@@ -29,8 +29,9 @@ import okhttp3.ResponseBody;
 public class MainDataManager extends BaseDataManager{
 
     private static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
-    //通用模块路径
-    private static String GENERAL_REGISTER = "/api/identify";
+    //注册
+    private static String GENERAL_REGISTER = "/api/v1/register";
+    //获取验证码
     private static String GENERAL_REGISTER_CODE = "/api/identify";
 
     public MainDataManager(DataManager mDataManager) {

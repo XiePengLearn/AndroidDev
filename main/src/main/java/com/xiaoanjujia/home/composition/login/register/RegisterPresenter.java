@@ -112,7 +112,6 @@ public class RegisterPresenter extends BasePresenter implements RegisterContract
             public void onError(Throwable e) {
                 super.onError(e);
                 mLoginView.hiddenProgressDialogView();
-//                LogUtil.e(TAG, "=======onError:======= " + e.getMessage());
                 LogUtil.e(TAG, "=======onError:======= " + e.toString());
                 if(e instanceof HttpException){
                     ResponseBody responseBody = ((HttpException) e).response().errorBody();

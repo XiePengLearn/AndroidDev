@@ -241,9 +241,27 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             return;
         }
 
+        /**
+         * phone:用户名(手机号)
+         * password:密码
+         * code:验证码
+         * 返回参数
+         *
+         * user_name:用户名(手机号)
+         * password
+         * 接口返回
+         *
+         * {
+         *     "status": 1,
+         *     "message": "ok",
+         *     "data": {
+         *         "password": "15da5b87fbda7ab1a95e471a1247abce",
+         *         "user_name": "18635805566"
+         *     }
+         */
 
         Map<String, Object> mapParameters = new HashMap<>(6);
-        mapParameters.put("MOBILE", regPhone.getText().toString().trim());
+        mapParameters.put("phone", regPhone.getText().toString().trim());
         mapParameters.put("PASSWORD", lAgainPassword);
         mapParameters.put("RANDOM_NUMBER", lRandomNumber);
         mapParameters.put("CODE", lValidateCode);
