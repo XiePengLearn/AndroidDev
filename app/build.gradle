@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.xiaoanjujia.home"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        def isBuildAll = (buildMain as boolean) && (buildTest as boolean)
+
+        buildConfigField 'boolean', 'DEBUG_ALL', isBuildAll.toString()
+        lintOptions {
+            checkReleaseBuilds false
+            abortOnError false
+        }
+        //此风味是为了使用Instant Run
+        /*productFlavors {
+            dev {
+                // To avoid using legacy multidex, set minSdkVersion to 21 or higher.
+                minSdkVersion 21
+                versionNameSuffix "-dev"
+                applicationIdSuffix '.dev'
+            }
+        }*/
+
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi', 'x86'//, 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    annotationProcessor "com.alibaba:arouter-compiler:$rootProject.arouterCompilerVersion"
+    implementation "com.alibaba:arouter-api:$rootProject.arouterVersion"
+    if (project.buildMain as boolean) {
+        implementation project(':main')
+    }
+
+    if (project.buildTest as boolean) {
+        implementation project(':testmodule')
+    }
+
+    def multidex_version = "2.0.1"
+    api "androidx.multidex:multidex:$multidex_version"
+
+
+}
