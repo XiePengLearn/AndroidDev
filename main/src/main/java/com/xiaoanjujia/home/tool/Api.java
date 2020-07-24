@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.tool;
 
 import com.xiaoanjujia.common.BaseApplication;
-import com.xiaoanjujia.common.util.CXAESUtil;
+import com.xiaoanjujia.common.util.AesUtil;
 import com.xiaoanjujia.common.util.PrefUtils;
 
 import java.util.ArrayList;
@@ -68,7 +68,8 @@ public class Api {
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         try {
-            ret[1] = CXAESUtil.encrypt(KEY,stringBuilder.toString());
+            ret[1] = AesUtil.Encrypt(KEY,stringBuilder.toString());
+//            ret[1] = AesUtil.Encrypt(KEY,"app-type=ios&did=3140EAA6-BC15-474E-965B-874F241E42E5&model=apple&os=13.5&time=1595424249000&vesion=1.0.0");
         } catch (Exception e) {
             e.printStackTrace();
         }

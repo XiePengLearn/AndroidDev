@@ -19,7 +19,7 @@ public class ResponseCode {
     /**
      * request  成功
      */
-    public static final String SUCCESS_OK = "200200";
+    public static final int SUCCESS_OK = 1;
 
     /**
      * 请求头缺少参数{}
@@ -43,6 +43,6 @@ public class ResponseCode {
      * Session失效
      */
 
-    public static final String SEESION_ERROR = "200999";
+    public static final int SEESION_ERROR = 0;
 
 }

@@ -1,5 +1,7 @@
 package com.xiaoanjujia.common.util;
 
+import android.util.Base64;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,8 +44,8 @@ public class CXAESUtil {
         // /src = Base64.encodeToString(src.getBytes(), Base64.DEFAULT);
         byte[] rawKey = toMakekey(key, keyLenght, defaultV).getBytes();// key.getBytes();
         byte[] result = encrypt(rawKey, src.getBytes("utf-8"));
-        // result = Base64.encode(result, Base64.DEFAULT);
-        return toHex(result);
+         result = Base64.encode(result, Base64.DEFAULT);
+        return result.toString();
     }
 
     /**

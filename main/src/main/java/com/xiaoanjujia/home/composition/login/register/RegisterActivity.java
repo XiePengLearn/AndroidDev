@@ -84,7 +84,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         setContentView(R.layout.activity_register);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-        lRandomNumber = Tool.GetRandomNumber(3);
+        lRandomNumber = Tool.GetRandomNumber(4);
         initView();
         initTitle();
 
@@ -132,15 +132,16 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         }
     }
 
+    //    {"status":1,"message":"OK","data":[]}
     @Override
     public void setCodeResponseData(RegisterCodeResponse registerCodeResponse) {
         try {
-            String code = registerCodeResponse.getCode();
-            String msg = registerCodeResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
+            int code = registerCodeResponse.getStatus();
+            String msg = registerCodeResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
                 countDown();
                 ToastUtil.showToast(this.getApplicationContext(), "验证码发送成功");
-            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+            } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
 
             } else {

@@ -1,6 +1,7 @@
 package com.xiaoanjujia.common.util;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
 
 /**
@@ -9,6 +10,7 @@ import android.widget.Toast;
  * @Description:
  */
 public class ToastUtil {
+
 
     private static Toast mToast;
 
@@ -19,8 +21,12 @@ public class ToastUtil {
         if (mToast == null) {
             mToast = Toast.makeText(context, msg, duration);
         } else {
+            mToast.cancel();
+            mToast = Toast.makeText(context, msg, duration);
             mToast.setText(msg);
+
         }
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();
     }
     /**
@@ -30,9 +36,11 @@ public class ToastUtil {
         if (mToast == null) {
             mToast = Toast.makeText(mContext, msg, Toast.LENGTH_SHORT);
         } else {
+            mToast.cancel();
+            mToast = Toast.makeText(mContext, msg, Toast.LENGTH_SHORT);
             mToast.setText(msg);
         }
-
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();
     }
 

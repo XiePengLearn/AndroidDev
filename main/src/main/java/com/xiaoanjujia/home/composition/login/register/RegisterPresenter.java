@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 /**
  * @Auther: xp
@@ -111,6 +112,20 @@ public class RegisterPresenter extends BasePresenter implements RegisterContract
             public void onError(Throwable e) {
                 super.onError(e);
                 mLoginView.hiddenProgressDialogView();
+//                LogUtil.e(TAG, "=======onError:======= " + e.getMessage());
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+                if(e instanceof HttpException){
+                    ResponseBody responseBody = ((HttpException) e).response().errorBody();
+
+                    try {
+                        if(responseBody != null){
+                            responseBody.toString();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
             }
 
             @Override

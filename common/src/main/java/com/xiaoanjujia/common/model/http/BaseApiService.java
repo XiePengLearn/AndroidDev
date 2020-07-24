@@ -58,6 +58,13 @@ public interface BaseApiService {
             @FieldMap Map<String, Object> maps,
             @HeaderMap TreeMap<String, String> headers
     );
+    @POST()
+    @FormUrlEncoded
+    Observable<ResponseBody> executePostHeader(
+            @Url() String url,
+            @FieldMap Map<String, Object> maps,
+            @HeaderMap Map<String, String> headers
+    );
 
     @POST("{url}")
     Flowable<ResponseBody> executePostBody(

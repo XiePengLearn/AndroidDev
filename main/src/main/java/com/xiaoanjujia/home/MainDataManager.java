@@ -28,10 +28,10 @@ import okhttp3.ResponseBody;
 
 public class MainDataManager extends BaseDataManager{
 
-    public static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
+    private static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
     //通用模块路径
-    public static String GENERAL_REGISTER = "/api/identify";
-    public static String GENERAL_REGISTER_CODE = "/api/identify";
+    private static String GENERAL_REGISTER = "/api/identify";
+    private static String GENERAL_REGISTER_CODE = "/api/identify";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -103,7 +103,7 @@ public class MainDataManager extends BaseDataManager{
      */
     public Disposable getRegisretCodeData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + GENERAL_REGISTER_CODE, mapParameters, mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_REGISTER_CODE, mapParameters,mapHeaders), consumer);
 
     }
     /**

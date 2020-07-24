@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
@@ -61,5 +62,11 @@ public class Utils {
     public static int dp2px(Context context, float dp) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
         return Math.round(px);
+    }
+    public static boolean isNull(String text) {
+        if (text != null && !TextUtils.isEmpty(text)) {
+            return false;
+        }
+        return true;
     }
 }
