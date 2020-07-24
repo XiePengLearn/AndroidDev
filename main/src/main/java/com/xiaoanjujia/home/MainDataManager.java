@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -27,9 +28,10 @@ import okhttp3.ResponseBody;
 
 public class MainDataManager extends BaseDataManager{
 
-    public static String KPI_ROOT_URL = "http://14.29.175.35:8091/api";//预生产环境接口
+    public static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
     //通用模块路径
-    public static String GENERAL_REGISTER = "/cm/v1";
+    public static String GENERAL_REGISTER = "/api/identify";
+    public static String GENERAL_REGISTER_CODE = "/api/identify";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -86,7 +88,7 @@ public class MainDataManager extends BaseDataManager{
      * @param consumer      consumer
      * @return Disposable
      */
-    public Disposable getRegisterData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+    public Disposable getRegisterData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
 
@@ -99,9 +101,9 @@ public class MainDataManager extends BaseDataManager{
      * @param consumer      consumer
      * @return Disposable
      */
-    public Disposable getRegisretCodeData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+    public Disposable getRegisretCodeData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_REGISTER_CODE, mapParameters, mapHeaders), consumer);
 
     }
     /**
@@ -112,7 +114,7 @@ public class MainDataManager extends BaseDataManager{
      * @param consumer      consumer
      * @return Disposable
      */
-    public Disposable getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+    public Disposable getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
     }

@@ -19,6 +19,7 @@ package com.xiaoanjujia.common.model.http;
 
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -55,7 +56,7 @@ public interface BaseApiService {
     Observable<ResponseBody> executePostHeader(
             @Url() String url,
             @FieldMap Map<String, Object> maps,
-            @HeaderMap Map<String, String> headers
+            @HeaderMap TreeMap<String, String> headers
     );
 
     @POST("{url}")

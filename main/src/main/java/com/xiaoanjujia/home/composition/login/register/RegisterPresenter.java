@@ -9,6 +9,7 @@ import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -50,7 +51,7 @@ public class RegisterPresenter extends BasePresenter implements RegisterContract
     }
 
     @Override
-    public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getRegisterData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
@@ -87,7 +88,7 @@ public class RegisterPresenter extends BasePresenter implements RegisterContract
     }
 
     @Override
-    public void getCodeRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getCodeRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getRegisretCodeData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {

@@ -5,6 +5,7 @@ import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @Auther: xp
@@ -32,8 +33,8 @@ public interface RegisterContract {
 
         Map getData();
 
-        void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-        void getCodeRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getCodeRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

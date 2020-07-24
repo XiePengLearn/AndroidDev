@@ -3,6 +3,7 @@ package com.xiaoanjujia.home.composition.login.login;
 import com.xiaoanjujia.home.entities.LoginResponse;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @Auther: xp
@@ -30,6 +31,6 @@ public interface LoginContract {
 
         Map getData();
 
-        void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

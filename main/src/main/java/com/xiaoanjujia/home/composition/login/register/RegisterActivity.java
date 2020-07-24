@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.sxjs.jd.R;
+import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.HandlerFactory;
 import com.xiaoanjujia.common.util.PhoneValidator;
@@ -21,15 +23,15 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.Tool;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
-import com.sxjs.jd.R;
-import com.sxjs.jd.R2;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
+import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -75,6 +77,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     private int timeLong = 90;
     private Timer mTimer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +87,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         lRandomNumber = Tool.GetRandomNumber(3);
         initView();
         initTitle();
+
     }
 
     private void initView() {
@@ -243,38 +247,42 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         mapParameters.put("RANDOM_NUMBER", lRandomNumber);
         mapParameters.put("CODE", lValidateCode);
 
-        Map<String, String> mapHeaders = new HashMap<>(1);
-        mapHeaders.put("ACTION", "S001");
-        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
-        initData(mapHeaders, mapParameters);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        initData(headersTreeMap, mapParameters);
     }
 
-    public void initData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void initData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         presenter.getRequestData(mapHeaders, mapParameters);
     }
 
     /**
      * 获取验证码
+     * <p>
+     * 字段 参考值 备注
+     * sign sdjnjndkjmdfskljmnmj 唯一值
+     * vesion 1 版本号
+     * app-type ios app的类型
+     * did 12233 设备号
+     * os 2.3 设备的操作系统
+     * model apple app机型
+     * user-token sdj44w343nweicjwrerkc 登录后需要携带的参数
+     * time 12345455 当前时间
      */
     public void getValidateCodeRequest() {
 
         btnGetValidateCode.setClickable(false);
 
         Map<String, Object> mapParameters = new HashMap<>(6);
-        mapParameters.put("MOBILE", regPhone.getText().toString().trim());
-        mapParameters.put("RANDOM_NUMBER", lRandomNumber);
-        mapParameters.put("TYPE", "1");
+        mapParameters.put("phone", regPhone.getText().toString().trim());
 
-        Map<String, String> mapHeaders = new HashMap<>(1);
-        mapHeaders.put("ACTION", "CM001");
-        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
-        initGetCodeData(mapHeaders, mapParameters);
+        initGetCodeData(headersTreeMap, mapParameters);
 
 
     }
 
-    private void initGetCodeData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    private void initGetCodeData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         presenter.getCodeRequestData(mapHeaders, mapParameters);
     }
 

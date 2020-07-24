@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.sxjs.jd.R;
+import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PrefUtils;
@@ -25,12 +27,12 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.ClearEditText;
 import com.xiaoanjujia.home.MainDataManager;
-import com.sxjs.jd.R;
-import com.sxjs.jd.R2;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -149,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     }
 
-    public void initData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void initData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         presenter.getLoginData(mapHeaders, mapParameters);
     }
 
@@ -286,11 +288,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         mapParameters.put("XINGE_TOKEN", mXinGeToken);
         LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
 
-        Map<String, String> mapHeaders = new HashMap<>(1);
-        mapHeaders.put("ACTION", "S002");
-        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
-        initData(mapHeaders, mapParameters);
+        initData(headersTreeMap, mapParameters);
     }
 
 

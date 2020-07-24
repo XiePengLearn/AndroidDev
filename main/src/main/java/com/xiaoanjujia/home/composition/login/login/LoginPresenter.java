@@ -8,6 +8,7 @@ import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -49,7 +50,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
     }
 
     @Override
-    public void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {

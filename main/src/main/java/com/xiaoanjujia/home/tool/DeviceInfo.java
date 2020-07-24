@@ -1,7 +1,6 @@
-package com.xiaoanjujia.home.entities;
+package com.xiaoanjujia.home.tool;
 
-import android.content.Context;
-
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.util.DeviceUuidFactory;
 
 /**
@@ -10,24 +9,15 @@ import com.xiaoanjujia.common.util.DeviceUuidFactory;
  * @Description:
  */
 public class DeviceInfo {
-    private Context mContext;
 
-    public DeviceInfo(Context mContext) {
-        this.mContext = mContext;
-    }
 
     private String deviceModel = DeviceUtils.getAndroidModel();
 
-    private Integer deviceHeight = DeviceUtils.getScreenHeight(mContext);
-
-    private Integer deviceWidth = DeviceUtils.getScreenWidth(mContext);
-
     private String osName = DeviceUtils.getAndroidVer();
 
-    //    private String udid = DeviceIdUtil.getDeviceId(MyApp.getMyApplication());
-    private String udid = DeviceUuidFactory.getInstance(mContext).getDeviceUuid() + "";
+    private String udid = DeviceUuidFactory.getInstance(BaseApplication.getInstance()).getDeviceUuid() + "";
 
-    private String platver = DeviceUtils.getVersionName(mContext);
+    private String platver = DeviceUtils.getVersionName();
 
     public String getDeviceModel() {
         return deviceModel;
@@ -37,21 +27,6 @@ public class DeviceInfo {
         this.deviceModel = deviceModel;
     }
 
-    public Integer getDeviceHeight() {
-        return deviceHeight;
-    }
-
-    public void setDeviceHeight(Integer deviceHeight) {
-        this.deviceHeight = deviceHeight;
-    }
-
-    public Integer getDeviceWidth() {
-        return deviceWidth;
-    }
-
-    public void setDeviceWidth(Integer deviceWidth) {
-        this.deviceWidth = deviceWidth;
-    }
 
     public String getOsName() {
         return osName;
@@ -82,8 +57,6 @@ public class DeviceInfo {
     public String toString() {
         return "DeviceInfo{" +
                 "deviceModel='" + deviceModel + '\'' +
-                ", deviceHeight=" + deviceHeight +
-                ", deviceWidth=" + deviceWidth +
                 ", osName='" + osName + '\'' +
                 ", udid='" + udid + '\'' +
                 ", platver='" + platver + '\'' +

@@ -1,12 +1,12 @@
-package com.xiaoanjujia.home.entities;
+package com.xiaoanjujia.home.tool;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.util.DisplayMetrics;
+
+import com.xiaoanjujia.common.BaseApplication;
 
 /**
  * @Auther: xp
@@ -29,14 +29,14 @@ public class DeviceUtils {
      * @param
      * @return
      */
-    public static String getVersionName(Context mContext) {
+    public static String getVersionName( ) {
         PackageInfo packInfo = null;
         try {
-            packInfo = mContext.getApplicationContext().getPackageManager().getPackageInfo(mContext.getApplicationContext().getPackageName(), 0);
+            packInfo = BaseApplication.getInstance().getPackageManager().getPackageInfo( BaseApplication.getInstance().getPackageName(), 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return packInfo == null ? "1" : packInfo.versionCode+"";
+        return packInfo == null ? "1.0.0" : packInfo.versionName;
     }
 
     /**
@@ -54,17 +54,17 @@ public class DeviceUtils {
         return language;
     }
 
-    public static int getScreenWidth(Context mContext) {
-        final Resources resources = mContext.getApplicationContext().getResources();
-        final DisplayMetrics dm = resources.getDisplayMetrics();
-        return dm.widthPixels;
-    }
-
-    public static int getScreenHeight(Context mContext) {
-        final Resources resources = mContext.getApplicationContext().getResources();
-        final DisplayMetrics dm = resources.getDisplayMetrics();
-        return dm.heightPixels;
-    }
+//    public static int getScreenWidth(Context mContext) {
+//        final Resources resources = mContext.getApplicationContext().getResources();
+//        final DisplayMetrics dm = resources.getDisplayMetrics();
+//        return dm.widthPixels;
+//    }
+//
+//    public static int getScreenHeight(Context mContext) {
+//        final Resources resources = mContext.getApplicationContext().getResources();
+//        final DisplayMetrics dm = resources.getDisplayMetrics();
+//        return dm.heightPixels;
+//    }
 
     public static String getMacAddress(Context mContext) {
         String macAddress = null;

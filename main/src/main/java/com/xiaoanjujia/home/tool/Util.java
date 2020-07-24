@@ -1,8 +1,8 @@
-package com.xiaoanjujia.home;
+package com.xiaoanjujia.home.tool;
 
-import android.content.Context;
 import android.text.TextUtils;
 
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.util.PrefUtils;
 
 /**
@@ -19,8 +19,8 @@ public class Util {
     }
 
 
-    public static boolean isLogin(Context mContext) {
-        String token = PrefUtils.readSESSION_ID(mContext);
+    public static boolean isLogin() {
+        String token = PrefUtils.readSESSION_ID(BaseApplication.getInstance());
         if (!isNull(token)) {
             return true;
         }
