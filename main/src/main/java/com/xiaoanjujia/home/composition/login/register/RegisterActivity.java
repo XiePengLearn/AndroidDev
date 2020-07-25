@@ -24,7 +24,6 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.StringUtils;
 import com.xiaoanjujia.common.util.ToastUtil;
-import com.xiaoanjujia.common.util.Tool;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
@@ -81,7 +80,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
 
     private RegisterResponse registerResponse;
-    private String lRandomNumber;
 
     private int timeLong = 90;
     private Timer mTimer;
@@ -94,7 +92,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         setContentView(R.layout.activity_register);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-        lRandomNumber = Tool.GetRandomNumber(4);
         initView();
         initTitle();
 

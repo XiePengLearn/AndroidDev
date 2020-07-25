@@ -35,6 +35,8 @@ public class MainDataManager extends BaseDataManager{
     private static String GENERAL_REGISTER_CODE = "/api/identify";
     //登录
     private static String GENERAL_LOGIN = "/api/v1/login";
+    //忘记密码
+    private static String GENERAL_FORGER = "/api/v1/editPassword";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -94,6 +96,19 @@ public class MainDataManager extends BaseDataManager{
     public Disposable getRegisterData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
+
+    }
+    /**
+     * 获取忘记密码数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegisterForgerData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_FORGER, mapParameters, mapHeaders), consumer);
 
     }
     /**

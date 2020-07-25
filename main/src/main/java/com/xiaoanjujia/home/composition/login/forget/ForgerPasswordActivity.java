@@ -24,12 +24,11 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.StringUtils;
 import com.xiaoanjujia.common.util.ToastUtil;
-import com.xiaoanjujia.common.util.Tool;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.entities.ForgerResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
-import com.xiaoanjujia.home.entities.RegisterResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
@@ -80,21 +79,19 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
     LinearLayout llRegisterRootView;
 
 
-    private RegisterResponse registerResponse;
-    private String lRandomNumber;
 
     private int timeLong = 90;
     private Timer mTimer;
     private CodeUtils mCodeUtils;
+    private ForgerResponse forgerResponse;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_forger);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-        lRandomNumber = Tool.GetRandomNumber(4);
         initView();
         initTitle();
 
@@ -129,16 +126,16 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
      * "user_name": "18635805566"
      * }
      *
-     * @param registerResponse
+     * @param forgerResponse
      */
     @Override
-    public void setResponseData(RegisterResponse registerResponse) {
-        this.registerResponse = registerResponse;
+    public void setResponseData(ForgerResponse forgerResponse) {
+        this.forgerResponse = forgerResponse;
         try {
-            int code = registerResponse.getStatus();
-            String msg = registerResponse.getMessage();
+            int code = forgerResponse.getStatus();
+            String msg = forgerResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.Registered_successfully));
+                ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.forger_successfully));
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
@@ -185,15 +182,15 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("registerResponse", registerResponse);
+        outState.putSerializable("forgerResponse", forgerResponse);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            RegisterResponse registerResponse = (RegisterResponse) savedInstanceState.getSerializable("registerResponse");
-            this.registerResponse = registerResponse;
+            ForgerResponse forgerResponse = (ForgerResponse) savedInstanceState.getSerializable("forgerResponse");
+            this.forgerResponse = forgerResponse;
 
         }
     }
@@ -285,27 +282,30 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
         }
 
         /**
-         * phone:用户名(手机号)
-         * password:密码
-         * code:验证码
-         * 返回参数
+         * 修改密码
+         * header参数每次都要携带
          *
-         * user_name:用户名(手机号)
-         * password
+         * 1.接口地址 /api/v1/editPassword
+         * 2.请求方式 put
+         * 请求参数
+         *
+         * phone:用户名手机号
+         * password:密码
+         * password1:确认密码
+         * code:1234验证码
          * 接口返回
          *
          * {
          *     "status": 1,
-         *     "message": "ok",
-         *     "data": {
-         *         "password": "15da5b87fbda7ab1a95e471a1247abce",
-         *         "user_name": "18635805566"
-         *     }
+         *     "message": "修改成功",
+         *     "data": []
+         * }
          */
 
         Map<String, Object> mapParameters = new HashMap<>(6);
         mapParameters.put("phone", regPhone.getText().toString().trim());
         mapParameters.put("password", lPassword);
+        mapParameters.put("password1", lPassword);
         //        mapParameters.put("RANDOM_NUMBER", lRandomNumber);
         mapParameters.put("code", lValidateCode);
 

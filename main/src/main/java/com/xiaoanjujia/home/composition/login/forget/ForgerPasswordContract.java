@@ -1,8 +1,8 @@
 package com.xiaoanjujia.home.composition.login.forget;
 
 
+import com.xiaoanjujia.home.entities.ForgerResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
-import com.xiaoanjujia.home.entities.RegisterResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface ForgerPasswordContract {
     interface View {
 
 
-        void setResponseData(RegisterResponse registerResponse);
+        void setResponseData(ForgerResponse forgerResponse);
         void setCodeResponseData(RegisterCodeResponse registerResponse);
 
         void showProgressDialogView();

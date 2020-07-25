@@ -5,6 +5,7 @@
     <string name="login_entry">登    录</string>
     <string name="register_regist">注册</string>
     <string name="Registered_successfully">注册成功</string>
+    <string name="forger_successfully">修改密码成功</string>
     <string name="register_verification_code">请输入验证码</string>
     <string name="register_get_verification_code">获取验证码</string>
     <string name="register_re_get_verification_code">重新发送</string>
