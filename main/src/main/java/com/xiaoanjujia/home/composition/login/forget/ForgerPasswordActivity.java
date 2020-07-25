@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.login.register;
+package com.xiaoanjujia.home.composition.login.forget;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -47,11 +47,11 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/register/register")
-public class RegisterActivity extends BaseActivity implements RegisterContract.View {
+@Route(path = "/forgerPassword/forgerPassword")
+public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswordContract.View {
 
     @Inject
-    RegisterPresenter presenter;
+    ForgerPasswordPresenter presenter;
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -101,9 +101,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     private void initView() {
-        DaggerRegisterActivityComponent.builder()
+        DaggerForgerPasswordActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .registerPresenterModule(new RegisterPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .forgerPasswordPresenterModule(new ForgerPasswordPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 

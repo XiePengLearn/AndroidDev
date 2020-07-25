@@ -49,10 +49,10 @@ dependencies {
     //design
     api 'com.google.android.material:material:1.1.0'
 
-    //leak
-    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+//    //leak
+//    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+//    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+//    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     //fresco
     api "com.facebook.fresco:fresco:$rootProject.frescoVersion"
     // RunTimePermissionRequest

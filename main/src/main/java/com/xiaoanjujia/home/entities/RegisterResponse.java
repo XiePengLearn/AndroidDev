@@ -9,37 +9,64 @@ import java.io.Serializable;
  */
 public class RegisterResponse implements Serializable {
 
+
     /**
-     * code : 200200
-     * msg : 说明
-     * data :
+     * status : 1
+     * message : ok
+     * data : {"password":"15da5b87fbda7ab1a95e471a1247abce","user_name":"18635805566"}
      */
 
-    private String code;
-    private String msg;
-    private String data;
+    private int status;
+    private String message;
+    private DataBean data;
 
-    public String getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(DataBean data) {
         this.data = data;
+    }
+
+    public static class DataBean {
+        /**
+         * password : 15da5b87fbda7ab1a95e471a1247abce
+         * user_name : 18635805566
+         */
+
+        private String password;
+        private String user_name;
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getUser_name() {
+            return user_name;
+        }
+
+        public void setUser_name(String user_name) {
+            this.user_name = user_name;
+        }
     }
 }

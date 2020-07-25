@@ -5,7 +5,6 @@ import android.app.Application;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.app_common.BuildConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.squareup.leakcanary.LeakCanary;
 import com.xiaoanjujia.common.GlobalAppComponent;
 
 /**
@@ -16,11 +15,11 @@ import com.xiaoanjujia.common.GlobalAppComponent;
 public class CommonModule {
     public static void init(Application application){
 
-        if (LeakCanary.isInAnalyzerProcess(application)) {
-            return;
-        }
+//        if (LeakCanary.isInAnalyzerProcess(application)) {
+//            return;
+//        }
         if(BuildConfig.DEBUG){
-            LeakCanary.install(application);
+//            LeakCanary.install(application);
             ARouter.openLog();     // 打印日志
             ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }

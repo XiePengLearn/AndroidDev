@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.login.register;
+package com.xiaoanjujia.home.composition.login.forget;
 
 import com.google.gson.Gson;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
@@ -22,13 +22,13 @@ import retrofit2.HttpException;
  * @Date: 2019/9/15 06:43
  * @Description:
  */
-public class RegisterPresenter extends BasePresenter implements RegisterContract.Presenter {
+public class ForgerPasswordPresenter extends BasePresenter implements ForgerPasswordContract.Presenter {
     private MainDataManager mDataManager;
-    private              RegisterContract.View mLoginView;
+    private              ForgerPasswordContract.View mLoginView;
     private static final String                TAG = "ForgerPasswordPresenter";
 
     @Inject
-    public RegisterPresenter(MainDataManager mDataManager, RegisterContract.View view) {
+    public ForgerPasswordPresenter(MainDataManager mDataManager, ForgerPasswordContract.View view) {
         this.mDataManager = mDataManager;
         this.mLoginView = view;
 
