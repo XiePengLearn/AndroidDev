@@ -28,7 +28,7 @@ public class ResponseCode {
     /**
      * 请求体缺少参数{}
      */
-    public static final String RESPONSE_BODY_ERROR   = "200600";
+    public static final String RESPONSE_BODY_ERROR = "200600";
 
     /**
      * 请求参数值{}错误
@@ -38,11 +38,11 @@ public class ResponseCode {
     /**
      * 自定义错误
      */
-    public static final String CUSTOM_ERROR  = "200998";
+    public static final String CUSTOM_ERROR = "200998";
     /**
      * Session失效
      */
 
-    public static final int SEESION_ERROR = 0;
+    public static final int SEESION_ERROR = 403;
 
 }

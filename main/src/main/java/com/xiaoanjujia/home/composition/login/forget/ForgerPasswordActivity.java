@@ -47,7 +47,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/forgerPassword/forgerPassword")
+@Route(path = "/forget/forget")
 public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswordContract.View {
 
     @Inject

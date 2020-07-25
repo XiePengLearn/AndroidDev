@@ -68,7 +68,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R2.id.register)
     TextView register;
 
-    private String mXinGeToken;
     private static final String TAG = "LoginActivity";
     private Button mLoginEntry;
     private LoginResponse loginResponse;
@@ -171,12 +170,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 }
                 if (!TextUtils.isEmpty(password)) {
                     editPassword.setText(password);
-
                 }
             }
         }
-
-
     }
 
 
@@ -184,18 +180,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void setLoginData(LoginResponse loginResponse) {
         this.loginResponse = loginResponse;
         try {
-            String code = loginResponse.getCode();
-            String msg = loginResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData());
+            int code = loginResponse.getStatus();
+            String msg = loginResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData().getToken());
                 boolean checked = loginRememberPasswords.isChecked();
-                String SESSION_ID = loginResponse.getData();
+                LoginResponse.DataBean data = loginResponse.getData();
+                String SESSION_ID = data.getToken();
                 if (checked) {
                     //保存账号密码   储存状态 SESSION_ID
                     PrefUtils.writeUserName(editAccount.getText().toString().trim(), this.getApplicationContext());
                     PrefUtils.writePassword(editPassword.getText().toString().trim(), this.getApplicationContext());
-
-
                     PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                     PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
 
@@ -206,13 +201,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                     PrefUtils.writeCheckRemember(false, this.getApplicationContext());
                     PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
                 }
-
-                PrefUtils.writeUserNameDefault(editAccount.getText().toString().trim(), this.getApplicationContext());
-                PrefUtils.writePasswordDefault(editPassword.getText().toString().trim(), this.getApplicationContext());
-
                 ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 finish();
-            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+            } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
 
             } else {
@@ -277,16 +268,35 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
 
         //密码加密 并没有用到 我给注释了
+        /**
+         * 用户登录
+         * 接口注意
+         * 地址:/api/v1/login
+         * 请求方式:post
+         * http code：200
+         * 请求参数
+         * phone:用户名(手机号)(都传)
+         * 密码登录
+         * password:密码
+         * 验证码登录
+         * code
+         * 返回参数
+         * token
+         * 接口返回
+         * {
+         *     "status": 1,
+         *     "message": "登录成功",
+         *     "data": {
+         *         "token": "S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz",
+         *         "user_id": 35
+         *     }
+         * }
+         */
 
 
-        Map<String, Object> mapParameters = new HashMap<>(6);
-        mapParameters.put("MOBILE", lAccount);
-        mapParameters.put("PASSWORD", lPassword);
-        mapParameters.put("SIGNIN_TYPE", "1");
-        mapParameters.put("USER_TYPE", "1");
-        mapParameters.put("MOBILE_TYPE", "1");
-        mapParameters.put("XINGE_TOKEN", mXinGeToken);
-        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("phone", lAccount);
+        mapParameters.put("password", lPassword);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 

@@ -12,45 +12,62 @@ public class LoginResponse implements Serializable {
 
 
     /**
-     * code : 200200
-     * data : ca0342e4-9a5b-410c-9bbb-d6e65a2b17f9
-     * msg : null
+     * status : 1
+     * message : 登录成功
+     * data : {"token":"S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz","user_id":35}
      */
 
-    private String code;
-    private String data;
-    private String msg;
+    private int status;
+    private String message;
+    private DataBean data;
 
-    public String getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getData() {
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
-    public String getMsg() {
-        return msg;
-    }
+    public static class DataBean {
+        /**
+         * token : S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz
+         * user_id : 35
+         */
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+        private String token;
+        private int user_id;
 
-    @Override
-    public String toString() {
-        return "LoginResponse{" +
-                "code='" + code + '\'' +
-                ", data='" + data + '\'' +
-                ", msg=" + msg +
-                '}';
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public int getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(int user_id) {
+            this.user_id = user_id;
+        }
     }
 }

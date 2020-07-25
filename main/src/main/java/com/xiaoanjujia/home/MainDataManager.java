@@ -33,6 +33,8 @@ public class MainDataManager extends BaseDataManager{
     private static String GENERAL_REGISTER = "/api/v1/register";
     //获取验证码
     private static String GENERAL_REGISTER_CODE = "/api/identify";
+    //登录
+    private static String GENERAL_LOGIN = "/api/v1/login";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -117,6 +119,6 @@ public class MainDataManager extends BaseDataManager{
      */
     public Disposable getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_LOGIN, mapParameters, mapHeaders), consumer);
     }
 }
