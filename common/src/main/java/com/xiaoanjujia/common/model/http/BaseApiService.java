@@ -33,6 +33,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -58,6 +59,15 @@ public interface BaseApiService {
             @FieldMap Map<String, Object> maps,
             @HeaderMap TreeMap<String, String> headers
     );
+
+    @PUT()
+    @FormUrlEncoded
+    Observable<ResponseBody> executePutHeader(
+            @Url() String url,
+            @FieldMap Map<String, Object> maps,
+            @HeaderMap TreeMap<String, String> headers
+    );
+
     @POST()
     @FormUrlEncoded
     Observable<ResponseBody> executePostHeader(
@@ -76,7 +86,6 @@ public interface BaseApiService {
     Observable<ResponseBody> executeGet(
             @Url String url,
             @QueryMap Map<String, Object> maps);
-
 
 
     @Multipart
@@ -121,7 +130,7 @@ public interface BaseApiService {
 
     @GET
     Flowable<ResponseBody> getTest(@Url String fileUrl,
-                                         @QueryMap Map<String, Object> maps);
+                                   @QueryMap Map<String, Object> maps);
 
     @FormUrlEncoded
     @POST()

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
+    <include layout="@layout/jkx_public_title_home" />
 
     <com.xiaoanjujia.common.widget.headerview.JDHeaderView
         android:id="@+id/find_pull_refresh_header"

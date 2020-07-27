@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -42,6 +44,16 @@ import butterknife.ButterKnife;
 public class QuicklyFragment extends BaseFragment implements QuicklyFragmentContract.View, PtrHandler {
     @Inject
     QuicklyFragmentPresenter mPresenter;
+    @BindView(R2.id.fake_status_bar)
+    View fakeStatusBar;
+    @BindView(R2.id.main_title_back)
+    ImageView mainTitleBack;
+    @BindView(R2.id.main_title_text)
+    TextView mainTitleText;
+    @BindView(R2.id.main_title_right)
+    ImageView mainTitleRight;
+    @BindView(R2.id.main_title_container)
+    LinearLayout mainTitleContainer;
     @BindView(R2.id.no_data_img)
     ImageView noDataImg;
     @BindView(R2.id.rl_fragment_no_data)
@@ -49,8 +61,6 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
 
-
-    private Handler mHandler;
 
     private static final String TAG = "NationExamActivity";
 
@@ -101,7 +111,6 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
         //                adapter.setEnableLoadMore(true);
         //                findRecyclerview.setAdapter(adapter);
 
-        mHandler = new Handler();
 
     }
 

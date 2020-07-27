@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.entities;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Auther: xp
@@ -13,13 +14,13 @@ public class ForgerResponse implements Serializable {
 
     /**
      * status : 1
-     * message : 登录成功
-     * data : {"token":"S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz","user_id":35}
+     * message : 修改成功
+     * data : []
      */
 
     private int status;
     private String message;
-    private DataBean data;
+    private List<?> data;
 
     public int getStatus() {
         return status;
@@ -37,37 +38,11 @@ public class ForgerResponse implements Serializable {
         this.message = message;
     }
 
-    public DataBean getData() {
+    public List<?> getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(List<?> data) {
         this.data = data;
-    }
-
-    public static class DataBean {
-        /**
-         * token : S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz
-         * user_id : 35
-         */
-
-        private String token;
-        private int user_id;
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-        public int getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(int user_id) {
-            this.user_id = user_id;
-        }
     }
 }

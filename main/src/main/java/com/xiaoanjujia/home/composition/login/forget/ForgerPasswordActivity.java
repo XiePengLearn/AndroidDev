@@ -30,6 +30,7 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.ForgerResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.tool.Api;
+import com.xiaoanjujia.home.tool.Util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +95,11 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
         unbinder = ButterKnife.bind(this);
         initView();
         initTitle();
-
+        String userName = PrefUtils.readUserName(this.getApplicationContext());
+        if (!Util.isNull(userName)) {
+            regPhone.setText(userName);
+            regPhone.setSelection(userName.length());
+        }
     }
 
     private void initView() {
@@ -243,20 +248,6 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
                             R.string.password_character_restrict), Toast.LENGTH_SHORT);
             return;
         }
-//        String imageCode = etImageCode.getText().toString().trim();
-//        if (Utils.isNull(imageCode)) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    mContext.getResources().getString(
-//                            R.string.register_image_code), Toast.LENGTH_SHORT);
-//            return;
-//        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    mContext.getResources().getString(
-//                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
-//            return;
-//        }
         //        if (!lPassword.equals(lAgainPassword)) {
         //            ToastUtil.showToast(
         //                    mContext,

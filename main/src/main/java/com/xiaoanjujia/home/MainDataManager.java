@@ -107,7 +107,7 @@ public class MainDataManager extends BaseDataManager{
      * @return Disposable
      */
     public Disposable getRegisterForgerData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
-        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+        return changeIOToMainThread(getService(BaseApiService.class).executePutHeader
                 (KPI_ROOT_URL + GENERAL_FORGER, mapParameters, mapHeaders), consumer);
 
     }
