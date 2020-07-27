@@ -2,7 +2,7 @@
     <!--<string name="app_name">京东</string>-->
     <string name="login_remember_password">记住密码</string>
     <string name="login_forget_password">忘记密码</string>
-    <string name="login_entry">登    录</string>
+    <string name="login_entry">登录</string>
     <string name="register_regist">注册</string>
     <string name="Registered_successfully">注册成功</string>
     <string name="forger_successfully">修改密码成功</string>
@@ -17,4 +17,6 @@
     <string name="register_title">注册</string>
     <string name="register_image_code">请输入图形验证码</string>
     <string name="register_image_code_correct">请输入正确的图形验证码</string>
+    <string name="register_forget_password">找回密码</string>
+    <string name="register_code_login">手机号快捷登录</string>
 </resources>

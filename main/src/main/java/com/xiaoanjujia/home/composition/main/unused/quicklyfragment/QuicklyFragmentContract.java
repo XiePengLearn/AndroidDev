@@ -1,24 +1,22 @@
-package com.xiaoanjujia.home.composition.login.code_login;
+package com.xiaoanjujia.home.composition.main.unused.quicklyfragment;
 
 
 import com.xiaoanjujia.home.entities.LoginResponse;
-import com.xiaoanjujia.home.entities.RegisterCodeResponse;
-import com.xiaoanjujia.home.entities.RegisterResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * @Auther: xp
- * @Date: 2019/9/14 23:30
+ * @Date: 2019/10
  * @Description:
  */
-public interface CodeLoginContract {
+public interface QuicklyFragmentContract {
+
     interface View {
 
 
         void setResponseData(LoginResponse loginResponse);
-        void setCodeResponseData(RegisterCodeResponse registerResponse);
 
         void showProgressDialogView();
 
@@ -36,6 +34,5 @@ public interface CodeLoginContract {
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-        void getCodeRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

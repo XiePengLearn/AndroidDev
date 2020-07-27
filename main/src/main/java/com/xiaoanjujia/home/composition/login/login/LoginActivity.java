@@ -86,8 +86,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         unbinder = ButterKnife.bind(this);
 
         initView();
+        initTitle();
 
+    }
 
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText(R.string.login_entry);
     }
 
     private void initView() {
@@ -252,7 +260,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             LoginMethod();
         } else if (i == R.id.register) {
             ARouter.getInstance().build("/register/register").greenChannel().navigation(this);
-        }else if (i == R.id.fast_login) {
+        } else if (i == R.id.fast_login) {
             ARouter.getInstance().build("/codeLogin/codeLogin").greenChannel().navigation(this);
         }
     }
@@ -348,20 +356,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     }
 
-    private long timeMillis;
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if ((System.currentTimeMillis() - timeMillis) > 2000) {
-                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-                timeMillis = System.currentTimeMillis();
-            } else {
-                finish();
-                System.exit(0);
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }

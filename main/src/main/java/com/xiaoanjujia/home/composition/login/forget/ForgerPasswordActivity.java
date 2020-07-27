@@ -114,7 +114,7 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText(R.string.register_title);
+        mainTitleText.setText(R.string.register_forget_password);
     }
 
     /**
@@ -243,20 +243,20 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
                             R.string.password_character_restrict), Toast.LENGTH_SHORT);
             return;
         }
-        String imageCode = etImageCode.getText().toString().trim();
-        if (Utils.isNull(imageCode)) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
-                            R.string.register_image_code), Toast.LENGTH_SHORT);
-            return;
-        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
-                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
-            return;
-        }
+//        String imageCode = etImageCode.getText().toString().trim();
+//        if (Utils.isNull(imageCode)) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    mContext.getResources().getString(
+//                            R.string.register_image_code), Toast.LENGTH_SHORT);
+//            return;
+//        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    mContext.getResources().getString(
+//                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
+//            return;
+//        }
         //        if (!lPassword.equals(lAgainPassword)) {
         //            ToastUtil.showToast(
         //                    mContext,

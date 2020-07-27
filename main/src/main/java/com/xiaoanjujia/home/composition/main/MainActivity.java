@@ -1,23 +1,33 @@
 package com.xiaoanjujia.home.composition.main;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.sxjs.jd.R;
+import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
 import com.xiaoanjujia.home.MainDataManager;
-import com.sxjs.jd.R;
-import com.sxjs.jd.R2;
-import com.xiaoanjujia.home.composition.main.classificationfragment.ClassificationFragment;
-import com.xiaoanjujia.home.composition.main.findfragment.FindFragment;
-import com.xiaoanjujia.home.composition.main.homefragment.MainHomeFragment;
-import com.xiaoanjujia.home.composition.main.my.MyFragment;
+import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
+import com.xiaoanjujia.home.composition.main.mine.MineFragment;
+import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
+import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
+import com.xiaoanjujia.home.entities.LoginResponse;
 
 import javax.inject.Inject;
 
@@ -28,66 +38,213 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements MainContract.View, BottomNavigationBar.OnTabSelectedListener {
 
     @Inject
-    MainPresenter presenter;
+    MainPresenter       presenter;
     @BindView(R2.id.bottom_navigation_bar1)
     BottomNavigationBar bottomNavigationBar;
     @BindView(R2.id.main_container)
-    FrameLayout mainContainer;
-    private MainHomeFragment mMainHomeFragment;
-    private ClassificationFragment mClassificationFragment;
+    FrameLayout         mainContainer;
+    private UnlockingFragment mUnlockingFragment;
+    private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
-    private FindFragment mFindFragment;
-    private MyFragment mMyFragment;
+    private CommunityFragment mCommunityFragment;
+    private MineFragment mMyFragment;
+    @SuppressLint("StaticFieldLeak")
+    public static MainActivity       instance;//关闭当前页面的instance
+    private final String             MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         mFragmentManager = getSupportFragmentManager();
         initView();
         initData();
+        //在oncreate中添加
+        instance = this;
+        registerMessageBroadcast();
 
+//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//        int heapSize = manager.getMemoryClass();
+//        int maxHeapSize = manager.getLargeMemoryClass();  // manafest.xml   android:largeHeap="true"
+//        LogUtil.e(TAG, "--------heapSize--------:" + heapSize + ";--------maxHeapSize--------:" + maxHeapSize);
     }
 
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----MainActivity收到信鸽的服务推送消息-----");
+        //初始化首页数据
+        initLogin();
+    }
+
+    private void initLogin() {
+//        String lAccount = PrefUtils.readUserNameDefault(this.getApplicationContext());
+//        String lPassword = PrefUtils.readPasswordDefault(this.getApplicationContext());
+//
+//        String mXinGeToken = PrefUtils.readXinGeToken(this.getApplicationContext());
+//        Map<String, Object> mapParameters = new HashMap<>(6);
+//        mapParameters.put("MOBILE", lAccount);
+//        mapParameters.put("PASSWORD", lPassword);
+//        mapParameters.put("SIGNIN_TYPE", "1");
+//        mapParameters.put("USER_TYPE", "1");
+//        mapParameters.put("MOBILE_TYPE", "1");
+//        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+//        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+//
+//        Map<String, String> mapHeaders = new HashMap<>(1);
+//        mapHeaders.put("ACTION", "S002");
+//        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+//
+//        presenter.getLoginData(mapHeaders, mapParameters);
+    }
+
+
     public void initView() {
-        mMainHomeFragment = (MainHomeFragment) mFragmentManager.findFragmentByTag("home_fg");
-        mClassificationFragment = (ClassificationFragment) mFragmentManager.findFragmentByTag("class_fg");
-        mFindFragment = (FindFragment) mFragmentManager.findFragmentByTag("find_fg");
-        mMyFragment = (MyFragment) mFragmentManager.findFragmentByTag("my_fg");
 
-        if(mMainHomeFragment == null){
-            mMainHomeFragment = MainHomeFragment.newInstance();
-            addFragment(R.id.main_container, mMainHomeFragment, "home_fg");
-        }
-        if(mClassificationFragment == null){
-            mClassificationFragment = ClassificationFragment.newInstance();
-            addFragment(R.id.main_container, mClassificationFragment, "class_fg");
+        mUnlockingFragment = (UnlockingFragment) mFragmentManager.findFragmentByTag("home_fg");
+        mTenementFragment = (TenementFragment) mFragmentManager.findFragmentByTag("class_fg");
+        mCommunityFragment = (CommunityFragment) mFragmentManager.findFragmentByTag("find_fg");
+        mMyFragment = (MineFragment) mFragmentManager.findFragmentByTag("my_fg");
+
+
+        if (mUnlockingFragment == null) {
+            mUnlockingFragment = UnlockingFragment.newInstance();
+            addFragment(R.id.main_container, mUnlockingFragment, "home_fg");
         }
 
-        if(mFindFragment == null){
-            mFindFragment = FindFragment.newInstance();
-            addFragment(R.id.main_container, mFindFragment, "find_fg");
-        }
-
-        if(mMyFragment == null){
-            mMyFragment = MyFragment.newInstance();
-            addFragment(R.id.main_container, mMyFragment, "my_fg");
-        }
-
-        mFragmentManager.beginTransaction().show(mMainHomeFragment).hide(mClassificationFragment)
-                .hide(mFindFragment)
-                .hide(mMyFragment)
+        mFragmentManager.beginTransaction().show(mUnlockingFragment)
                 .commitAllowingStateLoss();
+        hideClassificationFragmnt();
+        hideFindFragment();
+        hideMyFragment();
 
         DaggerMainActivityComponent.builder()
                 .appComponent(getAppComponent())
                 .mainPresenterModule(new MainPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
+
+
         initBottomNavigation();
 
+
+    }
+
+    @Override
+    public void onTabSelected(int position) {
+        if (position == 0) {
+            if (mUnlockingFragment == null) {
+                mUnlockingFragment = UnlockingFragment.newInstance();
+                addFragment(R.id.main_container, mUnlockingFragment, "home_fg");
+            }
+
+            hideClassificationFragmnt();
+            hideFindFragment();
+            hideMyFragment();
+
+            mFragmentManager.beginTransaction()
+
+                    .show(mUnlockingFragment)
+                    .commitAllowingStateLoss();
+
+
+        } else if (position == 1) {
+            if (mTenementFragment == null) {
+                mTenementFragment = TenementFragment.newInstance();
+                addFragment(R.id.main_container, mTenementFragment, "class_fg");
+            }
+
+            hideHomeFragment();
+
+            hideFindFragment();
+            hideMyFragment();
+
+
+            mFragmentManager.beginTransaction()
+                    .show(mTenementFragment)
+                    .commitAllowingStateLoss();
+
+
+        } else if (position == 2) {
+            if (mCommunityFragment == null) {
+                mCommunityFragment = CommunityFragment.newInstance();
+                addFragment(R.id.main_container, mCommunityFragment, "find_fg");
+            }
+
+
+            hideHomeFragment();
+            hideClassificationFragmnt();
+
+            hideMyFragment();
+
+
+            mFragmentManager.beginTransaction()
+                    .show(mCommunityFragment)
+                    .commitAllowingStateLoss();
+
+
+        } else if (position == 3) {
+
+            if (mMyFragment == null) {
+                mMyFragment = MineFragment.newInstance();
+                addFragment(R.id.main_container, mMyFragment, "my_fg");
+            }
+
+            hideHomeFragment();
+            hideClassificationFragmnt();
+            hideFindFragment();
+
+            mFragmentManager.beginTransaction()
+                    .show(mMyFragment)
+                    .commitAllowingStateLoss();
+
+
+        }
+    }
+
+    private void hideHomeFragment() {
+        if (mUnlockingFragment != null) {
+            mFragmentManager.beginTransaction().hide(mUnlockingFragment).commitAllowingStateLoss();
+        }
+    }
+
+    private void hideMyFragment() {
+        if (mMyFragment != null) {
+            mFragmentManager.beginTransaction().hide(mMyFragment).commitAllowingStateLoss();
+        }
+    }
+
+    private void hideFindFragment() {
+        if (mCommunityFragment != null) {
+            mFragmentManager.beginTransaction().hide(mCommunityFragment).commitAllowingStateLoss();
+        }
+    }
+
+    private void hideClassificationFragmnt() {
+        if (mTenementFragment != null) {
+            mFragmentManager.beginTransaction().hide(mTenementFragment).commitAllowingStateLoss();
+        }
     }
 
     private void initBottomNavigation() {
@@ -108,7 +265,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                 .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
                 .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
                 .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent).setBadgeItem(numberBadgeItem))
+                //                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent).setBadgeItem(numberBadgeItem))
                 .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
                 .setFirstSelectedPosition(0)
                 .initialise();
@@ -120,15 +277,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
 
     public void initData() {
-        presenter.getText();
+        //        presenter.getText();
     }
 
     private String text;
+    private String loginData;
+
 
     @Override
-    public void setText(String text) {
+    public void setLoginData(LoginResponse loginResponse) {
 
-        this.text = text;
+
     }
 
     @Override
@@ -141,59 +300,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         hiddenProgressDialog();
     }
 
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("text", text);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            String text = savedInstanceState.getString("text");
-            this.text = text;
-
-        }
-    }
-
-
-    @Override
-    public void onTabSelected(int position) {
-        if(position == 0){
-            mFragmentManager.beginTransaction()
-                    .hide(mFindFragment)
-                    .hide(mClassificationFragment)
-                    .hide(mMyFragment)
-                    .show(mMainHomeFragment)
-                    .commitAllowingStateLoss();
-        }
-        else if(position == 1){
-            mFragmentManager.beginTransaction()
-                    .hide(mFindFragment)
-                    .hide(mMainHomeFragment)
-                    .hide(mMyFragment)
-                    .show(mClassificationFragment)
-                    .commitAllowingStateLoss();
-        }
-        else if(position == 2){
-            mFragmentManager.beginTransaction()
-                    .hide(mClassificationFragment)
-                    .hide(mMainHomeFragment)
-                    .hide(mMyFragment)
-                    .show(mFindFragment)
-                    .commitAllowingStateLoss();
-        }else if(position == 4){
-            mFragmentManager.beginTransaction()
-                    .hide(mClassificationFragment)
-                    .hide(mMainHomeFragment)
-                    .hide(mFindFragment)
-                    .show(mMyFragment)
-                    .commitAllowingStateLoss();
-        }
-    }
 
     @Override
     public void onTabUnselected(int position) {
@@ -210,6 +316,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         super.onStart();
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -217,7 +324,30 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             presenter.destory();
         }
 
+        if (mSystemMessageReceiver != null) {
+            unregisterReceiver(mSystemMessageReceiver);
+        }
+
+        instance = null;
 
     }
+
+    private long timeMillis;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - timeMillis) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                timeMillis = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }

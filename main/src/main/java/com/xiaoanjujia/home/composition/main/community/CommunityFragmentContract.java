@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.main;
+package com.xiaoanjujia.home.composition.main.community;
 
 
 import com.xiaoanjujia.home.entities.LoginResponse;
@@ -7,13 +7,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by admin on 2017/3/12.
+ * @Auther: xp
+ * @Date: 2019/10
+ * @Description:
  */
+public interface CommunityFragmentContract {
 
-public interface MainContract {
     interface View {
-        void setLoginData(LoginResponse loginResponse);
 
+
+        void setResponseData(LoginResponse loginResponse);
 
         void showProgressDialogView();
 
@@ -22,13 +25,14 @@ public interface MainContract {
 
     interface Presenter {
 
+
         void destory();
 
         void saveData();
 
         Map getData();
-        void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+
+        void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
-
 }

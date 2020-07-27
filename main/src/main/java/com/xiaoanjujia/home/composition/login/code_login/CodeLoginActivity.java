@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
@@ -23,6 +24,7 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -70,11 +72,9 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
     LinearLayout llRegisterRootView;
 
 
-    private RegisterResponse registerResponse;
-
     private int timeLong = 90;
     private Timer mTimer;
-//    private CodeUtils mCodeUtils;
+    //    private CodeUtils mCodeUtils;
 
 
     @Override
@@ -85,6 +85,11 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
         unbinder = ButterKnife.bind(this);
         initView();
         initTitle();
+        String userName = PrefUtils.readUserName(this.getApplicationContext());
+        if (!Util.isNull(userName)) {
+            regPhone.setText(userName);
+            regPhone.setSelection(userName.length());
+        }
 
     }
 
@@ -95,9 +100,9 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 .build()
                 .inject(this);
 
-//        mCodeUtils = CodeUtils.getInstance();
-//        Bitmap bitmap = mCodeUtils.createBitmap();
-//        imageCode.setImageBitmap(bitmap);
+        //        mCodeUtils = CodeUtils.getInstance();
+        //        Bitmap bitmap = mCodeUtils.createBitmap();
+        //        imageCode.setImageBitmap(bitmap);
     }
 
     /**
@@ -105,7 +110,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText(R.string.register_title);
+        mainTitleText.setText(R.string.register_code_login);
     }
 
     /**
@@ -117,19 +122,26 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
      * "user_name": "18635805566"
      * }
      *
-     * @param registerResponse
+     * @param loginResponse
      */
     @Override
-    public void setResponseData(RegisterResponse registerResponse) {
-        this.registerResponse = registerResponse;
+    public void setResponseData(LoginResponse loginResponse) {
         try {
-            int code = registerResponse.getStatus();
-            String msg = registerResponse.getMessage();
+            int code = loginResponse.getStatus();
+            String msg = loginResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.Registered_successfully));
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                }
+                LoginResponse.DataBean data = loginResponse.getData();
+                String SESSION_ID = data.getToken();
+                //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
-//                PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
+                PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
+                PrefUtils.writeSESSION_ID(SESSION_ID, BaseApplication.getInstance());
+
+                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -170,24 +182,8 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("registerResponse", registerResponse);
-    }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            RegisterResponse registerResponse = (RegisterResponse) savedInstanceState.getSerializable("registerResponse");
-            this.registerResponse = registerResponse;
-
-        }
-    }
-
-
-    @OnClick({R2.id.main_title_back, R2.id.btn_getValidateCode, R2.id.reg_btn_register, R2.id.image_code
+    @OnClick({R2.id.main_title_back, R2.id.btn_getValidateCode, R2.id.reg_btn_register
 
     })
     public void onViewClicked(View view) {
@@ -219,42 +215,6 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
     }
 
     private void RegisterMethod() {
-
-//        String lPassword = regPassword.getText().toString().trim();
-//        if (TextUtils.isEmpty(lPassword)) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    "请填写密码（密码长度6-16个字符，要包含字母和数字）", Toast.LENGTH_SHORT);
-//            return;
-//        }
-//        if (!StringUtils.isPasswordRegex(lPassword)) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    mContext.getResources().getString(
-//                            R.string.password_character_restrict), Toast.LENGTH_SHORT);
-//            return;
-//        }
-//        String imageCode = etImageCode.getText().toString().trim();
-//        if (Utils.isNull(imageCode)) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    mContext.getResources().getString(
-//                            R.string.register_image_code), Toast.LENGTH_SHORT);
-//            return;
-//        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
-//            ToastUtil.showToast(
-//                    mContext,
-//                    mContext.getResources().getString(
-//                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
-//            return;
-//        }
-        //        if (!lPassword.equals(lAgainPassword)) {
-        //            ToastUtil.showToast(
-        //                    mContext,
-        //                    mContext.getResources().getString(
-        //                            R.string.password_not_same), Toast.LENGTH_SHORT);
-        //            return;
-        //        }
         String errorMsg = PhoneValidator.validate(regPhone.getText().toString()
                 .trim());
         if (null != errorMsg) {
@@ -293,8 +253,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
 
         Map<String, Object> mapParameters = new HashMap<>(6);
         mapParameters.put("phone", regPhone.getText().toString().trim());
-//        mapParameters.put("password", lPassword);
-        //        mapParameters.put("RANDOM_NUMBER", lRandomNumber);
+        //        mapParameters.put("password", lPassword);
         mapParameters.put("code", lValidateCode);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();

@@ -5,6 +5,7 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 
@@ -55,16 +56,16 @@ public class CodeLoginPresenter extends BasePresenter implements CodeLoginContra
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getRegisterData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    RegisterResponse registerResponse = gson.fromJson(response, RegisterResponse.class);
+                    LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
 
-                    mLoginView.setResponseData(registerResponse);
+                    mLoginView.setResponseData(loginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

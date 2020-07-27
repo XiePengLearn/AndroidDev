@@ -5,7 +5,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xiaoanjujia.home.composition.main.MainActivity">
+    tools:context="com.xiaoanjujia.home.composition.main2.MainActivity">
     <com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar
         android:layout_alignParentBottom="true"
         android:id="@+id/bottom_navigation_bar1"

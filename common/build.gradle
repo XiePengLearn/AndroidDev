@@ -68,6 +68,11 @@ dependencies {
     //auto size
     api 'me.jessyan:autosize:1.2.1'
 
+    // updateApp
+    api 'com.teprinciple:updateapputils:2.0.4'
 
+    // RunTimePermissionRequest
+    api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
+    api 'com.jude:easyrecyclerview:4.2.3'
 
 }

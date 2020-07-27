@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.main;
+package com.xiaoanjujia.home.composition.main.tenement;
 
 
 import com.xiaoanjujia.home.MainDataManager;
@@ -7,27 +7,31 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by admin on 2017/3/12.
+ * @Auther: xp
+ * @Date: 2019/10
+ * @Description:
  */
+
 @Module
-public class MainPresenterModule {
-    private MainContract.View view;
+public class TenementFragmentModule {
+
+    private TenementFragmentContract.View view;
 
     private MainDataManager mainDataManager;
 
-    public MainPresenterModule(MainContract.View view,MainDataManager mainDataManager) {
+    public TenementFragmentModule(TenementFragmentContract.View  view, MainDataManager mainDataManager) {
         this.view = view;
         this.mainDataManager = mainDataManager;
     }
 
     @Provides
-    MainContract.View providerMainContractView(){
+    TenementFragmentContract.View providerMainContractView(){
         return view;
     }
+
+
     @Provides
     MainDataManager providerMainDataManager(){
         return mainDataManager;
     }
-
-
 }
