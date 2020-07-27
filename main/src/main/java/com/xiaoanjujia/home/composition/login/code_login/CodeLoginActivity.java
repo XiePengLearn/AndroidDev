@@ -1,6 +1,5 @@
 package com.xiaoanjujia.home.composition.login.code_login;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -17,19 +16,17 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
-import com.xiaoanjujia.common.util.CodeUtils;
 import com.xiaoanjujia.common.util.HandlerFactory;
 import com.xiaoanjujia.common.util.PhoneValidator;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
-import com.xiaoanjujia.common.util.StringUtils;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
-import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 import com.xiaoanjujia.home.tool.Api;
+import com.xiaoanjujia.home.tool.Util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +43,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/register/register")
+@Route(path = "/codeLogin/codeLogin")
 public class CodeLoginActivity extends BaseActivity implements CodeLoginContract.View {
 
     @Inject
@@ -67,12 +64,6 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
     EditText regVerificationCode;
     @BindView(R2.id.btn_getValidateCode)
     Button btnGetValidateCode;
-    @BindView(R2.id.reg_password)
-    EditText regPassword;
-    @BindView(R2.id.et_image_code)
-    EditText etImageCode;
-    @BindView(R2.id.image_code)
-    ImageView imageCode;
     @BindView(R2.id.reg_btn_register)
     Button regBtnRegister;
     @BindView(R2.id.ll_register_root_view)
@@ -83,7 +74,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
 
     private int timeLong = 90;
     private Timer mTimer;
-    private CodeUtils mCodeUtils;
+//    private CodeUtils mCodeUtils;
 
 
     @Override
@@ -104,9 +95,9 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 .build()
                 .inject(this);
 
-        mCodeUtils = CodeUtils.getInstance();
-        Bitmap bitmap = mCodeUtils.createBitmap();
-        imageCode.setImageBitmap(bitmap);
+//        mCodeUtils = CodeUtils.getInstance();
+//        Bitmap bitmap = mCodeUtils.createBitmap();
+//        imageCode.setImageBitmap(bitmap);
     }
 
     /**
@@ -137,7 +128,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
             if (code == ResponseCode.SUCCESS_OK) {
                 ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.Registered_successfully));
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
-                PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
+//                PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
@@ -219,44 +210,44 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
             //注册
             RegisterMethod();
 
-        } else if (i == R.id.image_code) {
+        } /*else if (i == R.id.image_code) {
             //更换图形验证码
             Bitmap bitmap = mCodeUtils.createBitmap();
             imageCode.setImageBitmap(bitmap);
 
-        }
+        }*/
     }
 
     private void RegisterMethod() {
 
-        String lPassword = regPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(lPassword)) {
-            ToastUtil.showToast(
-                    mContext,
-                    "请填写密码（密码长度6-16个字符，要包含字母和数字）", Toast.LENGTH_SHORT);
-            return;
-        }
-        if (!StringUtils.isPasswordRegex(lPassword)) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
-                            R.string.password_character_restrict), Toast.LENGTH_SHORT);
-            return;
-        }
-        String imageCode = etImageCode.getText().toString().trim();
-        if (Utils.isNull(imageCode)) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
-                            R.string.register_image_code), Toast.LENGTH_SHORT);
-            return;
-        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
-                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
-            return;
-        }
+//        String lPassword = regPassword.getText().toString().trim();
+//        if (TextUtils.isEmpty(lPassword)) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    "请填写密码（密码长度6-16个字符，要包含字母和数字）", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if (!StringUtils.isPasswordRegex(lPassword)) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    mContext.getResources().getString(
+//                            R.string.password_character_restrict), Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        String imageCode = etImageCode.getText().toString().trim();
+//        if (Utils.isNull(imageCode)) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    mContext.getResources().getString(
+//                            R.string.register_image_code), Toast.LENGTH_SHORT);
+//            return;
+//        } else if (!imageCode.equalsIgnoreCase(mCodeUtils.getCode())) {
+//            ToastUtil.showToast(
+//                    mContext,
+//                    mContext.getResources().getString(
+//                            R.string.register_image_code_correct), Toast.LENGTH_SHORT);
+//            return;
+//        }
         //        if (!lPassword.equals(lAgainPassword)) {
         //            ToastUtil.showToast(
         //                    mContext,
@@ -272,7 +263,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
         }
 
         String lValidateCode = regVerificationCode.getText().toString().trim();
-        if (null == lValidateCode || lValidateCode.length() == 0) {
+        if (Util.isNull(lValidateCode)) {
             ToastUtil.showToast(
                     mContext,
                     mContext.getResources().getString(
@@ -302,7 +293,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
 
         Map<String, Object> mapParameters = new HashMap<>(6);
         mapParameters.put("phone", regPhone.getText().toString().trim());
-        mapParameters.put("password", lPassword);
+//        mapParameters.put("password", lPassword);
         //        mapParameters.put("RANDOM_NUMBER", lRandomNumber);
         mapParameters.put("code", lValidateCode);
 

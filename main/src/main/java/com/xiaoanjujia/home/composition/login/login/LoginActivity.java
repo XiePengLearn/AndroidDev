@@ -47,28 +47,33 @@ import butterknife.OnClick;
 public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Inject
     LoginPresenter presenter;
+
+
+    private static final String TAG = "LoginActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
     ImageView mainTitleBack;
     @BindView(R2.id.main_title_text)
     TextView mainTitleText;
+    @BindView(R2.id.main_title_right)
+    ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.edit_account)
     ClearEditText editAccount;
     @BindView(R2.id.edit_password)
     ClearEditText editPassword;
-    @BindView(R2.id.login_remember_passwords)
-    CheckBox loginRememberPasswords;
-    @BindView(R2.id.login_find_password)
-    TextView loginFindPassword;
     @BindView(R2.id.login_entry)
     Button loginEntry;
+    @BindView(R2.id.login_remember_passwords)
+    CheckBox loginRememberPasswords;
+    @BindView(R2.id.fast_login)
+    TextView fastLogin;
+    @BindView(R2.id.login_find_password)
+    TextView loginFindPassword;
     @BindView(R2.id.register)
     TextView register;
-
-    private static final String TAG = "LoginActivity";
     private Button mLoginEntry;
     private LoginResponse loginResponse;
     private boolean isClickForgetPassword = false;
@@ -222,7 +227,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @OnClick({R2.id.main_title_back, R2.id.edit_account, R2.id.edit_password,
-            R2.id.login_remember_passwords, R2.id.login_find_password, R2.id.login_entry, R2.id.register})
+            R2.id.login_remember_passwords, R2.id.login_find_password, R2.id.login_entry, R2.id.register, R2.id.fast_login})
     public void onViewClicked(View view) {
         int i = view.getId();
         if (i == R.id.main_title_back) {
@@ -247,6 +252,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             LoginMethod();
         } else if (i == R.id.register) {
             ARouter.getInstance().build("/register/register").greenChannel().navigation(this);
+        }else if (i == R.id.fast_login) {
+            ARouter.getInstance().build("/codeLogin/codeLogin").greenChannel().navigation(this);
         }
     }
 

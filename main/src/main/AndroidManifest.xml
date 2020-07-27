@@ -71,6 +71,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.login.forget.ForgerPasswordActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.login.code_login.CodeLoginActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
