@@ -74,5 +74,5 @@ dependencies {
     // RunTimePermissionRequest
     api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
     api 'com.jude:easyrecyclerview:4.2.3'
-
+    api 'com.alibaba:fastjson:1.2.46'
 }

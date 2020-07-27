@@ -141,7 +141,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 PrefUtils.writeSESSION_ID(SESSION_ID, BaseApplication.getInstance());
 
-                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
+                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(CodeLoginActivity.this);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面

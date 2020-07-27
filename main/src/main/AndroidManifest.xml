@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.xiaoanjujia.home.composition.main2.MainActivity"
+            android:name="com.xiaoanjujia.home.composition.main.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
 
         </activity>
