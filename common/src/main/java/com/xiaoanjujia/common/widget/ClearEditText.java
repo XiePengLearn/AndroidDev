@@ -12,6 +12,8 @@ import android.view.animation.TranslateAnimation;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.sxjs.common.R;
+import com.xiaoanjujia.common.BaseApplication;
+import com.xiaoanjujia.common.util.DensityUtils;
 
 /**
  * @Auther: xp
@@ -42,7 +44,7 @@ public class ClearEditText extends AppCompatEditText implements
         if (mClearDrawable == null) {
             mClearDrawable = getResources().getDrawable(R.drawable.search_clear);
         }
-        mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight());
+        mClearDrawable.setBounds(0, 0, DensityUtils.dp2px(BaseApplication.getInstance(), 15), DensityUtils.dp2px(BaseApplication.getInstance(), 15));
         setClearIconVisible(false);
         setOnFocusChangeListener(this);
         //addTextChangedListener(this);

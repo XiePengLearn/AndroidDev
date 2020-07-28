@@ -79,6 +79,15 @@ public class StoreFragment extends BaseFragment implements StoreFragmentContract
         initView();
         initData();
 
+        initTitle();
+    }
+
+    /**
+     * 初始化title
+     */
+    private void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText("商城");
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
 import java.util.TreeMap;

@@ -264,5 +264,11 @@
     <declare-styleable name="GifImageView">
         <attr name="resId" format="reference" />
     </declare-styleable>
-
+    <declare-styleable name="RingLoadingView">
+        <!-- 圆环的边宽 -->
+        <attr name="rlv_ring_width" format="dimension|reference|float" />
+        <!-- 是否自动开启旋转，默认开启 -->
+        <attr name="rlv_auto_start" format="boolean" />
+        <attr name="ringColor" format="color"></attr>
+    </declare-styleable>
 </resources>

@@ -21,6 +21,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PhoneValidator;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -267,11 +268,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     private void LoginMethod() {
         String lAccount = editAccount.getText().toString().trim();
-
         if (TextUtils.isEmpty(lAccount)) {
-
             ToastUtil.showToast(mContext, getResources().getString(
                     R.string.username_not_empty), Toast.LENGTH_SHORT);
+            return;
+        }
+        String errorMsg = PhoneValidator.validate(lAccount);
+        if (null != errorMsg) {
+            ToastUtil.showToast(mContext, errorMsg, Toast.LENGTH_SHORT);
             return;
         }
 
@@ -355,7 +359,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
 
     }
-
 
 
 }

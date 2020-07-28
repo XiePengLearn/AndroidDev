@@ -80,6 +80,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         initView();
         initData();
 
+        initTitle();
+    }
+
+    /**
+     * 初始化title
+     */
+    private void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText("社区");
     }
 
     @Override

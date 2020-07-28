@@ -25,6 +25,7 @@ import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
 import com.xiaoanjujia.home.composition.main.mine.MineFragment;
+import com.xiaoanjujia.home.composition.main.store.StoreFragment;
 import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
 import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
 import com.xiaoanjujia.home.entities.LoginResponse;
@@ -38,19 +39,20 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements MainContract.View, BottomNavigationBar.OnTabSelectedListener {
 
     @Inject
-    MainPresenter       presenter;
+    MainPresenter presenter;
     @BindView(R2.id.bottom_navigation_bar1)
     BottomNavigationBar bottomNavigationBar;
     @BindView(R2.id.main_container)
-    FrameLayout         mainContainer;
+    FrameLayout mainContainer;
     private UnlockingFragment mUnlockingFragment;
     private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
     private CommunityFragment mCommunityFragment;
+    private StoreFragment mStoreFragment;
     private MineFragment mMyFragment;
     @SuppressLint("StaticFieldLeak")
-    public static MainActivity       instance;//关闭当前页面的instance
-    private final String             MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
+    public static MainActivity instance;//关闭当前页面的instance
+    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
 
 
     @Override
@@ -66,10 +68,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         instance = this;
         registerMessageBroadcast();
 
-//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//        int heapSize = manager.getMemoryClass();
-//        int maxHeapSize = manager.getLargeMemoryClass();  // manafest.xml   android:largeHeap="true"
-//        LogUtil.e(TAG, "--------heapSize--------:" + heapSize + ";--------maxHeapSize--------:" + maxHeapSize);
+        //        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        //        int heapSize = manager.getMemoryClass();
+        //        int maxHeapSize = manager.getLargeMemoryClass();  // manafest.xml   android:largeHeap="true"
+        //        LogUtil.e(TAG, "--------heapSize--------:" + heapSize + ";--------maxHeapSize--------:" + maxHeapSize);
     }
 
     /**
@@ -99,44 +101,46 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     }
 
     private void initLogin() {
-//        String lAccount = PrefUtils.readUserNameDefault(this.getApplicationContext());
-//        String lPassword = PrefUtils.readPasswordDefault(this.getApplicationContext());
-//
-//        String mXinGeToken = PrefUtils.readXinGeToken(this.getApplicationContext());
-//        Map<String, Object> mapParameters = new HashMap<>(6);
-//        mapParameters.put("MOBILE", lAccount);
-//        mapParameters.put("PASSWORD", lPassword);
-//        mapParameters.put("SIGNIN_TYPE", "1");
-//        mapParameters.put("USER_TYPE", "1");
-//        mapParameters.put("MOBILE_TYPE", "1");
-//        mapParameters.put("XINGE_TOKEN", mXinGeToken);
-//        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
-//
-//        Map<String, String> mapHeaders = new HashMap<>(1);
-//        mapHeaders.put("ACTION", "S002");
-//        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
-//
-//        presenter.getLoginData(mapHeaders, mapParameters);
+        //        String lAccount = PrefUtils.readUserNameDefault(this.getApplicationContext());
+        //        String lPassword = PrefUtils.readPasswordDefault(this.getApplicationContext());
+        //
+        //        String mXinGeToken = PrefUtils.readXinGeToken(this.getApplicationContext());
+        //        Map<String, Object> mapParameters = new HashMap<>(6);
+        //        mapParameters.put("MOBILE", lAccount);
+        //        mapParameters.put("PASSWORD", lPassword);
+        //        mapParameters.put("SIGNIN_TYPE", "1");
+        //        mapParameters.put("USER_TYPE", "1");
+        //        mapParameters.put("MOBILE_TYPE", "1");
+        //        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        //        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+        //
+        //        Map<String, String> mapHeaders = new HashMap<>(1);
+        //        mapHeaders.put("ACTION", "S002");
+        //        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+        //
+        //        presenter.getLoginData(mapHeaders, mapParameters);
     }
 
 
     public void initView() {
 
-        mUnlockingFragment = (UnlockingFragment) mFragmentManager.findFragmentByTag("home_fg");
-        mTenementFragment = (TenementFragment) mFragmentManager.findFragmentByTag("class_fg");
-        mCommunityFragment = (CommunityFragment) mFragmentManager.findFragmentByTag("find_fg");
+        mUnlockingFragment = (UnlockingFragment) mFragmentManager.findFragmentByTag("unlocking_fg");
+        mTenementFragment = (TenementFragment) mFragmentManager.findFragmentByTag("tenement_fg");
+        mCommunityFragment = (CommunityFragment) mFragmentManager.findFragmentByTag("community_fg");
+        mStoreFragment = (StoreFragment) mFragmentManager.findFragmentByTag("store_fg");
         mMyFragment = (MineFragment) mFragmentManager.findFragmentByTag("my_fg");
 
 
         if (mUnlockingFragment == null) {
             mUnlockingFragment = UnlockingFragment.newInstance();
-            addFragment(R.id.main_container, mUnlockingFragment, "home_fg");
+            addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
         }
 
         mFragmentManager.beginTransaction().show(mUnlockingFragment)
                 .commitAllowingStateLoss();
-        hideClassificationFragmnt();
-        hideFindFragment();
+        hideTenementFragment();
+        hideCommunityFragment();
+        hideStoreFragment();
         hideMyFragment();
 
         DaggerMainActivityComponent.builder()
@@ -156,11 +160,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         if (position == 0) {
             if (mUnlockingFragment == null) {
                 mUnlockingFragment = UnlockingFragment.newInstance();
-                addFragment(R.id.main_container, mUnlockingFragment, "home_fg");
+                addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
             }
 
-            hideClassificationFragmnt();
-            hideFindFragment();
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideStoreFragment();
             hideMyFragment();
 
             mFragmentManager.beginTransaction()
@@ -172,12 +177,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 1) {
             if (mTenementFragment == null) {
                 mTenementFragment = TenementFragment.newInstance();
-                addFragment(R.id.main_container, mTenementFragment, "class_fg");
+                addFragment(R.id.main_container, mTenementFragment, "tenement_fg");
             }
 
             hideHomeFragment();
 
-            hideFindFragment();
+            hideCommunityFragment();
+            hideStoreFragment();
             hideMyFragment();
 
 
@@ -189,13 +195,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 2) {
             if (mCommunityFragment == null) {
                 mCommunityFragment = CommunityFragment.newInstance();
-                addFragment(R.id.main_container, mCommunityFragment, "find_fg");
+                addFragment(R.id.main_container, mCommunityFragment, "community_fg");
             }
 
 
             hideHomeFragment();
-            hideClassificationFragmnt();
-
+            hideTenementFragment();
+            hideStoreFragment();
             hideMyFragment();
 
 
@@ -206,15 +212,31 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
         } else if (position == 3) {
 
+            if (mStoreFragment == null) {
+                mStoreFragment = StoreFragment.newInstance();
+                addFragment(R.id.main_container, mStoreFragment, "store_fg");
+            }
+
+            hideHomeFragment();
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideMyFragment();
+            mFragmentManager.beginTransaction()
+                    .show(mStoreFragment)
+                    .commitAllowingStateLoss();
+
+
+        } else if (position == 4) {
+
             if (mMyFragment == null) {
                 mMyFragment = MineFragment.newInstance();
                 addFragment(R.id.main_container, mMyFragment, "my_fg");
             }
 
             hideHomeFragment();
-            hideClassificationFragmnt();
-            hideFindFragment();
-
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideStoreFragment();
             mFragmentManager.beginTransaction()
                     .show(mMyFragment)
                     .commitAllowingStateLoss();
@@ -235,13 +257,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         }
     }
 
-    private void hideFindFragment() {
+    private void hideCommunityFragment() {
         if (mCommunityFragment != null) {
             mFragmentManager.beginTransaction().hide(mCommunityFragment).commitAllowingStateLoss();
         }
     }
 
-    private void hideClassificationFragmnt() {
+    private void hideStoreFragment() {
+        if (mStoreFragment != null) {
+            mFragmentManager.beginTransaction().hide(mStoreFragment).commitAllowingStateLoss();
+        }
+    }
+
+    private void hideTenementFragment() {
         if (mTenementFragment != null) {
             mFragmentManager.beginTransaction().hide(mTenementFragment).commitAllowingStateLoss();
         }
@@ -265,7 +293,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                 .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
                 .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
                 .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                //                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent).setBadgeItem(numberBadgeItem))
+                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent).setBadgeItem(numberBadgeItem))
                 .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
                 .setFirstSelectedPosition(0)
                 .initialise();

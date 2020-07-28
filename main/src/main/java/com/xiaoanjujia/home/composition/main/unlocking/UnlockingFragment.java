@@ -79,7 +79,15 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         initView();
         initData();
+        initTitle();
+    }
 
+    /**
+     * 初始化title
+     */
+    private void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText("开锁");
     }
 
     @Override

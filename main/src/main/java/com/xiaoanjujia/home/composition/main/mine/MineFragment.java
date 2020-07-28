@@ -80,6 +80,15 @@ public class MineFragment extends BaseFragment implements MineFragmentContract.V
         initView();
         initData();
 
+        initTitle();
+    }
+
+    /**
+     * 初始化title
+     */
+    private void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText("我的");
     }
 
     @Override

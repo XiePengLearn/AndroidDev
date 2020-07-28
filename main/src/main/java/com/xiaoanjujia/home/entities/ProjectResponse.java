@@ -35,4 +35,42 @@ public class ProjectResponse implements Serializable {
 
         return response;
     }
+
+    public static boolean isJsonObjectData(String content) {
+        ProjectResponse response = new ProjectResponse();
+        try {
+            JSONObject jsonObject = new JSONObject(content);
+            response.result = jsonObject.optInt("status");
+            response.info = jsonObject.optString("message");
+            Object object = jsonObject.opt("data");
+            if (object instanceof JSONObject) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public static boolean isJsonArrayData(String content) {
+        ProjectResponse response = new ProjectResponse();
+        try {
+            JSONObject jsonObject = new JSONObject(content);
+            response.result = jsonObject.optInt("status");
+            response.info = jsonObject.optString("message");
+            Object object = jsonObject.opt("data");
+            if (object instanceof JSONArray) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 }
