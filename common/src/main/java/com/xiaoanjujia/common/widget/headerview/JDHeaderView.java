@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sxjs.common.R;
+import com.xiaoanjujia.common.widget.LoadingView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrUIHandler;
 import com.xiaoanjujia.common.widget.pulltorefresh.indicator.PtrIndicator;
@@ -21,16 +22,16 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
 
 
     private TextView status_text;
-    private ImageView ren;
     private ImageView hezi;
     private int viewHeight;
-    private ImageView donghua;
-    private AnimationDrawable drawable;
+    private LoadingView donghua;
+    //    private AnimationDrawable drawable;
     private RefreshDistanceListener listener;
     /**
      * 自开始下拉 0.2倍height内是否执行了缩放，
      */
     private boolean isScale;
+    private LoadingView ren;
 
     public void setOnRefreshDistanceListener(RefreshDistanceListener listener) {
         this.listener = listener;
@@ -53,12 +54,12 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
 
     private void initView() {
 
-        View view = View.inflate(this.getContext(), R.layout.jingdongheaderviewlayout,null);
+        View view = View.inflate(this.getContext(), R.layout.jingdongheaderviewlayout, null);
         status_text = (TextView) view.findViewById(R.id.status_test);
-        ren = (ImageView) view.findViewById(R.id.ren);
+        ren = (LoadingView) view.findViewById(R.id.pull_to_loading_iv);
         hezi = (ImageView) view.findViewById(R.id.hezi);
-        donghua = (ImageView) view.findViewById(R.id.donghua);
-        drawable = (AnimationDrawable) donghua.getDrawable();
+        donghua = (LoadingView) view.findViewById(R.id.donghua_loading_iv);
+        //        drawable = (AnimationDrawable) donghua.getDrawable();
         setRatioOfHeaderHeightToRefresh(1.0f);
         setHeaderView(view);
         addPtrUIHandler(this);
@@ -66,7 +67,7 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
 
     @Override
     public void onUIReset(PtrFrameLayout frame) {
-        drawable.stop();
+        //        drawable.stop();
         donghua.setVisibility(View.GONE);
         ren.setVisibility(View.VISIBLE);
         hezi.setVisibility(View.VISIBLE);
@@ -75,9 +76,9 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
     @Override
     public void onUIRefreshPrepare(PtrFrameLayout frame) {
 
-        if(frame.isPullToRefresh()){
+        if (frame.isPullToRefresh()) {
             status_text.setText("松开刷新...");
-        }else{
+        } else {
             status_text.setText("下拉刷新...");
 
         }
@@ -88,7 +89,7 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
         ren.setVisibility(View.GONE);
         hezi.setVisibility(View.GONE);
         donghua.setVisibility(View.VISIBLE);
-        drawable.start();
+        //        drawable.start();
         status_text.setText("更新中...");
     }
 
@@ -97,26 +98,28 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
     }
 
     private static final String TAG = "JDHeaderView";
+
     @Override
     public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
         //ptrIndicator.setRatioOfHeaderHeightToRefresh(1.0f);
         final int mOffsetToRefresh = frame.getOffsetToRefresh();
         final int currentPos = ptrIndicator.getCurrentPosY();
         final int lastPos = ptrIndicator.getLastPosY();
-        if(listener != null){
+        if (listener != null) {
             listener.onPositionChange(currentPos);
         }
-        if(viewHeight == 0)
-        viewHeight = ptrIndicator.getHeaderHeight();
+        if (viewHeight == 0)
+            viewHeight = ptrIndicator.getHeaderHeight();
         float v = currentPos * 1.0f / viewHeight;
-        if(v > 1)v= 1;
+        if (v > 1)
+            v = 1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             //此处防止首次下拉到0.2height时突然缩小
-            if(!isScale && v <= 0.2){
+            if (!isScale && v <= 0.2) {
                 isScale = true;
                 setImgScale(0.2f);
             }
-            if(v > 0.2){
+            if (v > 0.2) {
                 setImgScale(v);
             }
 
@@ -143,7 +146,7 @@ public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
         hezi.setScaleX(v);
     }
 
-    public interface RefreshDistanceListener{
+    public interface RefreshDistanceListener {
         void onPositionChange(int currentPosY);
     }
 

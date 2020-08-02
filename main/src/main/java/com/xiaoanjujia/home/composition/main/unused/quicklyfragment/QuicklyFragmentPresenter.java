@@ -57,7 +57,6 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-
             private LoginResponse mLoginResponse;
 
             @Override

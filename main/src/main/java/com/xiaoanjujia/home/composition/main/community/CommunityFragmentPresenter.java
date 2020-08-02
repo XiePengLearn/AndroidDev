@@ -6,6 +6,7 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,15 +56,23 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private LoginResponse mDataResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    LoginResponse dataResponse = gson.fromJson(response, LoginResponse.class);
-
-                    mContractView.setResponseData(dataResponse);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, LoginResponse.class);
+                    } else {
+                        mDataResponse = new LoginResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setResponseData(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
