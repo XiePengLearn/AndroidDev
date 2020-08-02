@@ -19,24 +19,25 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_60"
+                android:layout_width="@dimen/dp_71"
+                android:layout_height="@dimen/dp_71"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_60"
+                android:layout_marginTop="@dimen/dp_70"
                 android:src="@drawable/ic_launcher" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_49"
                 android:paddingLeft="@dimen/dp_30"
                 android:paddingRight="@dimen/dp_30">
 
                 <ImageView
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_width="@dimen/dp_17"
+                    android:layout_height="@dimen/dp_21"
                     android:layout_marginRight="@dimen/dp_27"
-                    android:src="@drawable/phone_icon" />
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/username_icon_login" />
 
                 <com.xiaoanjujia.common.widget.ClearEditText
                     android:id="@+id/edit_account"
@@ -48,9 +49,9 @@
                     android:gravity="left|center_vertical"
                     android:hint="请输入您的用户名/账号"
                     android:inputType="phone"
+                    android:maxLength="11"
                     android:paddingRight="@dimen/dp_10"
                     android:singleLine="true"
-                    android:maxLength="11"
                     android:text=""
                     android:textColor="#333333"
                     android:textColorHint="#dddddd"
@@ -63,23 +64,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_1"
                 android:layout_marginLeft="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_marginTop="@dimen/dp_11"
                 android:layout_marginRight="@dimen/dp_30"
                 android:background="#DEDEDE" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
                 android:layout_marginTop="@dimen/dp_24"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_30"
                 android:paddingRight="@dimen/dp_30">
 
                 <ImageView
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_width="@dimen/dp_17"
+                    android:layout_height="@dimen/dp_21"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/dp_27"
-                    android:src="@drawable/password_icon" />
+                    android:src="@drawable/password_icon_login" />
 
                 <com.xiaoanjujia.common.widget.ClearEditText
                     android:id="@+id/edit_password"
@@ -106,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_1"
                 android:layout_marginLeft="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_marginTop="@dimen/dp_11"
                 android:layout_marginRight="@dimen/dp_30"
                 android:background="#DEDEDE" />
 
@@ -114,10 +116,10 @@
             <Button
                 android:id="@+id/login_entry"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_45"
+                android:layout_height="@dimen/dp_42"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_23"
+                android:layout_marginTop="@dimen/dp_35"
                 android:layout_marginRight="@dimen/dp_30"
                 android:background="@drawable/bg_shap_button_1"
                 android:gravity="center"
@@ -168,7 +170,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_57"
+                android:layout_marginRight="@dimen/dp_30"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -177,28 +181,28 @@
                     android:id="@+id/login_find_password"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/sp_10"
+                    android:layout_marginRight="@dimen/sp_18"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:text="@string/login_forget_password"
-                    android:textColor="#333333"
+                    android:textColor="@color/color_5bbe8c"
                     android:textSize="@dimen/sp_14" />
 
                 <View
                     android:layout_width="@dimen/dp_1"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/dp_1"
-                    android:background="#DEDEDE" />
+                    android:background="@color/color_656565" />
 
                 <TextView
                     android:id="@+id/register"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/sp_10"
+                    android:layout_marginLeft="@dimen/sp_18"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:text="新用户注册"
-                    android:textColor="#333333"
+                    android:textColor="@color/color_5bbe8c"
                     android:textSize="@dimen/sp_14" />
 
 

@@ -5,4 +5,6 @@
     <color name="dialog_bg">#aa333333</color>
     <color name="no_network_bg">#333333</color>
     <color name="search_corner_bg">#ddBBBABA</color>
+    <color name="color_5bbe8c">#5bbe8c</color>
+    <color name="color_656565">#656565</color>
 </resources>
