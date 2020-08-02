@@ -6,6 +6,7 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,7 +26,8 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
     private MainDataManager mDataManager;
 
     private QuicklyFragmentContract.View mContractView;
-    private static  final String         TAG = "BeforePagePresenter";
+    private static final String TAG = "BeforePagePresenter";
+
     @Inject
     public QuicklyFragmentPresenter(MainDataManager mDataManager, QuicklyFragmentContract.View view) {
         this.mDataManager = mDataManager;
@@ -55,15 +57,24 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private LoginResponse mLoginResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    LoginResponse dataResponse = gson.fromJson(response, LoginResponse.class);
-
-                    mContractView.setResponseData(dataResponse);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                    } else {
+                        mLoginResponse = new LoginResponse();
+                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
+                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setResponseData(mLoginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

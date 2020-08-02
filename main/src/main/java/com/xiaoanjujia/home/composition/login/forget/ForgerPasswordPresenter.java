@@ -6,6 +6,8 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.ForgerResponse;
+import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 
@@ -25,8 +27,9 @@ import retrofit2.HttpException;
  */
 public class ForgerPasswordPresenter extends BasePresenter implements ForgerPasswordContract.Presenter {
     private MainDataManager mDataManager;
-    private              ForgerPasswordContract.View mLoginView;
-    private static final String                TAG = "ForgerPasswordPresenter";
+    private ForgerPasswordContract.View mLoginView;
+    private static final String TAG = "ForgerPasswordPresenter";
+    private RegisterCodeResponse mRegisterCodeResponse;
 
     @Inject
     public ForgerPasswordPresenter(MainDataManager mDataManager, ForgerPasswordContract.View view) {
@@ -57,15 +60,24 @@ public class ForgerPasswordPresenter extends BasePresenter implements ForgerPass
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getRegisterForgerData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private ForgerResponse mForgerResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    ForgerResponse forgerResponse = gson.fromJson(response, ForgerResponse.class);
-
-                    mLoginView.setResponseData(forgerResponse);
+                    boolean isJsonArrayData = ProjectResponse.isJsonArrayData(response);
+                    if (isJsonArrayData) {
+                        mForgerResponse = gson.fromJson(response, ForgerResponse.class);
+                    } else {
+                        mForgerResponse = new ForgerResponse();
+                        mForgerResponse.setMessage(ProjectResponse.getMessage(response));
+                        mForgerResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mLoginView.setResponseData(mForgerResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -82,7 +94,7 @@ public class ForgerPasswordPresenter extends BasePresenter implements ForgerPass
             public void onComplete() {
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
-                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime+"  ms");
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
                 mLoginView.hiddenProgressDialogView();
             }
         });
@@ -100,9 +112,15 @@ public class ForgerPasswordPresenter extends BasePresenter implements ForgerPass
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    RegisterCodeResponse registerCodeResponse = gson.fromJson(response, RegisterCodeResponse.class);
-
-                    mLoginView.setCodeResponseData(registerCodeResponse);
+                    boolean isJsonArrayData = ProjectResponse.isJsonArrayData(response);
+                    if (isJsonArrayData) {
+                        mRegisterCodeResponse = gson.fromJson(response, RegisterCodeResponse.class);
+                    } else {
+                        mRegisterCodeResponse = new RegisterCodeResponse();
+                        mRegisterCodeResponse.setMessage(ProjectResponse.getMessage(response));
+                        mRegisterCodeResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mLoginView.setCodeResponseData(mRegisterCodeResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -114,11 +132,11 @@ public class ForgerPasswordPresenter extends BasePresenter implements ForgerPass
                 super.onError(e);
                 mLoginView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= " + e.toString());
-                if(e instanceof HttpException){
+                if (e instanceof HttpException) {
                     ResponseBody responseBody = ((HttpException) e).response().errorBody();
 
                     try {
-                        if(responseBody != null){
+                        if (responseBody != null) {
                             responseBody.toString();
                         }
                     } catch (Exception ex) {
@@ -132,7 +150,7 @@ public class ForgerPasswordPresenter extends BasePresenter implements ForgerPass
             public void onComplete() {
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
-                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime+"  ms");
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
                 mLoginView.hiddenProgressDialogView();
             }
         });

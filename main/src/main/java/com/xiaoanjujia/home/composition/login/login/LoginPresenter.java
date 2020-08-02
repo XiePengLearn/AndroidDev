@@ -7,6 +7,7 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.RegisterResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,8 +24,8 @@ import okhttp3.ResponseBody;
  */
 public class LoginPresenter extends BasePresenter implements LoginContract.Presenter {
     private MainDataManager mDataManager;
-    private              LoginContract.View mLoginView;
-    private static final String             TAG = "MainPresenter";
+    private LoginContract.View mLoginView;
+    private static final String TAG = "MainPresenter";
 
     @Inject
     public LoginPresenter(MainDataManager mDataManager, LoginContract.View view) {
@@ -55,6 +56,9 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private LoginResponse mLoginResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
@@ -62,9 +66,15 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
-
-                    mLoginView.setLoginData(loginResponse);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                    } else {
+                        mLoginResponse = new LoginResponse();
+                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
+                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mLoginView.setLoginData(mLoginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
