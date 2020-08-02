@@ -87,7 +87,7 @@
             android:layout_marginTop="10dp"
             android:background="@null"
             android:cursorVisible="true"
-            android:drawableLeft="@drawable/password_icon_login"
+            android:drawableLeft="@drawable/password_icon_register"
             android:drawablePadding="@dimen/dp_10"
             android:hint="6-20位登录密码"
             android:inputType="textPassword"
