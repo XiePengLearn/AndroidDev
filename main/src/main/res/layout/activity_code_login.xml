@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="@dimen/dp_97"
         android:layout_marginRight="20dp"
         android:orientation="vertical">
 
@@ -24,7 +24,7 @@
             android:layout_marginTop="10dp"
             android:background="@null"
             android:cursorVisible="true"
-            android:drawableLeft="@drawable/password_icon"
+            android:drawableLeft="@drawable/sms_phone_code_login"
             android:drawablePadding="@dimen/dp_10"
             android:hint="填写手机号"
             android:inputType="phone"
@@ -42,7 +42,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="38dp"
 
             android:orientation="horizontal">
 
@@ -53,7 +53,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
-                android:drawableLeft="@drawable/password_icon"
+                android:drawableLeft="@drawable/sms_code_code_login"
                 android:drawablePadding="@dimen/dp_10"
                 android:hint="短信验证码"
                 android:inputType="phone"
@@ -92,7 +92,7 @@
                 android:id="@+id/reg_btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="138dp"
                 android:background="@drawable/bg_shap_button_1"
                 android:text="登录"
                 android:textColor="#fff"
