@@ -83,7 +83,7 @@ public class RegisterSuccessActivity extends BaseActivity implements RegisterSuc
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText(R.string.Registered_successfully);
+        mainTitleText.setText(R.string.registered_successfully);
     }
 
     private void initView() {

@@ -136,7 +136,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             int code = registerResponse.getStatus();
             String msg = registerResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.Registered_successfully));
+                ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.registered_successfully));
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());

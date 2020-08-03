@@ -23,7 +23,6 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.success.invite.DaggerInviteSuccessActivityComponent;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -84,7 +83,7 @@ public class PublishSuccessActivity extends BaseActivity implements PublishSucce
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText(R.string.Registered_successfully);
+        mainTitleText.setText(R.string.publish_successfully);
     }
 
     private void initView() {

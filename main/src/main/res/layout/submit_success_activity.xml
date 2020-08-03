@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_22"
-            android:text="注册成功"
+            android:text="提交资料成功"
             android:textColor="#333333"
             android:textSize="@dimen/sp_14" />
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_10"
-            android:text="请点击跳转至主页"
+            android:text="等待后台审核"
             android:textColor="#333333"
             android:textSize="@dimen/sp_14" />
 
@@ -51,7 +51,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="立即跳转"
+            android:text="返回主页"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/sp_14" />
 
