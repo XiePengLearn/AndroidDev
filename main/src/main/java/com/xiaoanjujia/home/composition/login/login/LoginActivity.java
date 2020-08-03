@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     LoginPresenter presenter;
 
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "PublishSuccessActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -254,14 +254,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             //忘记密码
             isClickForgetPassword = true;
             ARouter.getInstance().build("/forget/forget").greenChannel().navigation(this);
+            finish();
 
         } else if (i == R.id.login_entry) {
             //登录
             LoginMethod();
         } else if (i == R.id.register) {
             ARouter.getInstance().build("/register/register").greenChannel().navigation(this);
+            finish();
         } else if (i == R.id.fast_login) {
             ARouter.getInstance().build("/codeLogin/codeLogin").greenChannel().navigation(this);
+            finish();
         }
     }
 

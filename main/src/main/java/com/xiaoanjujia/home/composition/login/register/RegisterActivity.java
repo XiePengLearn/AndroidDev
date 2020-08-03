@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
@@ -139,6 +140,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
+                ARouter.getInstance().build("/RegisterSuccess/RegisterSuccess").greenChannel().navigation(this);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -147,7 +149,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(this.getApplicationContext(), msg);
                 }
-
             }
         } catch (Exception e) {
             ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");

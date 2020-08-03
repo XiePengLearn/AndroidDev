@@ -69,11 +69,30 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.login.register.RegisterActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name="com.xiaoanjujia.home.composition.login.forget.ForgerPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.login.code_login.CodeLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.register.RegisterSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.publish.PublishSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.invite.InviteSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.audit.AuditSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.modification.ModificationSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.success.submit.SubmitSuccessActivity"
             android:screenOrientation="portrait" />
     </application>
 
