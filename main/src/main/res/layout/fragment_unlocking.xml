@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cube_ptr="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/jkx_public_title_home" />
+
+    <com.xiaoanjujia.common.widget.headerview.JDHeaderView
+        android:id="@+id/find_pull_refresh_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        cube_ptr:ptr_duration_to_close="200"
+        cube_ptr:ptr_duration_to_close_header="300"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
+        cube_ptr:ptr_resistance="2.0">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/unlocking_independent_booking_for_visitors"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:text="访客自主预约"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/unlocking_visiting_scholar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:text="访客邀请"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/unlocking_visitors_to_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:text="访客审核"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_fragment_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/no_data_img"
+                    android:layout_width="@dimen/dp_240"
+                    android:layout_height="@dimen/dp_140"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/message_empty" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </com.xiaoanjujia.common.widget.headerview.JDHeaderView>
+</LinearLayout>
