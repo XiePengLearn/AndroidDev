@@ -14,7 +14,7 @@ public class LoginResponse implements Serializable {
     /**
      * status : 1
      * message : 登录成功
-     * data : {"token":"S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz","user_id":35}
+     * data : {"token":"LZAn6zYfH06M+fYUeiyA8Iq2wLFTup12g3v6RyzWRAHWZvJijQTwwGl9OE6Y2rto","user_id":6,"role_id":0,"roletype":0,"rolename":""}
      */
 
     private int status;
@@ -47,12 +47,18 @@ public class LoginResponse implements Serializable {
 
     public static class DataBean {
         /**
-         * token : S9IUILwR98oAnV97jcDGzlc8w7xSczV7g9mdlP2+soksQMUBYOeetH8d7qT8/YVz
-         * user_id : 35
+         * token : LZAn6zYfH06M+fYUeiyA8Iq2wLFTup12g3v6RyzWRAHWZvJijQTwwGl9OE6Y2rto
+         * user_id : 6
+         * role_id : 0
+         * roletype : 0
+         * rolename :
          */
 
         private String token;
         private int user_id;
+        private int role_id;
+        private int roletype;
+        private String rolename;
 
         public String getToken() {
             return token;
@@ -68,6 +74,30 @@ public class LoginResponse implements Serializable {
 
         public void setUser_id(int user_id) {
             this.user_id = user_id;
+        }
+
+        public int getRole_id() {
+            return role_id;
+        }
+
+        public void setRole_id(int role_id) {
+            this.role_id = role_id;
+        }
+
+        public int getRoletype() {
+            return roletype;
+        }
+
+        public void setRoletype(int roletype) {
+            this.roletype = roletype;
+        }
+
+        public String getRolename() {
+            return rolename;
+        }
+
+        public void setRolename(String rolename) {
+            this.rolename = rolename;
         }
     }
 }

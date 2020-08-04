@@ -136,6 +136,8 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 }
                 LoginResponse.DataBean data = loginResponse.getData();
                 String SESSION_ID = data.getToken();
+                int roletype = data.getRoletype();
+                PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());

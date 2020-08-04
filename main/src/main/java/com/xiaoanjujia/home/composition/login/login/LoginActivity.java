@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PhoneValidator;
@@ -193,6 +194,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void setLoginData(LoginResponse loginResponse) {
         this.loginResponse = loginResponse;
+        //roletype:---0是普通用户---1是物业主管----2是物业人员
         try {
             int code = loginResponse.getStatus();
             String msg = loginResponse.getMessage();
@@ -201,12 +203,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 boolean checked = loginRememberPasswords.isChecked();
                 LoginResponse.DataBean data = loginResponse.getData();
                 String SESSION_ID = data.getToken();
+                int roletype = data.getRoletype();
+                PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
                 if (checked) {
                     //保存账号密码   储存状态 SESSION_ID
                     PrefUtils.writeUserName(editAccount.getText().toString().trim(), this.getApplicationContext());
                     PrefUtils.writePassword(editPassword.getText().toString().trim(), this.getApplicationContext());
                     PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                     PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
+
 
                 } else {
                     //保存账号密码   储存状态 SESSION_ID

@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PhoneValidator;
@@ -115,6 +116,8 @@ public class RegisterSuccessActivity extends BaseActivity implements RegisterSuc
                 LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData().getToken());
                 LoginResponse.DataBean data = loginResponse.getData();
                 String SESSION_ID = data.getToken();
+                int roletype = data.getRoletype();
+                PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(mUserName, this.getApplicationContext());
                 PrefUtils.writePassword(mPassword, this.getApplicationContext());

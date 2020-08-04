@@ -26,18 +26,18 @@ public class PrefUtils {
         return mySharedPreferences.getLong("CurrentTime", 0);
     }
 
-    public static void writeZJId(String userName, Context context) {
+    public static void writeRoleType(int roleType, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = mySharedPreferences.edit();
-        editor.putString("writeZJId", userName);
+        editor.putInt("roleType", roleType);
         editor.apply();
     }
 
-    public static String readZJId(Context context) {
+    public static int readRoleType(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
-        return mySharedPreferences.getString("writeZJId", "");
+        return mySharedPreferences.getInt("roleType", 0);
     }
 
     public static void writeUserName(String userName, Context context) {
