@@ -23,6 +23,7 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
@@ -65,9 +66,9 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
     @BindView(R2.id.reg_verification_code)
     EditText regVerificationCode;
     @BindView(R2.id.btn_getValidateCode)
-    Button btnGetValidateCode;
+    AlphaButton btnGetValidateCode;
     @BindView(R2.id.reg_btn_register)
-    Button regBtnRegister;
+    AlphaButton regBtnRegister;
     @BindView(R2.id.ll_register_root_view)
     LinearLayout llRegisterRootView;
 

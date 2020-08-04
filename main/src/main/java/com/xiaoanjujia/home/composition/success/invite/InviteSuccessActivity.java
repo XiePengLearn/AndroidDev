@@ -22,6 +22,7 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -58,9 +59,8 @@ public class InviteSuccessActivity extends BaseActivity implements InviteSuccess
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.register_success_entry)
-    Button registerSuccessEntry;
+    AlphaButton registerSuccessEntry;
 
-    private Button mLoginEntry;
     private LoginResponse loginResponse;
     private boolean isClickForgetPassword = false;
     private String mUserName;

@@ -26,6 +26,7 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.ClearEditText;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -65,7 +66,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R2.id.edit_password)
     ClearEditText editPassword;
     @BindView(R2.id.login_entry)
-    Button loginEntry;
+    AlphaButton loginEntry;
     @BindView(R2.id.login_remember_passwords)
     CheckBox loginRememberPasswords;
     @BindView(R2.id.fast_login)

@@ -39,7 +39,7 @@
             android:textSize="@dimen/sp_14" />
 
 
-        <Button
+        <com.xiaoanjujia.common.widget.alphaview.AlphaButton
             android:id="@+id/register_success_entry"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_42"

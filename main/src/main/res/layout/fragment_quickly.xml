@@ -30,7 +30,7 @@
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
 
-                <Button
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                     android:id="@+id/unlocking_independent_booking_for_visitors"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_42"
@@ -45,7 +45,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="@dimen/sp_14" />
 
-                <Button
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                     android:id="@+id/unlocking_visiting_scholar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_42"
@@ -61,7 +61,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="@dimen/sp_14" />
 
-                <Button
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                     android:id="@+id/unlocking_visitors_to_review"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_42"
