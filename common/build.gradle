@@ -31,30 +31,39 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
+
     //retrofit
     api "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     api "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     api "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     api "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
     api "com.google.code.gson:gson:$rootProject.gsonVersion"
+
     //rxJava
     api "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     api "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+
     //dagger
     api "com.google.dagger:dagger:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     //ButterKnife
     api "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+
     //design
     api 'com.google.android.material:material:1.1.0'
 
-//    //leak
-//    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-//    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
-//    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    //    //leak
+
+    //    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+
+    //    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+
+    //    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+
     //fresco
     api "com.facebook.fresco:fresco:$rootProject.frescoVersion"
+
     // RunTimePermissionRequest
     api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
 
@@ -75,4 +84,5 @@ dependencies {
     api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
     api 'com.jude:easyrecyclerview:4.2.3'
     api 'com.alibaba:fastjson:1.2.46'
+    implementation files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
 }

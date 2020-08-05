@@ -67,7 +67,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quickly, container, false);
+        View view = inflater.inflate(R.layout.fragment_community, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
