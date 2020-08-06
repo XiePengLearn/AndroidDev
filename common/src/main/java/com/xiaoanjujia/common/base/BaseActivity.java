@@ -18,6 +18,7 @@ import com.xiaoanjujia.common.AppComponent;
 import com.xiaoanjujia.common.GlobalAppComponent;
 import com.xiaoanjujia.common.model.DataManager;
 import com.xiaoanjujia.common.receiver.NetWorkChangeBroadcastReceiver;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.DialogUtil;
 
 import butterknife.Unbinder;
@@ -40,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDataManager = getAppComponent().getDataManager();
         mContext = getAppComponent().getContext();
         registerNetChangeReceiver();
+        AppManager.getInstance().addActivity(this);
     }
 
     private void registerNetChangeReceiver() {
@@ -123,6 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        AppManager.getInstance().finishActivity(this);
         if(loadingDialog != null && loadingDialog.isShowing()){
             loadingDialog.dismiss();
             loadingDialog = null;

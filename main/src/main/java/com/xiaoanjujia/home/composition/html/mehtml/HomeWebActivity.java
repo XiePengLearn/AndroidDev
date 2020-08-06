@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,8 +17,6 @@ import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 import com.xiaoanjujia.common.base.BaseActivity;
-import com.xiaoanjujia.common.util.LogUtil;
-import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.X5WebView;
@@ -60,9 +57,9 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
     X5WebView webView;
 
 
-    private              String        mXinGeToken;
-    private static final String        TAG = "NationExamActivity";
-    private              Button        mLoginEntry;
+    private String mXinGeToken;
+    private static final String TAG = "NationExamActivity";
+    private Button mLoginEntry;
     private LoginResponse loginResponse;
     private Intent mIntent;
     private String mWebUrl;
@@ -97,6 +94,7 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
 
 
     }
+
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("我的");
@@ -121,7 +119,7 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
             super.onReceivedTitle(view, title);
             if (title.contains("404")) {
                 webView.setVisibility(View.GONE);
-            }else {
+            } else {
                 mainTitleText.setText(title);
             }
         }
@@ -159,15 +157,13 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
 
 
         Map<String, Object> mapParameters = new HashMap<>(2);
-//        mapParameters.put("phone", lAccount);
-//        mapParameters.put("password", lPassword);
+        //        mapParameters.put("phone", lAccount);
+        //        mapParameters.put("password", lPassword);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         initData(headersTreeMap, mapParameters);
     }
-
-
 
 
     @Override
@@ -198,10 +194,11 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
 
         }
     }
+
     public void goBack() {
         if (webView.canGoBack())
             webView.goBack();
         else
-           finish();
+            finish();
     }
 }

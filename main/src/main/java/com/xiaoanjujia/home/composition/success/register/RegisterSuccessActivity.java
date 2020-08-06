@@ -17,6 +17,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PhoneValidator;
 import com.xiaoanjujia.common.util.PrefUtils;
@@ -25,6 +26,7 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -123,7 +125,7 @@ public class RegisterSuccessActivity extends BaseActivity implements RegisterSuc
                 PrefUtils.writePassword(mPassword, this.getApplicationContext());
                 PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                 PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
-
+                AppManager.getInstance().finishActivity(LoginActivity.class);
                 ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {

@@ -17,6 +17,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.HandlerFactory;
 import com.xiaoanjujia.common.util.PhoneValidator;
 import com.xiaoanjujia.common.util.PrefUtils;
@@ -25,6 +26,8 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.main.MainActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
@@ -145,6 +148,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 PrefUtils.writeSESSION_ID(SESSION_ID, BaseApplication.getInstance());
 
                 ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(CodeLoginActivity.this);
+                AppManager.getInstance().finishActivity(LoginActivity.class);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面

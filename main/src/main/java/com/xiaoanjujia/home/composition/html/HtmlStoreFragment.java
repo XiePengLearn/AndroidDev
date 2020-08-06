@@ -1,12 +1,16 @@
 package com.xiaoanjujia.home.composition.html;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -14,9 +18,10 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.widget.X5WebView;
-import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
+import com.xiaoanjujia.home.composition.html.mehtml.HomeWebActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,13 +32,24 @@ import butterknife.ButterKnife;
  * @Description:
  */
 public class HtmlStoreFragment extends BaseFragment {
+
+
+    public static String mUrlDataKey = "url";
+    public static String mJDHeaderView = "JDHeaderView";
+    @BindView(R2.id.fake_status_bar)
+    View fakeStatusBar;
+    @BindView(R2.id.main_title_back)
+    ImageView mainTitleBack;
+    @BindView(R2.id.main_title_text)
+    TextView mainTitleText;
+    @BindView(R2.id.main_title_right)
+    ImageView mainTitleRight;
+    @BindView(R2.id.main_title_container)
+    LinearLayout mainTitleContainer;
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
     @BindView(R2.id.webView)
     X5WebView webView;
-
-    public static String mUrlDataKey = "url";
-    public static String mJDHeaderView = "JDHeaderView";
     private Bundle mArguments;
     private String mWebUrl;
     private View mView;
@@ -42,7 +58,18 @@ public class HtmlStoreFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_store_html, container, false);
         unbinder = ButterKnife.bind(this, mView);
+        mWebUrl = "https://www.xiaoanjujia.com/mobile/";
+        initViewMethod();
+        initTitle();
         return mView;
+    }
+
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText(R.string.login_entry);
     }
 
     @Override
@@ -52,28 +79,37 @@ public class HtmlStoreFragment extends BaseFragment {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onLazyLoad() {
-        mArguments = getArguments();
-        mWebUrl = mArguments.getString(mUrlDataKey);
-        initView();
+        //        mArguments = getArguments();
+        //        mWebUrl = mArguments.getString(mUrlDataKey);
     }
 
-    private void initView() {
+    private void initViewMethod() {
 
         webView.loadUrl(mWebUrl);
         MyWebChromClient webChromClient = new MyWebChromClient();
         webView.setWebChromeClient(webChromClient);
-
+        webView.setWebViewClient(new MyWebViewClient());
 
     }
 
 
-    public static HtmlStoreFragment newInstance(String url, JDHeaderView findPullRefreshHeader) {
+    public static HtmlStoreFragment newInstance() {
         HtmlStoreFragment examMiddleFragment = new HtmlStoreFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(mUrlDataKey, url);
-        //        bundle.putSerializable(mJDHeaderView, findPullRefreshHeader);
+        //        bundle.putString(mUrlDataKey, url);
         examMiddleFragment.setArguments(bundle);
         return examMiddleFragment;
+    }
+
+    class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+            Intent intent = new Intent(getActivity(), HomeWebActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
+
+            return true;
+        }
     }
 
     class MyWebChromClient extends WebChromeClient {
@@ -88,6 +124,7 @@ public class HtmlStoreFragment extends BaseFragment {
             }
             super.onProgressChanged(view, newProgress);
         }
+
 
         @Override
         public void onReceivedTitle(WebView view, String title) {

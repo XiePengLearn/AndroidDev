@@ -17,6 +17,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
@@ -24,6 +25,7 @@ import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.HtmlMeFragment;
+import com.xiaoanjujia.home.composition.html.HtmlStoreFragment;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
 import com.xiaoanjujia.home.composition.main.mine.MineFragment;
 import com.xiaoanjujia.home.composition.main.store.StoreFragment;
@@ -49,7 +51,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
     private CommunityFragment mCommunityFragment;
-    private StoreFragment mStoreFragment;
+    private HtmlStoreFragment mStoreFragment;
     private HtmlMeFragment mMyFragment;
     @SuppressLint("StaticFieldLeak")
     public static MainActivity instance;//关闭当前页面的instance
@@ -128,7 +130,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         mUnlockingFragment = (UnlockingFragment) mFragmentManager.findFragmentByTag("unlocking_fg");
         mTenementFragment = (TenementFragment) mFragmentManager.findFragmentByTag("tenement_fg");
         mCommunityFragment = (CommunityFragment) mFragmentManager.findFragmentByTag("community_fg");
-        mStoreFragment = (StoreFragment) mFragmentManager.findFragmentByTag("store_fg");
+        mStoreFragment = (HtmlStoreFragment) mFragmentManager.findFragmentByTag("store_fg");
         mMyFragment = (HtmlMeFragment) mFragmentManager.findFragmentByTag("my_fg");
 
 
@@ -214,7 +216,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 3) {
 
             if (mStoreFragment == null) {
-                mStoreFragment = StoreFragment.newInstance();
+                mStoreFragment = HtmlStoreFragment.newInstance();
                 addFragment(R.id.main_container, mStoreFragment, "store_fg");
             }
 

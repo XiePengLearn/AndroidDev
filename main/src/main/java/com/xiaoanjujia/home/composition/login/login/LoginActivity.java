@@ -260,17 +260,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             //忘记密码
             isClickForgetPassword = true;
             ARouter.getInstance().build("/forget/forget").greenChannel().navigation(this);
-            finish();
+//            finish();
 
         } else if (i == R.id.login_entry) {
             //登录
             LoginMethod();
         } else if (i == R.id.register) {
             ARouter.getInstance().build("/register/register").greenChannel().navigation(this);
-            finish();
+//            finish();
         } else if (i == R.id.fast_login) {
             ARouter.getInstance().build("/codeLogin/codeLogin").greenChannel().navigation(this);
-            finish();
+//            finish();
         }
     }
 

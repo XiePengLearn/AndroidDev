@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -29,6 +32,16 @@ import butterknife.ButterKnife;
  * @Description:
  */
 public class HtmlMeFragment extends BaseFragment {
+    @BindView(R2.id.fake_status_bar)
+    View fakeStatusBar;
+    @BindView(R2.id.main_title_back)
+    ImageView mainTitleBack;
+    @BindView(R2.id.main_title_text)
+    TextView mainTitleText;
+    @BindView(R2.id.main_title_right)
+    ImageView mainTitleRight;
+    @BindView(R2.id.main_title_container)
+    LinearLayout mainTitleContainer;
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
     @BindView(R2.id.webView)
@@ -44,11 +57,24 @@ public class HtmlMeFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_me_html, container, false);
         unbinder = ButterKnife.bind(this, mView);
-        mWebUrl = "https://www.baidu.com/";
+        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
         initViewMethod();
+        initTitle();
+        initSetting();
         return mView;
     }
 
+    private void initSetting() {
+        webView.getSettings();
+    }
+
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText(R.string.login_entry);
+    }
     @Override
     public void initEvent() {
     }
