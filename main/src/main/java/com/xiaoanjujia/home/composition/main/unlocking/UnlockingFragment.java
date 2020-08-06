@@ -1,7 +1,6 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +19,12 @@ import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.main.unused.quicklyfragment.DaggerQuicklyFragmentComponent;
+import com.xiaoanjujia.home.composition.me.certification_merchants.CertificationMerchantsActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -36,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @Auther: xp
@@ -45,6 +46,7 @@ import butterknife.ButterKnife;
 public class UnlockingFragment extends BaseFragment implements UnlockingFragmentContract.View, PtrHandler {
     @Inject
     UnlockingFragmentPresenter mPresenter;
+    private static final String TAG = "NationExamActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -55,15 +57,20 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
+    @BindView(R2.id.unlocking_independent_booking_for_visitors)
+    AlphaButton unlockingIndependentBookingForVisitors;
+    @BindView(R2.id.unlocking_visiting_scholar)
+    AlphaButton unlockingVisitingScholar;
+    @BindView(R2.id.unlocking_visitors_to_review)
+    AlphaButton unlockingVisitorsToReview;
+    @BindView(R2.id.unlocking_visitors_store)
+    AlphaButton unlockingVisitorsStore;
     @BindView(R2.id.no_data_img)
     ImageView noDataImg;
     @BindView(R2.id.rl_fragment_no_data)
     RelativeLayout rlFragmentNoData;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
-
-
-    private static final String TAG = "NationExamActivity";
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +81,6 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
     @Override
     public void initEvent() {
-
-        Bundle arguments = getArguments();
-
         initView();
         initData();
         initTitle();
@@ -183,4 +187,17 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
 
+    @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
+    public void onViewClicked(View view) {
+        int id = view.getId();
+        if (id == R.id.unlocking_independent_booking_for_visitors) {
+
+        } else if (id == R.id.unlocking_visiting_scholar) {
+
+        } else if (id == R.id.unlocking_visitors_to_review) {
+
+        } else if (id == R.id.unlocking_visitors_store) {
+            ARouter.getInstance().build("/CertificationMerchantsActivity/CertificationMerchantsActivity").greenChannel().navigation(getActivity());
+        }
+    }
 }
