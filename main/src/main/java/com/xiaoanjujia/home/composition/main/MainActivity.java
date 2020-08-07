@@ -281,7 +281,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private void initBottomNavigation() {
         BadgeItem numberBadgeItem = new BadgeItem()
                 .setBorderWidth(4)
-                .setBackgroundColorResource(R.color.colorAccent)
+                .setBackgroundColorResource(R.color.rh_color2)
                 .setText("99+")
                 .setHideOnSelect(false);
 
