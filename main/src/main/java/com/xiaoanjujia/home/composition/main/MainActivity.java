@@ -18,7 +18,6 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
-import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -29,8 +28,6 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.HtmlMeFragment;
 import com.xiaoanjujia.home.composition.html.HtmlStoreFragment;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
-import com.xiaoanjujia.home.composition.main.mine.MineFragment;
-import com.xiaoanjujia.home.composition.main.store.StoreFragment;
 import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
 import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
 import com.xiaoanjujia.home.entities.LoginResponse;
@@ -71,8 +68,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //在oncreate中添加
         instance = this;
         registerMessageBroadcast();
-        //        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
-        mRoleType = 1;
+        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
