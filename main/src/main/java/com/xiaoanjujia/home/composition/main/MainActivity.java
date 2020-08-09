@@ -68,14 +68,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         mFragmentManager = getSupportFragmentManager();
-        initView();
-        initData();
         //在oncreate中添加
         instance = this;
         registerMessageBroadcast();
-        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        //        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        mRoleType = 1;
         //roletype:---0是普通用户---1是物业主管----2是物业人员
-
+        initView();
+        initData();
 
     }
 
@@ -337,7 +337,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                 .setText("99+")
                 .setHideOnSelect(false);
 
-        bottomNavigationBar.setMode(BottomNavigationBar.MODE_DEFAULT);
+        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         //bottomNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         //bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
