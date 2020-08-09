@@ -16,9 +16,11 @@ import androidx.fragment.app.FragmentManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
@@ -56,6 +58,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     @SuppressLint("StaticFieldLeak")
     public static MainActivity instance;//关闭当前页面的instance
     private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
+    private int mRoleType;
 
 
     @Override
@@ -70,11 +73,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //在oncreate中添加
         instance = this;
         registerMessageBroadcast();
+        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        //roletype:---0是普通用户---1是物业主管----2是物业人员
 
-        //        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        //        int heapSize = manager.getMemoryClass();
-        //        int maxHeapSize = manager.getLargeMemoryClass();  // manafest.xml   android:largeHeap="true"
-        //        LogUtil.e(TAG, "--------heapSize--------:" + heapSize + ";--------maxHeapSize--------:" + maxHeapSize);
+
     }
 
     /**
@@ -160,92 +162,142 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
     @Override
     public void onTabSelected(int position) {
-        if (position == 0) {
-            if (mUnlockingFragment == null) {
-                mUnlockingFragment = UnlockingFragment.newInstance();
-                addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
+        if (mRoleType == 0) {
+            //普通用户
+            if (position == 0) {
+                if (mUnlockingFragment == null) {
+                    mUnlockingFragment = UnlockingFragment.newInstance();
+                    addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
+                }
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mUnlockingFragment)
+                        .commitAllowingStateLoss();
+            } else if (position == 1) {
+                if (mCommunityFragment == null) {
+                    mCommunityFragment = CommunityFragment.newInstance();
+                    addFragment(R.id.main_container, mCommunityFragment, "community_fg");
+                }
+                hideHomeFragment();
+                hideTenementFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mCommunityFragment)
+                        .commitAllowingStateLoss();
+
+
+            } else if (position == 2) {
+
+                if (mStoreFragment == null) {
+                    mStoreFragment = HtmlStoreFragment.newInstance();
+                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mStoreFragment)
+                        .commitAllowingStateLoss();
+
+
+            } else if (position == 3) {
+
+                if (mMyFragment == null) {
+                    mMyFragment = HtmlMeFragment.newInstance();
+                    addFragment(R.id.main_container, mMyFragment, "my_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mMyFragment)
+                        .commitAllowingStateLoss();
+
+
             }
+        } else {
+            //物业人员
+            if (position == 0) {
+                if (mUnlockingFragment == null) {
+                    mUnlockingFragment = UnlockingFragment.newInstance();
+                    addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
+                }
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mUnlockingFragment)
+                        .commitAllowingStateLoss();
+            } else if (position == 1) {
+                if (mTenementFragment == null) {
+                    mTenementFragment = TenementFragment.newInstance();
+                    addFragment(R.id.main_container, mTenementFragment, "tenement_fg");
+                }
+                hideHomeFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mTenementFragment)
+                        .commitAllowingStateLoss();
+            } else if (position == 2) {
+                if (mCommunityFragment == null) {
+                    mCommunityFragment = CommunityFragment.newInstance();
+                    addFragment(R.id.main_container, mCommunityFragment, "community_fg");
+                }
+                hideHomeFragment();
+                hideTenementFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mCommunityFragment)
+                        .commitAllowingStateLoss();
 
-            hideTenementFragment();
-            hideCommunityFragment();
-            hideStoreFragment();
-            hideMyFragment();
 
-            mFragmentManager.beginTransaction()
+            } else if (position == 3) {
 
-                    .show(mUnlockingFragment)
-                    .commitAllowingStateLoss();
+                if (mStoreFragment == null) {
+                    mStoreFragment = HtmlStoreFragment.newInstance();
+                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mStoreFragment)
+                        .commitAllowingStateLoss();
 
 
-        } else if (position == 1) {
-            if (mTenementFragment == null) {
-                mTenementFragment = TenementFragment.newInstance();
-                addFragment(R.id.main_container, mTenementFragment, "tenement_fg");
+            } else if (position == 4) {
+
+                if (mMyFragment == null) {
+                    mMyFragment = HtmlMeFragment.newInstance();
+                    addFragment(R.id.main_container, mMyFragment, "my_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mMyFragment)
+                        .commitAllowingStateLoss();
+
+
             }
-
-            hideHomeFragment();
-
-            hideCommunityFragment();
-            hideStoreFragment();
-            hideMyFragment();
-
-
-            mFragmentManager.beginTransaction()
-                    .show(mTenementFragment)
-                    .commitAllowingStateLoss();
-
-
-        } else if (position == 2) {
-            if (mCommunityFragment == null) {
-                mCommunityFragment = CommunityFragment.newInstance();
-                addFragment(R.id.main_container, mCommunityFragment, "community_fg");
-            }
-
-
-            hideHomeFragment();
-            hideTenementFragment();
-            hideStoreFragment();
-            hideMyFragment();
-
-
-            mFragmentManager.beginTransaction()
-                    .show(mCommunityFragment)
-                    .commitAllowingStateLoss();
-
-
-        } else if (position == 3) {
-
-            if (mStoreFragment == null) {
-                mStoreFragment = HtmlStoreFragment.newInstance();
-                addFragment(R.id.main_container, mStoreFragment, "store_fg");
-            }
-
-            hideHomeFragment();
-            hideTenementFragment();
-            hideCommunityFragment();
-            hideMyFragment();
-            mFragmentManager.beginTransaction()
-                    .show(mStoreFragment)
-                    .commitAllowingStateLoss();
-
-
-        } else if (position == 4) {
-
-            if (mMyFragment == null) {
-                mMyFragment = HtmlMeFragment.newInstance();
-                addFragment(R.id.main_container, mMyFragment, "my_fg");
-            }
-
-            hideHomeFragment();
-            hideTenementFragment();
-            hideCommunityFragment();
-            hideStoreFragment();
-            mFragmentManager.beginTransaction()
-                    .show(mMyFragment)
-                    .commitAllowingStateLoss();
-
-
         }
+
     }
 
     private void hideHomeFragment() {
@@ -285,21 +337,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                 .setText("99+")
                 .setHideOnSelect(false);
 
-        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
+        bottomNavigationBar.setMode(BottomNavigationBar.MODE_DEFAULT);
         //bottomNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         //bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
         //bottomNavigationBar.setAutoHideEnabled(true);
 
+        if (mRoleType == 0) {
+            //普通用户
+            bottomNavigationBar
+                    .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
+                    //                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+                    .setFirstSelectedPosition(0)
+                    .initialise();
+        } else {
+            //物业人员
+            bottomNavigationBar
+                    .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+                    .setFirstSelectedPosition(0)
+                    .initialise();
+        }
 
-        bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
-                .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
-                .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent).setBadgeItem(numberBadgeItem))
-                .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
-                .setFirstSelectedPosition(0)
-                .initialise();
 
         bottomNavigationBar.setTabSelectedListener(this);
     }
