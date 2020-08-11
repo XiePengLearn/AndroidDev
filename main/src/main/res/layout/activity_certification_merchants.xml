@@ -195,12 +195,147 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_19"
+                android:layout_marginLeft="@dimen/dp_18"
                 android:layout_marginTop="@dimen/dp_9"
                 android:text="上传公司证件："
                 android:textColor="@color/color_494949"
                 android:textSize="@dimen/sp_17" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/uploading_company_certificate_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="horizontal">
+                            <!-- 代替上面的的按钮，选择图片-->
+                            <GridView
+                                android:id="@+id/uploading_company_certificate_gd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:cacheColorHint="#00000000"
+                                android:columnWidth="98dip"
+                                android:gravity="center"
+                                android:horizontalSpacing="1.0dip"
+                                android:listSelector="#00000000"
+                                android:numColumns="auto_fit"
+                                android:scrollbars="none"
+                                android:stretchMode="spacingWidthUniform"
+                                android:verticalSpacing="1.0dip"></GridView>
+
+
+                        </LinearLayout>
+                    </FrameLayout>
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:hint="（限制三张，企业上传营业执照，个人上传身份证正反面）"
+                    android:textColor="@color/color_C5C3C3"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:text="*上传特殊材料："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="带*可选填"
+                    android:textColor="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/uploading_special_certificate_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="horizontal">
+                            <!-- 代替上面的的按钮，选择图片-->
+                            <GridView
+                                android:id="@+id/uploading_special_certificate_gd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:cacheColorHint="#00000000"
+                                android:columnWidth="98dip"
+                                android:gravity="center"
+                                android:horizontalSpacing="1.0dip"
+                                android:listSelector="#00000000"
+                                android:numColumns="auto_fit"
+                                android:scrollbars="none"
+                                android:stretchMode="spacingWidthUniform"
+                                android:verticalSpacing="1.0dip"></GridView>
+
+
+                        </LinearLayout>
+                    </FrameLayout>
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:hint="（限制五张，如食品安全证书，商标授权证书等）"
+                    android:textColor="#FF0000"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </LinearLayout>
     </com.xiaoanjujia.common.util.MyScrollView>
 </LinearLayout>

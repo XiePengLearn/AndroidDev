@@ -2,24 +2,16 @@ package com.xiaoanjujia.home.composition.me.certification_merchants;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.sxjs.jd.R;
-import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
-import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -30,7 +22,6 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -40,28 +31,8 @@ import butterknife.ButterKnife;
 public class CertificationMerchantsActivity extends BaseActivity implements CertificationMerchantsContract.View {
     @Inject
     CertificationMerchantsPresenter mPresenter;
+    private static final String TAG = "CertificationMerchantsActivity";
 
-
-    private static final String TAG = "ChatRecordActivity";
-    @BindView(R2.id.fake_status_bar)
-    View fakeStatusBar;
-    @BindView(R2.id.main_title_back)
-    ImageView mainTitleBack;
-    @BindView(R2.id.main_title_text)
-    TextView mainTitleText;
-    @BindView(R2.id.main_title_right)
-    ImageView mainTitleRight;
-    @BindView(R2.id.main_title_container)
-    LinearLayout mainTitleContainer;
-    @BindView(R2.id.chat_list)
-    EasyRecyclerView chatList;
-    @BindView(R2.id.no_data_img)
-    ImageView noDataImg;
-    @BindView(R2.id.rl_no_data)
-    RelativeLayout rlNoData;
-    @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
-    private LoginResponse loginResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
