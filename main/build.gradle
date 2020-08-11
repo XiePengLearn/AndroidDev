@@ -39,8 +39,6 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.arouterCompilerVersion"
-    api "org.permissionsdispatcher:permissionsdispatcher:$rootProject.latestVersion"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$rootProject.latestVersion"
     api project(':app_common')
 
 

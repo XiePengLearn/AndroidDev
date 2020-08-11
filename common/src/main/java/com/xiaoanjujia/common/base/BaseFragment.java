@@ -74,9 +74,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
+//        if (unbinder != null) {
+//            unbinder.unbind();
+//        }
         if (dialog != null) {
             if (dialog.isShowing())
                 dialog.dismiss();

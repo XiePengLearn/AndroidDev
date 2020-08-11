@@ -64,6 +64,12 @@ public class HtmlStoreFragment extends BaseFragment {
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        webView.onResume();
+    }
+
     /**
      * 初始化title
      */

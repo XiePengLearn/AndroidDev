@@ -1,16 +1,26 @@
 package com.xiaoanjujia.home.composition.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -56,7 +66,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     public static MainActivity instance;//关闭当前页面的instance
     private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称`
     private int mRoleType;
-
+    // 要申请的权限
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE};
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +85,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
+        //         版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // 检查该权限是否已经获取
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            int i1 = ContextCompat.checkSelfPermission(this, permissions[1]);
+            int i2 = ContextCompat.checkSelfPermission(this, permissions[2]);
+            int i3 = ContextCompat.checkSelfPermission(this, permissions[3]);
+            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            if (i != PackageManager.PERMISSION_GRANTED || i1 != PackageManager.PERMISSION_GRANTED
+                    || i2 != PackageManager.PERMISSION_GRANTED || i3 != PackageManager.PERMISSION_GRANTED) {
+                // 如果没有授予该权限，就去提示用户请求
+                showDialogTipUserRequestPermission();
+            }
+        }
     }
 
     /**
@@ -438,6 +466,150 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    // 提示用户该请求权限的弹出框
+    private void showDialogTipUserRequestPermission() {
+
+        AlertDialog mAlertDialog = new AlertDialog.Builder(this).create();
+
+        mAlertDialog.setTitle("权限不可用");
+        mAlertDialog.setMessage("由于小安居家需要获取定位/存储空间/相机权限，为你定位与存储个人信息；\n否则，您将无法正常使用小安居家");
+        mAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "立即开启", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startRequestPermission();
+            }
+        });
+
+        mAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.show();
+        mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.color_888888));
+        mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.color_2AAD67));
+    }
+
+
+    // 开始提交请求权限
+    private void startRequestPermission() {
+        ActivityCompat.requestPermissions(this, permissions, 321);
+    }
+
+    // 用户权限 申请 的回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 321) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[0]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    }
+                } else if (grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[1]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    }
+                } else if (grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[2]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    }
+                } else if (grantResults[3] != PackageManager.PERMISSION_GRANTED) {
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[3]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    }
+                }
+            }
+        }
+    }
+
+
+    // 提示用户去应用设置界面手动开启权限
+
+    private void showDialogTipUserGoToAppSettting() {
+
+        dialog = new AlertDialog.Builder(this)
+                .setTitle("权限不可用")
+                .setMessage("请在-应用设置-权限-中，允许小安居家使用定位/存储空间/相机权限来保存用户数据")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 跳转到应用设置界面
+                        goToAppSetting();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.color_888888));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.color_2AAD67));
+    }
+
+    // 跳转到当前应用的设置界面
+    private void goToAppSetting() {
+        Intent intent = new Intent();
+
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+
+        startActivityForResult(intent, 123);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123) {
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // 检查该权限是否已经获取
+                int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+                int i1 = ContextCompat.checkSelfPermission(this, permissions[1]);
+                int i2 = ContextCompat.checkSelfPermission(this, permissions[2]);
+                int i3 = ContextCompat.checkSelfPermission(this, permissions[3]);
+                // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+                if (i == PackageManager.PERMISSION_GRANTED && i1 == PackageManager.PERMISSION_GRANTED &&
+                        i2 == PackageManager.PERMISSION_GRANTED && i3 == PackageManager.PERMISSION_GRANTED) {
+                    if (dialog != null && dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+
+                } else {
+
+
+                    // 提示用户应该去应用设置界面手动开启权限
+                    showDialogTipUserGoToAppSettting();
+                }
+
+
+            }
+        }
     }
 
 

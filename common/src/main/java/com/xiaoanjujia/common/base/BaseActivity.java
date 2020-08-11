@@ -131,9 +131,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             loadingDialog = null;
         }
         clearDisposable();
-        if(unbinder != null){
-            unbinder.unbind();
-        }
+//        if(unbinder != null){
+//            unbinder.unbind();
+//        }
 
         if(null != receiver){
             receiver.onDestroy();
