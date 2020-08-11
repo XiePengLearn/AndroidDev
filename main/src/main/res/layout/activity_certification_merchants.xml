@@ -240,7 +240,7 @@
                                 android:numColumns="auto_fit"
                                 android:scrollbars="none"
                                 android:stretchMode="spacingWidthUniform"
-                                android:verticalSpacing="1.0dip"></GridView>
+                                android:verticalSpacing="1.0dip"/>
 
 
                         </LinearLayout>
