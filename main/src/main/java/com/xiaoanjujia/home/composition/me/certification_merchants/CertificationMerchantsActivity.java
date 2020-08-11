@@ -21,7 +21,6 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.main.unused.quicklyactivity.DaggerQuicklyActivityComponent;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -67,7 +66,7 @@ public class CertificationMerchantsActivity extends BaseActivity implements Cert
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quickly);
+        setContentView(R.layout.activity_certification_merchants);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
 

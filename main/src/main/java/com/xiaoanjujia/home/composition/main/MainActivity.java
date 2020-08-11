@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private HtmlMeFragment mMyFragment;
     @SuppressLint("StaticFieldLeak")
     public static MainActivity instance;//关闭当前页面的instance
-    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
+    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称`
     private int mRoleType;
 
 
@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
-
     }
 
     /**

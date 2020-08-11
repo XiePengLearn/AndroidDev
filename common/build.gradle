@@ -79,12 +79,12 @@ dependencies {
 
     // updateApp
     api 'com.teprinciple:updateapputils:2.0.4'
-
-    // RunTimePermissionRequest
-    api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
     api 'com.jude:easyrecyclerview:4.2.3'
     api 'com.alibaba:fastjson:1.2.46'
     api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
 
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.8'
+    // RunTimePermissionRequest
+    api "org.permissionsdispatcher:permissionsdispatcher:$rootProject.latestVersion"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$rootProject.latestVersion"
 }
