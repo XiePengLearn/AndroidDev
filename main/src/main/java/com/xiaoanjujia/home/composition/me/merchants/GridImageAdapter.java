@@ -37,14 +37,14 @@ public class GridImageAdapter extends
     private final PublishActivity mContext;
     private LayoutInflater mInflater;
     private List<LocalMedia> list = new ArrayList<>();
-    private int selectMax = 9;
+    private int selectMax = 3;
     /**
      * 点击添加图片跳转
      */
     private onAddPicClickListener mOnAddPicClickListener;
 
     public interface onAddPicClickListener {
-        void onAddPicClick();
+        void onAddPicClick1();
     }
 
     public GridImageAdapter(PublishActivity context, onAddPicClickListener mOnAddPicClickListener) {
@@ -123,7 +123,7 @@ public class GridImageAdapter extends
             viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnAddPicClickListener.onAddPicClick();
+                    mOnAddPicClickListener.onAddPicClick1();
                 }
             });
             viewHolder.llDel.setVisibility(View.INVISIBLE);

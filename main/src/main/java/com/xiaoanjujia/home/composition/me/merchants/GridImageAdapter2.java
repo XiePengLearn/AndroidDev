@@ -37,7 +37,7 @@ public class GridImageAdapter2 extends
     private final PublishActivity mContext;
     private LayoutInflater mInflater;
     private List<LocalMedia> list = new ArrayList<>();
-    private int selectMax = 9;
+    private int selectMax = 5;
     /**
      * 点击添加图片跳转
      */
@@ -140,7 +140,7 @@ public class GridImageAdapter2 extends
                         GridImageAdapter2.this.notifyItemRemoved(index);
                         GridImageAdapter2.this.notifyItemRangeChanged(index, list.size());
                         if (list.size() == 0) {
-                            mContext.refershAddPictureButton();
+                            mContext.refershAddPictureButton2();
                         }
                     }
                 }

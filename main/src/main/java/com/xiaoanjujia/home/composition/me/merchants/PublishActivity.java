@@ -127,7 +127,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
      * 初始化title
      */
     public void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText(R.string.ren_zheng_shang_hu);
     }
 
@@ -144,11 +144,12 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         companyCertificateRecycler.setLayoutManager(manager);
         mAdapter = new GridImageAdapter(PublishActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
-
+        mAdapter.setSelectMax(5);
         companyCertificateRecycler.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                isfirst = true;
                 LogUtil.e(TAG, "长度---->" + selectList.size());
                 if (selectList.size() > 0) {
 
@@ -183,15 +184,16 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         });
 
 
-        FullyGridLayoutManager manager2 = new FullyGridLayoutManager(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
+        FullyGridLayoutManager2 manager2 = new FullyGridLayoutManager2(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
         uploadingSpecialCertificateRv.setLayoutManager(manager2);
         mAdapter2 = new GridImageAdapter2(PublishActivity.this, onAddPicClickListener2);
         mAdapter2.setList(selectList2);
-
+        mAdapter2.setSelectMax(5);
         uploadingSpecialCertificateRv.setAdapter(mAdapter2);
         mAdapter2.setOnItemClickListener(new GridImageAdapter2.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                isfirst = false;
                 LogUtil.e(TAG, "长度---->" + selectList2.size());
                 if (selectList2.size() > 0) {
 
@@ -412,7 +414,10 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         companyCertificateIm.setVisibility(View.VISIBLE);
         companyCertificateRecycler.setVisibility(View.GONE);
     }
-
+    public void refershAddPictureButton2() {
+        uploadingSpecialCertificateIv.setVisibility(View.VISIBLE);
+        uploadingSpecialCertificateRv.setVisibility(View.GONE);
+    }
 
     public void photoSelection(boolean isFirst, int maxSelect, int resquestCode, List<LocalMedia> selectList) {
         this.isfirst = isFirst;
@@ -420,18 +425,20 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             //上传公司证件：
             isCameraButton = true;
             mMaxSelectNum = 3;
-            mAdapter.setSelectMax(mMaxSelectNum);
+            mAdapter.setSelectMax(3);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton);
+            selectPictureSetting(isCameraButton, selectList,5);
+            mAdapter.notifyDataSetChanged();
         } else {
             //*上传特殊材料：
             isCameraButton = true;
             mMaxSelectNum = 5;
-            mAdapter2.setSelectMax(mMaxSelectNum);
+            mAdapter2.setSelectMax(5);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton);
+            selectPictureSetting(isCameraButton, selectList2,5);
+            mAdapter2.notifyDataSetChanged();
         }
     }
 
@@ -460,12 +467,12 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                         // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                         // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
-                        for (LocalMedia media : selectList) {
-                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
-                            LogUtil.e(TAG, "原图---->" + media.getPath());
-                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
-                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
-                        }
+                        //                        for (LocalMedia media : selectList) {
+                        //                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
+                        //                            LogUtil.e(TAG, "原图---->" + media.getPath());
+                        //                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
+                        //                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
+                        //                        }
                         mAdapter.setList(selectList);
                         mAdapter.notifyDataSetChanged();
                     } else {
@@ -507,9 +514,10 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener = new GridImageAdapter.onAddPicClickListener() {
         @Override
-        public void onAddPicClick() {
+        public void onAddPicClick1() {
+            isfirst = true;
             mMaxSelectNum = 3;
-            selectPictureSetting(isCameraButton);
+            selectPictureSetting(isCameraButton, selectList,3);
 
         }
 
@@ -518,13 +526,14 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         @Override
         public void onAddPicClick() {
             mMaxSelectNum = 5;
-            selectPictureSetting(isCameraButton);
+            isfirst = false;
+            selectPictureSetting(isCameraButton, selectList2,5);
 
         }
 
     };
 
-    private void selectPictureSetting(Boolean isCameraButton) {
+    private void selectPictureSetting(Boolean isCameraButton, List<LocalMedia> selectList,int mMaxSelectNum) {
         // 进入相册 以下是例子：不需要的api可以不写
         PictureSelector.create(PublishActivity.this)
                 .openGallery(chooseMode)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
