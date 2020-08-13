@@ -1,6 +1,5 @@
 package com.xiaoanjujia.home.composition.me.merchants;
 
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.sxjs.jd.R;
+import com.xiaoanjujia.common.util.LogUtilsxp;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,20 +120,28 @@ public class GridImageAdapter extends
 
 
             viewHolder.mImg.setImageResource(R.drawable.ic_add_image);
-            viewHolder.mImg.setOnClickListener(v -> mOnAddPicClickListener.onAddPicClick());
+            viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnAddPicClickListener.onAddPicClick();
+                }
+            });
             viewHolder.llDel.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.llDel.setVisibility(View.VISIBLE);
-            viewHolder.llDel.setOnClickListener(view -> {
-                int index = viewHolder.getAdapterPosition();
-                // 这里有时会返回-1造成数据下标越界,具体可参考getAdapterPosition()源码，
-                // 通过源码分析应该是bindViewHolder()暂未绘制完成导致，知道原因的也可联系我~感谢
-                if (index != RecyclerView.NO_POSITION) {
-                    list.remove(index);
-                    notifyItemRemoved(index);
-                    notifyItemRangeChanged(index, list.size());
-                    if (list.size() == 0) {
-                        mContext.refershAddPictureButton();
+            viewHolder.llDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int index = viewHolder.getAdapterPosition();
+                    // 这里有时会返回-1造成数据下标越界,具体可参考getAdapterPosition()源码，
+                    // 通过源码分析应该是bindViewHolder()暂未绘制完成导致，知道原因的也可联系我~感谢
+                    if (index != RecyclerView.NO_POSITION) {
+                        list.remove(index);
+                        GridImageAdapter.this.notifyItemRemoved(index);
+                        GridImageAdapter.this.notifyItemRangeChanged(index, list.size());
+                        if (list.size() == 0) {
+                            mContext.refershAddPictureButton();
+                        }
                     }
                 }
             });
@@ -151,13 +160,13 @@ public class GridImageAdapter extends
             }
             // 图片
             if (media.isCompressed()) {
-                LogUtils.e("compress image result:", new File(media.getCompressPath()).length() / 1024 + "k");
-                LogUtils.e("压缩地址::", media.getCompressPath());
+                LogUtilsxp.e("compress image result:", new File(media.getCompressPath()).length() / 1024 + "k");
+                LogUtilsxp.e("压缩地址::", media.getCompressPath());
             }
 
-            LogUtils.e("原图地址::", media.getPath());
+            LogUtilsxp.e("原图地址::", media.getPath());
             if (media.isCut()) {
-                LogUtils.e("裁剪地址::", media.getCutPath());
+                LogUtilsxp.e("裁剪地址::", media.getCutPath());
             }
             long duration = media.getDuration();
             viewHolder.tvDuration.setVisibility(PictureMimeType.eqVideo(media.getMimeType())
@@ -186,9 +195,12 @@ public class GridImageAdapter extends
             }
             //itemView 的点击事件
             if (mItemClickListener != null) {
-                viewHolder.itemView.setOnClickListener(v -> {
-                    int adapterPosition = viewHolder.getAdapterPosition();
-                    mItemClickListener.onItemClick(adapterPosition, v);
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int adapterPosition = viewHolder.getAdapterPosition();
+                        mItemClickListener.onItemClick(adapterPosition, v);
+                    }
                 });
             }
         }

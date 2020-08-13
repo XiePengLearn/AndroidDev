@@ -108,6 +108,7 @@ public class CertificationMerchantsActivity extends BaseActivity implements Cert
         initView();
         initData();
         myOnclick();
+        bindGridView();
     }
 
     private void initView() {

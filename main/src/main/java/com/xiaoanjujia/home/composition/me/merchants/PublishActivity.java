@@ -1,20 +1,15 @@
 package com.xiaoanjujia.home.composition.me.merchants;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -37,7 +31,11 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.SelectPicPopupWindow;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.entities.FeedBackResponse;
+import com.xiaoanjujia.home.entities.UploadImageResponse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,72 +61,66 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     private static final String TAG = "PublishActivity";
     @BindView(R2.id.fake_status_bar)
-    View           fakeStatusBar;
-    @BindView(R2.id.jkx_title_left)
-    TextView       jkxTitleLeft;
-    @BindView(R2.id.jkx_close_page)
-    TextView       jkxClosePage;
-    @BindView(R2.id.jkx_title_left_btn)
-    Button         jkxTitleLeftBtn;
-    @BindView(R2.id.jkx_title_center)
-    TextView       jkxTitleCenter;
-    @BindView(R2.id.jkx_title_right_btn)
-    TextView       jkxTitleRightBtn;
-    @BindView(R2.id.new_message)
-    TextView       newMessage;
-    @BindView(R2.id.rl_new_message)
-    RelativeLayout rlNewMessage;
-    @BindView(R2.id.jkx_title_right)
-    TextView       jkxTitleRight;
-    @BindView(R2.id.tv_knowledge_publish)
-    TextView       tvKnowledgePublish;
-    @BindView(R2.id.jkx_text_right_select)
-    TextView       jkxTextRightSelect;
-    @BindView(R2.id.ed_publish_title)
-    EditText       edPublishTitle;
-    @BindView(R2.id.ed_publish_content)
-    EditText       edPublishContent;
-    @BindView(R2.id.recycler)
-    RecyclerView recyclerView;
-    @BindView(R2.id.iv_select_add_image)
-    ImageView      ivSelectAddImage;
+    View fakeStatusBar;
+    @BindView(R2.id.main_title_back)
+    ImageView mainTitleBack;
+    @BindView(R2.id.main_title_text)
+    TextView mainTitleText;
+    @BindView(R2.id.main_title_right)
+    ImageView mainTitleRight;
+    @BindView(R2.id.main_title_container)
+    LinearLayout mainTitleContainer;
+    @BindView(R2.id.edit_merchant_name)
+    EditText editMerchantName;
+    @BindView(R2.id.edit_company_name)
+    EditText editCompanyName;
+    @BindView(R2.id.edit_merchant_phone)
+    EditText editMerchantPhone;
+    @BindView(R2.id.edit_merchant_code)
+    EditText editMerchantCode;
+    @BindView(R2.id.company_certificate_im)
+    ImageView companyCertificateIm;
+    @BindView(R2.id.company_certificate_recycler)
+    RecyclerView companyCertificateRecycler;
+    @BindView(R2.id.uploading_special_certificate_iv)
+    ImageView uploadingSpecialCertificateIv;
+    @BindView(R2.id.uploading_special_certificate_rv)
+    RecyclerView uploadingSpecialCertificateRv;
+    @BindView(R2.id.register_success_entry)
+    AlphaButton registerSuccessEntry;
     @BindView(R2.id.ll_knowledge_publish_root)
-    LinearLayout   llKnowledgePublishRoot;
+    LinearLayout llKnowledgePublishRoot;
 
 
-    private Button           mLoginEntry;
+    private Button mLoginEntry;
     private FeedBackResponse feedBackResponse;
 
-    public static final int              START_RECORD = 24;    //录音
-    private             GridImageAdapter mAdapter;
+    public static final int START_RECORD = 24;    //录音
+    private GridImageAdapter mAdapter;
 
 
     private int themeId;
     private int chooseMode;
 
     private List<LocalMedia> selectList = new ArrayList<>();
-    private int              mMaxSelectNum;
-    private boolean          isCameraButton;
-    private int              mChoseType = 0; //1为图片  2为视频
+    private int mMaxSelectNum;
+    private boolean isCameraButton;
+    private int mChoseType = 0; //1为图片  2为视频
 
-    private String     currentOutputVideoPath = "";//压缩后的视频地址
+    private String currentOutputVideoPath = "";//压缩后的视频地址
 
-    private String videoTime     = "";//获取视频时长
-    private int    videoWidth    = 0;//获取视频的宽度
-    private int    videoHeight   = 0;//获取视频的高度
-    private int    videoGotation = 0;//获取视频的角度
+    private String videoTime = "";//获取视频时长
+    private int videoWidth = 0;//获取视频的宽度
+    private int videoHeight = 0;//获取视频的高度
+    private int videoGotation = 0;//获取视频的角度
     private Bitmap mBitMap;
-    private Double videoLength   = 0.00;//视频时长 s
-
-    private CustomProgressDialog mProcessingDialog;
+    private Double videoLength = 0.00;//视频时长 s
 
 
-    public static final String                     PATH         = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jkx/";
-    private             UploadVideoResponse        uploadVideoResponse;
-    private             List<PublishVideoResponse> videoUriList = new ArrayList<>();
-    private             List<PublishImageResponse> imageUriList = new ArrayList<>();
-    private             List<LocalMedia>           selectImageCommitTemp;    //防止提交未成功 报错而临时存在的,只有提交时 才会赋值
-    private             UploadImageResponse        uploadImageResponse;
+    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jkx/";
+    private List<PublishImageResponse> imageUriList = new ArrayList<>();
+    private List<LocalMedia> selectImageCommitTemp;    //防止提交未成功 报错而临时存在的,只有提交时 才会赋值
+    private UploadImageResponse uploadImageResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,43 +132,16 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         selectImageCommitTemp = new ArrayList<>();
         initTitle();
         initView();
-        edPublishContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!TextUtils.isEmpty(s.toString())) {
-                    //                    tvCommit.setBackgroundResource(R.drawable.bg_shap_button_31);
-                } else {
-                    //                    tvCommit.setBackgroundResource(R.drawable.bg_shap_button_31_gray);
-                }
-            }
-        });
         initFile();
-        initVideo();
     }
 
     /**
      * 初始化title
      */
     public void initTitle() {
-        //返回按钮
-        jkxClosePage.setVisibility(View.VISIBLE);
-        tvKnowledgePublish.setVisibility(View.VISIBLE);
-
-        //标题
-        jkxTitleCenter.setText("");
-
-
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText(R.string.ren_zheng_shang_hu);
     }
 
 
@@ -189,40 +154,43 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
 
         FullyGridLayoutManager manager = new FullyGridLayoutManager(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(manager);
+        companyCertificateRecycler.setLayoutManager(manager);
         mAdapter = new GridImageAdapter(PublishActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
 
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((position, v) -> {
-            LogUtil.e(TAG, "长度---->" + selectList.size());
-            if (selectList.size() > 0) {
+        companyCertificateRecycler.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                LogUtil.e(TAG, "长度---->" + selectList.size());
+                if (selectList.size() > 0) {
 
-                LocalMedia media = selectList.get(position);
-                String mimeType = media.getMimeType();
-                int mediaType = PictureMimeType.getMimeType(mimeType);
-                switch (mediaType) {
-                    case PictureConfig.TYPE_VIDEO:
-                        // 预览视频
-                        PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
-                        break;
-                    case PictureConfig.TYPE_AUDIO:
-                        // 预览音频
-                        PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
-                        break;
-                    default:
-                        // 预览图片 可自定长按保存路径
-                        //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
-                        //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
-                        //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
-                        PictureSelector.create(PublishActivity.this)
-                                .themeStyle(themeId) // xml设置主题
-                                //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
-                                //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
-                                .isNotPreviewDownload(true)// 预览图片长按是否可以下载
-                                .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
-                                .openExternalPreview(position, selectList);
-                        break;
+                    LocalMedia media = selectList.get(position);
+                    String mimeType = media.getMimeType();
+                    int mediaType = PictureMimeType.getMimeType(mimeType);
+                    switch (mediaType) {
+                        case PictureConfig.TYPE_VIDEO:
+                            // 预览视频
+                            PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
+                            break;
+                        case PictureConfig.TYPE_AUDIO:
+                            // 预览音频
+                            PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
+                            break;
+                        default:
+                            // 预览图片 可自定长按保存路径
+                            //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
+                            //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
+                            //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
+                            PictureSelector.create(PublishActivity.this)
+                                    .themeStyle(themeId) // xml设置主题
+                                    //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
+                                    //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
+                                    .isNotPreviewDownload(true)// 预览图片长按是否可以下载
+                                    .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                                    .openExternalPreview(position, selectList);
+                            break;
+                    }
                 }
             }
         });
@@ -306,36 +274,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    @Override
-    public void setUploadVideo(UploadVideoResponse uploadVideoResponse) {
-        this.uploadVideoResponse = uploadVideoResponse;
-        try {
-            String code = uploadVideoResponse.getCode();
-            String msg = uploadVideoResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
-
-                String video_uri = uploadVideoResponse.getData().getIMAGE_URI();
-                PublishVideoResponse videoResponse = new PublishVideoResponse();
-                videoResponse.setTYPE("2");
-                videoResponse.setURI(video_uri);
-                videoUriList.add(videoResponse);
-                String jsonVideo = new Gson().toJson(videoUriList);
-                LogUtil.e(TAG, "============jsonVideo===============" + jsonVideo);
-                initUploadVideoData(jsonVideo, "1");
-                videoUriList.clear();
-            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
-                //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
-                finish();
-            } else {
-                ToastUtil.showToast(this.getApplicationContext(), msg);
-                hiddenProgressDialogView();
-            }
-        } catch (Exception e) {
-            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
-        }
-    }
-
 
     @Override
     public void showProgressDialogView() {
@@ -355,15 +293,15 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    public static final int TAKE_VIDEO   = 16; // 视频
+    public static final int TAKE_VIDEO = 16; // 视频
     public static final int TAKE_PICTURE = 3; // 拍照和相册
 
-    @OnClick({R2.id.jkx_close_page, R2.id.tv_knowledge_publish, R2.id.iv_select_add_image})
+    @OnClick({R2.id.main_title_back, R2.id.register_success_entry, R2.id.company_certificate_im})
     public void onViewClicked(View view) {
-        int i = view.getId();
-        if (i == R.id.jkx_close_page) {
+        int id = view.getId();
+        if (id == R.id.main_title_back) {
             finish();
-        } else if (i == R.id.tv_knowledge_publish) {
+        } else if (id == R.id.register_success_entry) {
             String publishTitle = edPublishTitle.getText().toString().trim();
             String publishContent = edPublishContent.getText().toString().trim();
             if (TextUtils.isEmpty(publishTitle)) {
@@ -381,179 +319,23 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 ToastUtil.showToast(mContext.getApplicationContext(), "内容限制1500字数");
                 return;
             }
-
-            if (selectList.size() > 0) {
-                if (mChoseType == 2) {
-                    // 选择的视频需要进行压缩
-                    LocalMedia localMedia = selectList.get(0);
-                    String mVideoPath = localMedia.getPath();
-                    try {
-                        MediaMetadataRetriever retr = new MediaMetadataRetriever();
-                        retr.setDataSource(mVideoPath);
-                        videoTime = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//获取视频时长
-                        videoWidth = Integer.valueOf(retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));//获取视频的宽度
-                        videoHeight = Integer.valueOf(retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));//获取视频的高度
-                        videoGotation = Integer.valueOf(retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));//获取视频的角度
-
-                        LogUtil.e(TAG, "videoWidth=" + videoWidth);
-                        LogUtil.e(TAG, "videoHeight=" + videoHeight);
-                        videoLength = Double.parseDouble(videoTime) / 1000.00;
-                        LogUtil.e(TAG, "videoLength=" + videoLength);
-                        mProcessingDialog.show();
-                        mProcessingDialog.setProgress(0);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-
-
-                                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                                    retriever.setDataSource(mVideoPath);
-                                    int originWidth = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-                                    int originHeight = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-                                    int bitrate = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-                                    int outWidth = 0;
-                                    int outHeight = 0;
-                                    int outBitrate = 0;
-                                    if(originWidth>originHeight){
-                                        if (originHeight > 3500) {
-                                            outWidth = originWidth / 7;
-                                            outHeight = originHeight / 7;
-                                        } else if (originHeight > 3000) {
-                                            outWidth = originWidth / 6;
-                                            outHeight = originHeight / 6;
-                                        } else if (originHeight > 2500) {
-                                            outWidth = originWidth / 5;
-                                            outHeight = originHeight / 5;
-                                        } else if (originHeight > 2000) {
-                                            outWidth = originWidth / 4;
-                                            outHeight = originHeight / 4;
-                                        } else if (originHeight > 1500) {
-                                            outWidth = originWidth / 3;
-                                            outHeight = originHeight / 3;
-                                        } else if (originHeight > 1000) {
-                                            outWidth = originWidth / 2;
-                                            outHeight = originHeight / 2;
-                                        } else if (originHeight > 700) {
-                                            outWidth = (int) (originWidth / 1.5);
-                                            outHeight = (int) (originHeight / 1.5);
-                                        } else if (originHeight > 500) {
-                                            outWidth = originWidth;
-                                            outHeight = originHeight;
-                                        }
-                                    }else {
-                                        if (originWidth > 3500) {
-                                            outWidth = originWidth / 7;
-                                            outHeight = originHeight / 7;
-                                        } else if (originWidth > 3000) {
-                                            outWidth = originWidth / 6;
-                                            outHeight = originHeight / 6;
-                                        } else if (originWidth > 2500) {
-                                            outWidth = originWidth / 5;
-                                            outHeight = originHeight / 5;
-                                        } else if (originWidth > 2000) {
-                                            outWidth = originWidth / 4;
-                                            outHeight = originHeight / 4;
-                                        } else if (originWidth > 1500) {
-                                            outWidth = originWidth / 3;
-                                            outHeight = originHeight / 3;
-                                        } else if (originWidth > 1000) {
-                                            outWidth = originWidth / 2;
-                                            outHeight = originHeight / 2;
-                                        } else if (originWidth > 700) {
-                                            outWidth = (int) (originWidth / 1.5);
-                                            outHeight = (int) (originHeight / 1.5);
-                                        } else if (originWidth > 500) {
-                                            outWidth = originWidth;
-                                            outHeight = originHeight;
-                                        }
-                                    }
-
-                                    // 分辨率320x240  码率200-384kbps;
-                                    // 分辨率640x480  码率768-1024kbps;
-                                    //分辨率1280x720(720p)  码率2048-3072kbps;
-                                    //分辨率1920x1080(1080p)  码率5120-8192kbps.
-                                    LogUtil.e(TAG,"outWidth:"+outWidth+"--"+"outHeight:"+outHeight+"--"+"bitrate:"+bitrate/5);
-                                try {
-                                    VideoProcessor.processor(getApplicationContext())
-                                            .input(mVideoPath)
-                                            .output(currentOutputVideoPath)
-                                            .outWidth(outWidth)
-                                            .outHeight(outHeight)
-                                            //                                            .startTimeMs(startMs)
-                                            //                                            .endTimeMs(endMs)
-                                            .progressListener(listener)
-                                            .bitrate(2048 * 1000)
-                                            .process();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mProcessingDialog.dismiss();
-
-                                        //压缩成功
-                                        File file = new File(currentOutputVideoPath);
-
-                                        LogUtil.e(TAG, "=====mVideoPath压缩成功======" + currentOutputVideoPath);
-                                        LogUtil.e(TAG, new File(currentOutputVideoPath).length() / 1024 + "k");
-                                        uploadVideoToServer(file);
-                                    }
-                                });
-
-                            }
-                        }).start();
-
-
-                        //                        startCompress(mVideoPath);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        LogUtil.e(TAG, "e=" + e.getMessage());
-                        //不压缩上传
-
-                        File file = new File(mVideoPath);
-
-                        LogUtil.e(TAG, "=====mVideoPath不压缩上传======" + mVideoPath);
-                        LogUtil.e("compress image result:", new File(mVideoPath).length() / 1024 + "k");
-                        uploadVideoToServer(file);
-                    }
-                } else {
-                    //选择图片
-                    selectImageCommitTemp.clear();
-                    selectImageCommitTemp.addAll(selectList);
-                    uploadImage(selectImageCommitTemp);
-                }
-            }
-
-
-        } else if (i == R.id.iv_select_add_image) {
+        } else if (id == R.id.company_certificate_im) {
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
-            selectPicPopupWindow.setData("照片", "视频", null);
+            selectPicPopupWindow.setData("照片", "", null);
             selectPicPopupWindow.setOnSelectItemOnclickListener(new SelectPicPopupWindow.OnSelectItemOnclickListener() {
                 @Override
                 public void selectItem(String str) {
 
                     if ("照片".equals(str)) {
                         mChoseType = 1;
-                        if (PermissionUtils.isGranted(PermissionConstants.CAMERA, PermissionConstants.STORAGE)) {
-                            photoSelection(true, 2, TAKE_PICTURE, selectList);
-                        } else {
-                            requestPermission(TAKE_PICTURE, selectList, PermissionConstants.CAMERA, PermissionConstants.STORAGE);
-                        }
-                    } else if ("视频".equals(str)) {
-                        mChoseType = 2;
-                        if (PermissionUtils.isGranted(PermissionConstants.CAMERA, PermissionConstants.STORAGE)) {
-                            photoSelection(false, 1, TAKE_VIDEO, selectList);
-                        } else {
-                            requestPermission(TAKE_VIDEO, selectList, PermissionConstants.CAMERA, PermissionConstants.STORAGE);
-                        }
+                        photoSelection(true, 2, TAKE_PICTURE, selectList);
                     }
                 }
             });
             selectPicPopupWindow.showPopWindow();
         }
     }
+
 
     private void postError() {
         runOnUiThread(new Runnable() {
@@ -564,20 +346,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         });
     }
 
-    VideoProgressListener listener = new VideoProgressListener() {
-        @Override
-        public void onProgress(float progress) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-//                    ToastUtil.showToast(mContext, "压缩进度:" + progress);
-                    mProcessingDialog.setProgress((int) (progress*100));
-                }
-            });
-
-        }
-    };
 
     private void uploadImage(List<LocalMedia> localMediaList) {
         if (localMediaList.size() > 0) {
@@ -587,11 +355,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             LogUtil.e(TAG, "=====compressPath======" + compressPath);
             LogUtil.e("compress image result:", new File(compressPath).length() / 1024 + "k");
             uploadImageToServer(file);
-        } else {
-            String jsonImage = new Gson().toJson(imageUriList);
-            LogUtil.e(TAG, "============jsonImage===============" + jsonImage);
-            initUploadVideoData(jsonImage, "0");
-            imageUriList.clear();
         }
     }
 
@@ -604,71 +367,12 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         mPresenter.getUploadImage(mapHeaders, file_name);
     }
 
-    //上传视频(方法)
-    private void uploadVideoToServer(File file_name) {
-
-        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-        Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "CM003");
-        mapHeaders.put("SESSION_ID", mSession_id);
-        mPresenter.getUploadVideo(mapHeaders, file_name);
-
-
-    }
-
-    private void initUploadVideoData(String jsonVideo, String TYPE) {
-        /**
-         * 属性名称中文名称数据类型数据长度允许为空备注说明
-         * TITLE 标题字符型
-         * CONTENT 内容字符型
-         * IMAGE_URIS 图片地址集合类型
-         * USER_ID	用户ID	字符型
-         * TYPE	上传媒体的类型	字符型 0:图片1:视频
-         */
-
-        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-        Map<String, Object> mapParameters = new HashMap<>(5);
-        mapParameters.put("IMAGE_URIS", jsonVideo);
-        mapParameters.put("TITLE", edPublishTitle.getText().toString());
-        mapParameters.put("CONTENT", edPublishContent.getText().toString());
-        mapParameters.put("USER_ID", "");
-        mapParameters.put("TYPE", TYPE);
-
-        Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "I013");
-        mapHeaders.put("SESSION_ID", mSession_id);
-
-        mPresenter.getRequestData(mapHeaders, mapParameters);
-    }
 
     public void refershAddPictureButton() {
-        ivSelectAddImage.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        companyCertificateIm.setVisibility(View.VISIBLE);
+        companyCertificateRecycler.setVisibility(View.GONE);
     }
 
-
-    /**
-     * 获取一组权限方法
-     *
-     * @param type        功能
-     * @param permissions 申请的权限
-     */
-    public void requestPermission(final int type, final List<LocalMedia> listLocalMedia, final @PermissionConstants.Permission String... permissions) {
-        PermissionHelper.request(new PermissionHelper.OnPermissionGrantedListener() {
-            @Override
-            public void onPermissionGranted() {
-                switch (type) {
-                    case TAKE_VIDEO:
-                        photoSelection(false, mMaxSelectNum, type, listLocalMedia);
-                        break;
-                    case TAKE_PICTURE:
-                        photoSelection(true, mMaxSelectNum, type, listLocalMedia);
-                        break;
-                }
-            }
-        }, permissions);
-
-    }
 
     public void photoSelection(boolean isCamera, int maxSelect, int resquestCode, List<LocalMedia> selectList) {
         if (isCamera) {
@@ -701,13 +405,13 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                     selectList = PictureSelector.obtainMultipleResult(data);
 
                     //选择后有结果隐藏图片添加的按钮,无结果则隐藏
-                    //选择后有结果显示recyclerView,无结果则隐藏
+                    //选择后有结果显示companyCertificateRecycler,无结果则隐藏
                     if (selectList.size() > 0) {
                         ivSelectAddImage.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        companyCertificateRecycler.setVisibility(View.VISIBLE);
                     } else {
                         ivSelectAddImage.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
+                        companyCertificateRecycler.setVisibility(View.GONE);
                     }
                     // 例如 LocalMedia 里面返回三种path
                     // 1.media.getPath(); 为原图path
@@ -800,22 +504,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     }
 
 
-    private void initVideo() {
-
-        mProcessingDialog = new CustomProgressDialog(this);
-        mProcessingDialog.getWindow().setBackgroundDrawableResource(R.color.menu_color);
-
-        mProcessingDialog.setCancelable(false);
-        mProcessingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-
-            }
-        });
-
-
-    }
-
     /**
      * 没有文件夹。创建文件夹
      *
@@ -832,4 +520,5 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
         }
     }
+
 }

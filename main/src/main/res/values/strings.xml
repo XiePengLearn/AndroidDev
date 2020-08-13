@@ -25,4 +25,5 @@
     <string name="register_image_code_correct">请输入正确的图形验证码</string>
     <string name="register_forget_password">找回密码</string>
     <string name="register_code_login">手机号快捷登录</string>
+    <string name="ren_zheng_shang_hu">认证商户</string>
 </resources>
