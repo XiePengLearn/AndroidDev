@@ -18,13 +18,13 @@
         <Button
             android:id="@+id/btn_select_1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_41"
+            android:layout_height="@dimen/dp_48"
             android:layout_marginLeft="@dimen/dp_9"
             android:layout_marginRight="@dimen/dp_9"
-            android:background="@drawable/shape_semi_fillet_write"
-            android:textColor="#407BE7"
+            android:background="@drawable/bg_shape_corner_white"
+            android:textColor="@color/color_2AAD67"
             android:textSize="@dimen/sp_17" />
-
+        <!-- shape_semi_fillet_write-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -48,14 +48,14 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_41"
+            android:layout_height="@dimen/dp_48"
             android:layout_marginLeft="@dimen/dp_9"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_marginRight="@dimen/dp_9"
             android:layout_marginBottom="@dimen/dp_7"
             android:background="@drawable/bg_shape_corner_white"
             android:text="@string/cancel"
-            android:textColor="#407BE7"
+            android:textColor="@color/color_2AAD67"
             android:textSize="@dimen/sp_19"
 
             />

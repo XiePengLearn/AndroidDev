@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.app_common.BuildConfig;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xiaoanjujia.common.GlobalAppComponent;
 
 /**
@@ -26,7 +25,6 @@ public class CommonModule {
 
         ARouter.init(application);
         //CrashReport.initCrashReport(getApplicationContext(), "93f0e37549", CommonConfig.DEBUG);
-        Fresco.initialize(application);
         GlobalAppComponent.init(application);
 
         //平行module初始化

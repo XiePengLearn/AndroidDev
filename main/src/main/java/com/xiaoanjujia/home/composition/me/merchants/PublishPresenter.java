@@ -1,13 +1,18 @@
 package com.xiaoanjujia.home.composition.me.merchants;
 
 import com.google.gson.Gson;
+import com.xiaoanjujia.common.apiservice.RetrofitService;
+import com.xiaoanjujia.common.apiservice.RetrofitServiceUtil;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.FeedBackResponse;
+import com.xiaoanjujia.home.entities.UploadImageResponse;
 
 import java.io.File;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -55,7 +60,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
     }
 
     @Override
-    public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getFeedBackData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
@@ -94,7 +99,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
     }
 
     @Override
-    public void getUploadImage(Map<String, String> headers, File file_name) {
+    public void getUploadImage(TreeMap<String, String> headers, File file_name) {
 
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
@@ -141,50 +146,5 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
                 });
     }
 
-    @Override
-    public void getUploadVideo(Map<String, String> headers, File file_name) {
-        mContractView.showProgressDialogView();
-        final long beforeRequestTime = System.currentTimeMillis();
-        RetrofitService retrofitService = RetrofitServiceUtil.getRetrofitService();
-        RequestBody params = RequestBody.create(MediaType.parse("text/plain"), "mp4");
-        final RequestBody requestBody = RequestBody.create(MediaType.parse("video/mp4; charset=utf-8"), file_name);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("VIDEO", file_name.getName(), requestBody);
-        retrofitService.upload_avatar(headers, part, params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseBody>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
 
-                    }
-
-                    @Override
-                    public void onNext(ResponseBody responseBody) {
-                        try {
-
-                            String response = responseBody.string();
-                            LogUtil.e(TAG, "=======response:=======" + response);
-                            Gson gson = new Gson();
-                            UploadVideoResponse uploadVideoResponse = gson.fromJson(response, UploadVideoResponse.class);
-
-                            mContractView.setUploadVideo(uploadVideoResponse);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mContractView.hiddenProgressDialogView();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        long completeRequestTime = System.currentTimeMillis();
-                        long useTime = completeRequestTime - beforeRequestTime;
-                        LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-
-                    }
-                });
-    }
 }

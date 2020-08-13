@@ -1,12 +1,10 @@
 package com.xiaoanjujia.home.composition.me.merchants;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,13 +33,17 @@ import com.xiaoanjujia.common.widget.SelectPicPopupWindow;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
+import com.xiaoanjujia.home.entities.PublishImageResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.tool.Api;
+import com.xiaoanjujia.home.tool.Util;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -51,7 +53,7 @@ import butterknife.OnClick;
 
 /**
  * @author xiepeng
- * 知见-发布
+ * 商户认证
  */
 @Route(path = "/publishActivity/publishActivity")
 public class PublishActivity extends BaseActivity implements PublishContract.View {
@@ -92,35 +94,20 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     LinearLayout llKnowledgePublishRoot;
 
 
-    private Button mLoginEntry;
     private FeedBackResponse feedBackResponse;
-
-    public static final int START_RECORD = 24;    //录音
     private GridImageAdapter mAdapter;
-
-
+    private GridImageAdapter2 mAdapter2;
     private int themeId;
     private int chooseMode;
-
     private List<LocalMedia> selectList = new ArrayList<>();
+    private List<LocalMedia> selectList2 = new ArrayList<>();
     private int mMaxSelectNum;
     private boolean isCameraButton;
-    private int mChoseType = 0; //1为图片  2为视频
-
-    private String currentOutputVideoPath = "";//压缩后的视频地址
-
-    private String videoTime = "";//获取视频时长
-    private int videoWidth = 0;//获取视频的宽度
-    private int videoHeight = 0;//获取视频的高度
-    private int videoGotation = 0;//获取视频的角度
-    private Bitmap mBitMap;
-    private Double videoLength = 0.00;//视频时长 s
-
-
     public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jkx/";
     private List<PublishImageResponse> imageUriList = new ArrayList<>();
     private List<LocalMedia> selectImageCommitTemp;    //防止提交未成功 报错而临时存在的,只有提交时 才会赋值
     private UploadImageResponse uploadImageResponse;
+    private boolean isfirst = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -195,6 +182,49 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             }
         });
 
+
+        FullyGridLayoutManager manager2 = new FullyGridLayoutManager(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
+        uploadingSpecialCertificateRv.setLayoutManager(manager2);
+        mAdapter2 = new GridImageAdapter2(PublishActivity.this, onAddPicClickListener2);
+        mAdapter2.setList(selectList2);
+
+        uploadingSpecialCertificateRv.setAdapter(mAdapter2);
+        mAdapter2.setOnItemClickListener(new GridImageAdapter2.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                LogUtil.e(TAG, "长度---->" + selectList2.size());
+                if (selectList2.size() > 0) {
+
+                    LocalMedia media = selectList2.get(position);
+                    String mimeType = media.getMimeType();
+                    int mediaType = PictureMimeType.getMimeType(mimeType);
+                    switch (mediaType) {
+                        case PictureConfig.TYPE_VIDEO:
+                            // 预览视频
+                            PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
+                            break;
+                        case PictureConfig.TYPE_AUDIO:
+                            // 预览音频
+                            PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
+                            break;
+                        default:
+                            // 预览图片 可自定长按保存路径
+                            //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
+                            //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
+                            //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
+                            PictureSelector.create(PublishActivity.this)
+                                    .themeStyle(themeId) // xml设置主题
+                                    //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
+                                    //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
+                                    .isNotPreviewDownload(true)// 预览图片长按是否可以下载
+                                    .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                                    .openExternalPreview(position, selectList2);
+                            break;
+                    }
+                }
+            }
+        });
+
     }
 
     private void initData(String content) {
@@ -203,11 +233,9 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("CONTETNT", content);
 
-        Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "S012");
-        mapHeaders.put("SESSION_ID", mSession_id);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
-        mPresenter.getRequestData(mapHeaders, mapParameters);
+        mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
 
@@ -293,42 +321,57 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    public static final int TAKE_VIDEO = 16; // 视频
     public static final int TAKE_PICTURE = 3; // 拍照和相册
 
-    @OnClick({R2.id.main_title_back, R2.id.register_success_entry, R2.id.company_certificate_im})
+    @OnClick({R2.id.main_title_back, R2.id.register_success_entry, R2.id.company_certificate_im, R2.id.uploading_special_certificate_iv})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.register_success_entry) {
-            String publishTitle = edPublishTitle.getText().toString().trim();
-            String publishContent = edPublishContent.getText().toString().trim();
-            if (TextUtils.isEmpty(publishTitle)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入标题");
+            String editMerchantNameText = editMerchantName.getText().toString().trim();
+            String editCompanyNameText = editCompanyName.getText().toString().trim();
+            String editMerchantPhoneText = editMerchantPhone.getText().toString().trim();
+            String editMerchantCodeText = editMerchantCode.getText().toString().trim();
+            if (Util.isNull(editMerchantNameText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入商户简称");
                 return;
-            } else if (publishTitle.length() > 50) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "标题限制50字数");
+            }
+            if (Util.isNull(editCompanyNameText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入公司名称");
+                return;
+            }
+            if (Util.isNull(editMerchantPhoneText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入联系号码");
+                return;
+            }
+            if (Util.isNull(editMerchantCodeText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "商户代码");
                 return;
             }
 
-            if (TextUtils.isEmpty(publishContent)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入内容");
-                return;
-            } else if (publishContent.length() > 1500) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "内容限制1500字数");
-                return;
-            }
         } else if (id == R.id.company_certificate_im) {
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
-            selectPicPopupWindow.setData("照片", "", null);
+            selectPicPopupWindow.setData("拍照/相册", "", null);
             selectPicPopupWindow.setOnSelectItemOnclickListener(new SelectPicPopupWindow.OnSelectItemOnclickListener() {
                 @Override
                 public void selectItem(String str) {
 
-                    if ("照片".equals(str)) {
-                        mChoseType = 1;
+                    if ("拍照/相册".equals(str)) {
                         photoSelection(true, 2, TAKE_PICTURE, selectList);
+                    }
+                }
+            });
+            selectPicPopupWindow.showPopWindow();
+        } else if (id == R.id.uploading_special_certificate_iv) {
+            SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
+            selectPicPopupWindow.setData("拍照/相册", "", null);
+            selectPicPopupWindow.setOnSelectItemOnclickListener(new SelectPicPopupWindow.OnSelectItemOnclickListener() {
+                @Override
+                public void selectItem(String str) {
+
+                    if ("拍照/相册".equals(str)) {
+                        photoSelection(false, 2, TAKE_PICTURE, selectList);
                     }
                 }
             });
@@ -360,11 +403,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     //上传图片(方法)
     private void uploadImageToServer(File file_name) {
-        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-        Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "CM003");
-        mapHeaders.put("SESSION_ID", mSession_id);
-        mPresenter.getUploadImage(mapHeaders, file_name);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getUploadImage(headersTreeMap, file_name);
     }
 
 
@@ -374,25 +414,25 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     }
 
 
-    public void photoSelection(boolean isCamera, int maxSelect, int resquestCode, List<LocalMedia> selectList) {
-        if (isCamera) {
+    public void photoSelection(boolean isFirst, int maxSelect, int resquestCode, List<LocalMedia> selectList) {
+        this.isfirst = isFirst;
+        if (isFirst) {
+            //上传公司证件：
             isCameraButton = true;
-            mMaxSelectNum = 9;
+            mMaxSelectNum = 3;
             mAdapter.setSelectMax(mMaxSelectNum);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
             selectPictureSetting(isCameraButton);
         } else {
-            isCameraButton = false;
-            mMaxSelectNum = 1;
-            mAdapter.setSelectMax(mMaxSelectNum);
-            // 视频
-            chooseMode = PictureMimeType.ofVideo();
+            //*上传特殊材料：
+            isCameraButton = true;
+            mMaxSelectNum = 5;
+            mAdapter2.setSelectMax(mMaxSelectNum);
+            // 单独拍照和相册
+            chooseMode = PictureMimeType.ofImage();
             selectPictureSetting(isCameraButton);
         }
-        //        选择拍照熟悉设置
-
-
     }
 
     @Override
@@ -401,32 +441,65 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
-                    // 图片选择结果回调
-                    selectList = PictureSelector.obtainMultipleResult(data);
+                    if (isfirst) {
+                        // 图片选择结果回调
+                        selectList = PictureSelector.obtainMultipleResult(data);
 
-                    //选择后有结果隐藏图片添加的按钮,无结果则隐藏
-                    //选择后有结果显示companyCertificateRecycler,无结果则隐藏
-                    if (selectList.size() > 0) {
-                        ivSelectAddImage.setVisibility(View.GONE);
-                        companyCertificateRecycler.setVisibility(View.VISIBLE);
+                        //选择后有结果隐藏图片添加的按钮,无结果则隐藏
+                        //选择后有结果显示companyCertificateRecycler,无结果则隐藏
+                        if (selectList.size() > 0) {
+                            companyCertificateIm.setVisibility(View.GONE);
+                            companyCertificateRecycler.setVisibility(View.VISIBLE);
+                        } else {
+                            companyCertificateIm.setVisibility(View.VISIBLE);
+                            companyCertificateRecycler.setVisibility(View.GONE);
+                        }
+                        // 例如 LocalMedia 里面返回三种path
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
+                        // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
+                        for (LocalMedia media : selectList) {
+                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
+                            LogUtil.e(TAG, "原图---->" + media.getPath());
+                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
+                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
+                        }
+                        mAdapter.setList(selectList);
+                        mAdapter.notifyDataSetChanged();
                     } else {
-                        ivSelectAddImage.setVisibility(View.VISIBLE);
-                        companyCertificateRecycler.setVisibility(View.GONE);
+
+                        //---------------------------------------------------------------------------------------------------------
+                        // 图片选择结果回调
+                        selectList2 = PictureSelector.obtainMultipleResult(data);
+
+                        //选择后有结果隐藏图片添加的按钮,无结果则隐藏
+                        //选择后有结果显示companyCertificateRecycler,无结果则隐藏
+                        if (selectList2.size() > 0) {
+                            uploadingSpecialCertificateIv.setVisibility(View.GONE);
+                            uploadingSpecialCertificateRv.setVisibility(View.VISIBLE);
+                        } else {
+                            uploadingSpecialCertificateIv.setVisibility(View.VISIBLE);
+                            uploadingSpecialCertificateRv.setVisibility(View.GONE);
+                        }
+                        // 例如 LocalMedia 里面返回三种path
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
+                        // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
+                        for (LocalMedia media : selectList2) {
+                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
+                            LogUtil.e(TAG, "原图---->" + media.getPath());
+                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
+                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
+                        }
+                        mAdapter2.setList(selectList2);
+                        mAdapter2.notifyDataSetChanged();
                     }
-                    // 例如 LocalMedia 里面返回三种path
-                    // 1.media.getPath(); 为原图path
-                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                    // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
-                    // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
-                    for (LocalMedia media : selectList) {
-                        LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
-                        LogUtil.e(TAG, "原图---->" + media.getPath());
-                        LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
-                        LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
-                    }
-                    mAdapter.setList(selectList);
-                    mAdapter.notifyDataSetChanged();
+
+
                     break;
             }
         }
@@ -435,6 +508,16 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener = new GridImageAdapter.onAddPicClickListener() {
         @Override
         public void onAddPicClick() {
+            mMaxSelectNum = 3;
+            selectPictureSetting(isCameraButton);
+
+        }
+
+    };
+    private GridImageAdapter2.onAddPicClickListener onAddPicClickListener2 = new GridImageAdapter2.onAddPicClickListener() {
+        @Override
+        public void onAddPicClick() {
+            mMaxSelectNum = 5;
             selectPictureSetting(isCameraButton);
 
         }
@@ -500,7 +583,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     private void initFile() {
         makeRootDirectory(PATH);
-        currentOutputVideoPath = PATH + GetPathFromUri.getVideoFileName();
     }
 
 

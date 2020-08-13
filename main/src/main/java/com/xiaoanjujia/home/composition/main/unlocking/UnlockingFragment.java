@@ -24,7 +24,6 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.me.certification_merchants.CertificationMerchantsActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -197,7 +196,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_visitors_to_review) {
 
         } else if (id == R.id.unlocking_visitors_store) {
-            ARouter.getInstance().build("/CertificationMerchantsActivity/CertificationMerchantsActivity").greenChannel().navigation(getActivity());
+            //            ARouter.getInstance().build("/CertificationMerchantsActivity/CertificationMerchantsActivity").greenChannel().navigation(getActivity());
+            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(getActivity());
         }
     }
 }

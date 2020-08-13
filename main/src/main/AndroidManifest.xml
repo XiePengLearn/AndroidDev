@@ -103,6 +103,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.me.certification_merchants.CertificationMerchantsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.me.merchants.PublishActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
