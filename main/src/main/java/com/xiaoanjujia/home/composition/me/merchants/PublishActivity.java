@@ -80,6 +80,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     EditText editMerchantPhone;
     @BindView(R2.id.edit_merchant_code)
     EditText editMerchantCode;
+
+
     @BindView(R2.id.company_certificate_im)
     ImageView companyCertificateIm;
     @BindView(R2.id.company_certificate_recycler)
@@ -88,6 +90,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     ImageView uploadingSpecialCertificateIv;
     @BindView(R2.id.uploading_special_certificate_rv)
     RecyclerView uploadingSpecialCertificateRv;
+
+
     @BindView(R2.id.register_success_entry)
     AlphaButton registerSuccessEntry;
     @BindView(R2.id.ll_knowledge_publish_root)
@@ -428,7 +432,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             mAdapter.setSelectMax(3);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton, selectList,5);
+            selectPictureSetting(isCameraButton, selectList,3);
             mAdapter.notifyDataSetChanged();
         } else {
             //*上传特殊材料：
