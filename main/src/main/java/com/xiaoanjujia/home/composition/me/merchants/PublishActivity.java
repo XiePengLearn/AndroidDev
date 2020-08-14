@@ -113,6 +113,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     private UploadImageResponse uploadImageResponse;
     private boolean isfirst = false;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -308,6 +309,36 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
+    @Override
+    public void setUploadPicture(UploadImageResponse uploadImageResponse) {
+        this.uploadImageResponse = uploadImageResponse;
+        try {
+            int code = uploadImageResponse.getStatus();
+            String msg = uploadImageResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                String image_uri = uploadImageResponse.getData().getPath();
+                PublishImageResponse publishImageResponse = new PublishImageResponse();
+                publishImageResponse.setTYPE("1");
+                publishImageResponse.setURI(image_uri);
+                imageUriList.add(publishImageResponse);
+
+                selectImageCommitTemp.remove(0);
+                uploadImage(selectImageCommitTemp);
+                //                if (selectImageCommitTemp.size() < 1)
+                //                    deleteCache();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+                finish();
+            } else {
+                ToastUtil.showToast(this.getApplicationContext(), msg);
+                hiddenProgressDialogView();
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
 
     @Override
     public void showProgressDialogView() {
@@ -358,7 +389,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             //选择图片
             selectImageCommitTemp.clear();
             selectImageCommitTemp.addAll(selectList);
-            uploadImage(selectImageCommitTemp);
+            //            uploadImage(selectImageCommitTemp);
+            uploadPictureToServer(selectList);
 
         } else if (id == R.id.company_certificate_im) {
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -415,6 +447,12 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     private void uploadImageToServer(File file_name) {
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
         mPresenter.getUploadImage(headersTreeMap, file_name);
+    }
+
+    //上传多张图片(方法)
+    private void uploadPictureToServer(List<LocalMedia> selectList) {
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getUploadPicture(headersTreeMap, selectList);
     }
 
 

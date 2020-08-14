@@ -18,6 +18,7 @@
 package com.xiaoanjujia.common.model.http;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -60,6 +61,21 @@ public interface BaseApiService {
             @HeaderMap TreeMap<String, String> headers
     );
 
+    @Multipart
+    @POST()
+    Observable<ResponseBody> executePostImageHeader(
+            @Url() String url,
+            @PartMap Map<String, RequestBody> map,
+            @Part List<MultipartBody.Part> parts,
+            @HeaderMap TreeMap<String, String> headers
+    );
+    @Multipart
+    @POST()
+    Observable<ResponseBody> executePostImageHeaderNoParam(
+            @Url() String url,
+            @Part List<MultipartBody.Part> parts,
+            @HeaderMap TreeMap<String, String> headers
+    );
     @PUT()
     @FormUrlEncoded
     Observable<ResponseBody> executePutHeader(

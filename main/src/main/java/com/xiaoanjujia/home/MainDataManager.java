@@ -20,13 +20,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
  * @author：xp on 2018/4/20 18:26.
  */
 
-public class MainDataManager extends BaseDataManager{
+public class MainDataManager extends BaseDataManager {
 
     private static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
     //注册
@@ -37,12 +39,14 @@ public class MainDataManager extends BaseDataManager{
     private static String GENERAL_LOGIN = "/api/v1/login";
     //忘记密码
     private static String GENERAL_FORGER = "/api/v1/editPassword";
+    //上传图片
+    private static String GENERAL_UPLOAD_IMAGE = "/api/image";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
     }
 
-    public static MainDataManager getInstance(DataManager dataManager){
+    public static MainDataManager getInstance(DataManager dataManager) {
         return new MainDataManager(dataManager);
     }
 
@@ -51,19 +55,19 @@ public class MainDataManager extends BaseDataManager{
      */
     public Disposable login(DisposableObserver<ResponseBody> consumer, String mobile, String verifyCode) {
 
-        return changeIOToMainThread(getService(MainApiService.class).login(mobile,verifyCode), consumer);
+        return changeIOToMainThread(getService(MainApiService.class).login(mobile, verifyCode), consumer);
     }
 
 
-    public Disposable getMainData(int start , int count , DisposableObserver<ResponseBody> consumer){
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("start",start);
-        map.put("count",count);
-        return changeIOToMainThread(getService(BaseApiService.class).executeGet("http://www.baidu.com",map),consumer);
+    public Disposable getMainData(int start, int count, DisposableObserver<ResponseBody> consumer) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("start", start);
+        map.put("count", count);
+        return changeIOToMainThread(getService(BaseApiService.class).executeGet("http://www.baidu.com", map), consumer);
 
     }
 
-    public List<String> getTypeOfNameData(){
+    public List<String> getTypeOfNameData() {
         ArrayList<String> list = new ArrayList<>(20);
         for (int i = 0; i < 20; i++) {
             list.add("家用电器");
@@ -71,7 +75,7 @@ public class MainDataManager extends BaseDataManager{
         return list;
     }
 
-    public<S> Disposable getData(DisposableObserver<S> consumer , final Class<S> clazz , final String fillName) {
+    public <S> Disposable getData(DisposableObserver<S> consumer, final Class<S> clazz, final String fillName) {
         return Observable.create(new ObservableOnSubscribe<S>() {
             @Override
             public void subscribe(ObservableEmitter<S> e) throws Exception {
@@ -98,6 +102,7 @@ public class MainDataManager extends BaseDataManager{
                 (KPI_ROOT_URL + GENERAL_REGISTER, mapParameters, mapHeaders), consumer);
 
     }
+
     /**
      * 获取忘记密码数据
      *
@@ -111,6 +116,7 @@ public class MainDataManager extends BaseDataManager{
                 (KPI_ROOT_URL + GENERAL_FORGER, mapParameters, mapHeaders), consumer);
 
     }
+
     /**
      * 获取验证码
      *
@@ -121,9 +127,10 @@ public class MainDataManager extends BaseDataManager{
      */
     public Disposable getRegisretCodeData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + GENERAL_REGISTER_CODE, mapParameters,mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_REGISTER_CODE, mapParameters, mapHeaders), consumer);
 
     }
+
     /**
      * 获取登录数据
      *
@@ -148,5 +155,21 @@ public class MainDataManager extends BaseDataManager{
     public Disposable getFeedBackData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_LOGIN, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param mapHeaders 请求头
+     * @param consumer   consumer
+     * @return Disposable
+     * @Url() String url,
+     * @PartMap Map<String, RequestBody> map,
+     * @Part List<MultipartBody.Part> parts,
+     * @HeaderMap TreeMap<String, String> headers
+     */
+    public Disposable executePostImageHeader(TreeMap<String, String> mapHeaders, Map<String, RequestBody> map, List<MultipartBody.Part> parts, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostImageHeaderNoParam
+                (KPI_ROOT_URL + GENERAL_UPLOAD_IMAGE,  parts, mapHeaders), consumer);
     }
 }
