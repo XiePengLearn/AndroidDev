@@ -1,16 +1,19 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
+
 /**
  * @Auther: xp
- * @Date: 2019/9/21 16:11
+ * @Date: 2019/9/15 10:34
  * @Description:
  */
-public class UploadImageResponse {
+public class ComExamineStatusResponse implements Serializable {
+
 
     /**
      * status : 1
-     * message : OK
-     * data : {"path":"https://a.xiaoanjujia.com/uploads/images/2020/07-21/b104c02321833ac7dcc323539f5a2ebe.jpg,https://a.xiaoanjujia.com/uploads/images/2020/07-21/ea5b207875b7f9d49b3c5094d07bb8b0.jpg"}
+     * message : 未认证
+     * data : {"examine":0,"refuse_text":""}
      */
 
     private int status;
@@ -43,17 +46,27 @@ public class UploadImageResponse {
 
     public static class DataBean {
         /**
-         * path : https://a.xiaoanjujia.com/uploads/images/2020/07-21/b104c02321833ac7dcc323539f5a2ebe.jpg,https://a.xiaoanjujia.com/uploads/images/2020/07-21/ea5b207875b7f9d49b3c5094d07bb8b0.jpg
+         * examine : 0
+         * refuse_text :
          */
 
-        private String img_path;
+        private int examine;
+        private String refuse_text;
 
-        public String getPath() {
-            return img_path;
+        public int getExamine() {
+            return examine;
         }
 
-        public void setPath(String img_path) {
-            this.img_path = img_path;
+        public void setExamine(int examine) {
+            this.examine = examine;
+        }
+
+        public String getRefuse_text() {
+            return refuse_text;
+        }
+
+        public void setRefuse_text(String refuse_text) {
+            this.refuse_text = refuse_text;
         }
     }
 }

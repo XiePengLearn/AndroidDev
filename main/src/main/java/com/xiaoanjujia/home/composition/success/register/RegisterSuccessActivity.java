@@ -3,7 +3,6 @@ package com.xiaoanjujia.home.composition.success.register;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -120,6 +119,8 @@ public class RegisterSuccessActivity extends BaseActivity implements RegisterSuc
                 String SESSION_ID = data.getToken();
                 int roletype = data.getRoletype();
                 PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
+                int user_id = data.getUser_id();
+                PrefUtils.writeUserId(String.valueOf(user_id), BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(mUserName, this.getApplicationContext());
                 PrefUtils.writePassword(mPassword, this.getApplicationContext());

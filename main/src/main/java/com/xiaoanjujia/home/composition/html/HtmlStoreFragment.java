@@ -21,7 +21,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.widget.X5WebView;
-import com.xiaoanjujia.home.composition.html.mehtml.HomeWebActivity;
+import com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +75,8 @@ public class HtmlStoreFragment extends BaseFragment {
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText(R.string.login_entry);
+        mainTitleText.setText("");
+        mainTitleContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class HtmlStoreFragment extends BaseFragment {
     class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            Intent intent = new Intent(getActivity(), HomeWebActivity.class);
+            Intent intent = new Intent(getActivity(), MeWebActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
 

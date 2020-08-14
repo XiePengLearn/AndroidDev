@@ -91,7 +91,7 @@ public class Api {
         mapHeaders.put("sign", mSignByForm[1]);
         mapHeaders.put("time", mSignByForm[0]);
         if (Util.isLogin()) {
-            mapHeaders.put("user-token", PrefUtils.readSESSION_ID(BaseApplication.getInstance()));
+            mapHeaders.put("token", PrefUtils.readSESSION_ID(BaseApplication.getInstance()));
         }
         mapHeaders.put("vesion", versionCode);
         return mapHeaders;

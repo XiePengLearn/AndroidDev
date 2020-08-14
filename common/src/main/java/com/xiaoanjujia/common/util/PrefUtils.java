@@ -12,6 +12,22 @@ import android.content.SharedPreferences;
 public class PrefUtils {
     private static final String SHARE_PREFS_NAME = "kpi_client";
 
+    //绩时查 UID
+    public static void writeUserId(String userId, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("userId", userId);
+        editor.apply();
+    }
+
+    public static String readUserId(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getString("userId", "");
+
+    }
+
     public static void writeCurrentTime(long currentTime, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -39,6 +55,7 @@ public class PrefUtils {
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getInt("roleType", 0);
     }
+
 
     public static void writeUserName(String userName, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
@@ -275,22 +292,6 @@ public class PrefUtils {
         return mySharedPreferences.getString("latitude", "");
     }
 
-
-    //绩时查 UID
-    public static void writeUid(String token, Context context) {
-        SharedPreferences mySharedPreferences = context.getSharedPreferences(
-                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mySharedPreferences.edit();
-        editor.putString("uid", token);
-        editor.apply();
-    }
-
-    public static String readUid(Context context) {
-        SharedPreferences mySharedPreferences = context.getSharedPreferences(
-                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
-        return mySharedPreferences.getString("uid", "");
-
-    }
 
     //微信 头像
 

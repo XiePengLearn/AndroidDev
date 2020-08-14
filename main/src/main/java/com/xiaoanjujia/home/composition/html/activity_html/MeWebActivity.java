@@ -1,9 +1,8 @@
-package com.xiaoanjujia.home.composition.html.mehtml;
+package com.xiaoanjujia.home.composition.html.activity_html;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -37,10 +36,10 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/homeWebActivity/homeWebActivity")
-public class HomeWebActivity extends BaseActivity implements HomeWebContract.View {
+@Route(path = "/MeWebActivity/MeWebActivity")
+public class MeWebActivity extends BaseActivity implements MeWebContract.View {
     @Inject
-    HomeWebPresenter presenter;
+    MeWebPresenter presenter;
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -57,10 +56,7 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
     X5WebView webView;
 
 
-    private String mXinGeToken;
     private static final String TAG = "NationExamActivity";
-    private Button mLoginEntry;
-    private LoginResponse loginResponse;
     private Intent mIntent;
     private String mWebUrl;
 
@@ -79,9 +75,9 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
     private void initView() {
 
 
-        DaggerHomeWebActivityComponent.builder()
+        DaggerMeWebActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .homeWebPresenterModule(new HomeWebPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .meWebPresenterModule(new MeWebPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 
@@ -97,7 +93,7 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
 
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("我的");
+        mainTitleText.setText("");
 
     }
 
@@ -134,14 +130,12 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
     @Override
     protected void onResume() {
         super.onResume();
-
-
+        webView.onResume();
     }
 
 
     @Override
     public void setLoginData(LoginResponse loginResponse) {
-        this.loginResponse = loginResponse;
         try {
 
 

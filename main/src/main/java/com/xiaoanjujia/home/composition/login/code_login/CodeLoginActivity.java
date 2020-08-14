@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,10 +26,8 @@ import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
-import com.xiaoanjujia.home.composition.main.MainActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
-import com.xiaoanjujia.home.entities.RegisterResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.xiaoanjujia.home.tool.Util;
 
@@ -141,6 +138,8 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 String SESSION_ID = data.getToken();
                 int roletype = data.getRoletype();
                 PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
+                int user_id = data.getUser_id();
+                PrefUtils.writeUserId(String.valueOf(user_id), BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());

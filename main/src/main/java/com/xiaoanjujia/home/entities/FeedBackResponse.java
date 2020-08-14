@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Auther: xp
@@ -8,37 +9,38 @@ import java.io.Serializable;
  * @Description:
  */
 public class FeedBackResponse implements Serializable {
+
     /**
-     * code : 200200
-     * msg : 说明
-     * data :
+     * status : 1
+     * message : OK
+     * data : []
      */
 
-    private String code;
-    private String msg;
-    private String data;
+    private int status;
+    private String message;
+    private List<?> data;
 
-    public String getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getData() {
+    public List<?> getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List<?> data) {
         this.data = data;
     }
 }

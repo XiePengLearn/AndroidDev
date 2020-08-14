@@ -2,13 +2,12 @@ package com.xiaoanjujia.home.composition.me.merchants;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.xiaoanjujia.common.apiservice.RetrofitService;
-import com.xiaoanjujia.common.apiservice.RetrofitServiceUtil;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 
 import java.io.File;
@@ -19,10 +18,7 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -35,8 +31,8 @@ import okhttp3.ResponseBody;
  */
 public class PublishPresenter extends BasePresenter implements PublishContract.Presenter {
     private MainDataManager mDataManager;
-    private              PublishContract.View mContractView;
-    private static final String               TAG = "PublishPresenter";
+    private PublishContract.View mContractView;
+    private static final String TAG = "PublishPresenter";
 
     @Inject
     public PublishPresenter(MainDataManager mDataManager, PublishContract.View view) {
@@ -64,9 +60,11 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
 
     @Override
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
-        mContractView.showProgressDialogView();
+        //        mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getFeedBackData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private FeedBackResponse mfeedBackResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
@@ -74,9 +72,15 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    FeedBackResponse feedBackResponse = gson.fromJson(response, FeedBackResponse.class);
-
-                    mContractView.setResponseData(feedBackResponse);
+                    boolean jsonArrayData = ProjectResponse.isJsonArrayData(response);
+                    if (jsonArrayData) {
+                        mfeedBackResponse = gson.fromJson(response, FeedBackResponse.class);
+                    } else {
+                        mfeedBackResponse = new FeedBackResponse();
+                        mfeedBackResponse.setMessage(ProjectResponse.getMessage(response));
+                        mfeedBackResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setResponseData(mfeedBackResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,6 +92,11 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
             public void onError(Throwable e) {
                 super.onError(e);
                 mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= ");
+                mfeedBackResponse = new FeedBackResponse();
+                mfeedBackResponse.setMessage("商户认证数据提交失败......");
+                mfeedBackResponse.setStatus(0);
+                mContractView.setResponseData(mfeedBackResponse);
             }
 
             @Override
@@ -102,7 +111,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
     }
 
     @Override
-    public void getUploadImage(TreeMap<String, String> headers, File file_name) {
+    public void getUploadImage(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList) {
         /**
          * 公共上传图片
          * header参数每次都要携带
@@ -117,49 +126,46 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
          *     }
          * }
          */
-        mContractView.showProgressDialogView();
+        //        mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        RetrofitService retrofitService = RetrofitServiceUtil.getRetrofitService();
-        RequestBody params = RequestBody.create(MediaType.parse("text/plain"), "png");
-        final RequestBody requestBody = RequestBody.create(MediaType.parse("image/png/jpg; charset=utf-8"), file_name);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("IMAGE", file_name.getName(), requestBody);
-        retrofitService.upload_avatar(headers, part, params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseBody>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        List<File> imageFile = new ArrayList<>();
+        for (int i = 0; i < LocalMediaList.size(); i++) {
+            imageFile.add(new File(LocalMediaList.get(i).getPath()));
+        }
+        List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
+        Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
 
-                    }
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    UploadImageResponse mUploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
 
-                    @Override
-                    public void onNext(ResponseBody responseBody) {
-                        try {
+                    mContractView.setUploadImage(mUploadImageResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //                mContractView.hiddenProgressDialogView();
+            }
 
-                            String response = responseBody.string();
-                            LogUtil.e(TAG, "=======response:=======" + response);
-                            Gson gson = new Gson();
-                            UploadImageResponse uploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                //                mContractView.hiddenProgressDialogView();
+            }
 
-                            mContractView.setUploadImage(uploadImageResponse);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mContractView.hiddenProgressDialogView();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        long completeRequestTime = System.currentTimeMillis();
-                        long useTime = completeRequestTime - beforeRequestTime;
-                        LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-
-                    }
-                });
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                //                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
     }
 
     @Override
@@ -171,7 +177,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
             imageFile.add(new File(LocalMediaList.get(i).getPath()));
         }
         List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
-        Disposable disposable = mDataManager.executePostImageHeader(headers,null, partList, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
@@ -185,14 +191,14 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
 
             @Override
@@ -200,15 +206,17 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
     }
-    private RequestBody convertToRequestBody(String param){
+
+    private RequestBody convertToRequestBody(String param) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), param);
         return requestBody;
     }
+
     private List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
         List<MultipartBody.Part> parts = new ArrayList<>(files.size());
         for (File file : files) {

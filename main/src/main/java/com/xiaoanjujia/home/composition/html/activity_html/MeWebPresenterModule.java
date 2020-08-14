@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.html.mehtml;
+package com.xiaoanjujia.home.composition.html.activity_html;
 
 
 import com.xiaoanjujia.home.MainDataManager;
@@ -12,18 +12,18 @@ import dagger.Provides;
  * @Description:
  */
 @Module
-public class HomeWebPresenterModule {
-    private HomeWebContract.View view;
+public class MeWebPresenterModule {
+    private MeWebContract.View view;
 
     private MainDataManager mainDataManager;
 
-    public HomeWebPresenterModule(HomeWebContract.View view, MainDataManager mainDataManager) {
+    public MeWebPresenterModule(MeWebContract.View view, MainDataManager mainDataManager) {
         this.view = view;
         this.mainDataManager = mainDataManager;
     }
 
     @Provides
-    HomeWebContract.View providerMainContractView() {
+    MeWebContract.View providerMainContractView() {
         return view;
     }
 

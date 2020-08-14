@@ -5,7 +5,6 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,6 +22,7 @@ public interface PublishContract {
         void setResponseData(FeedBackResponse feedBackResponse);
 
         void setUploadImage(UploadImageResponse uploadImageResponse);
+
         void setUploadPicture(UploadImageResponse uploadImageResponse);
 
         void showProgressDialogView();
@@ -41,7 +41,8 @@ public interface PublishContract {
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-        void getUploadImage(TreeMap<String, String> headers, File file_name);
+        void getUploadImage(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList);
+
         void getUploadPicture(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList);
     }
 }

@@ -95,10 +95,10 @@
             android:name="com.xiaoanjujia.home.composition.success.submit.SubmitSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.xiaoanjujia.home.composition.html.mehtml.HomeWebActivity"
+            android:name="com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.xiaoanjujia.home.composition.html.mehtml.HomeWebViewActivity"
+            android:name="com.xiaoanjujia.home.composition.html.HomeWebViewActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.me.certification_merchants.CertificationMerchantsActivity"

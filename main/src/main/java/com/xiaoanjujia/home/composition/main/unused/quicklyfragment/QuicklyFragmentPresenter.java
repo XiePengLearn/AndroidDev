@@ -85,6 +85,7 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
             public void onError(Throwable e) {
                 super.onError(e);
                 mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.html.mehtml;
+package com.xiaoanjujia.home.composition.html.activity_html;
 
 
 import com.xiaoanjujia.home.entities.LoginResponse;
@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * @Date: 2019/9/13 22:10
  * @Description:
  */
-public interface HomeWebContract {
+public interface MeWebContract {
 
     interface View {
 

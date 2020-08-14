@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.html.mehtml;
+package com.xiaoanjujia.home.composition.html.activity_html;
 
 import com.google.gson.Gson;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
@@ -20,13 +20,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/13 22:09
  * @Description:
  */
-public class HomeWebPresenter extends BasePresenter implements HomeWebContract.Presenter {
+public class MeWebPresenter extends BasePresenter implements MeWebContract.Presenter {
     private MainDataManager mDataManager;
-    private              HomeWebContract.View mLoginView;
+    private              MeWebContract.View mLoginView;
     private static final String               TAG = "MainPresenter";
 
     @Inject
-    public HomeWebPresenter(MainDataManager mDataManager, HomeWebContract.View view) {
+    public MeWebPresenter(MainDataManager mDataManager, MeWebContract.View view) {
         this.mDataManager = mDataManager;
         this.mLoginView = view;
 

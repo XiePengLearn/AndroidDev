@@ -1,10 +1,12 @@
 package com.xiaoanjujia.home.composition.me.merchants;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +25,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PrefUtils;
@@ -31,6 +34,7 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.SelectPicPopupWindow;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
 import com.xiaoanjujia.home.entities.PublishImageResponse;
@@ -112,6 +116,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     private List<LocalMedia> selectImageCommitTemp;    //防止提交未成功 报错而临时存在的,只有提交时 才会赋值
     private UploadImageResponse uploadImageResponse;
     private boolean isfirst = false;
+    private String mCompanyPath;
+    private String mMSpecialImgsPath;
 
 
     @Override
@@ -234,12 +240,31 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     }
 
-    private void initData(String content) {
-
-        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+    /**
+     * user_id:用户id
+     * name_acronym:商户简称
+     * shop_name:商户全称
+     * shop_phone:手机号
+     * code:身份证或者组织代码
+     * status:0个人,1企业( 可不传 ) *
+     * imgs_url:公司证件图片链接
+     * special_imgs_url:特殊证件图片链接
+     */
+    private void initData() {
+        String editMerchantNameText = editMerchantName.getText().toString().trim();
+        String editCompanyNameText = editCompanyName.getText().toString().trim();
+        String editMerchantPhoneText = editMerchantPhone.getText().toString().trim();
+        String editMerchantCodeText = editMerchantCode.getText().toString().trim();
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("CONTETNT", content);
-
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("name_acronym", editMerchantNameText);
+        mapParameters.put("shop_name", editCompanyNameText);
+        mapParameters.put("shop_phone", editMerchantPhoneText);
+        mapParameters.put("code", editMerchantCodeText);
+        mapParameters.put("imgs_url", mCompanyPath);
+        if (!Utils.isNull(mMSpecialImgsPath)) {
+            mapParameters.put("special_imgs_url", mMSpecialImgsPath);
+        }
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getRequestData(headersTreeMap, mapParameters);
@@ -257,13 +282,14 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     public void setResponseData(FeedBackResponse feedBackResponse) {
         this.feedBackResponse = feedBackResponse;
         try {
-            String code = feedBackResponse.getCode();
-            String msg = feedBackResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
+            int code = uploadImageResponse.getStatus();
+            String msg = uploadImageResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
 
                 ToastUtil.showToast(this.getApplicationContext(), "提交成功");
+                ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(mContext);
                 finish();
-            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+            } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
 
@@ -286,16 +312,10 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             int code = uploadImageResponse.getStatus();
             String msg = uploadImageResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                String image_uri = uploadImageResponse.getData().getPath();
-                PublishImageResponse publishImageResponse = new PublishImageResponse();
-                publishImageResponse.setTYPE("1");
-                publishImageResponse.setURI(image_uri);
-                imageUriList.add(publishImageResponse);
+                mMSpecialImgsPath = uploadImageResponse.getData().getPath();
+                //用户未选择 特殊材料
+                initData();
 
-                selectImageCommitTemp.remove(0);
-                uploadImage(selectImageCommitTemp);
-                //                if (selectImageCommitTemp.size() < 1)
-                //                    deleteCache();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -316,16 +336,16 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             int code = uploadImageResponse.getStatus();
             String msg = uploadImageResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                String image_uri = uploadImageResponse.getData().getPath();
-                PublishImageResponse publishImageResponse = new PublishImageResponse();
-                publishImageResponse.setTYPE("1");
-                publishImageResponse.setURI(image_uri);
-                imageUriList.add(publishImageResponse);
+                mCompanyPath = uploadImageResponse.getData().getPath();
+                //上传特殊图片
+                if (selectList2.size() > 0) {
+                    uploadImageToServer(selectList2);
+                } else {
+                    //用户未选择 特殊材料
+                    initData();
 
-                selectImageCommitTemp.remove(0);
-                uploadImage(selectImageCommitTemp);
-                //                if (selectImageCommitTemp.size() < 1)
-                //                    deleteCache();
+                }
+
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -383,16 +403,18 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 return;
             }
             if (Util.isNull(editMerchantCodeText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "商户代码");
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入商户代码");
                 return;
             }
-            //选择图片
-            selectImageCommitTemp.clear();
-            selectImageCommitTemp.addAll(selectList);
-            //            uploadImage(selectImageCommitTemp);
+            //先上传公司证件  ,公司证件上传成功后 在上传特殊材料选择图片
+            if (selectList.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择上传公司证件");
+                return;
+            }
             uploadPictureToServer(selectList);
 
         } else if (id == R.id.company_certificate_im) {
+            hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
             selectPicPopupWindow.setData("拍照/相册", "", null);
             selectPicPopupWindow.setOnSelectItemOnclickListener(new SelectPicPopupWindow.OnSelectItemOnclickListener() {
@@ -406,6 +428,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             });
             selectPicPopupWindow.showPopWindow();
         } else if (id == R.id.uploading_special_certificate_iv) {
+            hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
             selectPicPopupWindow.setData("拍照/相册", "", null);
             selectPicPopupWindow.setOnSelectItemOnclickListener(new SelectPicPopupWindow.OnSelectItemOnclickListener() {
@@ -432,24 +455,13 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     }
 
 
-    private void uploadImage(List<LocalMedia> localMediaList) {
-        if (localMediaList.size() > 0) {
-            String compressPath = localMediaList.get(0).getCompressPath();
-            File file = new File(compressPath);
-
-            LogUtil.e(TAG, "=====compressPath======" + compressPath);
-            LogUtil.e(TAG, new File(compressPath).length() / 1024 + "k");
-            uploadImageToServer(file);
-        }
-    }
-
-    //上传图片(方法)
-    private void uploadImageToServer(File file_name) {
+    //上传特殊图片(方法)
+    private void uploadImageToServer(List<LocalMedia> selectList) {
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-        mPresenter.getUploadImage(headersTreeMap, file_name);
+        mPresenter.getUploadImage(headersTreeMap, selectList);
     }
 
-    //上传多张图片(方法)
+    //上传公司证件(方法)
     private void uploadPictureToServer(List<LocalMedia> selectList) {
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
         mPresenter.getUploadPicture(headersTreeMap, selectList);
@@ -656,6 +668,14 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

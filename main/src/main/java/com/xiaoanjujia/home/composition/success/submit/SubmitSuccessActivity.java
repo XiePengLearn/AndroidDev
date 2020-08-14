@@ -3,7 +3,6 @@ package com.xiaoanjujia.home.composition.success.submit;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,7 +81,7 @@ public class SubmitSuccessActivity extends BaseActivity implements SubmitSuccess
      * 初始化title
      */
     public void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText(R.string.submit_successfully);
     }
 
@@ -148,8 +147,8 @@ public class SubmitSuccessActivity extends BaseActivity implements SubmitSuccess
             finish();
 
         } else if (i == R.id.register_success_entry) {
-            //登录
-            LoginMethod();
+            finish();
+            //            LoginMethod();
         }
     }
 

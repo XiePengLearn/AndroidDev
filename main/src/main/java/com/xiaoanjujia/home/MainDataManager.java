@@ -41,6 +41,10 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_FORGER = "/api/v1/editPassword";
     //上传图片
     private static String GENERAL_UPLOAD_IMAGE = "/api/image";
+    //提交商户认证
+    private static String GENERAL_GET_COMMUNITY = "/api/v1/getcommunity";
+    //获取商户认证状态
+    private static String GENERAL_COMEXAMINE = "/api/v1/comexamine";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -145,7 +149,7 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
-     * 获取登录数据
+     * 提交商户认证
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -154,7 +158,7 @@ public class MainDataManager extends BaseDataManager {
      */
     public Disposable getFeedBackData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + GENERAL_LOGIN, mapParameters, mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_GET_COMMUNITY, mapParameters, mapHeaders), consumer);
     }
 
     /**
@@ -170,6 +174,19 @@ public class MainDataManager extends BaseDataManager {
      */
     public Disposable executePostImageHeader(TreeMap<String, String> mapHeaders, Map<String, RequestBody> map, List<MultipartBody.Part> parts, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostImageHeaderNoParam
-                (KPI_ROOT_URL + GENERAL_UPLOAD_IMAGE,  parts, mapHeaders), consumer);
+                (KPI_ROOT_URL + GENERAL_UPLOAD_IMAGE, parts, mapHeaders), consumer);
     }
+    /**
+     *获取商户认证状态
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getComexamine(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMEXAMINE, mapParameters, mapHeaders), consumer);
+    }
+
 }

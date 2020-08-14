@@ -1,11 +1,11 @@
-package com.xiaoanjujia.home.composition.main.unused.quicklyactivity;
+package com.xiaoanjujia.home.composition.html.me_html;
 
 import com.google.gson.Gson;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
@@ -19,15 +19,17 @@ import okhttp3.ResponseBody;
 /**
  * @Auther: xp
  * @Date: 2019/10
- * @Description: ChangeAuthenticationPresenter
+ * @Description:
  */
-public class QuicklyPresenter extends BasePresenter implements QuicklyContract.Presenter {
+public class MeWebFragmentPresenter extends BasePresenter implements MeWebFragmentContract.Presenter {
+
     private MainDataManager mDataManager;
-    private              QuicklyContract.View mContractView;
-    private static final String               TAG = "ChangeAuthenticationPresenter";
+
+    private MeWebFragmentContract.View mContractView;
+    private static final String TAG = "BeforePagePresenter";
 
     @Inject
-    public QuicklyPresenter(MainDataManager mDataManager, QuicklyContract.View view) {
+    public MeWebFragmentPresenter(MainDataManager mDataManager, MeWebFragmentContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -54,26 +56,24 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-
-            private LoginResponse mLoginResponse;
+        Disposable disposable = mDataManager.getComexamine(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private ComExamineStatusResponse mComExamineStatusResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
-
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                        mComExamineStatusResponse = gson.fromJson(response, ComExamineStatusResponse.class);
                     } else {
-                        mLoginResponse = new LoginResponse();
-                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                        mComExamineStatusResponse = new ComExamineStatusResponse();
+                        mComExamineStatusResponse.setMessage(ProjectResponse.getMessage(response));
+                        mComExamineStatusResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setResponseData(mLoginResponse);
+                    mContractView.setResponseData(mComExamineStatusResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -98,4 +98,5 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
         });
         addDisposabe(disposable);
     }
+
 }
