@@ -148,7 +148,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         companyCertificateRecycler.setLayoutManager(manager);
         mAdapter = new GridImageAdapter(PublishActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
-        mAdapter.setSelectMax(5);
+        //        mAdapter.setSelectMax(5);
         companyCertificateRecycler.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
             @Override
@@ -192,7 +192,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         uploadingSpecialCertificateRv.setLayoutManager(manager2);
         mAdapter2 = new GridImageAdapter2(PublishActivity.this, onAddPicClickListener2);
         mAdapter2.setList(selectList2);
-        mAdapter2.setSelectMax(5);
+        //        mAdapter2.setSelectMax(5);
         uploadingSpecialCertificateRv.setAdapter(mAdapter2);
         mAdapter2.setOnItemClickListener(new GridImageAdapter2.OnItemClickListener() {
             @Override
@@ -364,7 +364,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 public void selectItem(String str) {
 
                     if ("拍照/相册".equals(str)) {
-                        photoSelection(true, 2, TAKE_PICTURE, selectList);
+                        photoSelection(true, selectList);
                     }
                 }
             });
@@ -377,7 +377,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 public void selectItem(String str) {
 
                     if ("拍照/相册".equals(str)) {
-                        photoSelection(false, 2, TAKE_PICTURE, selectList);
+                        photoSelection(false, selectList2);
                     }
                 }
             });
@@ -418,30 +418,31 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         companyCertificateIm.setVisibility(View.VISIBLE);
         companyCertificateRecycler.setVisibility(View.GONE);
     }
+
     public void refershAddPictureButton2() {
         uploadingSpecialCertificateIv.setVisibility(View.VISIBLE);
         uploadingSpecialCertificateRv.setVisibility(View.GONE);
     }
 
-    public void photoSelection(boolean isFirst, int maxSelect, int resquestCode, List<LocalMedia> selectList) {
+    public void photoSelection(boolean isFirst, List<LocalMedia> selectList) {
         this.isfirst = isFirst;
         if (isFirst) {
             //上传公司证件：
             isCameraButton = true;
             mMaxSelectNum = 3;
-            mAdapter.setSelectMax(3);
+            //            mAdapter.setSelectMax(3);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton, selectList,3);
+            selectPictureSetting(isCameraButton, selectList, 3);
             mAdapter.notifyDataSetChanged();
         } else {
             //*上传特殊材料：
             isCameraButton = true;
             mMaxSelectNum = 5;
-            mAdapter2.setSelectMax(5);
+            //            mAdapter2.setSelectMax(5);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton, selectList2,5);
+            selectPictureSetting(isCameraButton, selectList2, 5);
             mAdapter2.notifyDataSetChanged();
         }
     }
@@ -516,12 +517,12 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    private GridImageAdapter.onAddPicClickListener onAddPicClickListener = new GridImageAdapter.onAddPicClickListener() {
+    private GridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new GridImageAdapter.onAddPicClickListener1() {
         @Override
         public void onAddPicClick1() {
             isfirst = true;
             mMaxSelectNum = 3;
-            selectPictureSetting(isCameraButton, selectList,3);
+            selectPictureSetting(isCameraButton, selectList, 3);
 
         }
 
@@ -531,13 +532,13 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         public void onAddPicClick() {
             mMaxSelectNum = 5;
             isfirst = false;
-            selectPictureSetting(isCameraButton, selectList2,5);
+            selectPictureSetting(isCameraButton, selectList2, 5);
 
         }
 
     };
 
-    private void selectPictureSetting(Boolean isCameraButton, List<LocalMedia> selectList,int mMaxSelectNum) {
+    private void selectPictureSetting(Boolean isCameraButton, List<LocalMedia> selectList, int mMaxSelectNum) {
         // 进入相册 以下是例子：不需要的api可以不写
         PictureSelector.create(PublishActivity.this)
                 .openGallery(chooseMode)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()

@@ -41,13 +41,13 @@ public class GridImageAdapter extends
     /**
      * 点击添加图片跳转
      */
-    private onAddPicClickListener mOnAddPicClickListener;
+    private onAddPicClickListener1 mOnAddPicClickListener;
 
-    public interface onAddPicClickListener {
+    public interface onAddPicClickListener1 {
         void onAddPicClick1();
     }
 
-    public GridImageAdapter(PublishActivity context, onAddPicClickListener mOnAddPicClickListener) {
+    public GridImageAdapter(PublishActivity context, onAddPicClickListener1 mOnAddPicClickListener) {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         this.mOnAddPicClickListener = mOnAddPicClickListener;
