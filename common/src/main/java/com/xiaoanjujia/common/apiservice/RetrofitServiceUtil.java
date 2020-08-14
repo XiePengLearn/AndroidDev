@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitServiceUtil {
 
     private static RetrofitServiceUtil instance;
-    private static OkHttpClient        okHttpClient;
+    private static OkHttpClient okHttpClient;
 
     private RetrofitServiceUtil() {
         //设置okhttp的响应式时间
@@ -43,8 +43,8 @@ public class RetrofitServiceUtil {
 
     private RetrofitService innGetRetrofitService() {
         Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.1.18:8088/api/")//测试环境接口
-                .baseUrl("http://14.29.175.35:8091/api/")//预生产环境接口
+                //                .baseUrl("http://192.168.1.18:8088/api/")//测试环境接口
+                .baseUrl("https://a.xiaoanjujia.com/api/image/")//预生产环境接口
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)

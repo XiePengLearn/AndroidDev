@@ -12,25 +12,31 @@ public class UploadImageResponse {
      * msg : 说明
      * data : {"IMAGE_URI":"图片URI地址"}
      */
-
-    private String code;
-    private String   msg;
+    /*{
+     *     "status": 1,
+     *     "message": "OK",
+     *     "data": {
+     *         "path": "https://a.xiaoanjujia.com/uploads/images/2020/07-21/b104c02321833ac7dcc323539f5a2ebe.jpg,https://a.xiaoanjujia.com/uploads/images/2020/07-21/ea5b207875b7f9d49b3c5094d07bb8b0.jpg"
+     *     }
+     * }*/
+    private int status;
+    private String message;
     private DataBean data;
 
-    public String getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public DataBean getData() {
@@ -46,14 +52,14 @@ public class UploadImageResponse {
          * IMAGE_URI : 图片URI地址
          */
 
-        private String IMAGE_URI;
+        private String path;
 
-        public String getIMAGE_URI() {
-            return IMAGE_URI;
+        public String getPath() {
+            return path;
         }
 
-        public void setIMAGE_URI(String IMAGE_URI) {
-            this.IMAGE_URI = IMAGE_URI;
+        public void setPath(String path) {
+            this.path = path;
         }
     }
 }

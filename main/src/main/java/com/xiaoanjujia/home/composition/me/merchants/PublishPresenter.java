@@ -100,7 +100,20 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
 
     @Override
     public void getUploadImage(TreeMap<String, String> headers, File file_name) {
-
+        /**
+         * 公共上传图片
+         * header参数每次都要携带
+         * 1.接口地址 /api/image
+         * image[]
+         * img_path( 返回字符串,多张图片是用逗号隔开 ):路径
+         * {
+         *     "status": 1,
+         *     "message": "OK",
+         *     "data": {
+         *         "path": "https://a.xiaoanjujia.com/uploads/images/2020/07-21/b104c02321833ac7dcc323539f5a2ebe.jpg,https://a.xiaoanjujia.com/uploads/images/2020/07-21/ea5b207875b7f9d49b3c5094d07bb8b0.jpg"
+         *     }
+         * }
+         */
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         RetrofitService retrofitService = RetrofitServiceUtil.getRetrofitService();

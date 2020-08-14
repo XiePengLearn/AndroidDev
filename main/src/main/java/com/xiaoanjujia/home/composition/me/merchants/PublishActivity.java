@@ -282,10 +282,10 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     public void setUploadImage(UploadImageResponse uploadImageResponse) {
         this.uploadImageResponse = uploadImageResponse;
         try {
-            String code = uploadImageResponse.getCode();
-            String msg = uploadImageResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
-                String image_uri = uploadImageResponse.getData().getIMAGE_URI();
+            int code = uploadImageResponse.getStatus();
+            String msg = uploadImageResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                String image_uri = uploadImageResponse.getData().getPath();
                 PublishImageResponse publishImageResponse = new PublishImageResponse();
                 publishImageResponse.setTYPE("1");
                 publishImageResponse.setURI(image_uri);
@@ -295,7 +295,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 uploadImage(selectImageCommitTemp);
                 //                if (selectImageCommitTemp.size() < 1)
                 //                    deleteCache();
-            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+            } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
                 finish();
@@ -355,6 +355,10 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 ToastUtil.showToast(mContext.getApplicationContext(), "商户代码");
                 return;
             }
+            //选择图片
+            selectImageCommitTemp.clear();
+            selectImageCommitTemp.addAll(selectList);
+            uploadImage(selectImageCommitTemp);
 
         } else if (id == R.id.company_certificate_im) {
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -402,7 +406,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
             File file = new File(compressPath);
 
             LogUtil.e(TAG, "=====compressPath======" + compressPath);
-            LogUtil.e("compress image result:", new File(compressPath).length() / 1024 + "k");
+            LogUtil.e(TAG, new File(compressPath).length() / 1024 + "k");
             uploadImageToServer(file);
         }
     }
