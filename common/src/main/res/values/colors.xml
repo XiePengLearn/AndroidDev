@@ -9,5 +9,9 @@
     <color name="color_656565">#656565</color>
     <color name="color_2AAD67">#2AAD67</color>
     <color name="color_888888">#888888</color>
+    <color name="color_959595">#959595</color>
+    <color name="color_767676">#767676</color>
     <color name="app_color_f6">#f6f6f6</color>
+    <color name="base_font_color_32333D">#32333D</color>
+    <color name="color_me_menu_item_bottom_line">#F2F3F5</color>
 </resources>

@@ -1,7 +1,6 @@
 package com.xiaoanjujia.home.composition.main.unused.quicklyfragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,9 +77,15 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
 
         initView();
         initData();
-
+        initTitle();
     }
-
+    /**
+     * 初始化title
+     */
+    private void initTitle() {
+        mainTitleBack.setVisibility(View.VISIBLE);
+        mainTitleText.setText("商城");
+    }
     @Override
     public void onLazyLoad() {
 

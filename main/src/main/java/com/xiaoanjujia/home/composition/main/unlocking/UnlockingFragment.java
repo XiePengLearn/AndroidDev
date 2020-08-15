@@ -191,13 +191,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         int id = view.getId();
         if (id == R.id.unlocking_independent_booking_for_visitors) {
 
+            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_visiting_scholar) {
-
+            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_visitors_to_review) {
-
+            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_visitors_store) {
-            //            ARouter.getInstance().build("/CertificationMerchantsActivity/CertificationMerchantsActivity").greenChannel().navigation(getActivity());
-            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(getActivity());
+            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
         }
     }
 }

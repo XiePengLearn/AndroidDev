@@ -106,6 +106,15 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.me.merchants.PublishActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.visitor_audit.VisitorAuditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.visitor.VisitorActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

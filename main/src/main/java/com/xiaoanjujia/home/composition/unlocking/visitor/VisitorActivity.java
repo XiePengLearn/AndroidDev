@@ -1,25 +1,23 @@
-package com.xiaoanjujia.home.composition.main.unused.quicklyactivity;
+package com.xiaoanjujia.home.composition.unlocking.visitor;
 
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
-import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -32,16 +30,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author xiepeng
  */
-@Route(path = "/quicklyActivity/quicklyActivity")
-public class QuicklyActivity extends BaseActivity implements QuicklyContract.View {
+@Route(path = "/VisitorActivity/VisitorActivity")
+public class VisitorActivity extends BaseActivity implements VisitorContract.View {
     @Inject
-    QuicklyPresenter mPresenter;
-    private static final String TAG = "QuicklyActivity";
-
+    VisitorPresenter mPresenter;
+    private static final String TAG = "VisitorActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -52,19 +50,20 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.chat_list)
-    EasyRecyclerView chatList;
-    @BindView(R2.id.no_data_img)
-    ImageView noDataImg;
-    @BindView(R2.id.rl_no_data)
-    RelativeLayout rlNoData;
-    @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.visiting_cancel)
+    AlphaButton visitingCancel;
+    @BindView(R2.id.visiting_confirm)
+    AlphaButton visitingConfirm;
+    @BindView(R2.id.visiting_return_the_home_page)
+    AlphaButton visitingReturnTheHomePage;
+    @BindView(R2.id.ll_knowledge_publish_root)
+    LinearLayout llKnowledgePublishRoot;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quickly);
+        setContentView(R.layout.activity_visitor);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
 
@@ -77,12 +76,13 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("商城");
+        mainTitleText.setText("自主邀约");
     }
+
     private void initView() {
-        DaggerQuicklyActivityComponent.builder()
+        DaggerVisitorActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .quicklyPresenterModule(new QuicklyPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .visitorPresenterModule(new VisitorPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 
@@ -149,4 +149,20 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
             mPresenter.destory();
         }
     }
+
+    @OnClick({R2.id.main_title_back, R2.id.visiting_cancel, R2.id.visiting_confirm, R2.id.visiting_return_the_home_page})
+    public void onViewClicked(View view) {
+        int id = view.getId();
+        if (id == R.id.main_title_back) {
+            finish();
+        } else if (id == R.id.visiting_cancel) {
+
+        } else if (id == R.id.visiting_confirm) {
+
+        }else if (id == R.id.visiting_return_the_home_page) {
+
+        }
+    }
+
+
 }

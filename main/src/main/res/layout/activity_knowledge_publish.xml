@@ -123,6 +123,8 @@
                     android:cursorVisible="true"
                     android:gravity="left|center_vertical"
                     android:hint="客户可联系的电话号码"
+                    android:inputType="phone"
+                    android:maxLength="11"
                     android:singleLine="true"
                     android:text=""
                     android:textColor="#494949"
@@ -300,7 +302,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_8"
-                android:text="立即跳转"
+                android:text="立即上传"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>

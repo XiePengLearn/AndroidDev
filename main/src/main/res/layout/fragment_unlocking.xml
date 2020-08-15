@@ -56,7 +56,7 @@
                     android:gravity="center"
                     android:paddingTop="@dimen/dp_8"
                     android:paddingBottom="@dimen/dp_8"
-                    android:text="访客邀请"
+                    android:text="访客邀约"
                     android:textColor="#FFFFFF"
                     android:textSize="@dimen/sp_14" />
 
@@ -80,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_42"
                     android:layout_gravity="center"
+                    android:visibility="gone"
                     android:layout_marginLeft="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_30"
                     android:layout_marginRight="@dimen/dp_30"

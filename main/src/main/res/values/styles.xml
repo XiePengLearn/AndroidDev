@@ -15,4 +15,9 @@
         <item name="android:scrollbarStyle">outsideOverlay</item>
         <item name="android:scrollbarThumbVertical">@color/dark_gray</item>
     </style>
+
+    <style name="BottomDialogAnim" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translation_enter_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/translation_exit_to_bottom</item>
+    </style>
 </resources>
