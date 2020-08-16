@@ -1,7 +1,6 @@
 package com.xiaoanjujia.home.composition.main.tenement;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,13 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseFragment;
-import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.main.unused.quicklyfragment.DaggerQuicklyFragmentComponent;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -36,15 +34,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @Auther: xp
  * @Date: 2019/10
- * @Description: 快速开发Fragment
+ * @Description: 物业管理
  */
 public class TenementFragment extends BaseFragment implements TenementFragmentContract.View, PtrHandler {
     @Inject
     TenementFragmentPresenter mPresenter;
+
+
+    private static final String TAG = "NationExamActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -55,15 +57,16 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.no_data_img)
-    ImageView noDataImg;
-    @BindView(R2.id.rl_fragment_no_data)
-    RelativeLayout rlFragmentNoData;
+    @BindView(R2.id.tenement_department_head_btn)
+    AlphaButton tenementDepartmentHeadBtn;
+    @BindView(R2.id.tenement_department_head_rl)
+    RelativeLayout tenementDepartmentHeadRl;
+    @BindView(R2.id.tenement_personnel_btn)
+    AlphaButton tenementPersonnelBtn;
+    @BindView(R2.id.tenement_personnel_rl)
+    RelativeLayout tenementPersonnelRl;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
-
-
-    private static final String TAG = "NationExamActivity";
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -74,11 +77,8 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
 
     @Override
     public void initEvent() {
-
-        Bundle arguments = getArguments();
-
         initView();
-        initData();
+        //        initData();
         initTitle();
     }
 
@@ -104,31 +104,17 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
     }
 
     public void initView() {
-
-        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-
         DaggerTenementFragmentComponent.builder()
                 .appComponent(getAppComponent())
                 .tenementFragmentModule(new TenementFragmentModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-        //
         findPullRefreshHeader.setPtrHandler(this);
-        //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-        //                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
-        //                adapter.setOnLoadMoreListener(this);
-        //                adapter.setEnableLoadMore(true);
-        //                findRecyclerview.setAdapter(adapter);
-
-
     }
 
     public void initData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
-
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
@@ -140,8 +126,6 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
             String msg = loginResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
                 LoginResponse.DataBean data = loginResponse.getData();
-
-
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mActivity);
@@ -149,7 +133,6 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(mActivity.getApplicationContext(), msg);
                 }
-
             }
         } catch (Exception e) {
             ToastUtil.showToast(mActivity.getApplicationContext(), "解析数据失败");
@@ -183,4 +166,13 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
     }
 
 
+    @OnClick({R2.id.tenement_department_head_btn, R2.id.tenement_personnel_btn})
+    public void onViewClicked(View view) {
+        int id = view.getId();
+        if (id == R.id.tenement_department_head_btn) {
+            ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+        } else if (id == R.id.tenement_personnel_btn) {
+            ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+        }
+    }
 }

@@ -115,6 +115,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.visitor.VisitorActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.tenement.staff.StaffActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

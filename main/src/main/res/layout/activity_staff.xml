@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/jkx_public_title_home" />
+
+
+    <com.xiaoanjujia.common.util.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/invitation_particulars_of_matter_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_45"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="选择身份:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dp_266"
+                    android:layout_height="@dimen/dp_24">
+
+                    <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                        android:id="@+id/staff_select_id_name"
+                        android:layout_width="@dimen/dp_266"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_shape_button_select_id_name"
+
+                        android:gravity="center_vertical"
+                        android:hint="请选择"
+                        android:paddingStart="@dimen/dp_10"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_7"
+                        android:layout_height="@dimen/dp_7"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:src="@drawable/select_id_name" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout
+                android:id="@+id/take_picture_layout_alpha_rl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_18"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="@drawable/bg_shape_button_select_id_name"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/take_picture_layout_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingLeft="@dimen/dp_18"
+                        android:paddingRight="@dimen/dp_18"
+                        android:text="拍照上传"
+                        android:textColor="@color/color_29AD67"
+                        android:textSize="@dimen/sp_17" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:paddingLeft="@dimen/dp_18"
+                        android:paddingRight="@dimen/dp_18"
+                        android:text="（调取手机相机，不能相册获取）最多三张"
+                        android:textColor="@color/color_29AD67"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/staff_take_picture_layout_list_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:id="@+id/staff_take_picture_add_iv"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_add_image" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/staff_uploading_pic_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:overScrollMode="never"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+
+            </com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="工作日志："
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:background="@drawable/bg_shape_button_select_id_name"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/edit_work_diary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:maxLength="140"
+                    android:gravity="start"
+                    android:hint="请输入您的工作日志"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="异常提交："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
+
+                <EditText
+                    android:id="@+id/edit_abnormal_submitted"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:background="@drawable/bg_shape_button_select_id_name"
+                    android:cursorVisible="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="输入异常内容（若无则空）"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                android:id="@+id/staff_submit_immediately"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_42"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_34"
+                android:layout_marginRight="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_32"
+                android:background="@drawable/bg_shap_button_1"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:text="立即提交"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </com.xiaoanjujia.common.util.MyScrollView>
+
+
+</LinearLayout>

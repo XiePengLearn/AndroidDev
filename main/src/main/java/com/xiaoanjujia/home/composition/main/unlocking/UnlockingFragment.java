@@ -81,7 +81,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     @Override
     public void initEvent() {
         initView();
-        initData();
+        //        initData();
         initTitle();
     }
 
@@ -115,23 +115,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 .unlockingFragmentModule(new UnlockingFragmentModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-        //
         findPullRefreshHeader.setPtrHandler(this);
-        //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-        //                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
-        //                adapter.setOnLoadMoreListener(this);
-        //                adapter.setEnableLoadMore(true);
-        //                findRecyclerview.setAdapter(adapter);
-
-
     }
 
     public void initData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
-
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 

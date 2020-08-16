@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cube_ptr="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,44 +18,69 @@
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
         cube_ptr:ptr_resistance="2.0">
 
-        <ScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/tenement_department_head_rl"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_27"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_93"
+                    android:src="@drawable/tenement_department_head" />
 
-                <RelativeLayout
-                    android:id="@+id/rl_fragment_no_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_200"
-                    android:visibility="visible">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/no_data_img"
-                            android:layout_width="@dimen/dp_240"
-
-                            android:layout_height="@dimen/dp_140"
-                            android:background="@drawable/message_empty" />
-
-
-                    </LinearLayout>
-                </RelativeLayout>
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/tenement_department_head_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shape_button_tenement"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:text="我是物业主管"
+                    android:textColor="@color/color_9f9f9f"
+                    android:textSize="@dimen/sp_17" />
             </RelativeLayout>
-        </ScrollView>
 
+            <RelativeLayout
+                android:id="@+id/tenement_personnel_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_30">
 
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_27"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_93"
+                    android:src="@drawable/tenement_personnel" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/tenement_personnel_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shape_button_tenement"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:text="我是物业人员"
+                    android:textColor="@color/color_9f9f9f"
+                    android:textSize="@dimen/sp_17" />
+            </RelativeLayout>
+        </LinearLayout>
     </com.xiaoanjujia.common.widget.headerview.JDHeaderView>
 </LinearLayout>
