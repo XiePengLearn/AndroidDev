@@ -130,7 +130,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
         final long beforeRequestTime = System.currentTimeMillis();
         List<File> imageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
-            imageFile.add(new File(LocalMediaList.get(i).getPath()));
+            imageFile.add(new File(LocalMediaList.get(i).getCompressPath()));
         }
         List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
         Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {
@@ -155,6 +155,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
             public void onError(Throwable e) {
                 super.onError(e);
                 //                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= ");
             }
 
             @Override
@@ -174,7 +175,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
         final long beforeRequestTime = System.currentTimeMillis();
         List<File> imageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
-            imageFile.add(new File(LocalMediaList.get(i).getPath()));
+            imageFile.add(new File(LocalMediaList.get(i).getCompressPath()));
         }
         List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
         Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {
@@ -199,6 +200,7 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
             public void onError(Throwable e) {
                 super.onError(e);
                 //                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= ");
             }
 
             @Override

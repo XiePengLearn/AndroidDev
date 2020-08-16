@@ -17,9 +17,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.sxjs.jd.R;
-import com.xiaoanjujia.common.util.LogUtilsxp;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +30,8 @@ import java.util.List;
  */
 public class GridImageAdapter extends
         RecyclerView.Adapter<GridImageAdapter.ViewHolder> {
-    public static final int TYPE_CAMERA = 1;
-    public static final int TYPE_PICTURE = 2;
+    private static final int TYPE_CAMERA = 1;
+    private static final int TYPE_PICTURE = 2;
     private final PublishActivity mContext;
     private LayoutInflater mInflater;
     private List<LocalMedia> list = new ArrayList<>();
@@ -47,7 +45,7 @@ public class GridImageAdapter extends
         void onAddPicClick1();
     }
 
-    public GridImageAdapter(PublishActivity context, onAddPicClickListener1 mOnAddPicClickListener) {
+    GridImageAdapter(PublishActivity context, onAddPicClickListener1 mOnAddPicClickListener) {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         this.mOnAddPicClickListener = mOnAddPicClickListener;
@@ -67,7 +65,7 @@ public class GridImageAdapter extends
         LinearLayout llDel;
         TextView tvDuration;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mImg = view.findViewById(R.id.fiv);
             llDel = view.findViewById(R.id.ll_del);
@@ -159,15 +157,7 @@ public class GridImageAdapter extends
                 path = SdkVersionUtils.checkedAndroid_Q() ? media.getAndroidQToPath() : media.getPath();
             }
             // 图片
-            if (media.isCompressed()) {
-                LogUtilsxp.e("compress image result:", new File(media.getCompressPath()).length() / 1024 + "k");
-                LogUtilsxp.e("压缩地址::", media.getCompressPath());
-            }
 
-            LogUtilsxp.e("原图地址::", media.getPath());
-            if (media.isCut()) {
-                LogUtilsxp.e("裁剪地址::", media.getCutPath());
-            }
             long duration = media.getDuration();
             viewHolder.tvDuration.setVisibility(PictureMimeType.eqVideo(media.getMimeType())
                     ? View.VISIBLE : View.GONE);

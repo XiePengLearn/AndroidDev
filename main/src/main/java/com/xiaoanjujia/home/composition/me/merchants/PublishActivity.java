@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -37,7 +38,6 @@ import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
-import com.xiaoanjujia.home.entities.PublishImageResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.xiaoanjujia.home.tool.Util;
@@ -102,7 +102,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     LinearLayout llKnowledgePublishRoot;
 
 
-    private FeedBackResponse feedBackResponse;
     private GridImageAdapter mAdapter;
     private GridImageAdapter2 mAdapter2;
     private int themeId;
@@ -112,9 +111,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     private int mMaxSelectNum;
     private boolean isCameraButton;
     public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jkx/";
-    private List<PublishImageResponse> imageUriList = new ArrayList<>();
-    private List<LocalMedia> selectImageCommitTemp;    //防止提交未成功 报错而临时存在的,只有提交时 才会赋值
-    private UploadImageResponse uploadImageResponse;
     private boolean isfirst = false;
     private String mCompanyPath;
     private String mMSpecialImgsPath;
@@ -127,11 +123,9 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-        selectImageCommitTemp = new ArrayList<>();
         initTitle();
         initView();
 
-        initFile();
     }
 
     /**
@@ -195,7 +189,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         });
 
 
-        FullyGridLayoutManager2 manager2 = new FullyGridLayoutManager2(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager2 = new LinearLayoutManager(PublishActivity.this, GridLayoutManager.HORIZONTAL, false);
         uploadingSpecialCertificateRv.setLayoutManager(manager2);
         mAdapter2 = new GridImageAdapter2(PublishActivity.this, onAddPicClickListener2);
         mAdapter2.setList(selectList2);
@@ -280,10 +274,9 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     @Override
     public void setResponseData(FeedBackResponse feedBackResponse) {
-        this.feedBackResponse = feedBackResponse;
         try {
-            int code = uploadImageResponse.getStatus();
-            String msg = uploadImageResponse.getMessage();
+            int code = feedBackResponse.getStatus();
+            String msg = feedBackResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
 
                 ToastUtil.showToast(this.getApplicationContext(), "提交成功");
@@ -307,7 +300,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     @Override
     public void setUploadImage(UploadImageResponse uploadImageResponse) {
-        this.uploadImageResponse = uploadImageResponse;
         try {
             int code = uploadImageResponse.getStatus();
             String msg = uploadImageResponse.getMessage();
@@ -331,7 +323,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     @Override
     public void setUploadPicture(UploadImageResponse uploadImageResponse) {
-        this.uploadImageResponse = uploadImageResponse;
         try {
             int code = uploadImageResponse.getStatus();
             String msg = uploadImageResponse.getMessage();
@@ -378,7 +369,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    public static final int TAKE_PICTURE = 3; // 拍照和相册
 
     @OnClick({R2.id.main_title_back, R2.id.register_success_entry, R2.id.company_certificate_im, R2.id.uploading_special_certificate_iv})
     public void onViewClicked(View view) {
@@ -526,12 +516,13 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                         // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                         // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
-                        //                        for (LocalMedia media : selectList) {
-                        //                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
-                        //                            LogUtil.e(TAG, "原图---->" + media.getPath());
-                        //                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
-                        //                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
-                        //                        }
+                        for (LocalMedia media : selectList) {
+                            LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
+                            LogUtil.e(TAG, new File(media.getCompressPath()).length() / 1024 + "k");
+                            LogUtil.e(TAG, "原图---->" + media.getPath());
+                            LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
+                            LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
+                        }
                         mAdapter.setList(selectList);
                         mAdapter.notifyDataSetChanged();
                     } else {
@@ -541,7 +532,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                         selectList2 = PictureSelector.obtainMultipleResult(data);
 
                         //选择后有结果隐藏图片添加的按钮,无结果则隐藏
-                        //选择后有结果显示companyCertificateRecycler,无结果则隐藏
+                        //选择后有结果显示uploadingSpecialCertificateRv,无结果则隐藏
                         if (selectList2.size() > 0) {
                             uploadingSpecialCertificateIv.setVisibility(View.GONE);
                             uploadingSpecialCertificateRv.setVisibility(View.VISIBLE);
@@ -557,6 +548,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                         // 4.media.getAndroidQToPath();为Android Q版本特有返回的字段，此字段有值就用来做上传使用
                         for (LocalMedia media : selectList2) {
                             LogUtil.e(TAG, "压缩---->" + media.getCompressPath());
+                            LogUtil.e(TAG, new File(media.getCompressPath()).length() / 1024 + "k");
                             LogUtil.e(TAG, "原图---->" + media.getPath());
                             LogUtil.e(TAG, "裁剪---->" + media.getCutPath());
                             LogUtil.e(TAG, "Android Q 特有Path---->" + media.getAndroidQToPath());
@@ -649,27 +641,6 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
-    private void initFile() {
-        makeRootDirectory(PATH);
-    }
-
-
-    /**
-     * 没有文件夹。创建文件夹
-     *
-     * @param filePath
-     */
-    public void makeRootDirectory(String filePath) {
-        File file = null;
-        try {
-            file = new File(filePath);
-            if (!file.exists()) {
-                Boolean isTrue = file.mkdir();
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext()
