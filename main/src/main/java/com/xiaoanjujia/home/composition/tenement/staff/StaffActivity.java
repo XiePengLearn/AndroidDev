@@ -39,6 +39,7 @@ import com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.ArrayList;
@@ -100,6 +101,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     private List<LocalMedia> selectList = new ArrayList<>();
     private StaffGridImageAdapter mAdapter;
     private int themeId;
+    private String mStaffImgsPath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -231,6 +233,29 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
 
     }
 
+    @Override
+    public void setUploadImage(UploadImageResponse uploadImageResponse) {
+        try {
+            int code = uploadImageResponse.getStatus();
+            String msg = uploadImageResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                mStaffImgsPath = uploadImageResponse.getData().getPath();
+                //用户未选择 特殊材料
+                //                initData();
+                hiddenProgressDialogView();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+                finish();
+            } else {
+                ToastUtil.showToast(this.getApplicationContext(), msg);
+                hiddenProgressDialogView();
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
 
     @Override
     public void showProgressDialogView() {
@@ -263,8 +288,14 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
         } else if (id == R.id.take_picture_layout_alpha_rl) {
             CameraActivity.startMe(this, 2005, CameraActivity.MongolianLayerType.IDCARD_POSITIVE);
         } else if (id == R.id.staff_submit_immediately) {
-
+            uploadImageToServer(selectList);
         }
+    }
+
+    //上传特殊图片(方法)
+    private void uploadImageToServer(List<LocalMedia> selectList) {
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getUploadImage(headersTreeMap, selectList);
     }
 
     private void classifyMethod() {

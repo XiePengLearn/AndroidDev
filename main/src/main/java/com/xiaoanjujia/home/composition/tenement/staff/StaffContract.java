@@ -1,8 +1,11 @@
 package com.xiaoanjujia.home.composition.tenement.staff;
 
 
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.UploadImageResponse;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,6 +20,7 @@ public interface StaffContract {
 
 
         void setResponseData(LoginResponse loginResponse);
+        void setUploadImage(UploadImageResponse uploadImageResponse);
 
         void showProgressDialogView();
 
@@ -31,6 +35,7 @@ public interface StaffContract {
         void saveData();
 
         Map getData();
+        void getUploadImage(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList);
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
