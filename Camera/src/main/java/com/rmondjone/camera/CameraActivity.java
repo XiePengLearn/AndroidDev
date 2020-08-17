@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.newland.springdialog.AnimSpring;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -368,12 +367,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
         //设置蒙版,护照出入境蒙版特殊处理
-        if (mMongolianLayerType != MongolianLayerType.PASSPORT_ENTRY_AND_EXIT) {
-            Glide.with(this).load(getMaskImage()).into(mMaskImage);
-        } else {
+//        if (mMongolianLayerType != MongolianLayerType.PASSPORT_ENTRY_AND_EXIT) {
+//            Glide.with(this).load(getMaskImage()).into(mMaskImage);
+//        } else {
             mMaskImage.setVisibility(View.GONE);
-            mPassportEntryAndExitImage.setVisibility(View.VISIBLE);
-        }
+//            mPassportEntryAndExitImage.setVisibility(View.VISIBLE);
+//        }
     }
 
     /**
