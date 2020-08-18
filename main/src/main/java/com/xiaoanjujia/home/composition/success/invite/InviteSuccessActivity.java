@@ -3,7 +3,6 @@ package com.xiaoanjujia.home.composition.success.invite;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,7 +81,7 @@ public class InviteSuccessActivity extends BaseActivity implements InviteSuccess
      * 初始化title
      */
     public void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText(R.string.invite_successfully);
     }
 

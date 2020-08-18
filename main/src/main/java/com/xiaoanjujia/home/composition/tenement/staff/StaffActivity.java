@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -36,11 +37,14 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.AddPropertyLogResponse;
+import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.tool.Api;
+import com.xiaoanjujia.home.tool.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,9 +73,9 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     @BindView(R2.id.main_title_text)
     TextView mainTitleText;
     @BindView(R2.id.main_title_right)
-    ImageView mainTitleRight;
+    TextView mainTitleRight;
     @BindView(R2.id.main_title_container)
-    LinearLayout mainTitleContainer;
+    RelativeLayout mainTitleContainer;
     @BindView(R2.id.staff_select_id_name)
     TextView staffSelectIdName;
     @BindView(R2.id.staff_select_id_name_rl)
@@ -102,6 +106,9 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     private StaffGridImageAdapter mAdapter;
     private int themeId;
     private String mStaffImgsPath;
+    List<String> listString = new ArrayList<>();
+    private List<TypeOfRoleResponse.DataBean.OrdinaryroleBean> ordinaryrole;
+    private int staffSelectIdId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,7 +118,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         String[] list3 = new String[]{"客服员", "综合维修工", "门岗保安", "巡逻保安", "消防中控员", "绿化工", "保洁员"};
-        adapter3 = new ArrayAdapter<String>(mContext, R.layout.item_textview, list3);
+        adapter3 = new ArrayAdapter<String>(mContext, R.layout.item_textview, listString);
         initView();
         initData();
         initTitle();
@@ -123,6 +130,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("物业管理");
+        mainTitleRight.setText("往期查询");
     }
 
     private void initView() {
@@ -191,16 +199,36 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     }
 
     private void initData() {
-
+        // roletype :1是物业主管.2普通物业
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
+        mapParameters.put("roletype", "2");
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
+        mPresenter.getTypesOfRoleData(headersTreeMap, mapParameters);
+    }
 
+    private void submitData() {
+        //        id:角色id
+        //        log_imgs:照片
+        //        log_text:日志文本
+        //        abnormal_text:异常提交
+        String staffSelectIdNameText = staffSelectIdName.getText().toString().trim();
+        String editWorkDiaryText = editWorkDiary.getText().toString().trim();
+        String editAbnormalSubmittedText = editAbnormalSubmitted.getText().toString().trim();
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("id", String.valueOf(staffSelectIdId));
+        mapParameters.put("log_imgs", mStaffImgsPath);
+        mapParameters.put("log_text", editWorkDiaryText);
+        if (!Utils.isNull(editAbnormalSubmittedText)) {
+            mapParameters.put("abnormal_text", editAbnormalSubmittedText);
+        } else {
+            mapParameters.put("abnormal_text", "");
+        }
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
-
 
     @Override
     protected void onResume() {
@@ -209,14 +237,46 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(AddPropertyLogResponse mAddPropertyLogResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = mAddPropertyLogResponse.getStatus();
+            String msg = mAddPropertyLogResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+                ARouter.getInstance().build("/PublishSuccessActivity/PublishSuccessActivity").greenChannel().navigation(mContext);
+                finish();
 
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
 
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+
+    }
+
+    @Override
+    public void setTypesOfRoleData(TypeOfRoleResponse mTypeOfRoleResponse) {
+        try {
+            int code = mTypeOfRoleResponse.getStatus();
+            String msg = mTypeOfRoleResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                TypeOfRoleResponse.DataBean data = mTypeOfRoleResponse.getData();
+                listString.clear();
+                ordinaryrole = data.getOrdinaryrole();
+                for (int i = 0; i < ordinaryrole.size(); i++) {
+                    listString.add(ordinaryrole.get(i).getName());
+                }
+                adapter3.notifyDataSetChanged();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
@@ -241,7 +301,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
             if (code == ResponseCode.SUCCESS_OK) {
                 mStaffImgsPath = uploadImageResponse.getData().getPath();
                 //用户未选择 特殊材料
-                //                initData();
+                submitData();
                 hiddenProgressDialogView();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -276,18 +336,38 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     }
 
     @OnClick({R2.id.main_title_back, R2.id.staff_select_id_name_rl, R2.id.staff_take_picture_add_iv,
-            R2.id.take_picture_layout_alpha_rl, R2.id.staff_submit_immediately})
+            R2.id.take_picture_layout_alpha_rl, R2.id.staff_submit_immediately, R2.id.main_title_right})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.staff_select_id_name_rl) {
             classifyMethod();
+        } else if (id == R.id.main_title_right) {
+           //往期查询
+
+
         } else if (id == R.id.staff_take_picture_add_iv) {
 
         } else if (id == R.id.take_picture_layout_alpha_rl) {
             CameraActivity.startMe(this, 2005, CameraActivity.MongolianLayerType.IDCARD_POSITIVE);
         } else if (id == R.id.staff_submit_immediately) {
+            String staffSelectIdNameText = staffSelectIdName.getText().toString().trim();
+            String editWorkDiaryText = editWorkDiary.getText().toString().trim();
+            String editAbnormalSubmittedText = editAbnormalSubmitted.getText().toString().trim();
+
+            if (Util.isNull(staffSelectIdNameText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择身份");
+                return;
+            }
+            if (selectList.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请拍照上传照片");
+                return;
+            }
+            if (Util.isNull(editWorkDiaryText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入工作日志");
+                return;
+            }
             uploadImageToServer(selectList);
         }
     }
@@ -318,6 +398,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String checkPayment = (String) parent.getItemAtPosition(position);
+                staffSelectIdId = ordinaryrole.get(position).getId();
                 staffSelectIdName.setText(checkPayment);
                 popupWindow3.dismiss();
 

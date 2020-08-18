@@ -3,7 +3,6 @@ package com.xiaoanjujia.home.composition.success.audit;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,7 +81,7 @@ public class AuditSuccessActivity extends BaseActivity implements AuditSuccessCo
      * 初始化title
      */
     public void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText(R.string.audit_successfully);
     }
 

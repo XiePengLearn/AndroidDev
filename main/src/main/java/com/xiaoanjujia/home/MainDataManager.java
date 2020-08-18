@@ -45,6 +45,10 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_GET_COMMUNITY = "/api/v1/getcommunity";
     //获取商户认证状态
     private static String GENERAL_COMEXAMINE = "/api/v1/comexamine";
+    //角色类型页面
+    private static String GENERAL_ROLETRPETOP = "/api/v1/roletrpetop";
+    //普通物业添加日志
+    private static String GENERAL_ADDPROPERTYLOG = "/api/v1/addpropertylog";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -188,5 +192,28 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_COMEXAMINE, mapParameters, mapHeaders), consumer);
     }
-
+    /**
+     *角色类型页面
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getTypeOfRole(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ROLETRPETOP, mapParameters, mapHeaders), consumer);
+    }
+    /**
+     *普通物业添加日志
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAddPropertyLog(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ADDPROPERTYLOG, mapParameters, mapHeaders), consumer);
+    }
 }

@@ -11,8 +11,9 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.AddPropertyLogResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 
 import java.io.File;
@@ -70,9 +71,9 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getAddPropertyLog(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LoginResponse mLoginResponse;
+            private AddPropertyLogResponse mAddPropertyLogResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -83,13 +84,13 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                        mAddPropertyLogResponse = gson.fromJson(response, AddPropertyLogResponse.class);
                     } else {
-                        mLoginResponse = new LoginResponse();
-                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                        mAddPropertyLogResponse = new AddPropertyLogResponse();
+                        mAddPropertyLogResponse.setMessage(ProjectResponse.getMessage(response));
+                        mAddPropertyLogResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setResponseData(mLoginResponse);
+                    mContractView.setResponseData(mAddPropertyLogResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -206,6 +207,55 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                 }).launch();
 
 
+    }
+
+    @Override
+    public void getTypesOfRoleData(TreeMap<String, String> headers, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getTypeOfRole(headers, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private TypeOfRoleResponse mTypeOfRoleResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mTypeOfRoleResponse = gson.fromJson(response, TypeOfRoleResponse.class);
+                    } else {
+                        mTypeOfRoleResponse = new TypeOfRoleResponse();
+                        mTypeOfRoleResponse.setMessage(ProjectResponse.getMessage(response));
+                        mTypeOfRoleResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setTypesOfRoleData(mTypeOfRoleResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
     }
 
     private RequestBody convertToRequestBody(String param) {
