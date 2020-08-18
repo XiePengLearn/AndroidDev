@@ -118,6 +118,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.staff.StaffActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.tenement.supervisor.SupervisorActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

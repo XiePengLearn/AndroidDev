@@ -170,7 +170,7 @@ public class TenementFragment extends BaseFragment implements TenementFragmentCo
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.tenement_department_head_btn) {
-            ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+            ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.tenement_personnel_btn) {
             ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
         }
