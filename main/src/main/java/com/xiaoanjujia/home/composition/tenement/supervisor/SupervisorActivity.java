@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -117,15 +116,32 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                boolean selected = view.isSelected();
-                Toast.makeText(SupervisorActivity.this, listDate.get(position) + "selected:" + selected, Toast.LENGTH_SHORT).show();
+                //时间
+                if (view.isSelected()) {
+                    datetype = listDateType.get(position);
+
+                } else {
+                    datetype = 1;//默认
+                }
+                page = 1;
+                initData(page, datetype, id);
             }
         });
 
         aflJobsToChoose.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                Toast.makeText(SupervisorActivity.this, listWork.get(position), Toast.LENGTH_SHORT).show();
+                //职位
+                //时间
+                if (view.isSelected()) {
+                    id = listWorkId.get(position);
+
+                } else {
+                    id = 0;//默认
+                }
+                page = 1;
+                initData(page, datetype, id);
+
             }
         });
         findPullRefreshHeader.setPtrHandler(this);
