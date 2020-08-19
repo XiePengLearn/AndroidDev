@@ -43,6 +43,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author xiepeng
@@ -373,5 +374,14 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 frame.refreshComplete();
             }
         }, 500);
+    }
+
+    @OnClick({R2.id.main_title_back, R2.id.no_data_img})
+    public void onViewClicked(View view) {
+        int viewId = view.getId();
+        if (viewId == R.id.main_title_back) {
+            finish();
+        } else if (viewId == R.id.no_data_img) {
+        }
     }
 }
