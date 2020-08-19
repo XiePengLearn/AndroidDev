@@ -49,6 +49,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_ROLETRPETOP = "/api/v1/roletrpetop";
     //普通物业添加日志
     private static String GENERAL_ADDPROPERTYLOG = "/api/v1/addpropertylog";
+    //物业管理列表日志
+    private static String GENERAL_PROPERTYLOGLISTS = "/api/v1/propertyloglists";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -215,5 +217,18 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getAddPropertyLog(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_ADDPROPERTYLOG, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     *  物业管理列表日志
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPropertyLoglists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_PROPERTYLOGLISTS, mapParameters, mapHeaders), consumer);
     }
 }

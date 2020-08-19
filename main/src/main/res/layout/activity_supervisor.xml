@@ -3,9 +3,12 @@
     xmlns:cube_ptr="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/jkx_public_title_home" />
+
+
 
     <com.xiaoanjujia.common.widget.headerview.JDHeaderView
         android:id="@+id/find_pull_refresh_header"
@@ -24,7 +27,60 @@
 
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <TextView
 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_17"
+                android:text="日志查看"
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="日志查看日期："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.example.library.AutoFlowLayout
+                    android:id="@+id/afl_cotent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="岗位选择："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.example.library.AutoFlowLayout
+                    android:id="@+id/afl_jobs_to_choose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <com.jude.easyrecyclerview.EasyRecyclerView
                 android:id="@+id/chat_list"

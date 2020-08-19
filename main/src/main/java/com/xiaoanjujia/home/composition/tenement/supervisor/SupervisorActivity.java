@@ -2,29 +2,41 @@ package com.xiaoanjujia.home.composition.tenement.supervisor;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.library.AutoFlowLayout;
+import com.example.library.FlowAdapter;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
+import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
+import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
+import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
+import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 import com.xiaoanjujia.home.tool.Api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -37,7 +49,7 @@ import butterknife.ButterKnife;
  * @author xiepeng
  */
 @Route(path = "/supervisorActivity/supervisorActivity")
-public class SupervisorActivity extends BaseActivity implements SupervisorContract.View {
+public class SupervisorActivity extends BaseActivity implements SupervisorContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
     SupervisorPresenter mPresenter;
     private static final String TAG = "StaffActivity";
@@ -60,6 +72,18 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     RelativeLayout rlNoData;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.afl_cotent)
+    AutoFlowLayout aflCotent;
+    @BindView(R2.id.afl_jobs_to_choose)
+    AutoFlowLayout aflJobsToChoose;
+    private LayoutInflater mLayoutInflater;
+
+    private List<String> listDate = new ArrayList<>();
+    private List<Integer> listDateType = new ArrayList<>();
+    private List<String> listWork = new ArrayList<>();
+    private List<Integer> listWorkId = new ArrayList<>();
+    private SupervisorPreviewsAdapter adapter;
+    private int page = 1, datetype = 1, id = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,9 +93,11 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         unbinder = ButterKnife.bind(this);
 
         initView();
-        initData();
+
+        initTypeRoieData();
         initTitle();
     }
+
     /**
      * 初始化title
      */
@@ -79,19 +105,47 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("商城");
     }
+
     private void initView() {
         DaggerSupervisorActivityComponent.builder()
                 .appComponent(getAppComponent())
                 .supervisorPresenterModule(new SupervisorPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
+        mLayoutInflater = LayoutInflater.from(this);
 
+        aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                boolean selected = view.isSelected();
+                Toast.makeText(SupervisorActivity.this, listDate.get(position) + "selected:" + selected, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        aflJobsToChoose.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                Toast.makeText(SupervisorActivity.this, listWork.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+        findPullRefreshHeader.setPtrHandler(this);
+        chatList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SupervisorPreviewsAdapter(R.layout.item_supervisor_recyclerview);
+        adapter.setOnLoadMoreListener(this);
+        adapter.setEnableLoadMore(false);
+        adapter.loadMoreComplete();
+        chatList.setAdapter(adapter);
     }
 
-    private void initData() {
+    //page
+    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
+    //id:角色id  默认0  全部
+    private void initData(int page, int datetype, int id) {
 
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
+        Map<String, Object> mapParameters = new HashMap<>(3);
+        mapParameters.put("page", String.valueOf(page));
+        mapParameters.put("datetype", String.valueOf(datetype));
+        mapParameters.put("id", String.valueOf(id));
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -99,6 +153,14 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
+    private void initTypeRoieData() {
+        // roletype :1是物业主管.2普通物业
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("roletype", "1");
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getTypesOfRoleData(headersTreeMap, mapParameters);
+    }
 
     @Override
     protected void onResume() {
@@ -107,13 +169,25 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(PropertyManagementListLogResponse mPropertyManagementListLogResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = mPropertyManagementListLogResponse.getStatus();
+            String msg = mPropertyManagementListLogResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
+                List<PropertyManagementListLogResponse.DataBean> messageDate = mPropertyManagementListLogResponse.getData();
+                if (messageDate != null) {
+                    if (messageDate.size() > 0) {
+                        List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                        data.clear();
+                        adapter.addData(messageDate);
+                        rlNoData.setVisibility(View.GONE);
+                    } else {
+                        rlNoData.setVisibility(View.VISIBLE);
+                    }
 
+                } else {
+                    rlNoData.setVisibility(View.VISIBLE);
+                }
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -129,6 +203,100 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
             ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
         }
 
+    }
+
+    @Override
+    public void setMoreData(PropertyManagementListLogResponse moreDate) {
+        try {
+            int code = moreDate.getStatus();
+            String msg = moreDate.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
+                List<PropertyManagementListLogResponse.DataBean> data = moreDate.getData();
+                if (data != null) {
+
+                    for (int i = 0; i < data.size(); i++) {
+                        adapter.getData().add(data.get(i));
+                    }
+                }
+
+
+                adapter.loadMoreComplete();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                adapter.loadMoreComplete();
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                finish();
+            } else {
+                adapter.loadMoreComplete();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            adapter.loadMoreComplete();
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setTypesOfRoleData(TypeOfRoleResponse mTypeOfRoleResponse) {
+        try {
+            int code = mTypeOfRoleResponse.getStatus();
+            String msg = mTypeOfRoleResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+
+                TypeOfRoleResponse.DataBean data = mTypeOfRoleResponse.getData();
+                listDate.clear();
+                listWork.clear();
+                List<TypeOfRoleResponse.DataBean.OrdinarydateBean> ordinarydate = data.getOrdinarydate();
+                List<TypeOfRoleResponse.DataBean.OrdinaryroleBean> ordinaryrole = data.getOrdinaryrole();
+                for (int i = 0; i < ordinarydate.size(); i++) {
+                    listDate.add(ordinarydate.get(i).getName());
+                    listDateType.add(ordinarydate.get(i).getDatetype());
+                }
+                for (int i = 0; i < ordinaryrole.size(); i++) {
+                    listWork.add(ordinaryrole.get(i).getName());
+                    listWorkId.add(ordinaryrole.get(i).getId());
+                }
+
+                aflCotent.setAdapter(new FlowAdapter(listDate) {
+                    @Override
+                    public View getView(int position) {
+                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
+                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
+                        tvAttrTag.setText(listDate.get(position));
+                        return item;
+                    }
+                });
+
+                aflJobsToChoose.setAdapter(new FlowAdapter(listWork) {
+                    @Override
+                    public View getView(int position) {
+                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
+                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
+                        tvAttrTag.setText(listWork.get(position));
+                        return item;
+                    }
+                });
+                initData(page, datetype, id);
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
     }
 
 
@@ -148,5 +316,46 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         if (mPresenter != null) {
             mPresenter.destory();
         }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+
+        chatList.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.loadMoreComplete();
+                page++;
+                initMoreData(page, datetype, id);
+            }
+        }, 500);
+    }
+
+    //page
+    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
+    //id:角色id  默认0  全部
+    private void initMoreData(int page, int datetype, int id) {
+
+        Map<String, Object> mapParameters = new HashMap<>(3);
+        mapParameters.put("page", String.valueOf(page));
+        mapParameters.put("datetype", String.valueOf(datetype));
+        mapParameters.put("id", String.valueOf(id));
+
+
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getMoreData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void onRefreshBegin(final PtrFrameLayout frame) {
+        frame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page = 1;
+                initData(page, datetype, id);
+                frame.refreshComplete();
+            }
+        }, 500);
     }
 }

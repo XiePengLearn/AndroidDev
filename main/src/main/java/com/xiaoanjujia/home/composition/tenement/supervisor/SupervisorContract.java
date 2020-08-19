@@ -1,7 +1,8 @@
 package com.xiaoanjujia.home.composition.tenement.supervisor;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
+import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,8 +17,9 @@ public interface SupervisorContract {
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
-
+        void setResponseData(PropertyManagementListLogResponse mPropertyManagementListLogResponse);
+        void setMoreData(PropertyManagementListLogResponse mPropertyManagementListLogResponse);
+        void setTypesOfRoleData(TypeOfRoleResponse mTypeOfRoleResponse);
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -33,5 +35,7 @@ public interface SupervisorContract {
         Map getData();
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getTypesOfRoleData(TreeMap<String, String> headers, Map<String, Object> mapParameters);
+        void getMoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

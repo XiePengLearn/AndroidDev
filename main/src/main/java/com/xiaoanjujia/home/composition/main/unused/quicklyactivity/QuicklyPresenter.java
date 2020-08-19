@@ -56,7 +56,7 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LoginResponse mLoginResponse;
+            private LoginResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -67,13 +67,13 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                        mDataResponse = gson.fromJson(response, LoginResponse.class);
                     } else {
-                        mLoginResponse = new LoginResponse();
-                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                        mDataResponse = new LoginResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setResponseData(mLoginResponse);
+                    mContractView.setResponseData(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
