@@ -130,7 +130,7 @@
                 android:layout_marginEnd="@dimen/dp_7"
                 android:background="@drawable/bg_shap_button_3"
                 android:gravity="center"
-                android:text="返回主页"
+                android:text="审核"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/sp_7" />
 

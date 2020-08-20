@@ -25,19 +25,19 @@ public class SupervisorPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
     protected void convert(BaseViewHolder helper, final PropertyManagementListLogResponse.DataBean info, int position) {
 
         String abnormal_text = info.getAbnormal_text();
-        if(!Utils.isNull(abnormal_text)){
+        if (!Utils.isNull(abnormal_text)) {
             helper.setText(R.id.item_supervisor_content_text, abnormal_text);
         }
         String create_time = info.getCreate_time();
-        if(!Utils.isNull(create_time)){
+        if (!Utils.isNull(create_time)) {
             helper.setText(R.id.item_supervisor_time_date, create_time);
         }
         String week = info.getWeek();
-        if(!Utils.isNull(week)){
+        if (!Utils.isNull(week)) {
             helper.setText(R.id.item_supervisor_week_date, week);
         }
         String publishName = info.getName();
-        if(!Utils.isNull(publishName)){
+        if (!Utils.isNull(publishName)) {
             helper.setText(R.id.item_supervisor_publisher, publishName);
         }
 
@@ -51,8 +51,15 @@ public class SupervisorPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
 
         //设置子View的点击事件
         helper.addOnClickListener(R.id.item_supervisor_btn_status);
-
-
+        //examinestatus:0是未审核1是通过2被拒绝
+        int examinestatus = info.getExaminestatus();
+        if (examinestatus == 1) {
+            helper.setText(R.id.item_supervisor_btn_status, "审核通过");
+        } else if (examinestatus ==2) {
+            helper.setText(R.id.item_supervisor_btn_status, examinestatus);
+        } else {
+            helper.setText(R.id.item_supervisor_btn_status, examinestatus);
+        }
 
     }
 
