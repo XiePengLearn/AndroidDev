@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.library.AutoFlowLayout;
 import com.example.library.FlowAdapter;
-import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
@@ -65,17 +65,14 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.chat_list)
-    EasyRecyclerView chatList;
+    RecyclerView mRecyclerView;
     @BindView(R2.id.no_data_img)
     ImageView noDataImg;
     @BindView(R2.id.rl_no_data)
     RelativeLayout rlNoData;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
-    @BindView(R2.id.afl_cotent)
-    AutoFlowLayout aflCotent;
-    @BindView(R2.id.afl_jobs_to_choose)
-    AutoFlowLayout aflJobsToChoose;
+
     private LayoutInflater mLayoutInflater;
 
     private List<String> listDate = new ArrayList<>();
@@ -84,6 +81,8 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     private List<Integer> listWorkId = new ArrayList<>();
     private SupervisorPreviewsAdapter adapter;
     private int page = 1, datetype = 1, id = 0;
+    private AutoFlowLayout aflCotent;
+    private AutoFlowLayout aflJobsToChoose;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +112,20 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 .build()
                 .inject(this);
         mLayoutInflater = LayoutInflater.from(this);
+
+
+        findPullRefreshHeader.setPtrHandler(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SupervisorPreviewsAdapter(R.layout.item_supervisor_recyclerview);
+        adapter.setOnLoadMoreListener(this);
+
+        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
+        aflCotent = itemHeader.findViewById(R.id.afl_cotent);
+        aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
+        adapter.addHeaderView(itemHeader);
+        adapter.setEnableLoadMore(true);
+        adapter.loadMoreComplete();
+        mRecyclerView.setAdapter(adapter);
 
         aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
             @Override
@@ -145,13 +158,25 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
 
             }
         });
-        findPullRefreshHeader.setPtrHandler(this);
-        chatList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SupervisorPreviewsAdapter(R.layout.item_supervisor_recyclerview);
-        adapter.setOnLoadMoreListener(this);
-        adapter.setEnableLoadMore(false);
-        adapter.loadMoreComplete();
-        chatList.setAdapter(adapter);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
+                int i = view.getId();
+                if (i == R.id.item_supervisor_btn_status) {
+
+                    //                    List data = baseAdapter.getData();
+                    //                    PersonalPublishResponse.DataBean.PAGEBean bean = (PersonalPublishResponse.DataBean.PAGEBean) data.get(position);
+                    //
+                    //                    String topic_id = bean.getTOPIC_ID();
+                    //                    Intent intent = new Intent(mContext, ForumDetailsActivity.class);
+                    //                    intent.putExtra("title", "绩效论坛");
+                    //                    intent.putExtra("topic_id", topic_id);
+                    //                    startActivity(intent);
+                }
+
+                return true;
+            }
+        });
     }
 
     //page
@@ -194,16 +219,30 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 List<PropertyManagementListLogResponse.DataBean> messageDate = mPropertyManagementListLogResponse.getData();
                 if (messageDate != null) {
                     if (messageDate.size() > 0) {
+                        if (messageDate.size() < 10) {
+                            adapter.setEnableLoadMore(false);
+                        } else {
+                            adapter.setEnableLoadMore(true);
+                        }
                         List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
                         data.clear();
                         adapter.addData(messageDate);
                         rlNoData.setVisibility(View.GONE);
                     } else {
                         rlNoData.setVisibility(View.VISIBLE);
+                        adapter.setEnableLoadMore(false);
+                        List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                        data.clear();
+                        adapter.notifyDataSetChanged();
                     }
 
                 } else {
+
                     rlNoData.setVisibility(View.VISIBLE);
+                    adapter.setEnableLoadMore(false);
+                    List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                    data.clear();
+                    adapter.notifyDataSetChanged();
                 }
 
             } else if (code == ResponseCode.SEESION_ERROR) {
@@ -231,14 +270,20 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
                 List<PropertyManagementListLogResponse.DataBean> data = moreDate.getData();
                 if (data != null) {
-
+                    if (data.size() < 10) {
+                        adapter.setEnableLoadMore(false);
+                    } else {
+                        adapter.setEnableLoadMore(true);
+                    }
                     for (int i = 0; i < data.size(); i++) {
                         adapter.getData().add(data.get(i));
                     }
+
+                } else {
+                    adapter.setEnableLoadMore(false);
                 }
 
 
-                adapter.loadMoreComplete();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 adapter.loadMoreComplete();
                 //SESSION_ID过期或者报错  要调起登录页面
@@ -257,6 +302,8 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         } catch (Exception e) {
             adapter.loadMoreComplete();
             ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        } finally {
+            adapter.loadMoreComplete();
         }
     }
 
@@ -338,10 +385,9 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     @Override
     public void onLoadMoreRequested() {
 
-        chatList.postDelayed(new Runnable() {
+        mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.loadMoreComplete();
                 page++;
                 initMoreData(page, datetype, id);
             }

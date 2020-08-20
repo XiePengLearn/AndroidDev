@@ -1,7 +1,13 @@
 package com.xiaoanjujia.home.composition.tenement.supervisor;
 
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.sxjs.jd.R;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.base.baseadapter.BaseViewHolder;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 
 /**
@@ -18,52 +24,34 @@ public class SupervisorPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
     @Override
     protected void convert(BaseViewHolder helper, final PropertyManagementListLogResponse.DataBean info, int position) {
 
-//        List<String> indication_name = info.getINDICATION_NAME();
-//        if (indication_name != null) {
-//            if (indication_name.size() > 0) {
-//                helper.setText(R.id.first_level_name, indication_name.get(0));
-//            }
-//            if (indication_name.size() > 1) {
-//                helper.setText(R.id.second_level_name, indication_name.get(1));
-//            }
-//            if (indication_name.size() > 2) {
-//                helper.setText(R.id.three_level_name, indication_name.get(2));
-//            }
-//        }
-//
-//
-//        LinearLayout linearLayout = helper.getView(R.id.zhibiao_value_layout);
-//
-//        linearLayout.removeAllViews();
-//        List<JkxYuPingResponse.DataBean.FILLINITEMSBean> fill_in_items = info.getFILL_IN_ITEMS();
-//        if (fill_in_items != null) {
-//            for (int i = 0; i < fill_in_items.size(); i++) {
-//                View zhibiao_value;
-//                if (i == fill_in_items.size() - 1) {
-//                    zhibiao_value = View.inflate(mContext, R.layout.jkx_zhibiao_value_item, null);
-//                } else {
-//                    zhibiao_value = View.inflate(mContext, R.layout.jkx_zhibiao_value_item_no_radius, null);
-//                }
-//                TextView item_name = zhibiao_value.findViewById(R.id.item_name);
-//                item_name.setText(fill_in_items.get(i).getITEM_NAME());
-//                TextView item_value = zhibiao_value.findViewById(R.id.item_value);
-//                item_value.setText(fill_in_items.get(i).getITEM_VALUE());
-//                linearLayout.addView(zhibiao_value);
-//            }
-//        }
-//
-//
-//        LinearLayout llView = helper.getView(R.id.zhibiao_desc_layout);
-//        llView.removeAllViews();
-//        List<JkxYuPingResponse.DataBean.REMINDBean> remind = info.getREMIND();
-//        if (remind != null) {
-//            for (int i = 0; i < remind.size(); i++) {
-//                View zhibiao_desc = View.inflate(mContext, R.layout.jkx_zhibiao_desc_item, null);
-//                TextView content = zhibiao_desc.findViewById(R.id.content);
-//                content.setText((i + 1) + "." + remind.get(i).getITEM_CONTENT());
-//                llView.addView(zhibiao_desc);
-//            }
-//        }
+        String abnormal_text = info.getAbnormal_text();
+        if(!Utils.isNull(abnormal_text)){
+            helper.setText(R.id.item_supervisor_content_text, abnormal_text);
+        }
+        String create_time = info.getCreate_time();
+        if(!Utils.isNull(create_time)){
+            helper.setText(R.id.item_supervisor_time_date, create_time);
+        }
+        String week = info.getWeek();
+        if(!Utils.isNull(week)){
+            helper.setText(R.id.item_supervisor_week_date, week);
+        }
+        String publishName = info.getName();
+        if(!Utils.isNull(publishName)){
+            helper.setText(R.id.item_supervisor_publisher, publishName);
+        }
+
+        RequestOptions options = new RequestOptions()
+                .error(R.drawable.ic_launcher);
+        //头像
+        Glide.with(mContext)
+                .load(info.getLog_imgs())
+                .apply(options)
+                .into((ImageView) helper.getView(R.id.item_supervisor_image_one));
+
+        //设置子View的点击事件
+        helper.addOnClickListener(R.id.item_supervisor_btn_status);
+
 
 
     }

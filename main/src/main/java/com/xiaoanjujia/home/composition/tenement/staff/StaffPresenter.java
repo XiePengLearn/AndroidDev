@@ -68,7 +68,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
     }
 
     @Override
-    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getAddPropertyLog(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
@@ -80,7 +80,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                 try {
 
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response);
+                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
@@ -184,7 +184,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                                 public void onError(Throwable e) {
                                     super.onError(e);
                                     //                mContractView.hiddenProgressDialogView();
-                                    LogUtil.e(TAG, "=======onError:======= ");
+                                    LogUtil.e(TAG, "=======onError:======= " + e.toString());
                                 }
 
                                 @Override
@@ -210,7 +210,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
     }
 
     @Override
-    public void getTypesOfRoleData(TreeMap<String, String> headers, Map<String, Object> mapParameters) {
+    public void getTypesOfRoleData(TreeMap<String, String> headers, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getTypeOfRole(headers, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
@@ -222,7 +222,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                 try {
 
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response);
+                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {

@@ -117,6 +117,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.staff.StaffActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.supervisor.SupervisorActivity"
