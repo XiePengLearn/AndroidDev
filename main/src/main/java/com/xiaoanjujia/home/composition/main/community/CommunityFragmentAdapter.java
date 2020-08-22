@@ -8,13 +8,13 @@ import com.sxjs.jd.R;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.base.baseadapter.BaseViewHolder;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
-import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
+import com.xiaoanjujia.home.entities.CommunitySearchResponse;
 
 /**
  * Created by admin on 2019/9/24.
  */
 
-public class CommunityFragmentAdapter extends BaseQuickAdapter<PropertyManagementListLogResponse.DataBean, BaseViewHolder> {
+public class CommunityFragmentAdapter extends BaseQuickAdapter<CommunitySearchResponse.DataBean, BaseViewHolder> {
 
     public CommunityFragmentAdapter(int layoutResId) {
         super(layoutResId);
@@ -22,44 +22,35 @@ public class CommunityFragmentAdapter extends BaseQuickAdapter<PropertyManagemen
 
 
     @Override
-    protected void convert(BaseViewHolder helper, final PropertyManagementListLogResponse.DataBean info, int position) {
+    protected void convert(BaseViewHolder helper, final CommunitySearchResponse.DataBean info, int position) {
 
-        String abnormal_text = info.getAbnormal_text();
-        if (!Utils.isNull(abnormal_text)) {
-            helper.setText(R.id.item_supervisor_content_text, abnormal_text);
+        String title = info.getTitle();
+        if (!Utils.isNull(title)) {
+            helper.setText(R.id.item_supervisor_content_text, title);
         }
-        String create_time = info.getCreate_time();
-        if (!Utils.isNull(create_time)) {
-            helper.setText(R.id.item_supervisor_time_date, create_time);
-        }
-        String week = info.getWeek();
-        if (!Utils.isNull(week)) {
-            helper.setText(R.id.item_supervisor_week_date, week);
-        }
-        String publishName = info.getName();
-        if (!Utils.isNull(publishName)) {
-            helper.setText(R.id.item_supervisor_publisher, publishName);
-        }
+        int count = info.getCount();
+        helper.setText(R.id.comment_count_tv, String.format("%s" + "条评论", String.valueOf(count)));
+
 
         RequestOptions options = new RequestOptions()
                 .error(R.drawable.ic_launcher);
         //头像
         Glide.with(mContext)
-                .load(info.getLog_imgs())
+                .load(info.getShow_img())
                 .apply(options)
                 .into((ImageView) helper.getView(R.id.item_supervisor_image_one));
-
-        //设置子View的点击事件
-        helper.addOnClickListener(R.id.item_supervisor_btn_status);
-        //examinestatus:0是未审核1是通过2被拒绝
-        int examinestatus = info.getExaminestatus();
-        if (examinestatus == 1) {
-            helper.setText(R.id.item_supervisor_btn_status, "审核通过");
-        } else if (examinestatus == 2) {
-            helper.setText(R.id.item_supervisor_btn_status, "审核已拒绝");
-        } else {
-            helper.setText(R.id.item_supervisor_btn_status, "未审核");
-        }
+//
+//        //设置子View的点击事件
+//        helper.addOnClickListener(R.id.item_supervisor_btn_status);
+//        //examinestatus:0是未审核1是通过2被拒绝
+//        int examinestatus = info.getExaminestatus();
+//        if (examinestatus == 1) {
+//            helper.setText(R.id.item_supervisor_btn_status, "审核通过");
+//        } else if (examinestatus == 2) {
+//            helper.setText(R.id.item_supervisor_btn_status, "审核已拒绝");
+//        } else {
+//            helper.setText(R.id.item_supervisor_btn_status, "未审核");
+//        }
 
     }
 

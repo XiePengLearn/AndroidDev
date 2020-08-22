@@ -51,6 +51,16 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_ADDPROPERTYLOG = "/api/v1/addpropertylog";
     //物业管理列表日志
     private static String GENERAL_PROPERTYLOGLISTS = "/api/v1/propertyloglists";
+    //社区首页分类
+    private static String GENERAL_COMCATELISTS = "/api/v1/comcatelists";
+    //社区热点
+    private static String GENERAL_COMMUHOTSPOT = "/api/v1/commuhotspot";
+    //热点列表
+    private static String GENERAL_COMHOTSPOTLIST = "/api/v1/comhotspotlist";
+    //社区搜索
+    private static String GENERAL_COMMUNITYSEARCH = "/api/v1/communitysearch";
+    //社区列表
+    private static String GENERAL_ORDERLISTS = "/api/v1/orderlists";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -182,8 +192,9 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostImageHeaderNoParam
                 (KPI_ROOT_URL + GENERAL_UPLOAD_IMAGE, parts, mapHeaders), consumer);
     }
+
     /**
-     *获取商户认证状态
+     * 获取商户认证状态
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -194,8 +205,9 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_COMEXAMINE, mapParameters, mapHeaders), consumer);
     }
+
     /**
-     *角色类型页面
+     * 角色类型页面
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -206,8 +218,9 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_ROLETRPETOP, mapParameters, mapHeaders), consumer);
     }
+
     /**
-     *普通物业添加日志
+     * 普通物业添加日志
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -220,7 +233,7 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
-     *  物业管理列表日志
+     * 物业管理列表日志
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -230,5 +243,71 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getPropertyLoglists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_PROPERTYLOGLISTS, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 社区首页分类
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getComcateLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMCATELISTS, mapParameters, mapHeaders), consumer);
+    }
+
+
+    /**
+     * 社区热点
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCommuhotSpot(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMMUHOTSPOT, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 热点列表
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getComhotSpotList(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMHOTSPOTLIST, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 社区搜索
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCommunitySearch(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMMUNITYSEARCH, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 社区列表
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getOrderLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ORDERLISTS, mapParameters, mapHeaders), consumer);
     }
 }
