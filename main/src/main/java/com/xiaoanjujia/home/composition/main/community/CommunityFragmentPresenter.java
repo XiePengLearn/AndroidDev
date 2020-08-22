@@ -5,8 +5,9 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
+import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -52,23 +53,25 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
     }
 
     @Override
-    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-            private LoginResponse mDataResponse;
+        Disposable disposable = mDataManager.getPropertyLoglists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private PropertyManagementListLogResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
+
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response);
+                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, LoginResponse.class);
+                        mDataResponse = gson.fromJson(response, PropertyManagementListLogResponse.class);
                     } else {
-                        mDataResponse = new LoginResponse();
+                        mDataResponse = new PropertyManagementListLogResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
@@ -84,6 +87,105 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
             public void onError(Throwable e) {
                 super.onError(e);
                 mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getTypesOfRoleData(TreeMap<String, String> headers, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getTypeOfRole(headers, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private TypeOfRoleResponse mTypeOfRoleResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mTypeOfRoleResponse = gson.fromJson(response, TypeOfRoleResponse.class);
+                    } else {
+                        mTypeOfRoleResponse = new TypeOfRoleResponse();
+                        mTypeOfRoleResponse.setMessage(ProjectResponse.getMessage(response));
+                        mTypeOfRoleResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setTypesOfRoleData(mTypeOfRoleResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getMoreData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getPropertyLoglists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private PropertyManagementListLogResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, PropertyManagementListLogResponse.class);
+                    } else {
+                        mDataResponse = new PropertyManagementListLogResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setMoreData(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
             }
 
             @Override
