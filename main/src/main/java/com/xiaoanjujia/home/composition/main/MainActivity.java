@@ -35,8 +35,8 @@ import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.html.HtmlStoreFragment;
 import com.xiaoanjujia.home.composition.html.me_html.MeWebFragment;
+import com.xiaoanjujia.home.composition.html.store_html.StoreWebFragment;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
 import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
 import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
     private CommunityFragment mCommunityFragment;
-    private HtmlStoreFragment mStoreFragment;
+    private StoreWebFragment mStoreFragment;
     private MeWebFragment mMyFragment;
     @SuppressLint("StaticFieldLeak")
     public static MainActivity instance;//关闭当前页面的instance
@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         mUnlockingFragment = (UnlockingFragment) mFragmentManager.findFragmentByTag("unlocking_fg");
         mTenementFragment = (TenementFragment) mFragmentManager.findFragmentByTag("tenement_fg");
         mCommunityFragment = (CommunityFragment) mFragmentManager.findFragmentByTag("community_fg");
-        mStoreFragment = (HtmlStoreFragment) mFragmentManager.findFragmentByTag("store_fg");
+        mStoreFragment = (StoreWebFragment) mFragmentManager.findFragmentByTag("store_fg");
         mMyFragment = (MeWebFragment) mFragmentManager.findFragmentByTag("my_fg");
 
 
@@ -216,7 +216,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             } else if (position == 2) {
 
                 if (mStoreFragment == null) {
-                    mStoreFragment = HtmlStoreFragment.newInstance();
+                    mStoreFragment = StoreWebFragment.newInstance();
                     addFragment(R.id.main_container, mStoreFragment, "store_fg");
                 }
 
@@ -289,7 +289,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             } else if (position == 3) {
 
                 if (mStoreFragment == null) {
-                    mStoreFragment = HtmlStoreFragment.newInstance();
+                    mStoreFragment = StoreWebFragment.newInstance();
                     addFragment(R.id.main_container, mStoreFragment, "store_fg");
                 }
 

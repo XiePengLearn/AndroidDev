@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.html.me_html;
+package com.xiaoanjujia.home.composition.html.store_html;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,10 +49,10 @@ import butterknife.ButterKnife;
  * @Date: 2019/10
  * @Description: 快速开发Fragment
  */
-public class MeWebFragment extends BaseFragment implements MeWebFragmentContract.View, PtrHandler {
+public class StoreWebFragment extends BaseFragment implements StoreWebFragmentContract.View, PtrHandler ,StoreWebInterface.JSStoreCallBack {
     private static final String TAG = "StoreWebFragment";
     @Inject
-    MeWebFragmentPresenter mPresenter;
+    StoreWebFragmentPresenter mPresenter;
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
     ImageView mainTitleBack;
@@ -72,18 +72,19 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_me_html, container, false);
+        View view = inflater.inflate(R.layout.fragment_store_html, container, false);
         unbinder = ButterKnife.bind(this, view);
         //        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
         mWebUrl = "https://www.xiaoanjujia.com/mobile/";
         initViewMethod();
         initTitle();
-        initSetting();
+        initSetting(this);
         return view;
     }
 
-    private void initSetting() {
+    private void initSetting(StoreWebInterface.JSStoreCallBack jSStoreCallBack) {
         webView.getSettings();
+        webView.addJavascriptInterface(new StoreWebInterface().setJsCallback(jSStoreCallBack), "JsToAndroidBridge");
     }
 
     /**
@@ -114,6 +115,21 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
         webView.setWebChromeClient(webChromClient);
         webView.setWebViewClient(new MyWebViewClient());
 
+    }
+
+    @Override
+    public String jsGetUserName() {
+        return null;
+    }
+
+    @Override
+    public String jsGetPassWord() {
+        return null;
+    }
+
+    @Override
+    public String jsGetUserToken() {
+        return null;
     }
 
     class MyWebViewClient extends WebViewClient {
@@ -152,8 +168,8 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
         }
     }
 
-    public static MeWebFragment newInstance() {
-        MeWebFragment newInstanceFragment = new MeWebFragment();
+    public static StoreWebFragment newInstance() {
+        StoreWebFragment newInstanceFragment = new StoreWebFragment();
         Bundle bundle = new Bundle();
         bundle.putString("key", "key");
         newInstanceFragment.setArguments(bundle);
@@ -161,9 +177,9 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     }
 
     public void initView() {
-        DaggerMeWebFragmentComponent.builder()
+        DaggerStoreWebFragmentComponent.builder()
                 .appComponent(getAppComponent())
-                .meWebFragmentModule(new MeWebFragmentModule(this, MainDataManager.getInstance(mDataManager)))
+                .storeWebFragmentModule(new StoreWebFragmentModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
     }

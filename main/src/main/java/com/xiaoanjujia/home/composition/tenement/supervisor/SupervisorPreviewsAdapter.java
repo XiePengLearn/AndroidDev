@@ -55,10 +55,10 @@ public class SupervisorPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
         int examinestatus = info.getExaminestatus();
         if (examinestatus == 1) {
             helper.setText(R.id.item_supervisor_btn_status, "审核通过");
-        } else if (examinestatus ==2) {
-            helper.setText(R.id.item_supervisor_btn_status, examinestatus);
+        } else if (examinestatus == 2) {
+            helper.setText(R.id.item_supervisor_btn_status, "审核已拒绝");
         } else {
-            helper.setText(R.id.item_supervisor_btn_status, examinestatus);
+            helper.setText(R.id.item_supervisor_btn_status, "未审核");
         }
 
     }
