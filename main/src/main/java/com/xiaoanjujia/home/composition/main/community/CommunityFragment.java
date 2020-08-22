@@ -135,7 +135,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         adapter = new CommunityFragmentAdapter(R.layout.item_community_fragment);
         adapter.setOnLoadMoreListener(this);
 
-        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
+        View itemHeader = mLayoutInflater.inflate(R.layout.item_community_fragment_header, null);
         aflCotent = itemHeader.findViewById(R.id.afl_cotent);
         aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
         adapter.addHeaderView(itemHeader);
@@ -341,8 +341,8 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 aflCotent.setAdapter(new FlowAdapter(listDate) {
                     @Override
                     public View getView(int position) {
-                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
-                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
+                        View item = mLayoutInflater.inflate(R.layout.item_community_fragment_header_grald, null);
+                        TextView tvAttrTag = (TextView) item.findViewById(R.id.item_community_content_text);
                         tvAttrTag.setText(listDate.get(position));
                         return item;
                     }
