@@ -14,8 +14,11 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.X5WebView;
@@ -36,10 +39,10 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/MeWebActivity/MeWebActivity")
-public class MeWebActivity extends BaseActivity implements MeWebContract.View {
+@Route(path = "/MyWebActivity/MyWebActivity")
+public class MyWebActivity extends BaseActivity implements MyWebContract.View, ActivityWebInterface.JSActivityCallBack {
     @Inject
-    MeWebPresenter presenter;
+    MyWebPresenter presenter;
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -69,15 +72,21 @@ public class MeWebActivity extends BaseActivity implements MeWebContract.View {
         initTitle();
         initView();
 
+        initSetting(this);
+    }
 
+    private void initSetting(ActivityWebInterface.JSActivityCallBack jSActivityCallBack) {
+        WebSettings settings = webView.getSettings();
+        settings.setUserAgent("xiaoan");
+        webView.addJavascriptInterface(new ActivityWebInterface().setJsCallback(jSActivityCallBack), "JsToAndroidBridge");
     }
 
     private void initView() {
 
 
-        DaggerMeWebActivityComponent.builder()
+        DaggerMyWebActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .meWebPresenterModule(new MeWebPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .myWebPresenterModule(new MyWebPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 
@@ -95,6 +104,22 @@ public class MeWebActivity extends BaseActivity implements MeWebContract.View {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("");
 
+    }
+
+    @Override
+    public String jsGetUserName() {
+
+        return PrefUtils.readUserName(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetPassWord() {
+        return PrefUtils.readPassword(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetUserToken() {
+        return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
     }
 
     class MyWebChromClient extends WebChromeClient {

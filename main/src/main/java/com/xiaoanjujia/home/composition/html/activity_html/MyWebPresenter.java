@@ -20,13 +20,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/13 22:09
  * @Description:
  */
-public class MeWebPresenter extends BasePresenter implements MeWebContract.Presenter {
+public class MyWebPresenter extends BasePresenter implements MyWebContract.Presenter {
     private MainDataManager mDataManager;
-    private              MeWebContract.View mLoginView;
+    private              MyWebContract.View mLoginView;
     private static final String               TAG = "MainPresenter";
 
     @Inject
-    public MeWebPresenter(MainDataManager mDataManager, MeWebContract.View view) {
+    public MyWebPresenter(MainDataManager mDataManager, MyWebContract.View view) {
         this.mDataManager = mDataManager;
         this.mLoginView = view;
 

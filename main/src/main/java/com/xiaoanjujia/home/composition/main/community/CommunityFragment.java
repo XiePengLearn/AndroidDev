@@ -49,7 +49,7 @@ import butterknife.ButterKnife;
  * @Date: 2019/10
  * @Description: 快速开发Fragment
  */
-public class CommunityFragment extends BaseFragment implements CommunityFragmentContract.View, PtrHandler , BaseQuickAdapter.RequestLoadMoreListener{
+public class CommunityFragment extends BaseFragment implements CommunityFragmentContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
     CommunityFragmentPresenter mPresenter;
     private static final String TAG = "CommunityFragment";
@@ -65,12 +65,13 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     LinearLayout mainTitleContainer;
     @BindView(R2.id.chat_list)
     RecyclerView mRecyclerView;
+    @BindView(R2.id.find_pull_refresh_header)
+    JDHeaderView findPullRefreshHeader;
     @BindView(R2.id.no_data_img)
     ImageView noDataImg;
     @BindView(R2.id.rl_no_data)
     RelativeLayout rlNoData;
-    @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+
 
     private LayoutInflater mLayoutInflater;
 
@@ -81,7 +82,6 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     private CommunityFragmentAdapter adapter;
     private int page = 1, datetype = 1, id = 0;
     private AutoFlowLayout aflCotent;
-    private AutoFlowLayout aflJobsToChoose;
 
 
     @Override
@@ -129,51 +129,34 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 .communityFragmentModule(new CommunityFragmentModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-        mLayoutInflater = LayoutInflater.from(mContext);
+        mLayoutInflater = LayoutInflater.from(getActivity());
         findPullRefreshHeader.setPtrHandler(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CommunityFragmentAdapter(R.layout.item_community_fragment);
         adapter.setOnLoadMoreListener(this);
 
         View itemHeader = mLayoutInflater.inflate(R.layout.item_community_fragment_header, null);
         aflCotent = itemHeader.findViewById(R.id.afl_cotent);
-        aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
         adapter.addHeaderView(itemHeader);
         adapter.setEnableLoadMore(true);
         adapter.loadMoreComplete();
         mRecyclerView.setAdapter(adapter);
 
-        aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                //时间
-                if (view.isSelected()) {
-                    datetype = listDateType.get(position);
+//        aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position, View view) {
+//                //时间
+//                if (view.isSelected()) {
+//                    datetype = listDateType.get(position);
+//
+//                } else {
+//                    datetype = 1;//默认
+//                }
+//                page = 1;
+//                initData(page, datetype, id);
+//            }
+//        });
 
-                } else {
-                    datetype = 1;//默认
-                }
-                page = 1;
-                initData(page, datetype, id);
-            }
-        });
-
-        aflJobsToChoose.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                //职位
-                //时间
-                if (view.isSelected()) {
-                    id = listWorkId.get(position);
-
-                } else {
-                    id = 0;//默认
-                }
-                page = 1;
-                initData(page, datetype, id);
-
-            }
-        });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
@@ -184,7 +167,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                     //                    PersonalPublishResponse.DataBean.PAGEBean bean = (PersonalPublishResponse.DataBean.PAGEBean) data.get(position);
                     //
                     //                    String topic_id = bean.getTOPIC_ID();
-                    //                    Intent intent = new Intent(mContext, ForumDetailsActivity.class);
+                    //                    Intent intent = new Intent(getActivity(), ForumDetailsActivity.class);
                     //                    intent.putExtra("title", "绩效论坛");
                     //                    intent.putExtra("topic_id", topic_id);
                     //                    startActivity(intent);
@@ -219,7 +202,6 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
         mPresenter.getTypesOfRoleData(headersTreeMap, mapParameters);
     }
-
 
 
     @Override
@@ -303,7 +285,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
             } else {
                 adapter.loadMoreComplete();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
                 }
 
             }
@@ -311,7 +293,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
         } catch (Exception e) {
             adapter.loadMoreComplete();
-            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
         } finally {
             adapter.loadMoreComplete();
         }
@@ -348,31 +330,20 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                     }
                 });
 
-                aflJobsToChoose.setAdapter(new FlowAdapter(listWork) {
-                    @Override
-                    public View getView(int position) {
-                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
-                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
-                        tvAttrTag.setText(listWork.get(position));
-                        return item;
-                    }
-                });
                 initData(page, datetype, id);
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
         }
     }
-
-
 
 
     @Override

@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.BaseApplication;
@@ -31,7 +32,7 @@ import com.xiaoanjujia.common.widget.dialog.ConfirmDialog;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -83,7 +84,8 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     }
 
     private void initSetting(StoreWebInterface.JSStoreCallBack jSStoreCallBack) {
-        webView.getSettings();
+        WebSettings settings = webView.getSettings();
+        settings.setUserAgent("xiaoan");
         webView.addJavascriptInterface(new StoreWebInterface().setJsCallback(jSStoreCallBack), "JsToAndroidBridge");
     }
 
@@ -99,7 +101,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     @Override
     public void initEvent() {
         initView();
-        initData();
+//        initData();
 
     }
 
@@ -119,23 +121,24 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
 
     @Override
     public String jsGetUserName() {
-        return null;
+
+        return PrefUtils.readUserName(BaseApplication.getInstance());
     }
 
     @Override
     public String jsGetPassWord() {
-        return null;
+        return PrefUtils.readPassword(BaseApplication.getInstance());
     }
 
     @Override
     public String jsGetUserToken() {
-        return null;
+        return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
     }
 
     class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            Intent intent = new Intent(getActivity(), MeWebActivity.class);
+            Intent intent = new Intent(getActivity(), MyWebActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
 

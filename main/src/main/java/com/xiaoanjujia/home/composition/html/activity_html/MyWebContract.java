@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * @Date: 2019/9/13 22:10
  * @Description:
  */
-public interface MeWebContract {
+public interface MyWebContract {
 
     interface View {
 

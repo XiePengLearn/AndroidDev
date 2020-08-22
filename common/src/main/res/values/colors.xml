@@ -15,4 +15,6 @@
     <color name="app_color_f6">#f6f6f6</color>
     <color name="base_font_color_32333D">#32333D</color>
     <color name="color_me_menu_item_bottom_line">#F2F3F5</color>
+    <color name="color_black">#ff000000</color>
+    <color name="color_53">#53575e</color>
 </resources>

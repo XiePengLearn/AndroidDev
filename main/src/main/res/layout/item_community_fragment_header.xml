@@ -1,37 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
 
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_17"
-            android:text="日志查看"
-            android:textColor="@color/color_494949"
-            android:textSize="@dimen/sp_14" />
+            android:layout_marginTop="17dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/details_top_bar_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_search"
+                android:visibility="gone" />
+
+            <com.xiaoanjujia.common.widget.SearchLayout
+                android:id="@+id/sl_searchLayout"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_15"
+
+                android:layout_weight="1"
+                android:background="@drawable/bg_shap_button_42"
+
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+
+                app:input_Color="@color/color_53"
+                app:input_Hint="搜索您想要的信息"
+                app:input_Hint_Size="14sp"
+                app:input_Hint_color="@color/gray"
+                app:input_Size="14sp"
+                app:tag_src="@drawable/ic_search" />
+
+
+            <TextView
+                android:id="@+id/tv_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:text="搜索"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_19">
+            android:layout_marginTop="@dimen/dp_16">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="日志查看日期："
-                android:textColor="@color/color_494949"
-                android:textSize="@dimen/sp_12" />
 
             <com.example.library.AutoFlowLayout
                 android:id="@+id/afl_cotent"
@@ -41,26 +71,7 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_19">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="岗位选择："
-                android:textColor="@color/color_494949"
-                android:textSize="@dimen/sp_12" />
-
-            <com.example.library.AutoFlowLayout
-                android:id="@+id/afl_jobs_to_choose"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

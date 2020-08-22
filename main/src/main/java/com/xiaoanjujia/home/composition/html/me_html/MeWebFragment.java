@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.BaseApplication;
@@ -31,7 +32,7 @@ import com.xiaoanjujia.common.widget.dialog.ConfirmDialog;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -49,7 +50,7 @@ import butterknife.ButterKnife;
  * @Date: 2019/10
  * @Description: 快速开发Fragment
  */
-public class MeWebFragment extends BaseFragment implements MeWebFragmentContract.View, PtrHandler {
+public class MeWebFragment extends BaseFragment implements MeWebFragmentContract.View, PtrHandler, MeWebInterface.JSMeCallBack {
     private static final String TAG = "StoreWebFragment";
     @Inject
     MeWebFragmentPresenter mPresenter;
@@ -74,16 +75,18 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me_html, container, false);
         unbinder = ButterKnife.bind(this, view);
-        //        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-        mWebUrl = "https://www.xiaoanjujia.com/mobile/";
+        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+        //        mWebUrl = "https://www.xiaoanjujia.com/mobile/";
         initViewMethod();
         initTitle();
-        initSetting();
+        initSetting(this);
         return view;
     }
 
-    private void initSetting() {
-        webView.getSettings();
+    private void initSetting(MeWebInterface.JSMeCallBack jSMeCallBack) {
+        WebSettings settings = webView.getSettings();
+        settings.setUserAgent("xiaoan");
+        webView.addJavascriptInterface(new MeWebInterface().setJsCallback(jSMeCallBack), "JsToAndroidBridge");
     }
 
     /**
@@ -98,7 +101,7 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     @Override
     public void initEvent() {
         initView();
-        initData();
+        //        initData();
 
     }
 
@@ -116,10 +119,26 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
 
     }
 
+    @Override
+    public String jsGetUserName() {
+
+        return PrefUtils.readUserName(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetPassWord() {
+        return PrefUtils.readPassword(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetUserToken() {
+        return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
+    }
+
     class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            Intent intent = new Intent(getActivity(), MeWebActivity.class);
+            Intent intent = new Intent(getActivity(), MyWebActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
 

@@ -95,7 +95,7 @@
             android:name="com.xiaoanjujia.home.composition.success.submit.SubmitSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity"
+            android:name="com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.html.HomeWebViewActivity"

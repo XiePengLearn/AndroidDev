@@ -21,7 +21,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.widget.X5WebView;
-import com.xiaoanjujia.home.composition.html.activity_html.MeWebActivity;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,7 +111,7 @@ public class HtmlStoreFragment extends BaseFragment {
     class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            Intent intent = new Intent(getActivity(), MeWebActivity.class);
+            Intent intent = new Intent(getActivity(), MyWebActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
 

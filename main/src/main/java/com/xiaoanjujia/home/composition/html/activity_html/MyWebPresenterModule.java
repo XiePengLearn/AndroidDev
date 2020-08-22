@@ -12,18 +12,18 @@ import dagger.Provides;
  * @Description:
  */
 @Module
-public class MeWebPresenterModule {
-    private MeWebContract.View view;
+public class MyWebPresenterModule {
+    private MyWebContract.View view;
 
     private MainDataManager mainDataManager;
 
-    public MeWebPresenterModule(MeWebContract.View view, MainDataManager mainDataManager) {
+    public MyWebPresenterModule(MyWebContract.View view, MainDataManager mainDataManager) {
         this.view = view;
         this.mainDataManager = mainDataManager;
     }
 
     @Provides
-    MeWebContract.View providerMainContractView() {
+    MyWebContract.View providerMainContractView() {
         return view;
     }
 

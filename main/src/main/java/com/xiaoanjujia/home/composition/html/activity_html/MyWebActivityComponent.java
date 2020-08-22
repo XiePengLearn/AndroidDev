@@ -13,8 +13,8 @@ import dagger.Component;
  */
 
 @PerActivity
-@Component(dependencies = AppComponent.class , modules = MeWebPresenterModule.class)
-public interface MeWebActivityComponent {
+@Component(dependencies = AppComponent.class , modules = MyWebPresenterModule.class)
+public interface MyWebActivityComponent {
 
-    void inject(MeWebActivity activity);
+    void inject(MyWebActivity activity);
 }
