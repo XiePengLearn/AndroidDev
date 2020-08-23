@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.composition.html.activity_html;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface MyWebContract {
     interface View {
 
 
-        void setLoginData(LoginResponse loginResponse);
+        void setResponseData(ComExamineStatusResponse mComExamineStatusResponse);
 
         void showProgressDialogView();
 
@@ -32,6 +32,6 @@ public interface MyWebContract {
 
         Map getData();
 
-        void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

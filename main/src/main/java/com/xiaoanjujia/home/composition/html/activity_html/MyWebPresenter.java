@@ -5,7 +5,8 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,13 +23,13 @@ import okhttp3.ResponseBody;
  */
 public class MyWebPresenter extends BasePresenter implements MyWebContract.Presenter {
     private MainDataManager mDataManager;
-    private              MyWebContract.View mLoginView;
+    private              MyWebContract.View mContractView;
     private static final String               TAG = "MainPresenter";
 
     @Inject
     public MyWebPresenter(MainDataManager mDataManager, MyWebContract.View view) {
         this.mDataManager = mDataManager;
-        this.mLoginView = view;
+        this.mContractView = view;
 
     }
 
@@ -50,33 +51,39 @@ public class MyWebPresenter extends BasePresenter implements MyWebContract.Prese
     }
 
     @Override
-    public void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
-        mLoginView.showProgressDialogView();
+    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getComexamine(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private ComExamineStatusResponse mComExamineStatusResponse;
+
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
-
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
-
-                    mLoginView.setLoginData(loginResponse);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mComExamineStatusResponse = gson.fromJson(response, ComExamineStatusResponse.class);
+                    } else {
+                        mComExamineStatusResponse = new ComExamineStatusResponse();
+                        mComExamineStatusResponse.setMessage(ProjectResponse.getMessage(response));
+                        mComExamineStatusResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setResponseData(mComExamineStatusResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                mLoginView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                LogUtil.e(TAG, "=======onError:======= " + e.getMessage() );
-                mLoginView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
             }
 
             @Override
@@ -84,7 +91,7 @@ public class MyWebPresenter extends BasePresenter implements MyWebContract.Prese
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mLoginView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);

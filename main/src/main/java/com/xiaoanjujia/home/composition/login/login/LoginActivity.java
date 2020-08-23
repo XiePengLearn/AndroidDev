@@ -20,6 +20,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PhoneValidator;
 import com.xiaoanjujia.common.util.PrefUtils;
@@ -28,6 +29,7 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.ClearEditText;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -86,6 +88,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         setContentView(R.layout.login_activity);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
+        String param = getIntent().getStringExtra("param");
+        if (!Utils.isNull(param) && param.equals("web")) {
+            AppManager.getInstance().finishOthersToActivity(LoginActivity.class);
+        }
 
         initView();
         initTitle();

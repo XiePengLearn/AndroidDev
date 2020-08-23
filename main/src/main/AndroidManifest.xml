@@ -31,6 +31,8 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.main.MainActivity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
 
         </activity>
@@ -121,6 +123,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.supervisor.SupervisorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
             android:screenOrientation="portrait" />
     </application>
 

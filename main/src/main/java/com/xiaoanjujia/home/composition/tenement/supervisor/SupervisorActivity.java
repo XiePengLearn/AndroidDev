@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.tenement.supervisor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -164,19 +166,29 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 int i = view.getId();
                 if (i == R.id.item_supervisor_btn_status) {
 
-                    //                    List data = baseAdapter.getData();
-                    //                    PersonalPublishResponse.DataBean.PAGEBean bean = (PersonalPublishResponse.DataBean.PAGEBean) data.get(position);
-                    //
-                    //                    String topic_id = bean.getTOPIC_ID();
-                    //                    Intent intent = new Intent(mContext, ForumDetailsActivity.class);
-                    //                    intent.putExtra("title", "绩效论坛");
-                    //                    intent.putExtra("topic_id", topic_id);
-                    //                    startActivity(intent);
+                    List data = adapter.getData();
+                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+                    int id = dateBean.getId();
+                    Intent intent = new Intent(SupervisorActivity.this, RecordDetailActivity.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
                 }
 
                 return true;
             }
         });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                List data = adapter.getData();
+                PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+                int id = dateBean.getId();
+                Intent intent = new Intent(SupervisorActivity.this, RecordDetailActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
     }
 
     //page

@@ -7,7 +7,7 @@
     <View
         android:id="@+id/fake_status_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_20" />
+        android:layout_height="@dimen/dp_25" />
 
     <LinearLayout
         android:id="@+id/main_title_container"

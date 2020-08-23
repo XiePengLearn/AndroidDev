@@ -33,6 +33,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -85,7 +86,8 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
 
     private void initSetting(MeWebInterface.JSMeCallBack jSMeCallBack) {
         WebSettings settings = webView.getSettings();
-        settings.setUserAgent("xiaoan");
+        String userAgentString = settings.getUserAgentString();
+        settings.setUserAgent(userAgentString + "xiaoan");
         webView.addJavascriptInterface(new MeWebInterface().setJsCallback(jSMeCallBack), "JsToAndroidBridge");
     }
 
@@ -133,6 +135,26 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     @Override
     public String jsGetUserToken() {
         return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
+    }
+
+    @Override
+    public void jsMerchantsCertification() {
+        initData();
+    }
+
+    @Override
+    public void jsGetLogOut() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("param", "web");
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     class MyWebViewClient extends WebViewClient {

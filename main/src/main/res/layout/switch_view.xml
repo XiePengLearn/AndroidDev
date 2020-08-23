@@ -11,10 +11,12 @@
         android:id="@+id/switch_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_2"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="center_vertical"
+
         android:singleLine="true"
         android:textColor="#494949"
         android:textSize="11sp"

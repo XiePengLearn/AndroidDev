@@ -61,6 +61,12 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_COMMUNITYSEARCH = "/api/v1/communitysearch";
     //社区列表
     private static String GENERAL_ORDERLISTS = "/api/v1/orderlists";
+    //日志详情
+    private static String GENERAL_LOGDETAILS = "/api/v1/logdetails";
+    //审核通过
+    private static String GENERAL_LOGEXAMINE = "/api/v1/logexamine";
+    //审核拒绝
+    private static String GENERAL_LOGREFUSE = "/api/v1/logrefuse";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -309,5 +315,45 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getOrderLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_ORDERLISTS, mapParameters, mapHeaders), consumer);
+    }
+
+
+    /**
+     * 日志详情
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getLogDetails(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_LOGDETAILS, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getLogExamine(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_LOGEXAMINE, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 审核拒绝
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getLogRefuse(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_LOGREFUSE, mapParameters, mapHeaders), consumer);
     }
 }

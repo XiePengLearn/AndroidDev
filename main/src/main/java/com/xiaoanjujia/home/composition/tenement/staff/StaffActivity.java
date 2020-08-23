@@ -65,7 +65,7 @@ import butterknife.OnClick;
 public class StaffActivity extends BaseActivity implements StaffContract.View {
     @Inject
     StaffPresenter mPresenter;
-    private static final String TAG = "StaffActivity";
+    private static final String TAG = "RecordDetailActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)

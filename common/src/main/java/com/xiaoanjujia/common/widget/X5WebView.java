@@ -74,6 +74,7 @@ public class X5WebView extends WebView {
         this.getView().setClickable(true);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebViewSettings() {
         WebSettings webSetting = this.getSettings();
         webSetting.setJavaScriptEnabled(true);

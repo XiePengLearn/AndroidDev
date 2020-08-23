@@ -1,5 +1,7 @@
 package com.xiaoanjujia.home.composition.html.activity_html;
 
+import android.webkit.JavascriptInterface;
+
 import com.xiaoanjujia.home.composition.html.store_html.WebInterFace;
 
 /**
@@ -15,7 +17,7 @@ public class ActivityWebInterface extends WebInterFace {
     }
 
     // 是在自线程中执行的
-
+    @JavascriptInterface
     @Override
     public String getUserName() {
         if (jsCallBack != null) {
@@ -24,6 +26,7 @@ public class ActivityWebInterface extends WebInterFace {
         return "";
     }
 
+    @JavascriptInterface
     @Override
     public String getPassWord() {
         if (jsCallBack != null) {
@@ -32,6 +35,7 @@ public class ActivityWebInterface extends WebInterFace {
         return "";
     }
 
+    @JavascriptInterface
     @Override
     public String getUserToken() {
         if (jsCallBack != null) {
@@ -40,6 +44,21 @@ public class ActivityWebInterface extends WebInterFace {
         return "";
     }
 
+    @JavascriptInterface
+    @Override
+    public void getMerchantsCertification() {
+        if (jsCallBack != null) {
+            jsCallBack.jsMerchantsCertification();
+        }
+    }
+
+    @JavascriptInterface
+    @Override
+    public void getLogOut() {
+        if (jsCallBack != null) {
+            jsCallBack.jsGetLogOut();
+        }
+    }
 
     public interface JSActivityCallBack {
         String jsGetUserName();
@@ -47,6 +66,10 @@ public class ActivityWebInterface extends WebInterFace {
         String jsGetPassWord();
 
         String jsGetUserToken();
+
+        void jsMerchantsCertification();
+
+        void jsGetLogOut();
     }
 
 }

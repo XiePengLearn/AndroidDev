@@ -257,7 +257,7 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
 
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getComhotSpotList(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getCommuhotSpot(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
             private StoreHot2Response mDateResponse;
 

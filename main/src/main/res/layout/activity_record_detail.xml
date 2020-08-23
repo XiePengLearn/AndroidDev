@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/jkx_public_title_home_right_text" />
+
+
+    <com.xiaoanjujia.common.util.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/invitation_particulars_of_matter_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="图片日志："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/staff_take_picture_layout_list_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/record_detail_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:visibility="visible" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="文字日志："
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_17" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:background="@color/color_f5f5f5"
+                android:minHeight="@dimen/dp_67"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/record_detail_text_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14"
+                    tool:text="文字日文字日文文字日文字日文字日文字日志内容志内容文字日志内容志内文字日文字日文文字日文字日文字日文字日志内容志内容文字日志内容志内容文字日文字日志内容志内容文字日志内容志内容字日文字日志内容志内容文字日志内容志内容文字日文字日志内容志内容文字日志内容志内容容文字日文字日志内容志内容文字日志内容志内容字日文字日志内容志内容文字日志内容志内容文字日文字日志内容志内容文字日志内容志内容" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/item_record_detail_time_date_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14"
+                        tool:text="2020-06-16 12：00" />
+
+                    <TextView
+                        android:id="@+id/item_record_detail_week_date_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14"
+                        tool:text="周二" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="日志发布人："
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/item_record_detail_publisher_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14"
+                        tool:text="综合维修工" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="异常内容："
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/item_record_detail_abnormal_text_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14"
+                        tool:text="无" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="处理日志："
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/item_record_detail_refuse_text_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_7"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_14"
+                        tool:text="无" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_47"
+                android:orientation="horizontal"
+                >
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/reject_layout_btn"
+                    android:layout_width="@dimen/dp_130"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_49"
+
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:text="驳回"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/agree_layout_btn"
+                    android:layout_width="@dimen/dp_130"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_19"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:text="同意"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reject_layout_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_18"
+                    android:paddingRight="@dimen/dp_18">
+
+
+                    <EditText
+                        android:id="@+id/edit_reject_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_80"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:background="@drawable/bg_shape_button_select_id_name"
+                        android:cursorVisible="true"
+                        android:gravity="left"
+                        android:hint="请输入驳回理由......"
+                        android:maxLength="140"
+                        android:text=""
+                        android:textColor="#494949"
+                        android:textColorHint="#C5C3C3"
+                        android:textCursorDrawable="@drawable/text_cursor"
+                        android:textSize="@dimen/sp_14" />
+
+                </LinearLayout>
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/confirm_reject_layout_btn"
+                    android:layout_width="@dimen/dp_130"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginTop="@dimen/sp_13"
+                    android:layout_marginBottom="@dimen/dp_35"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:text="确定驳回"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.xiaoanjujia.common.util.MyScrollView>
+
+
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.html.activity_html;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -19,11 +21,15 @@ import com.tencent.smtt.sdk.WebView;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.PrefUtils;
+import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.X5WebView;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
+import com.xiaoanjujia.common.widget.dialog.ConfirmDialog;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
@@ -77,7 +83,8 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
 
     private void initSetting(ActivityWebInterface.JSActivityCallBack jSActivityCallBack) {
         WebSettings settings = webView.getSettings();
-        settings.setUserAgent("xiaoan");
+        String userAgentString = settings.getUserAgentString();
+        settings.setUserAgent(userAgentString + "xiaoan");
         webView.addJavascriptInterface(new ActivityWebInterface().setJsCallback(jSActivityCallBack), "JsToAndroidBridge");
     }
 
@@ -122,6 +129,34 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
     }
 
+    @Override
+    public void jsMerchantsCertification() {
+        initData();
+    }
+
+    @Override
+    public void jsGetLogOut() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                Intent intent = new Intent(MyWebActivity.this, LoginActivity.class);
+                intent.putExtra("param", "web");
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void initData() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        presenter.getRequestData(headersTreeMap, mapParameters);
+    }
+
     class MyWebChromClient extends WebChromeClient {
 
         @Override
@@ -144,11 +179,7 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
                 mainTitleText.setText(title);
             }
         }
-    }
 
-
-    public void initData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
-        presenter.getLoginData(mapHeaders, mapParameters);
     }
 
 
@@ -160,28 +191,65 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
 
 
     @Override
-    public void setLoginData(LoginResponse loginResponse) {
+    public void setResponseData(ComExamineStatusResponse mComExamineStatusResponse) {
         try {
+            int code = mComExamineStatusResponse.getStatus();
+            String msg = mComExamineStatusResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                ComExamineStatusResponse.DataBean data = mComExamineStatusResponse.getData();
+               /* {
+                    "status": 1,
+                        "message": "未认证",
+                        "data": {
+                    "examine": 0,
+                            "refuse_text": ""
+                }
+                }*/
+              /* 0是未认证
+                1是认证通过
+                2是认证中
+                3被拒绝*/
+                if (data != null) {
+                    String refuse_text = data.getRefuse_text();
+                    if (data.getExamine() == 0) {
+                        ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(MyWebActivity.this);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
+                        }
+                    } else if (data.getExamine() == 1) {
+                        if (!Utils.isNull(msg) && !Utils.isNull(refuse_text)) {
+                            ConfirmDialog confirmDialog = new ConfirmDialog(MyWebActivity.this);
+                            confirmDialog.setTitleStr(msg);
+                            confirmDialog.setContentStr(refuse_text);
+                            confirmDialog.show();
+                        }
+                    } else if (data.getExamine() == 2) {
+                        ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(MyWebActivity.this);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
+                        }
+                    } else {
+                        ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(MyWebActivity.this);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
+                        }
+                    }
+
+                }
 
 
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(MyWebActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
+                }
+
+            }
         } catch (Exception e) {
-            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), "解析数据失败");
         }
-
-
-    }
-
-
-    private void LoginMethod() {
-
-
-        Map<String, Object> mapParameters = new HashMap<>(2);
-        //        mapParameters.put("phone", lAccount);
-        //        mapParameters.put("password", lPassword);
-
-        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
-        initData(headersTreeMap, mapParameters);
     }
 
 

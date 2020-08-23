@@ -14,5 +14,9 @@ public abstract class WebInterFace {
     @JavascriptInterface
     public abstract String getUserToken();
 
+    @JavascriptInterface
+    public abstract void getMerchantsCertification();
 
+    @JavascriptInterface
+    public abstract void getLogOut ();
 }

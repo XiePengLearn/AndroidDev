@@ -33,6 +33,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -50,7 +51,7 @@ import butterknife.ButterKnife;
  * @Date: 2019/10
  * @Description: 快速开发Fragment
  */
-public class StoreWebFragment extends BaseFragment implements StoreWebFragmentContract.View, PtrHandler ,StoreWebInterface.JSStoreCallBack {
+public class StoreWebFragment extends BaseFragment implements StoreWebFragmentContract.View, PtrHandler, StoreWebInterface.JSStoreCallBack {
     private static final String TAG = "StoreWebFragment";
     @Inject
     StoreWebFragmentPresenter mPresenter;
@@ -76,7 +77,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
         View view = inflater.inflate(R.layout.fragment_store_html, container, false);
         unbinder = ButterKnife.bind(this, view);
         //        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-        mWebUrl = "https://www.xiaoanjujia.com/mobile/";
+        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php";
         initViewMethod();
         initTitle();
         initSetting(this);
@@ -85,7 +86,8 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
 
     private void initSetting(StoreWebInterface.JSStoreCallBack jSStoreCallBack) {
         WebSettings settings = webView.getSettings();
-        settings.setUserAgent("xiaoan");
+        String userAgentString = settings.getUserAgentString();
+        settings.setUserAgent(userAgentString + "xiaoan");
         webView.addJavascriptInterface(new StoreWebInterface().setJsCallback(jSStoreCallBack), "JsToAndroidBridge");
     }
 
@@ -101,7 +103,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     @Override
     public void initEvent() {
         initView();
-//        initData();
+        //
 
     }
 
@@ -133,6 +135,27 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     @Override
     public String jsGetUserToken() {
         return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
+    }
+
+    @Override
+    public void jsMerchantsCertification() {
+        initData();
+    }
+
+    @Override
+    public void jsGetLogOut() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("param", "web");
+                    startActivity(intent);
+                }
+            });
+        }
+
     }
 
     class MyWebViewClient extends WebViewClient {

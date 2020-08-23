@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
 public class QuicklyActivity extends BaseActivity implements QuicklyContract.View {
     @Inject
     QuicklyPresenter mPresenter;
-    private static final String TAG = "StaffActivity";
+    private static final String TAG = "RecordDetailActivity";
 
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
