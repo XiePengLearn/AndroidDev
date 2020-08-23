@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/jkx_public_title_home_right_text" />
+
+
+    <com.xiaoanjujia.common.util.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/invitation_particulars_of_matter_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+
+                <TextView
+                    android:id="@+id/community_title_text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/staff_take_picture_layout_list_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/record_detail_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginRight="@dimen/dp_18"
+                    android:overScrollMode="never"
+                    android:visibility="visible" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/sp_14"
+                    android:layout_gravity="center"
+                    android:src="@drawable/community_home" />
+
+                <TextView
+                    android:id="@+id/item_composition_serve_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_7"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14"
+                    tool:text="服务于北京" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_13"
+                    android:layout_height="@dimen/sp_17"
+                    android:layout_gravity="center"
+                    android:src="@drawable/community_address" />
+
+                <TextView
+                    android:id="@+id/item_composition_address_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_7"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14"
+                    tool:text="地址" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/item_composition_btn_details"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="详情"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/item_composition_btn_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="评价"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/item_composition_btn_merchant"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="商家"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/item_composition_image_ad"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_120"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_5"
+                android:scaleType="centerCrop" />
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="评论内容："
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_17" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_18"
+                android:background="@drawable/bg_shape_button_select_id_name"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/edit_item_composition_comment_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:gravity="start"
+                    android:hint="请写出您的评价内容"
+                    android:maxLength="140"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/publish_composition_comment_content_btn"
+                    android:layout_width="@dimen/dp_130"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+
+                    android:layout_marginLeft="@dimen/dp_49"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:background="@drawable/bg_shap_button_1"
+                    android:gravity="center"
+                    android:text="立即发布"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/sp_14" />
+            </RelativeLayout>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="综合评分："
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_17" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_47"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginRight="@dimen/dp_18"
+                android:orientation="horizontal">
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/composition_comment_status_1"
+                    android:layout_width="@dimen/dp_55"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_shap_button"
+                    android:gravity="center"
+                    android:text="全部3"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/composition_comment_status_2"
+                    android:layout_width="@dimen/dp_55"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:background="@drawable/bg_shap_button"
+                    android:gravity="center"
+                    android:text="好评2"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
+
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/composition_comment_status_3"
+                    android:layout_width="@dimen/dp_55"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:background="@drawable/bg_shap_button"
+                    android:gravity="center"
+                    android:text="差评1"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </com.xiaoanjujia.common.util.MyScrollView>
+
+
+</LinearLayout>

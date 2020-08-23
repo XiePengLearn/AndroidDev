@@ -82,7 +82,7 @@ public class AuditSuccessActivity extends BaseActivity implements AuditSuccessCo
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText(R.string.audit_successfully);
+        mainTitleText.setText("审核成功");
     }
 
     private void initView() {
@@ -147,8 +147,7 @@ public class AuditSuccessActivity extends BaseActivity implements AuditSuccessCo
             finish();
 
         } else if (i == R.id.register_success_entry) {
-            //登录
-            LoginMethod();
+            finish();
         }
     }
 

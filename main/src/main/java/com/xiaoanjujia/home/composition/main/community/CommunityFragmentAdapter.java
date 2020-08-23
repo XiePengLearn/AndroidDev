@@ -53,18 +53,6 @@ public class CommunityFragmentAdapter extends BaseQuickAdapter<CommunitySearchRe
                 .load(info.getShow_img())
                 .apply(options)
                 .into((ImageView) helper.getView(R.id.item_supervisor_image_one));
-        //
-        //        //设置子View的点击事件
-        //        helper.addOnClickListener(R.id.item_supervisor_btn_status);
-        //        //examinestatus:0是未审核1是通过2被拒绝
-        //        int examinestatus = info.getExaminestatus();
-        //        if (examinestatus == 1) {
-        //            helper.setText(R.id.item_supervisor_btn_status, "审核通过");
-        //        } else if (examinestatus == 2) {
-        //            helper.setText(R.id.item_supervisor_btn_status, "审核已拒绝");
-        //        } else {
-        //            helper.setText(R.id.item_supervisor_btn_status, "未审核");
-        //        }
 
     }
 

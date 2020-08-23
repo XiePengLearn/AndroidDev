@@ -55,7 +55,7 @@ import butterknife.OnClick;
 public class RecordDetailActivity extends BaseActivity implements RecordDetailContract.View {
     @Inject
     RecordDetailPresenter mPresenter;
-    private static final String TAG = "RecordDetailActivity";
+    private static final String TAG = "CompositionDetailActivity";
 
     public static final String KEY_IMAGE_PATH = "imagePath";
     @BindView(R2.id.fake_status_bar)
@@ -292,13 +292,11 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
             int code = mLogExamineResponse.getStatus();
             String msg = mLogExamineResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                //                TypeOfRoleResponse.DataBean data = mTypeOfRoleResponse.getData();
-                //                listString.clear();
-                //                ordinaryrole = data.getOrdinaryrole();
-                //                for (int i = 0; i < ordinaryrole.size(); i++) {
-                //                    listString.add(ordinaryrole.get(i).getName());
-                //                }
-                //                adapter3.notifyDataSetChanged();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+                ARouter.getInstance().build("/AuditSuccessActivity/AuditSuccessActivity").greenChannel().navigation(mContext);
+                finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
@@ -317,7 +315,27 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
 
     @Override
     public void setLogRefuseData(LogRefuseResponse mLogRefuseResponse) {
+        try {
+            int code = mLogRefuseResponse.getStatus();
+            String msg = mLogRefuseResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+                finish();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
 
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
     }
 
 
@@ -346,7 +364,10 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.reject_layout_btn) {
+            rejectLayoutLl.setVisibility(View.VISIBLE);
+
         } else if (id == R.id.agree_layout_btn) {
+            logExamineData();
         } else if (id == R.id.confirm_reject_layout_btn) {
             String editRejectLayoutText = editRejectLayout.getText().toString().trim();
 
@@ -354,8 +375,9 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
                 ToastUtil.showToast(mContext.getApplicationContext(), "请输入驳回理由......");
                 return;
             }
-            requestData();
+            logRefuseData();
         } else if (id == R.id.reject_layout_ll) {
+
         }
     }
 }

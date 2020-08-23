@@ -65,7 +65,7 @@ import butterknife.OnClick;
 public class StaffActivity extends BaseActivity implements StaffContract.View {
     @Inject
     StaffPresenter mPresenter;
-    private static final String TAG = "RecordDetailActivity";
+    private static final String TAG = "CompositionDetailActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -130,7 +130,8 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("物业管理");
-        mainTitleRight.setText("往期查询");
+        //        mainTitleRight.setText("往期查询");
+        mainTitleRight.setText("");
     }
 
     private void initView() {
@@ -344,7 +345,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
         } else if (id == R.id.staff_select_id_name_rl) {
             classifyMethod();
         } else if (id == R.id.main_title_right) {
-           //往期查询
+            //往期查询
 
 
         } else if (id == R.id.staff_take_picture_add_iv) {

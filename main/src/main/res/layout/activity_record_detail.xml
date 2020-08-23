@@ -58,6 +58,8 @@
                     android:id="@+id/record_detail_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginRight="@dimen/dp_18"
                     android:overScrollMode="never"
                     android:visibility="visible" />
 
@@ -236,8 +238,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_47"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                     android:id="@+id/reject_layout_btn"

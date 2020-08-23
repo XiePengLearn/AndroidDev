@@ -127,6 +127,10 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.xiaoanjujia.home.composition.community.CompositionDetailActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

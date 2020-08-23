@@ -118,7 +118,7 @@ public class RecordDetailPresenter extends BasePresenter implements RecordDetail
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
                         mLogRefuseResponse = gson.fromJson(response, LogRefuseResponse.class);
                     } else {
@@ -168,7 +168,7 @@ public class RecordDetailPresenter extends BasePresenter implements RecordDetail
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
                         mLogExamineResponse = gson.fromJson(response, LogExamineResponse.class);
                     } else {

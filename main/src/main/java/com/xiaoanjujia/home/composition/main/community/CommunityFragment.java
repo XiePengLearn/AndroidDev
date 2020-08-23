@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.main.community;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.common.widget.view_switcher.UpDownViewSwitcher;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.community.CompositionDetailActivity;
 import com.xiaoanjujia.home.entities.ComcateListsResponse;
 import com.xiaoanjujia.home.entities.CommunitySearchResponse;
 import com.xiaoanjujia.home.entities.StoreHot2Response;
@@ -157,7 +159,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         mStoreHotMoreLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.showToast(BaseApplication.getInstance(), "热点更多 开发中" );
+                ToastUtil.showToast(BaseApplication.getInstance(), "热点更多 开发中");
             }
         });
 
@@ -188,26 +190,18 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         adapter.loadMoreComplete();
         mRecyclerView.setAdapter(adapter);
 
-
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
-                int i = view.getId();
-                if (i == R.id.item_supervisor_btn_status) {
-
-                    //                    List data = baseAdapter.getData();
-                    //                    PersonalPublishResponse.DataBean.PAGEBean bean = (PersonalPublishResponse.DataBean.PAGEBean) data.get(position);
-                    //
-                    //                    String topic_id = bean.getTOPIC_ID();
-                    //                    Intent intent = new Intent(mContext, ForumDetailsActivity.class);
-                    //                    intent.putExtra("title", "绩效论坛");
-                    //                    intent.putExtra("topic_id", topic_id);
-                    //                    startActivity(intent);
-                }
-
-                return true;
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                List data = adapter.getData();
+                CommunitySearchResponse.DataBean dateBean = (CommunitySearchResponse.DataBean) data.get(position);
+                int id = dateBean.getId();
+                Intent intent = new Intent(getActivity(), CompositionDetailActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
+
     }
 
     //page

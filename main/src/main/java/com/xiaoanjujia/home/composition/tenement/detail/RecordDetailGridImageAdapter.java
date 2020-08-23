@@ -135,8 +135,8 @@ public class RecordDetailGridImageAdapter extends
 //                    // 通过源码分析应该是bindViewHolder()暂未绘制完成导致，知道原因的也可联系我~感谢
 //                    if (index != RecyclerView.NO_POSITION) {
 //                        list.remove(index);
-//                        RecordDetailGridImageAdapter.this.notifyItemRemoved(index);
-//                        RecordDetailGridImageAdapter.this.notifyItemRangeChanged(index, list.size());
+//                        CompositionDetailGridImageAdapter.this.notifyItemRemoved(index);
+//                        CompositionDetailGridImageAdapter.this.notifyItemRangeChanged(index, list.size());
 //                        if (list.size() == 0) {
 //                            mContext.refershAddPictureButton();
 //                        }

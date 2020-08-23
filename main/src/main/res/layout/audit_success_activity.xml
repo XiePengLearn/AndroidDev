@@ -42,7 +42,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="立即跳转"
+            android:text="返回主页"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/sp_14" />
 

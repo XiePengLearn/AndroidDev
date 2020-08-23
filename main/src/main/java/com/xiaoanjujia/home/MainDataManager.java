@@ -67,6 +67,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_LOGEXAMINE = "/api/v1/logexamine";
     //审核拒绝
     private static String GENERAL_LOGREFUSE = "/api/v1/logrefuse";
+    //审核拒绝
+    private static String GENERAL_ORDERDETAILED = "/api/v1/orderdetailed";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -355,5 +357,18 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getLogRefuse(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_LOGREFUSE, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 社区列表详情
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCommunityDetailsResponse(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ORDERDETAILED, mapParameters, mapHeaders), consumer);
     }
 }
