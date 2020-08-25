@@ -38,10 +38,9 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
+import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
-import com.xiaoanjujia.home.entities.CommunitySearchResponse;
-import com.xiaoanjujia.home.entities.LogExamineResponse;
-import com.xiaoanjujia.home.entities.LogRefuseResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.ArrayList;
@@ -109,6 +108,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private TextView itemShopNameTv;
     private TextView itemShopNamePublishNumberTv;
     private TextView itemShopGradeDesTv;
+    private int page = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +123,8 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         initView();
         requestData();
         initTitle();
+
+        initCommentDetailsData(page);
     }
 
     /**
@@ -274,12 +276,12 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List data = adapter.getData();
-                CommunitySearchResponse.DataBean dateBean = (CommunitySearchResponse.DataBean) data.get(position);
-                int id = dateBean.getId();
-                Intent intent = new Intent(CompositionDetailActivity.this, CompositionDetailActivity.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
+                //                List data = adapter.getData();
+                //                CommentDetailsResponse.DataBean.AllCommentsBean dateBean = (CommentDetailsResponse.DataBean.AllCommentsBean) data.get(position);
+                //                int id = dateBean.getId();
+                //                Intent intent = new Intent(CompositionDetailActivity.this, CompositionDetailActivity.class);
+                //                intent.putExtra("id", id);
+                //                startActivity(intent);
             }
         });
     }
@@ -292,27 +294,6 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         }
 
     };
-
-
-    private void logExamineData() {
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("id", String.valueOf(mId));
-        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
-        mPresenter.getLogExamineData(headersTreeMap, mapParameters);
-    }
-
-    private void logRefuseData() {
-        //        id:日志id
-        //        refuse_text:拒绝理由
-        //        String editRejectLayoutText = editRejectLayout.getText().toString().trim();
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("id", String.valueOf(mId));
-        //        mapParameters.put("refuse_text", editRejectLayoutText);
-        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
-        mPresenter.getLogRefuseData(headersTreeMap, mapParameters);
-    }
 
 
     private void requestData() {
@@ -412,7 +393,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                         itemShopNameTv.setText(shop_name);
                     }
                     int shop_order_count = data.getShop_order_count();
-                    itemShopNamePublishNumberTv.setText(String.format("(总共发布%s条帖子)", shop_order_count));
+                    itemShopNamePublishNumberTv.setText(String.format("(总共发布%s条帖子)", String.valueOf(shop_order_count)));
                     String grade = data.getGrade();
                     if (!Utils.isNull(grade)) {
                         itemShopGradeDesTv.setText(grade);
@@ -436,21 +417,61 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
     }
 
+    private void initCommentDetailsData(int page) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("page", String.valueOf(page));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getCommentDetailsData(headersTreeMap, mapParameters);
+    }
+
+
     @Override
-    public void setLogExamineData(LogExamineResponse mLogExamineResponse) {
+    public void setCommentDetailsData(CommentDetailsResponse mCommentDetailsResponse) {
         try {
-            int code = mLogExamineResponse.getStatus();
-            String msg = mLogExamineResponse.getMessage();
+            int code = mCommentDetailsResponse.getStatus();
+            String msg = mCommentDetailsResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                CommentDetailsResponse.DataBean messageDate = mCommentDetailsResponse.getData();
+                if (messageDate != null) {
+                    int all_count = messageDate.getAll_count();
+                    int good_count = messageDate.getGood_count();
+                    int difference_count = messageDate.getDifference_count();
+                    compositionCommentStatus1.setText(String.format("全部%s", String.valueOf(all_count)));
+                    compositionCommentStatus2.setText(String.format("好评%s", String.valueOf(good_count)));
+                    compositionCommentStatus3.setText(String.format("差评%s", String.valueOf(difference_count)));
+
+                    List<CommentDetailsResponse.DataBean.AllCommentsBean> all_comments = messageDate.getAll_comments();
+                    List<CommentDetailsResponse.DataBean.GoodCommentsBean> good_comments = messageDate.getGood_comments();
+                    List<CommentDetailsResponse.DataBean.DifferenceCommentsBean> difference_comments = messageDate.getDifference_comments();
+                    if (all_comments.size() > 0) {
+                        if (all_comments.size() < 10) {
+                            mAdapter.setEnableLoadMore(false);
+                        } else {
+                            mAdapter.setEnableLoadMore(true);
+                        }
+                        List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                        data.clear();
+                        mAdapter.addData(all_comments);
+                    } else {
+                        mAdapter.setEnableLoadMore(false);
+                        List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                        data.clear();
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                } else {
+
+                    mAdapter.setEnableLoadMore(false);
+                    List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                    data.clear();
+                    mAdapter.notifyDataSetChanged();
                 }
-                ARouter.getInstance().build("/AuditSuccessActivity/AuditSuccessActivity").greenChannel().navigation(mContext);
-                finish();
+
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
-                finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(this.getApplicationContext(), msg);
@@ -460,32 +481,32 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         } catch (Exception e) {
             ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
         }
+    }
+
+    private void initCommentPublish() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("id", String.valueOf(mId));
+        //        mapParameters.put("refuse_text", editRejectLayoutText);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getCommentPublish(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setCommentPublish(CommentPublishResponse mCommentPublishResponse) {
 
     }
 
     @Override
-    public void setLogRefuseData(LogRefuseResponse mLogRefuseResponse) {
-        try {
-            int code = mLogRefuseResponse.getStatus();
-            String msg = mLogRefuseResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
-                }
-                finish();
-            } else if (code == ResponseCode.SEESION_ERROR) {
-                //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
-                finish();
-            } else {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
-                }
+    public void setMoreData(CommentDetailsResponse mCommentDetailsResponse) {
 
-            }
-        } catch (Exception e) {
-            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
-        }
     }
 
 
@@ -552,10 +573,42 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     @Override
     public void onLoadMoreRequested() {
 
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page++;
+                initMoreData(page);
+            }
+        }, 500);
+    }
+
+    //page
+    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
+    //id:角色id  默认0  全部
+    private void initMoreData(int page) {
+
+        Map<String, Object> mapParameters = new HashMap<>(3);
+        mapParameters.put("page", String.valueOf(page));
+        mapParameters.put("id", String.valueOf(mId));
+
+
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getMoreData(headersTreeMap, mapParameters);
     }
 
     @Override
-    public void onRefreshBegin(PtrFrameLayout frame) {
-
+    public void onRefreshBegin(final PtrFrameLayout frame) {
+        frame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page = 1;
+                if (mAdapter != null) {
+                    mAdapter.setEnableLoadMore(true);
+                }
+                initCommentDetailsData(page);
+                frame.refreshComplete();
+            }
+        }, 500);
     }
 }

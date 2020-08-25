@@ -1,9 +1,9 @@
 package com.xiaoanjujia.home.composition.community;
 
 
+import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
-import com.xiaoanjujia.home.entities.LogExamineResponse;
-import com.xiaoanjujia.home.entities.LogRefuseResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,10 +20,11 @@ public interface CompositionDetailContract {
 
         void setResponseData(CommunityDetailsResponse mCommunityDetailsResponse);
 
-        void setLogExamineData(LogExamineResponse mLogExamineResponse);
+        void setCommentDetailsData(CommentDetailsResponse mCommentDetailsResponse);
 
-        void setLogRefuseData(LogRefuseResponse mLogRefuseResponse);
+        void setCommentPublish(CommentPublishResponse mCommentPublishResponse);
 
+        void setMoreData(CommentDetailsResponse mCommentDetailsResponse);
 
         void showProgressDialogView();
 
@@ -40,10 +41,12 @@ public interface CompositionDetailContract {
         Map getData();
 
 
-        void getLogExamineData(TreeMap<String, String> headers, Map<String, Object> mapParameters);
+        void getCommentDetailsData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-        void getLogRefuseData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getMoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+
+        void getCommentPublish(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

@@ -5,9 +5,9 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
-import com.xiaoanjujia.home.entities.LogExamineResponse;
-import com.xiaoanjujia.home.entities.LogRefuseResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
@@ -50,6 +50,55 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
     @Override
     public Map getData() {
         return null;
+    }
+
+    @Override
+    public void getCommentDetailsData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getOrderComments(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private CommentDetailsResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, CommentDetailsResponse.class);
+                    } else {
+                        mDataResponse = new CommentDetailsResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setCommentDetailsData(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
     }
 
 
@@ -103,12 +152,12 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
     }
 
     @Override
-    public void getLogRefuseData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+    public void getMoreData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLogRefuse(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getOrderComments(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LogRefuseResponse mLogRefuseResponse;
+            private CommentDetailsResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -117,15 +166,15 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mLogRefuseResponse = gson.fromJson(response, LogRefuseResponse.class);
+                        mDataResponse = gson.fromJson(response, CommentDetailsResponse.class);
                     } else {
-                        mLogRefuseResponse = new LogRefuseResponse();
-                        mLogRefuseResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLogRefuseResponse.setStatus(ProjectResponse.getStatus(response));
+                        mDataResponse = new CommentDetailsResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setLogRefuseData(mLogRefuseResponse);
+                    mContractView.setMoreData(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -151,14 +200,13 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
         addDisposabe(disposable);
     }
 
-
     @Override
-    public void getLogExamineData(TreeMap<String, String> headers, final Map<String, Object> mapParameters) {
+    public void getCommentPublish(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLogExamine(headers, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getcommon(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LogExamineResponse mLogExamineResponse;
+            private CommentPublishResponse mLogRefuseResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -169,13 +217,13 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mLogExamineResponse = gson.fromJson(response, LogExamineResponse.class);
+                        mLogRefuseResponse = gson.fromJson(response, CommentPublishResponse.class);
                     } else {
-                        mLogExamineResponse = new LogExamineResponse();
-                        mLogExamineResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLogExamineResponse.setStatus(ProjectResponse.getStatus(response));
+                        mLogRefuseResponse = new CommentPublishResponse();
+                        mLogRefuseResponse.setMessage(ProjectResponse.getMessage(response));
+                        mLogRefuseResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setLogExamineData(mLogExamineResponse);
+                    mContractView.setCommentPublish(mLogRefuseResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
