@@ -26,6 +26,7 @@ import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.SearchLayout;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
@@ -91,6 +92,9 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     private CommunityHomePageClassificationAdapter mAdapterResult;
     private UpDownViewSwitcher mHomeViewSwitcher;
     private LinearLayout mStoreHotMoreLl;
+    private SearchLayout mSlSearchLayout;
+    private String mInputTheKeyWord = "";
+    private TextView mTvSearchButton;
 
 
     @Override
@@ -156,6 +160,44 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         aflCotent = itemHeader.findViewById(R.id.rl_community_home_page_classification);
         mHomeViewSwitcher = itemHeader.findViewById(R.id.home_view_switcher);
         mStoreHotMoreLl = itemHeader.findViewById(R.id.store_hot_more_ll);
+        mSlSearchLayout = itemHeader.findViewById(R.id.sl_searchLayout);
+        mTvSearchButton = itemHeader.findViewById(R.id.tv_search_button);
+        mTvSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                page = 1;
+                initData(page, mInputTheKeyWord);
+            }
+        });
+        mSlSearchLayout.setListener(new SearchLayout.OnSearchListener() {
+
+
+            @Override
+            public void onCancel() {
+                //                Toast.makeText(mContext, "取消", Toast.LENGTH_LONG).show();
+                mInputTheKeyWord = "";
+            }
+
+            @Override
+            public void onSearchKeyLister(String input) {
+                //                Toast.makeText(mContext, input, Toast.LENGTH_LONG).show();
+
+
+                //                if (TextUtils.isEmpty(input)) {
+                //
+                //                    //                    ToastUtil.showToast(HistorySearchActivity.this.getApplicationContext(), "请输入要搜索专家名称");
+                //                    Toast.makeText(mContext, "请输入要搜索专家名称", Toast.LENGTH_LONG).show();
+                //                    return;
+                //                }
+
+                LogUtil.e(TAG, "-----------执行次数----------:");
+                mInputTheKeyWord = input;
+                //隐藏软键盘
+                mSlSearchLayout.hideSoftInput();
+                page = 1;
+                initData(page, mInputTheKeyWord);
+            }
+        });
         mStoreHotMoreLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,15 +246,19 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
     }
 
-    //page
-    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
-    //id:角色id  默认0  全部
-    private void initData(int page, int datetype, int id) {
+    /**
+     * 1.接口地址 /api/v1/communitysearch
+     * page
+     * shop_name:订单标题和详情
+     *
+     * @param page
+     * @param shopName
+     */
+    private void initData(int page, String shopName) {
 
         Map<String, Object> mapParameters = new HashMap<>(3);
         mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("datetype", String.valueOf(datetype));
-        mapParameters.put("id", String.valueOf(id));
+        mapParameters.put("shop_name", shopName);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -338,7 +384,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                         mAdapterResult.addData(dataList);
                     }
                 }
-                initData(page, datetype, id);
+                initData(page, mInputTheKeyWord);
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
@@ -604,7 +650,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
             @Override
             public void run() {
                 page = 1;
-                initData(page, datetype, id);
+                initData(page, mInputTheKeyWord);
                 frame.refreshComplete();
             }
         }, 500);

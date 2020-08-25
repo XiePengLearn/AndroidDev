@@ -319,7 +319,6 @@ public class MainDataManager extends BaseDataManager {
                 (KPI_ROOT_URL + GENERAL_ORDERLISTS, mapParameters, mapHeaders), consumer);
     }
 
-
     /**
      * 日志详情
      *

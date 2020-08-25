@@ -32,7 +32,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name="com.xiaoanjujia.app.splash.GuideActivity"></activity>
+        <activity android:name="com.xiaoanjujia.app.splash.GuideActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.xiaoanjujia.app.splash.SplashActivity"
             android:screenOrientation="portrait"

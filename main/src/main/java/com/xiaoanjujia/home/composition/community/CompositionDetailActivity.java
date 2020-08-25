@@ -128,7 +128,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("审核通知");
+        mainTitleText.setText("详情页");
         mainTitleRight.setText("");
     }
 
