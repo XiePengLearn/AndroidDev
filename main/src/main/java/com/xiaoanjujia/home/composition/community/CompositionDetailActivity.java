@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.rmondjone.camera.CameraActivity;
@@ -27,6 +31,8 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
@@ -82,6 +88,27 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private int mId;
     private LayoutInflater mLayoutInflater;
     private CommunityDetailsActivityAdapter mAdapter;
+    private TextView communityTitleTextTv;
+    private RecyclerView recordDetailRv;
+    private TextView itemCompositionServeTv;
+    private TextView itemCompositionAddressTv;
+    private TextView itemCompositionBtnDetails;
+    private TextView itemCompositionBtnComment;
+    private TextView itemCompositionBtnMerchant;
+    private ImageView itemCompositionImageAd;
+    private EditText editItemCompositionCommentContent;
+    private AlphaButton publishCompositionCommentContentBtn;
+    private AlphaButton compositionCommentStatus1;
+    private AlphaButton compositionCommentStatus2;
+    private AlphaButton compositionCommentStatus3;
+    private TextView shopTitleTv;
+    private TextView shopTitleDesTv;
+    private LinearLayout itemCompositionBtnDetailsLl;
+    private LinearLayout itemCompositionBtnCommentLl;
+    private LinearLayout itemCompositionBtnMerchantLl;
+    private TextView itemShopNameTv;
+    private TextView itemShopNamePublishNumberTv;
+    private TextView itemShopGradeDesTv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,38 +147,109 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         findPullRefreshHeader.setPtrHandler(this);
 
         View itemHeader = mLayoutInflater.inflate(R.layout.activity_composition_detail_header, null);
+        recordDetailRv = itemHeader.findViewById(R.id.record_detail_rv);
+        communityTitleTextTv = itemHeader.findViewById(R.id.community_title_text_tv);
+        itemCompositionServeTv = itemHeader.findViewById(R.id.item_composition_serve_tv);
+        itemCompositionAddressTv = itemHeader.findViewById(R.id.item_composition_address_tv);
+        itemCompositionBtnDetails = itemHeader.findViewById(R.id.item_composition_btn_details);
+        itemCompositionBtnDetails.setTextColor(getResources().getColor(R.color.color_2AAD67));
+        itemCompositionBtnComment = itemHeader.findViewById(R.id.item_composition_btn_comment);
+        itemCompositionBtnMerchant = itemHeader.findViewById(R.id.item_composition_btn_merchant);
 
+        itemCompositionBtnDetailsLl = itemHeader.findViewById(R.id.item_composition_btn_details_ll);
+        itemCompositionBtnCommentLl = itemHeader.findViewById(R.id.item_composition_btn_comment_ll);
+        itemCompositionBtnMerchantLl = itemHeader.findViewById(R.id.item_composition_btn_merchant_ll);
 
-        RecyclerView recordDetailRv = itemHeader.findViewById(R.id.record_detail_rv);
-        //    @BindView(R2.id.staff_take_picture_layout_list_ll)
-        //    LinearLayout staffTakePictureLayoutListLl;
-        //    @BindView(R2.id.item_composition_serve_tv)
-        //    TextView itemCompositionServeTv;
-        //    @BindView(R2.id.item_composition_address_tv)
-        //    TextView itemCompositionAddressTv;
-        //    @BindView(R2.id.item_composition_btn_details)
-        //    TextView itemCompositionBtnDetails;
-        //    @BindView(R2.id.item_composition_btn_comment)
-        //    TextView itemCompositionBtnComment;
-        //    @BindView(R2.id.item_composition_btn_merchant)
-        //    TextView itemCompositionBtnMerchant;
-        //    @BindView(R2.id.item_composition_image_ad)
-        //    ImageView itemCompositionImageAd;
-        //    @BindView(R2.id.edit_item_composition_comment_content)
-        //    EditText editItemCompositionCommentContent;
-        //    @BindView(R2.id.publish_composition_comment_content_btn)
-        //    AlphaButton publishCompositionCommentContentBtn;
-        //    @BindView(R2.id.composition_comment_status_1)
-        //    AlphaButton compositionCommentStatus1;
-        //    @BindView(R2.id.composition_comment_status_2)
-        //    AlphaButton compositionCommentStatus2;
-        //    @BindView(R2.id.composition_comment_status_3)
-        //    AlphaButton compositionCommentStatus3;
+        itemShopNameTv = itemHeader.findViewById(R.id.item_shop_name_tv);
+        itemShopNamePublishNumberTv = itemHeader.findViewById(R.id.item_shop_name_publish_number_tv);
+        itemShopGradeDesTv = itemHeader.findViewById(R.id.item_shop_grade_des_tv);
+
+        itemCompositionBtnDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //详情
+                itemCompositionBtnDetails.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                itemCompositionBtnComment.setTextColor(getResources().getColor(R.color.color_494949));
+                itemCompositionBtnMerchant.setTextColor(getResources().getColor(R.color.color_494949));
+
+                itemCompositionBtnDetailsLl.setVisibility(View.VISIBLE);
+                itemCompositionBtnCommentLl.setVisibility(View.GONE);
+                itemCompositionBtnMerchantLl.setVisibility(View.GONE);
+
+            }
+        });
+        itemCompositionBtnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //评价
+                itemCompositionBtnDetails.setTextColor(getResources().getColor(R.color.color_494949));
+                itemCompositionBtnComment.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                itemCompositionBtnMerchant.setTextColor(getResources().getColor(R.color.color_494949));
+                itemCompositionBtnDetailsLl.setVisibility(View.GONE);
+                itemCompositionBtnCommentLl.setVisibility(View.VISIBLE);
+                itemCompositionBtnMerchantLl.setVisibility(View.GONE);
+            }
+        });
+        itemCompositionBtnMerchant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //商家
+                itemCompositionBtnDetails.setTextColor(getResources().getColor(R.color.color_494949));
+                itemCompositionBtnComment.setTextColor(getResources().getColor(R.color.color_494949));
+                itemCompositionBtnMerchant.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                itemCompositionBtnDetailsLl.setVisibility(View.GONE);
+                itemCompositionBtnCommentLl.setVisibility(View.GONE);
+                itemCompositionBtnMerchantLl.setVisibility(View.VISIBLE);
+            }
+        });
+        itemCompositionImageAd = itemHeader.findViewById(R.id.item_composition_image_ad);
+        editItemCompositionCommentContent = itemHeader.findViewById(R.id.edit_item_composition_comment_content);
+        publishCompositionCommentContentBtn = itemHeader.findViewById(R.id.publish_composition_comment_content_btn);
+        compositionCommentStatus1 = itemHeader.findViewById(R.id.composition_comment_status_1);
+        compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+        compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
+        compositionCommentStatus2 = itemHeader.findViewById(R.id.composition_comment_status_2);
+        compositionCommentStatus3 = itemHeader.findViewById(R.id.composition_comment_status_3);
+        compositionCommentStatus1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+                compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                compositionCommentStatus2.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_494949));
+                compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
+            }
+        });
+        compositionCommentStatus2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_494949));
+                compositionCommentStatus2.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+                compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
+            }
+        });
+        compositionCommentStatus3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_494949));
+                compositionCommentStatus2.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_494949));
+                compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+                compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_2AAD67));
+            }
+        });
+
+        shopTitleTv = itemHeader.findViewById(R.id.shop_title_tv);
+        shopTitleDesTv = itemHeader.findViewById(R.id.shop_title_des_tv);
         CompositionDetailGridLayoutManager manager = new CompositionDetailGridLayoutManager(CompositionDetailActivity.this, 3, GridLayoutManager.VERTICAL, false);
         recordDetailRv.setLayoutManager(manager);
         mAdapterHeaderRv = new CompositionDetailGridImageAdapter(CompositionDetailActivity.this, onAddPicClickListener);
         mAdapterHeaderRv.setList(selectList);
-        //        mAdapterHeaderRv.setSelectMax(5);
         recordDetailRv.setAdapter(mAdapterHeaderRv);
         mAdapterHeaderRv.setOnItemClickListener(new CompositionDetailGridImageAdapter.OnItemClickListener() {
             @Override
@@ -161,8 +259,6 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 if (selectList.size() > 0) {
                     PictureSelector.create(CompositionDetailActivity.this)
                             .themeStyle(themeId) // xml设置主题
-                            //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
-                            //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
                             .isNotPreviewDownload(true)// 预览图片长按是否可以下载
                             .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
                             .openExternalPreview(position, selectList);
@@ -275,60 +371,52 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                      *         "shop_phone": "1863805566",
                      *         "shop_order_count": 12
                      */
-                    //                    String title_text = data.getTitle_text();
-                    //                    if (!Utils.isNull(title_text)) {
-                    //                        communityTitleTextTv.setText(title_text);
-                    //                    }
-                    //                    String region = data.getRegion();
-                    //                    if (!Utils.isNull(region)) {
-                    //                        itemCompositionServeTv.setText(String.format("服务于%s", region));
-                    //                    }
-                    //
-                    //                    String detailed_address = data.getDetailed_address();
-                    //                    if (!Utils.isNull(detailed_address)) {
-                    //                        itemCompositionAddressTv.setText(detailed_address);
-                    //                    }
-                    //
-                    //                    String advertisement_img = data.getAdvertisement_img();
-                    //                    if (!Utils.isNull(advertisement_img)) {
-                    //                        RequestOptions options = new RequestOptions()
-                    //                                .centerCrop()
-                    //                                .placeholder(R.color.app_color_f6)
-                    //                                .diskCacheStrategy(DiskCacheStrategy.ALL);
-                    //                        Glide.with(CompositionDetailActivity.this)
-                    //                                .load(advertisement_img)
-                    //                                .apply(options)
-                    //                                .into(itemCompositionImageAd);
-                    //                    }
-                    //                    String week = data.getWeek();
-                    //                    if (!Utils.isNull(week)) {
-                    //                        itemRecordDetailWeekDateTv.setText(week);
-                    //                    }
-                    //                    String name = data.getName();
-                    //                    if (!Utils.isNull(name)) {
-                    //                        itemRecordDetailPublisherTv.setText(name);
-                    //                    }
-                    //                    String refuse_text = data.getRefuse_text();
-                    //                    if (!Utils.isNull(refuse_text)) {
-                    //                        itemRecordDetailRefuseTextTv.setText(refuse_text);
-                    //                    }
-                    //                    int examinestatus = data.getExaminestatus();
-                    //                    //examinestatus:0是未审核1是通过2被拒绝
-                    //                    if (examinestatus == 1) {
-                    //                        agreeLayoutBtn.setVisibility(View.INVISIBLE);
-                    //                        rejectLayoutBtn.setText("审核已通过");
-                    //                        rejectLayoutBtn.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_gray));
-                    //                        rejectLayoutBtn.setClickable(false);
-                    //                    } else if (examinestatus == 2) {
-                    //                        agreeLayoutBtn.setVisibility(View.INVISIBLE);
-                    //                        rejectLayoutBtn.setText("审核已拒绝");
-                    //                        rejectLayoutBtn.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_gray));
-                    //                        rejectLayoutBtn.setClickable(false);
-                    //                    } else {
-                    //                        //未审核
-                    //                    }
+                    String title = data.getTitle();
+                    if (!Utils.isNull(title)) {
+                        communityTitleTextTv.setText(title);
+                    }
+                    String region = data.getRegion();
+                    if (!Utils.isNull(region)) {
+                        itemCompositionServeTv.setText(String.format("服务于%s", region));
+                    }
+
+                    String detailed_address = data.getDetailed_address();
+                    if (!Utils.isNull(detailed_address)) {
+                        itemCompositionAddressTv.setText(detailed_address);
+                    }
+
+                    String advertisement_img = data.getAdvertisement_img();
+                    if (!Utils.isNull(advertisement_img)) {
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.color.app_color_f6)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                        Glide.with(CompositionDetailActivity.this)
+                                .load(advertisement_img)
+                                .apply(options)
+                                .into(itemCompositionImageAd);
+                    }
+
+                    String category_name = data.getCategory_name();
+                    if (!Utils.isNull(category_name)) {
+                        shopTitleTv.setText(String.format("服务类型: %s", category_name));
+                    }
+                    String title_text = data.getTitle_text();
+                    if (!Utils.isNull(title_text)) {
+                        shopTitleDesTv.setText(title_text);
+                    }
 
 
+                    String shop_name = data.getShop_name();
+                    if (!Utils.isNull(shop_name)) {
+                        itemShopNameTv.setText(shop_name);
+                    }
+                    int shop_order_count = data.getShop_order_count();
+                    itemShopNamePublishNumberTv.setText(String.format("(总共发布%s条帖子)", shop_order_count));
+                    String grade = data.getGrade();
+                    if (!Utils.isNull(grade)) {
+                        itemShopGradeDesTv.setText(grade);
+                    }
                 }
 
 
@@ -420,38 +508,38 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     }
 
 
-//    @OnClick({R2.id.main_title_back, R2.id.item_composition_btn_details, R2.id.item_composition_btn_comment,
+    //    @OnClick({R2.id.main_title_back, R2.id.item_composition_btn_details, R2.id.item_composition_btn_comment,
     //            R2.id.item_composition_btn_merchant, R2.id.publish_composition_comment_content_btn, R2.id.composition_comment_status_1,
     //            R2.id.composition_comment_status_2, R2.id.composition_comment_status_3, R2.id.item_composition_image_ad})
-//    public void onViewClicked(View view) {
-//        int id = view.getId();
-//        if (id == R.id.main_title_back) {
-//            finish();
-//        } else if (id == R.id.item_composition_btn_details) {
-//
-//        } else if (id == R.id.item_composition_btn_comment) {
-//
-//        } else if (id == R.id.item_composition_btn_merchant) {
-//
-//        } else if (id == R.id.publish_composition_comment_content_btn) {
-//            //            String editItemCompositionCommentContentText = editItemCompositionCommentContent.getText().toString().trim();
-//            //
-//            //            if (Util.isNull(editItemCompositionCommentContentText)) {
-//            //                ToastUtil.showToast(mContext.getApplicationContext(), "请写出您的评价内容");
-//            //                return;
-//            //            }
-//            //            logRefuseData();
-//        } else if (id == R.id.composition_comment_status_1) {
-//
-//        } else if (id == R.id.composition_comment_status_2) {
-//
-//        } else if (id == R.id.composition_comment_status_3) {
-//
-//        } else if (id == R.id.item_composition_image_ad) {
-//            //ad
-//
-//        }
-//    }
+    //    public void onViewClicked(View view) {
+    //        int id = view.getId();
+    //        if (id == R.id.main_title_back) {
+    //            finish();
+    //        } else if (id == R.id.item_composition_btn_details) {
+    //
+    //        } else if (id == R.id.item_composition_btn_comment) {
+    //
+    //        } else if (id == R.id.item_composition_btn_merchant) {
+    //
+    //        } else if (id == R.id.publish_composition_comment_content_btn) {
+    //            //            String editItemCompositionCommentContentText = editItemCompositionCommentContent.getText().toString().trim();
+    //            //
+    //            //            if (Util.isNull(editItemCompositionCommentContentText)) {
+    //            //                ToastUtil.showToast(mContext.getApplicationContext(), "请写出您的评价内容");
+    //            //                return;
+    //            //            }
+    //            //            logRefuseData();
+    //        } else if (id == R.id.composition_comment_status_1) {
+    //
+    //        } else if (id == R.id.composition_comment_status_2) {
+    //
+    //        } else if (id == R.id.composition_comment_status_3) {
+    //
+    //        } else if (id == R.id.item_composition_image_ad) {
+    //            //ad
+    //
+    //        }
+    //    }
 
     @OnClick({R2.id.main_title_back})
     public void onViewClicked(View view) {
@@ -460,6 +548,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
             finish();
         }
     }
+
     @Override
     public void onLoadMoreRequested() {
 

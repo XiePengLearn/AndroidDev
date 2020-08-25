@@ -60,7 +60,7 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
     public void getRequestData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getCommunitySearch(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getOrderLists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
             private CommunitySearchResponse mDataResponse;
 
@@ -169,7 +169,7 @@ public class CommunityFragmentPresenter extends BasePresenter implements Communi
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, CommunitySearchResponse.class);
                     } else {

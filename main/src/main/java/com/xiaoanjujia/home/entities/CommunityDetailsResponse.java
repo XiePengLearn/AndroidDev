@@ -73,8 +73,26 @@ public class CommunityDetailsResponse {
         private String name_acronym;
         private String shop_name;
         private String shop_phone;
+        private String category_name;
+        private String grade;
         private int shop_order_count;
         private List<String> top_imgs;
+
+        public String getCategory_name() {
+            return category_name;
+        }
+
+        public void setCategory_name(String category_name) {
+            this.category_name = category_name;
+        }
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public void setGrade(String grade) {
+            this.grade = grade;
+        }
 
         public int getId() {
             return id;

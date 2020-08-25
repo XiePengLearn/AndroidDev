@@ -166,6 +166,10 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
             @Override
             public void onClick(View v) {
                 page = 1;
+                if(adapter != null){
+                    adapter.setEnableLoadMore(true);
+                }
+
                 initData(page, mInputTheKeyWord);
             }
         });
@@ -195,6 +199,9 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 //隐藏软键盘
                 mSlSearchLayout.hideSoftInput();
                 page = 1;
+                if(adapter != null){
+                    adapter.setEnableLoadMore(true);
+                }
                 initData(page, mInputTheKeyWord);
             }
         });
@@ -334,15 +341,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
                 List<CommunitySearchResponse.DataBean> data = moreDate.getData();
                 if (data != null) {
+
+                    for (int i = 0; i < data.size(); i++) {
+                        adapter.getData().add(data.get(i));
+                    }
                     if (data.size() < 10) {
                         adapter.setEnableLoadMore(false);
                     } else {
                         adapter.setEnableLoadMore(true);
                     }
-                    for (int i = 0; i < data.size(); i++) {
-                        adapter.getData().add(data.get(i));
-                    }
-
                 } else {
                     adapter.setEnableLoadMore(false);
                 }
@@ -383,6 +390,9 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                         dataHistory.clear();
                         mAdapterResult.addData(dataList);
                     }
+                }
+                if(adapter != null){
+                    adapter.setEnableLoadMore(true);
                 }
                 initData(page, mInputTheKeyWord);
             } else if (code == ResponseCode.SEESION_ERROR) {
@@ -650,6 +660,9 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
             @Override
             public void run() {
                 page = 1;
+                if(adapter != null){
+                    adapter.setEnableLoadMore(true);
+                }
                 initData(page, mInputTheKeyWord);
                 frame.refreshComplete();
             }
