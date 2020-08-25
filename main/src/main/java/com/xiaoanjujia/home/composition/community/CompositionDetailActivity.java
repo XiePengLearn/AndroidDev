@@ -3,41 +3,40 @@ package com.xiaoanjujia.home.composition.community;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.rmondjone.camera.CameraActivity;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
-import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
-import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
+import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
+import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
+import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
+import com.xiaoanjujia.home.entities.CommunitySearchResponse;
 import com.xiaoanjujia.home.entities.LogExamineResponse;
 import com.xiaoanjujia.home.entities.LogRefuseResponse;
 import com.xiaoanjujia.home.tool.Api;
-import com.xiaoanjujia.home.tool.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ import butterknife.OnClick;
  * @author xiepeng
  */
 @Route(path = "/compositionDetailActivity/compositionDetailActivity")
-public class CompositionDetailActivity extends BaseActivity implements CompositionDetailContract.View {
+public class CompositionDetailActivity extends BaseActivity implements CompositionDetailContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
     CompositionDetailPresenter mPresenter;
     private static final String TAG = "CompositionDetailActivity";
@@ -68,45 +67,21 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     @BindView(R2.id.main_title_text)
     TextView mainTitleText;
     @BindView(R2.id.main_title_right)
-    TextView mainTitleRight;
+    ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
-    RelativeLayout mainTitleContainer;
-    @BindView(R2.id.community_title_text_tv)
-    TextView communityTitleTextTv;
-    @BindView(R2.id.invitation_particulars_of_matter_ll)
-    LinearLayout invitationParticularsOfMatterLl;
-    @BindView(R2.id.record_detail_rv)
-    RecyclerView recordDetailRv;
-    @BindView(R2.id.staff_take_picture_layout_list_ll)
-    LinearLayout staffTakePictureLayoutListLl;
-    @BindView(R2.id.item_composition_serve_tv)
-    TextView itemCompositionServeTv;
-    @BindView(R2.id.item_composition_address_tv)
-    TextView itemCompositionAddressTv;
-    @BindView(R2.id.item_composition_btn_details)
-    TextView itemCompositionBtnDetails;
-    @BindView(R2.id.item_composition_btn_comment)
-    TextView itemCompositionBtnComment;
-    @BindView(R2.id.item_composition_btn_merchant)
-    TextView itemCompositionBtnMerchant;
-    @BindView(R2.id.item_composition_image_ad)
-    ImageView itemCompositionImageAd;
-    @BindView(R2.id.edit_item_composition_comment_content)
-    EditText editItemCompositionCommentContent;
-    @BindView(R2.id.publish_composition_comment_content_btn)
-    AlphaButton publishCompositionCommentContentBtn;
-    @BindView(R2.id.composition_comment_status_1)
-    AlphaButton compositionCommentStatus1;
-    @BindView(R2.id.composition_comment_status_2)
-    AlphaButton compositionCommentStatus2;
-    @BindView(R2.id.composition_comment_status_3)
-    AlphaButton compositionCommentStatus3;
+    LinearLayout mainTitleContainer;
+    @BindView(R2.id.chat_list)
+    RecyclerView mRecyclerView;
+    @BindView(R2.id.find_pull_refresh_header)
+    JDHeaderView findPullRefreshHeader;
 
 
     private List<LocalMedia> selectList = new ArrayList<>();
-    private CompositionDetailGridImageAdapter mAdapter;
+    private CompositionDetailGridImageAdapter mAdapterHeaderRv;
     private int themeId;
     private int mId;
+    private LayoutInflater mLayoutInflater;
+    private CommunityDetailsActivityAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,7 +104,6 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("详情页");
-        mainTitleRight.setText("");
     }
 
     private void initView() {
@@ -139,13 +113,47 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 .build()
                 .inject(this);
 
+        mLayoutInflater = LayoutInflater.from(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new CommunityDetailsActivityAdapter(R.layout.item_community_fragment);
+        mAdapter.setOnLoadMoreListener(this);
+        findPullRefreshHeader.setPtrHandler(this);
+
+        View itemHeader = mLayoutInflater.inflate(R.layout.activity_composition_detail_header, null);
+
+
+        RecyclerView recordDetailRv = itemHeader.findViewById(R.id.record_detail_rv);
+        //    @BindView(R2.id.staff_take_picture_layout_list_ll)
+        //    LinearLayout staffTakePictureLayoutListLl;
+        //    @BindView(R2.id.item_composition_serve_tv)
+        //    TextView itemCompositionServeTv;
+        //    @BindView(R2.id.item_composition_address_tv)
+        //    TextView itemCompositionAddressTv;
+        //    @BindView(R2.id.item_composition_btn_details)
+        //    TextView itemCompositionBtnDetails;
+        //    @BindView(R2.id.item_composition_btn_comment)
+        //    TextView itemCompositionBtnComment;
+        //    @BindView(R2.id.item_composition_btn_merchant)
+        //    TextView itemCompositionBtnMerchant;
+        //    @BindView(R2.id.item_composition_image_ad)
+        //    ImageView itemCompositionImageAd;
+        //    @BindView(R2.id.edit_item_composition_comment_content)
+        //    EditText editItemCompositionCommentContent;
+        //    @BindView(R2.id.publish_composition_comment_content_btn)
+        //    AlphaButton publishCompositionCommentContentBtn;
+        //    @BindView(R2.id.composition_comment_status_1)
+        //    AlphaButton compositionCommentStatus1;
+        //    @BindView(R2.id.composition_comment_status_2)
+        //    AlphaButton compositionCommentStatus2;
+        //    @BindView(R2.id.composition_comment_status_3)
+        //    AlphaButton compositionCommentStatus3;
         CompositionDetailGridLayoutManager manager = new CompositionDetailGridLayoutManager(CompositionDetailActivity.this, 3, GridLayoutManager.VERTICAL, false);
         recordDetailRv.setLayoutManager(manager);
-        mAdapter = new CompositionDetailGridImageAdapter(CompositionDetailActivity.this, onAddPicClickListener);
-        mAdapter.setList(selectList);
-        //        mAdapter.setSelectMax(5);
-        recordDetailRv.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new CompositionDetailGridImageAdapter.OnItemClickListener() {
+        mAdapterHeaderRv = new CompositionDetailGridImageAdapter(CompositionDetailActivity.this, onAddPicClickListener);
+        mAdapterHeaderRv.setList(selectList);
+        //        mAdapterHeaderRv.setSelectMax(5);
+        recordDetailRv.setAdapter(mAdapterHeaderRv);
+        mAdapterHeaderRv.setOnItemClickListener(new CompositionDetailGridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
 
@@ -161,6 +169,23 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 }
             }
         });
+
+        mAdapter.addHeaderView(itemHeader);
+        mAdapter.setEnableLoadMore(true);
+        mAdapter.loadMoreComplete();
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                List data = adapter.getData();
+                CommunitySearchResponse.DataBean dateBean = (CommunitySearchResponse.DataBean) data.get(position);
+                int id = dateBean.getId();
+                Intent intent = new Intent(CompositionDetailActivity.this, CompositionDetailActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
     }
 
     private CompositionDetailGridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new CompositionDetailGridImageAdapter.onAddPicClickListener1() {
@@ -172,9 +197,6 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
     };
 
-    public void refershAddPictureButton() {
-        staffTakePictureLayoutListLl.setVisibility(View.GONE);
-    }
 
     private void logExamineData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
@@ -230,7 +252,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                             selectList.add(localMedia);
                         }
 
-                        mAdapter.notifyDataSetChanged();
+                        mAdapterHeaderRv.notifyDataSetChanged();
                     }
 
                     /**
@@ -253,31 +275,31 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                      *         "shop_phone": "1863805566",
                      *         "shop_order_count": 12
                      */
-                    String title_text = data.getTitle_text();
-                    if (!Utils.isNull(title_text)) {
-                        communityTitleTextTv.setText(title_text);
-                    }
-                    String region = data.getRegion();
-                    if (!Utils.isNull(region)) {
-                        itemCompositionServeTv.setText(String.format("服务于%s", region));
-                    }
-
-                    String detailed_address = data.getDetailed_address();
-                    if (!Utils.isNull(detailed_address)) {
-                        itemCompositionAddressTv.setText(detailed_address);
-                    }
-
-                    String advertisement_img = data.getAdvertisement_img();
-                    if (!Utils.isNull(advertisement_img)) {
-                        RequestOptions options = new RequestOptions()
-                                .centerCrop()
-                                .placeholder(R.color.app_color_f6)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL);
-                        Glide.with(CompositionDetailActivity.this)
-                                .load(advertisement_img)
-                                .apply(options)
-                                .into(itemCompositionImageAd);
-                    }
+                    //                    String title_text = data.getTitle_text();
+                    //                    if (!Utils.isNull(title_text)) {
+                    //                        communityTitleTextTv.setText(title_text);
+                    //                    }
+                    //                    String region = data.getRegion();
+                    //                    if (!Utils.isNull(region)) {
+                    //                        itemCompositionServeTv.setText(String.format("服务于%s", region));
+                    //                    }
+                    //
+                    //                    String detailed_address = data.getDetailed_address();
+                    //                    if (!Utils.isNull(detailed_address)) {
+                    //                        itemCompositionAddressTv.setText(detailed_address);
+                    //                    }
+                    //
+                    //                    String advertisement_img = data.getAdvertisement_img();
+                    //                    if (!Utils.isNull(advertisement_img)) {
+                    //                        RequestOptions options = new RequestOptions()
+                    //                                .centerCrop()
+                    //                                .placeholder(R.color.app_color_f6)
+                    //                                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                    //                        Glide.with(CompositionDetailActivity.this)
+                    //                                .load(advertisement_img)
+                    //                                .apply(options)
+                    //                                .into(itemCompositionImageAd);
+                    //                    }
                     //                    String week = data.getWeek();
                     //                    if (!Utils.isNull(week)) {
                     //                        itemRecordDetailWeekDateTv.setText(week);
@@ -398,36 +420,53 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     }
 
 
-    @OnClick({R2.id.main_title_back, R2.id.item_composition_btn_details, R2.id.item_composition_btn_comment,
-            R2.id.item_composition_btn_merchant, R2.id.publish_composition_comment_content_btn, R2.id.composition_comment_status_1,
-            R2.id.composition_comment_status_2, R2.id.composition_comment_status_3, R2.id.item_composition_image_ad})
+//    @OnClick({R2.id.main_title_back, R2.id.item_composition_btn_details, R2.id.item_composition_btn_comment,
+    //            R2.id.item_composition_btn_merchant, R2.id.publish_composition_comment_content_btn, R2.id.composition_comment_status_1,
+    //            R2.id.composition_comment_status_2, R2.id.composition_comment_status_3, R2.id.item_composition_image_ad})
+//    public void onViewClicked(View view) {
+//        int id = view.getId();
+//        if (id == R.id.main_title_back) {
+//            finish();
+//        } else if (id == R.id.item_composition_btn_details) {
+//
+//        } else if (id == R.id.item_composition_btn_comment) {
+//
+//        } else if (id == R.id.item_composition_btn_merchant) {
+//
+//        } else if (id == R.id.publish_composition_comment_content_btn) {
+//            //            String editItemCompositionCommentContentText = editItemCompositionCommentContent.getText().toString().trim();
+//            //
+//            //            if (Util.isNull(editItemCompositionCommentContentText)) {
+//            //                ToastUtil.showToast(mContext.getApplicationContext(), "请写出您的评价内容");
+//            //                return;
+//            //            }
+//            //            logRefuseData();
+//        } else if (id == R.id.composition_comment_status_1) {
+//
+//        } else if (id == R.id.composition_comment_status_2) {
+//
+//        } else if (id == R.id.composition_comment_status_3) {
+//
+//        } else if (id == R.id.item_composition_image_ad) {
+//            //ad
+//
+//        }
+//    }
+
+    @OnClick({R2.id.main_title_back})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
-        } else if (id == R.id.item_composition_btn_details) {
-
-        } else if (id == R.id.item_composition_btn_comment) {
-
-        } else if (id == R.id.item_composition_btn_merchant) {
-
-        } else if (id == R.id.publish_composition_comment_content_btn) {
-            String editItemCompositionCommentContentText = editItemCompositionCommentContent.getText().toString().trim();
-
-            if (Util.isNull(editItemCompositionCommentContentText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "请写出您的评价内容");
-                return;
-            }
-            //            logRefuseData();
-        } else if (id == R.id.composition_comment_status_1) {
-
-        } else if (id == R.id.composition_comment_status_2) {
-
-        } else if (id == R.id.composition_comment_status_3) {
-
-        } else if (id == R.id.item_composition_image_ad) {
-            //ad
-
         }
+    }
+    @Override
+    public void onLoadMoreRequested() {
+
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+
     }
 }
