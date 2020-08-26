@@ -6,6 +6,7 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentListResponse;
 import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
@@ -50,55 +51,6 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
     @Override
     public Map getData() {
         return null;
-    }
-
-    @Override
-    public void getCommentDetailsData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
-        mContractView.showProgressDialogView();
-        final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getOrderComments(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-
-            private CommentDetailsResponse mDataResponse;
-
-            @Override
-            public void onNext(ResponseBody responseBody) {
-                try {
-
-                    String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
-                    Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
-                    if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, CommentDetailsResponse.class);
-                    } else {
-                        mDataResponse = new CommentDetailsResponse();
-                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
-                    }
-                    mContractView.setCommentDetailsData(mDataResponse);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mContractView.hiddenProgressDialogView();
-            }
-
-            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-                mContractView.hiddenProgressDialogView();
-                LogUtil.e(TAG, "=======onError:======= " + e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-                long completeRequestTime = System.currentTimeMillis();
-                long useTime = completeRequestTime - beforeRequestTime;
-                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mContractView.hiddenProgressDialogView();
-            }
-        });
-        addDisposabe(disposable);
     }
 
 
@@ -152,12 +104,61 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
     }
 
     @Override
+    public void getCommentDetailsData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getCommentsLists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private CommentListResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, CommentListResponse.class);
+                    } else {
+                        mDataResponse = new CommentListResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setCommentDetailsData(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
     public void getMoreData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getOrderComments(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getCommentsLists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private CommentDetailsResponse mDataResponse;
+            private CommentListResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -168,9 +169,9 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, CommentDetailsResponse.class);
+                        mDataResponse = gson.fromJson(response, CommentListResponse.class);
                     } else {
-                        mDataResponse = new CommentDetailsResponse();
+                        mDataResponse = new CommentListResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
@@ -204,7 +205,7 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
     public void getCommentPublish(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getcommon(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getCommon(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
             private CommentPublishResponse mLogRefuseResponse;
 
@@ -224,6 +225,55 @@ public class CompositionDetailPresenter extends BasePresenter implements Composi
                         mLogRefuseResponse.setStatus(ProjectResponse.getStatus(response));
                     }
                     mContractView.setCommentPublish(mLogRefuseResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getCommentCount(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getOrderComments(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private CommentDetailsResponse mCommentDetailsResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mCommentDetailsResponse = gson.fromJson(response, CommentDetailsResponse.class);
+                    } else {
+                        mCommentDetailsResponse = new CommentDetailsResponse();
+                        mCommentDetailsResponse.setMessage(ProjectResponse.getMessage(response));
+                        mCommentDetailsResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setCommentCount(mCommentDetailsResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

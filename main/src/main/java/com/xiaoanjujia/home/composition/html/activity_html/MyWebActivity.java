@@ -130,6 +130,12 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
     }
 
     @Override
+    public String jsGetUserId() {
+
+        return PrefUtils.readUserId(BaseApplication.getInstance());
+    }
+
+    @Override
     public void jsMerchantsCertification() {
         initData();
     }

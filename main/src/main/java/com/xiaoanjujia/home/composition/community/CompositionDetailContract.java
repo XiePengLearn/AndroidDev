@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.community;
 
 
 import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentListResponse;
 import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
 
@@ -20,11 +21,13 @@ public interface CompositionDetailContract {
 
         void setResponseData(CommunityDetailsResponse mCommunityDetailsResponse);
 
-        void setCommentDetailsData(CommentDetailsResponse mCommentDetailsResponse);
+        void setCommentDetailsData(CommentListResponse mCommentListResponse);
 
         void setCommentPublish(CommentPublishResponse mCommentPublishResponse);
 
-        void setMoreData(CommentDetailsResponse mCommentDetailsResponse);
+        void setMoreData(CommentListResponse mCommentListResponse);
+
+        void setCommentCount(CommentDetailsResponse mCommentDetailsResponse);
 
         void showProgressDialogView();
 
@@ -48,5 +51,7 @@ public interface CompositionDetailContract {
         void getMoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getCommentPublish(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+
+        void getCommentCount(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

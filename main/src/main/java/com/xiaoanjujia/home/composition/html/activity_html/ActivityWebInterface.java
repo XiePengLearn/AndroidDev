@@ -60,12 +60,22 @@ public class ActivityWebInterface extends WebInterFace {
         }
     }
 
+
+    @JavascriptInterface
+    public void getUserId() {
+        if (jsCallBack != null) {
+            jsCallBack.jsGetUserId();
+        }
+    }
+
     public interface JSActivityCallBack {
         String jsGetUserName();
 
         String jsGetPassWord();
 
         String jsGetUserToken();
+
+        String jsGetUserId();
 
         void jsMerchantsCertification();
 

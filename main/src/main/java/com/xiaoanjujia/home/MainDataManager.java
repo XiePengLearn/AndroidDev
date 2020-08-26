@@ -73,7 +73,9 @@ public class MainDataManager extends BaseDataManager {
     //社区订单评论
     private static String GENERAL_ORDERCOMMENTS = "/api/v1/ordercomments";
     //新增评论
-    private static String GENERAL_GETCOMMON = "/api/v1/getcommon";
+    private static String GENERAL_GETCOMMON = "/api/v1/getCommon";
+    //评论列表
+    private static String GENERAL_COMMENTSLISTS = "/api/v1/commentslists";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -397,8 +399,22 @@ public class MainDataManager extends BaseDataManager {
      * @param consumer      consumer
      * @return Disposable
      */
-    public Disposable getcommon(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+    public Disposable getCommon(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GETCOMMON, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * //评论列表
+     * private static String GENERAL_COMMENTSLISTS = "/api/v1/commentslists";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCommentsLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_COMMENTSLISTS, mapParameters, mapHeaders), consumer);
     }
 }

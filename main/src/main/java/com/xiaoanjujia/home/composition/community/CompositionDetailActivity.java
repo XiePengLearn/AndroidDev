@@ -39,6 +39,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
 import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentListResponse;
 import com.xiaoanjujia.home.entities.CommentPublishResponse;
 import com.xiaoanjujia.home.entities.CommunityDetailsResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -109,6 +110,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private TextView itemShopNamePublishNumberTv;
     private TextView itemShopGradeDesTv;
     private int page = 1;
+    private String type = "all_count";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,8 +125,11 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         initView();
         requestData();
         initTitle();
+        //        page = 1;
+        //        type = "all_count";
+        //        initCommentDetailsData(page,type);
+        initCommentCount();
 
-        initCommentDetailsData(page);
     }
 
     /**
@@ -144,7 +149,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
         mLayoutInflater = LayoutInflater.from(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new CommunityDetailsActivityAdapter(R.layout.item_community_fragment);
+        mAdapter = new CommunityDetailsActivityAdapter(R.layout.item_community_activity_adapter);
         mAdapter.setOnLoadMoreListener(this);
         findPullRefreshHeader.setPtrHandler(this);
 
@@ -166,6 +171,15 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         itemShopNamePublishNumberTv = itemHeader.findViewById(R.id.item_shop_name_publish_number_tv);
         itemShopGradeDesTv = itemHeader.findViewById(R.id.item_shop_grade_des_tv);
 
+        itemCompositionImageAd = itemHeader.findViewById(R.id.item_composition_image_ad);
+        editItemCompositionCommentContent = itemHeader.findViewById(R.id.edit_item_composition_comment_content);
+        publishCompositionCommentContentBtn = itemHeader.findViewById(R.id.publish_composition_comment_content_btn);
+        compositionCommentStatus1 = itemHeader.findViewById(R.id.composition_comment_status_1);
+        compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+        compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
+        compositionCommentStatus2 = itemHeader.findViewById(R.id.composition_comment_status_2);
+        compositionCommentStatus3 = itemHeader.findViewById(R.id.composition_comment_status_3);
+
         itemCompositionBtnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +191,10 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 itemCompositionBtnDetailsLl.setVisibility(View.VISIBLE);
                 itemCompositionBtnCommentLl.setVisibility(View.GONE);
                 itemCompositionBtnMerchantLl.setVisibility(View.GONE);
+
+                List<CommentListResponse.DataBean> data = mAdapter.getData();
+                data.clear();
+                mAdapter.notifyDataSetChanged();
 
             }
         });
@@ -190,6 +208,15 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 itemCompositionBtnDetailsLl.setVisibility(View.GONE);
                 itemCompositionBtnCommentLl.setVisibility(View.VISIBLE);
                 itemCompositionBtnMerchantLl.setVisibility(View.GONE);
+                page = 1;
+                type = "all_count";
+                initCommentDetailsData(page, type);
+                compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
+                compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                compositionCommentStatus2.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_494949));
+                compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
+                compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
             }
         });
         itemCompositionBtnMerchant.setOnClickListener(new View.OnClickListener() {
@@ -202,16 +229,13 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 itemCompositionBtnDetailsLl.setVisibility(View.GONE);
                 itemCompositionBtnCommentLl.setVisibility(View.GONE);
                 itemCompositionBtnMerchantLl.setVisibility(View.VISIBLE);
+
+                List<CommentListResponse.DataBean> data = mAdapter.getData();
+                data.clear();
+                mAdapter.notifyDataSetChanged();
             }
         });
-        itemCompositionImageAd = itemHeader.findViewById(R.id.item_composition_image_ad);
-        editItemCompositionCommentContent = itemHeader.findViewById(R.id.edit_item_composition_comment_content);
-        publishCompositionCommentContentBtn = itemHeader.findViewById(R.id.publish_composition_comment_content_btn);
-        compositionCommentStatus1 = itemHeader.findViewById(R.id.composition_comment_status_1);
-        compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
-        compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
-        compositionCommentStatus2 = itemHeader.findViewById(R.id.composition_comment_status_2);
-        compositionCommentStatus3 = itemHeader.findViewById(R.id.composition_comment_status_3);
+
         compositionCommentStatus1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +245,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_494949));
                 compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
+                page = 1;
+                type = "all_count";
+                initCommentDetailsData(page, type);
             }
         });
         compositionCommentStatus2.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +259,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_2AAD67));
                 compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button));
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
+                page = 1;
+                type = "good_count";
+                initCommentDetailsData(page, type);
             }
         });
         compositionCommentStatus3.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +273,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus2.setTextColor(getResources().getColor(R.color.color_494949));
                 compositionCommentStatus3.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_2AAD67));
+                page = 1;
+                type = "difference_count";
+                initCommentDetailsData(page, type);
             }
         });
 
@@ -417,9 +450,13 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
     }
 
-    private void initCommentDetailsData(int page) {
-        Map<String, Object> mapParameters = new HashMap<>(2);
-        mapParameters.put("id", String.valueOf(mId));
+    private void initCommentDetailsData(int page, String type) {
+        //all_count:总评
+        //good_count:好评
+        //difference_count:差评
+        Map<String, Object> mapParameters = new HashMap<>(3);
+        mapParameters.put("type", type);
+        mapParameters.put("id", mId);
         mapParameters.put("page", String.valueOf(page));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -428,35 +465,25 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
 
     @Override
-    public void setCommentDetailsData(CommentDetailsResponse mCommentDetailsResponse) {
+    public void setCommentDetailsData(CommentListResponse mCommentListResponse) {
         try {
-            int code = mCommentDetailsResponse.getStatus();
-            String msg = mCommentDetailsResponse.getMessage();
+            int code = mCommentListResponse.getStatus();
+            String msg = mCommentListResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                CommentDetailsResponse.DataBean messageDate = mCommentDetailsResponse.getData();
+                List<CommentListResponse.DataBean> messageDate = mCommentListResponse.getData();
                 if (messageDate != null) {
-                    int all_count = messageDate.getAll_count();
-                    int good_count = messageDate.getGood_count();
-                    int difference_count = messageDate.getDifference_count();
-                    compositionCommentStatus1.setText(String.format("全部%s", String.valueOf(all_count)));
-                    compositionCommentStatus2.setText(String.format("好评%s", String.valueOf(good_count)));
-                    compositionCommentStatus3.setText(String.format("差评%s", String.valueOf(difference_count)));
-
-                    List<CommentDetailsResponse.DataBean.AllCommentsBean> all_comments = messageDate.getAll_comments();
-                    List<CommentDetailsResponse.DataBean.GoodCommentsBean> good_comments = messageDate.getGood_comments();
-                    List<CommentDetailsResponse.DataBean.DifferenceCommentsBean> difference_comments = messageDate.getDifference_comments();
-                    if (all_comments.size() > 0) {
-                        if (all_comments.size() < 10) {
+                    if (messageDate.size() > 0) {
+                        if (messageDate.size() < 10) {
                             mAdapter.setEnableLoadMore(false);
                         } else {
                             mAdapter.setEnableLoadMore(true);
                         }
-                        List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                        List<CommentListResponse.DataBean> data = mAdapter.getData();
                         data.clear();
-                        mAdapter.addData(all_comments);
+                        mAdapter.addData(messageDate);
                     } else {
                         mAdapter.setEnableLoadMore(false);
-                        List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                        List<CommentListResponse.DataBean> data = mAdapter.getData();
                         data.clear();
                         mAdapter.notifyDataSetChanged();
                     }
@@ -464,7 +491,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 } else {
 
                     mAdapter.setEnableLoadMore(false);
-                    List<CommentDetailsResponse.DataBean.AllCommentsBean> data = mAdapter.getData();
+                    List<CommentListResponse.DataBean> data = mAdapter.getData();
                     data.clear();
                     mAdapter.notifyDataSetChanged();
                 }
@@ -505,8 +532,48 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     }
 
     @Override
-    public void setMoreData(CommentDetailsResponse mCommentDetailsResponse) {
+    public void setMoreData(CommentListResponse mCommentListResponse) {
 
+    }
+
+    private void initCommentCount() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("id", String.valueOf(mId));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getCommentCount(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setCommentCount(CommentDetailsResponse mCommentDetailsResponse) {
+        try {
+            int code = mCommentDetailsResponse.getStatus();
+            String msg = mCommentDetailsResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                CommentDetailsResponse.DataBean messageDate = mCommentDetailsResponse.getData();
+                if (messageDate != null) {
+                    int all_count = messageDate.getAll_count();
+                    int good_count = messageDate.getGood_count();
+                    int difference_count = messageDate.getDifference_count();
+                    compositionCommentStatus1.setText(String.format("全部%s", String.valueOf(all_count)));
+                    compositionCommentStatus2.setText(String.format("好评%s", String.valueOf(good_count)));
+                    compositionCommentStatus3.setText(String.format("差评%s", String.valueOf(difference_count)));
+
+
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
     }
 
 
@@ -577,7 +644,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
             @Override
             public void run() {
                 page++;
-                initMoreData(page);
+                initMoreData(page, type);
             }
         }, 500);
     }
@@ -585,11 +652,12 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     //page
     //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
     //id:角色id  默认0  全部
-    private void initMoreData(int page) {
+    private void initMoreData(int page, String type) {
 
         Map<String, Object> mapParameters = new HashMap<>(3);
         mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("id", mId);
+        mapParameters.put("type", type);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -606,7 +674,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 if (mAdapter != null) {
                     mAdapter.setEnableLoadMore(true);
                 }
-                initCommentDetailsData(page);
+                initCommentDetailsData(page, type);
                 frame.refreshComplete();
             }
         }, 500);

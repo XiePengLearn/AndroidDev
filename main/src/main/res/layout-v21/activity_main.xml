@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:layout_alignParentBottom="true"
+        android:elevation="@dimen/dp_14"
         android:orientation="horizontal">
 
         <TextView

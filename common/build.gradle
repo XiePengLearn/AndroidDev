@@ -90,4 +90,5 @@ dependencies {
     api project(path: ':Camera')
     api 'top.zibin:Luban:1.1.8'
     api 'com.github.LRH1993:AutoFlowLayout:1.0.5'
+    api 'me.zhanghai.android.materialratingbar:library:1.4.0'
 }

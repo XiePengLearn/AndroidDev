@@ -2,13 +2,13 @@ package com.xiaoanjujia.home.composition.community;
 
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.base.baseadapter.BaseViewHolder;
-import com.xiaoanjujia.home.entities.CommentDetailsResponse;
+import com.xiaoanjujia.home.entities.CommentListResponse;
 
 /**
  * Created by admin on 2019/9/24.
  */
 
-public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentDetailsResponse.DataBean.AllCommentsBean, BaseViewHolder> {
+public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentListResponse.DataBean, BaseViewHolder> {
 
     public CommunityDetailsActivityAdapter(int layoutResId) {
         super(layoutResId);
@@ -16,7 +16,7 @@ public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentDet
 
 
     @Override
-    protected void convert(BaseViewHolder helper, final CommentDetailsResponse.DataBean.AllCommentsBean info, int position) {
+    protected void convert(BaseViewHolder helper, final CommentListResponse.DataBean info, int position) {
 
 //        String title = info.getTitle();
 //        if (!Utils.isNull(title)) {
