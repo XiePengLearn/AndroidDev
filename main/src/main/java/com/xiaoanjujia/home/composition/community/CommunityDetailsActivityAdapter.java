@@ -1,8 +1,16 @@
 package com.xiaoanjujia.home.composition.community;
 
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.sxjs.jd.R;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.base.baseadapter.BaseViewHolder;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.entities.CommentListResponse;
+
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
  * Created by admin on 2019/9/24.
@@ -18,33 +26,26 @@ public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentLis
     @Override
     protected void convert(BaseViewHolder helper, final CommentListResponse.DataBean info, int position) {
 
-//        String title = info.getTitle();
-//        if (!Utils.isNull(title)) {
-//            helper.setText(R.id.item_supervisor_content_text, title);
-//        }
-//        int count = info.getCount();
-//        helper.setText(R.id.comment_count_tv, String.format("%s" + "条评论", String.valueOf(count)));
-//
-//        String single_money = info.getSingle_money();
-//        AlphaButton alphaButton = helper.getView(R.id.item_item_community_btn_2);
-//        if (!Utils.isNull(single_money)) {
-//            double doubleMoney = Double.parseDouble(single_money);
-//            if (doubleMoney != 0.0) {
-//                alphaButton.setVisibility(View.VISIBLE);
-//            } else {
-//                alphaButton.setVisibility(View.GONE);
-//            }
-//        } else {
-//            alphaButton.setVisibility(View.GONE);
-//        }
-//
-//        RequestOptions options = new RequestOptions()
-//                .error(R.drawable.ic_launcher);
-//        //头像
-//        Glide.with(mContext)
-//                .load(info.getShow_img())
-//                .apply(options)
-//                .into((ImageView) helper.getView(R.id.item_supervisor_image_one));
+        int star_rating = info.getStar_rating();
+        MaterialRatingBar materialRatingBar = helper.getView(R.id.library_tinted_normal_ratingbar);
+        materialRatingBar.setNumStars(star_rating);
+        String content = info.getContent();
+        if (!Utils.isNull(content)) {
+            helper.setText(R.id.item_com_text, content);
+        }
+
+        String create_time = info.getCreate_time();
+        if (!Utils.isNull(create_time)) {
+            helper.setText(R.id.item_create_time, create_time);
+        }
+
+        RequestOptions options = new RequestOptions()
+                .error(R.drawable.tou_xiang_icon);
+        //头像
+        Glide.with(mContext)
+                .load(info.getComment_img())
+                .apply(options)
+                .into((ImageView) helper.getView(R.id.item_com_image_one));
 
     }
 

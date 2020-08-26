@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -18,115 +19,55 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/item_supervisor_image_one"
+                android:id="@+id/item_com_image_one"
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="@dimen/dp_30"
+                android:src="@drawable/tou_xiang_icon"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_marginBottom="@dimen/dp_8"
                 android:scaleType="fitXY" />
 
+
             <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/library_tinted_normal_ratingbar"
                 style="@style/Widget.MaterialRatingBar.RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:isIndicator="true"
                 android:maxHeight="@dimen/dp_14"
-                android:minHeight="@dimen/dp_14" />
+                android:minHeight="@dimen/dp_14"
+                android:rating="5"
+                app:mrb_progressTint="#ffc924"
+                app:mrb_secondaryProgressTint="#ffc924" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/item_supervisor_content_text"
+            android:id="@+id/item_com_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_6"
             android:layout_marginEnd="@dimen/dp_47"
-            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:lines="2"
             android:textColor="@color/color_494949"
             android:textSize="@dimen/sp_14"
-            tool:text="北京搬家，透明收费，服务满意付款，快速上门，大型搬家公司" />
+            tool:text="很好" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_36"
-            android:layout_marginLeft="@dimen/dp_93"
-            android:layout_marginTop="@dimen/dp_52"
-            android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/item_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/sp_12"
+            tool:text="2020/8" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/sp_14"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="@dimen/dp_19"
-
-                    android:layout_height="@dimen/dp_19"
-                    android:background="@drawable/comment_bg"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/item_supervisor_time_date"
-                        android:layout_width="@dimen/sp_12"
-                        android:layout_height="@dimen/sp_14"
-                        android:src="@drawable/comment_icon" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_3"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/comment_count_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/color_494949"
-                        android:textSize="@dimen/sp_7" />
-
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                android:id="@+id/item_item_community_btn_1"
-                android:layout_width="@dimen/dp_48"
-                android:layout_height="@dimen/dp_14"
-                android:layout_marginTop="@dimen/dp_11"
-                android:layout_marginEnd="@dimen/dp_7"
-                android:background="@drawable/bg_shap_button_3"
-                android:gravity="center"
-                android:text="快速上门"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/sp_7" />
-
-            <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                android:id="@+id/item_item_community_btn_2"
-                android:layout_width="@dimen/dp_48"
-                android:layout_height="@dimen/dp_14"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/dp_9"
-                android:layout_toEndOf="@id/item_item_community_btn_1"
-                android:background="@drawable/bg_shap_button_3"
-                android:gravity="center"
-                android:text="有红包领"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/sp_7" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 
