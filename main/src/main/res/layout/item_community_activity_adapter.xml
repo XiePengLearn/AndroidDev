@@ -8,6 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
         android:layout_marginBottom="@dimen/dp_18"
         android:background="@drawable/item_child_bg"
         android:orientation="vertical">
@@ -22,9 +24,9 @@
                 android:id="@+id/item_com_image_one"
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="@dimen/dp_30"
-                android:src="@drawable/tou_xiang_icon"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/tou_xiang_icon" />
 
 
             <me.zhanghai.android.materialratingbar.MaterialRatingBar
