@@ -126,10 +126,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
             android:name="com.xiaoanjujia.home.composition.community.CompositionDetailActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>
 

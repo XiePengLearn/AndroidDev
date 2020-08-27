@@ -1,10 +1,12 @@
 package com.xiaoanjujia.home.composition.community;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,13 +27,17 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.rmondjone.camera.CameraActivity;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
+import com.xiaoanjujia.common.widget.alphaview.AlphaLinearLayout;
+import com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
@@ -55,6 +61,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
  * @author xiepeng
@@ -80,6 +87,16 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     RecyclerView mRecyclerView;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.ll_collect)
+    AlphaLinearLayout llCollect;
+    @BindView(R2.id.ll_copy_phone_number)
+    AlphaLinearLayout llCopyPhoneNumber;
+    @BindView(R2.id.call_phone)
+    TextView callPhone;
+    @BindView(R2.id.rl_call_phone)
+    AlphaRelativeLayout rlCallPhone;
+    @BindView(R2.id.bottom_layout)
+    LinearLayout bottomLayout;
 
 
     private List<LocalMedia> selectList = new ArrayList<>();
@@ -111,6 +128,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private TextView itemShopGradeDesTv;
     private int page = 1;
     private String type = "all_count";
+    private MaterialRatingBar comNormalRatingbar;
+    private int mCommunityId;
+    private String shop_phone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,6 +142,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
         Intent intent = getIntent();
         mId = intent.getIntExtra("id", 0);
+        mCommunityId = intent.getIntExtra("community_id", 0);
         initView();
         requestData();
         initTitle();
@@ -166,6 +187,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         itemCompositionBtnDetailsLl = itemHeader.findViewById(R.id.item_composition_btn_details_ll);
         itemCompositionBtnCommentLl = itemHeader.findViewById(R.id.item_composition_btn_comment_ll);
         itemCompositionBtnMerchantLl = itemHeader.findViewById(R.id.item_composition_btn_merchant_ll);
+        comNormalRatingbar = itemHeader.findViewById(R.id.com_normal_ratingbar);
 
         itemShopNameTv = itemHeader.findViewById(R.id.item_shop_name_tv);
         itemShopNamePublishNumberTv = itemHeader.findViewById(R.id.item_shop_name_publish_number_tv);
@@ -174,6 +196,23 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         itemCompositionImageAd = itemHeader.findViewById(R.id.item_composition_image_ad);
         editItemCompositionCommentContent = itemHeader.findViewById(R.id.edit_item_composition_comment_content);
         publishCompositionCommentContentBtn = itemHeader.findViewById(R.id.publish_composition_comment_content_btn);
+        publishCompositionCommentContentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String comtext = editItemCompositionCommentContent.getText().toString().trim();
+                if (Utils.isNull(comtext)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), "请写出您的评价内容");
+                    return;
+                }
+                int rating = (int) comNormalRatingbar.getRating();
+                if (rating == 0) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), "请输入星级评价");
+                    return;
+                }
+                initCommentPublish(String.valueOf(rating), comtext);
+            }
+        });
         compositionCommentStatus1 = itemHeader.findViewById(R.id.composition_comment_status_1);
         compositionCommentStatus1.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_select));
         compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
@@ -195,6 +234,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 List<CommentListResponse.DataBean> data = mAdapter.getData();
                 data.clear();
                 mAdapter.notifyDataSetChanged();
+                hideKeyboard(v);
 
             }
         });
@@ -233,6 +273,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 List<CommentListResponse.DataBean> data = mAdapter.getData();
                 data.clear();
                 mAdapter.notifyDataSetChanged();
+                hideKeyboard(v);
             }
         });
 
@@ -431,6 +472,11 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     if (!Utils.isNull(grade)) {
                         itemShopGradeDesTv.setText(grade);
                     }
+
+                    shop_phone = data.getShop_phone();
+                    if (!Utils.isNull(shop_phone)) {
+                        callPhone.setText(shop_phone);
+                    }
                 }
 
 
@@ -510,7 +556,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         }
     }
 
-    private void initCommentPublish() {
+    private void initCommentPublish(String star_rating, String common_text) {
         /**
          * user_id:用户id
          * community_id:商户id
@@ -519,8 +565,11 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
          * common_text:内容
          */
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("id", String.valueOf(mId));
-        //        mapParameters.put("refuse_text", editRejectLayoutText);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        mapParameters.put("star_rating", star_rating);
+        mapParameters.put("common_text", common_text);
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getCommentPublish(headersTreeMap, mapParameters);
@@ -528,12 +577,71 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
 
     @Override
     public void setCommentPublish(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                if (!Utils.isNull(msg)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                }
 
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
     }
 
     @Override
     public void setMoreData(CommentListResponse mCommentListResponse) {
+        try {
+            int code = mCommentListResponse.getStatus();
+            String msg = mCommentListResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                LogUtil.e(TAG, "SESSION_ID: " + mCommentListResponse.getData());
+                List<CommentListResponse.DataBean> data = mCommentListResponse.getData();
+                if (data != null) {
 
+                    for (int i = 0; i < data.size(); i++) {
+                        mAdapter.getData().add(data.get(i));
+                    }
+                    if (data.size() < 10) {
+                        mAdapter.setEnableLoadMore(false);
+                    } else {
+                        mAdapter.setEnableLoadMore(true);
+                    }
+                } else {
+                    mAdapter.setEnableLoadMore(false);
+                }
+
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                mAdapter.loadMoreComplete();
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+            } else {
+                mAdapter.loadMoreComplete();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            mAdapter.loadMoreComplete();
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        } finally {
+            mAdapter.loadMoreComplete();
+        }
     }
 
     private void initCommentCount() {
@@ -629,13 +737,6 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     //        }
     //    }
 
-    @OnClick({R2.id.main_title_back})
-    public void onViewClicked(View view) {
-        int id = view.getId();
-        if (id == R.id.main_title_back) {
-            finish();
-        }
-    }
 
     @Override
     public void onLoadMoreRequested() {
@@ -675,8 +776,33 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     mAdapter.setEnableLoadMore(true);
                 }
                 initCommentDetailsData(page, type);
+                initCommentCount();
                 frame.refreshComplete();
             }
         }, 500);
     }
+
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @OnClick({R2.id.ll_collect, R2.id.ll_copy_phone_number, R2.id.rl_call_phone, R2.id.main_title_back})
+    public void onViewClicked(View view) {
+        int id = view.getId();
+        if (id == R.id.ll_collect) {
+
+        } else if (id == R.id.ll_copy_phone_number) {
+
+        } else if (id == R.id.rl_call_phone) {
+
+        } else if (id == R.id.main_title_back) {
+            finish();
+        }
+    }
+
 }

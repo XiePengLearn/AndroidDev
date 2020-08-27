@@ -245,8 +245,10 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 List data = adapter.getData();
                 CommunitySearchResponse.DataBean dateBean = (CommunitySearchResponse.DataBean) data.get(position);
                 int id = dateBean.getId();
+                int community_id = dateBean.getCommunity_id();
                 Intent intent = new Intent(getActivity(), CompositionDetailActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("community_id", community_id);
                 startActivity(intent);
             }
         });
