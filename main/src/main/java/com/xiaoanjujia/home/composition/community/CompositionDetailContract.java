@@ -24,6 +24,7 @@ public interface CompositionDetailContract {
         void setCommentDetailsData(CommentListResponse mCommentListResponse);
 
         void setCommentPublish(CommentPublishResponse mCommentPublishResponse);
+        void setCommentLike(CommentPublishResponse mCommentPublishResponse);
 
         void setMoreData(CommentListResponse mCommentListResponse);
 
@@ -51,6 +52,7 @@ public interface CompositionDetailContract {
         void getMoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getCommentPublish(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getCommentLike(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getCommentCount(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }

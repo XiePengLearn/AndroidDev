@@ -111,17 +111,8 @@
             android:background="@drawable/bg_shap_button_1">
 
 
-            <TextView
-                android:id="@+id/call_phone"
-                android:layout_width="@dimen/dp_140"
-                android:layout_height="@dimen/dp_34"
-                android:gravity="center"
-
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/sp_14"
-                android:visibility="visible" />
-
             <ImageView
+                android:id="@+id/wei_icon_iv"
                 android:layout_width="@dimen/sp_19"
                 android:layout_height="@dimen/dp_22"
                 android:layout_centerVertical="true"
@@ -130,6 +121,17 @@
                 android:src="@drawable/wei_xin_icon"
                 android:visibility="visible" />
 
+            <TextView
+                android:id="@+id/call_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_34"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@id/wei_icon_iv"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/sp_14"
+                android:visibility="visible" />
         </com.xiaoanjujia.common.widget.alphaview.AlphaRelativeLayout>
 
     </LinearLayout>

@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称`
     private int mRoleType;
     // 要申请的权限
-    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION,
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE,
             Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE};
     private AlertDialog dialog;
 
@@ -503,7 +503,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         AlertDialog mAlertDialog = new AlertDialog.Builder(this).create();
 
         mAlertDialog.setTitle("权限不可用");
-        mAlertDialog.setMessage("由于小安居家需要获取定位/存储空间/相机权限，为你定位与存储个人信息；\n否则，您将无法正常使用小安居家");
+        mAlertDialog.setMessage("由于小安居家需要获取拨打电话/存储空间/相机权限，为方便你拨通商户电话与存储个人信息；\n否则，您将无法正常使用小安居家");
         mAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "立即开启", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -582,7 +582,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
         dialog = new AlertDialog.Builder(this)
                 .setTitle("权限不可用")
-                .setMessage("请在-应用设置-权限-中，允许小安居家使用定位/存储空间/相机权限来保存用户数据")
+                .setMessage("请在-应用设置-权限-中，允许小安居家使用拨打电话/存储空间/相机权限来保存用户数据")
                 .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

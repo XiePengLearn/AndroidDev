@@ -1,7 +1,9 @@
 package com.xiaoanjujia.home.composition.community;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -288,7 +290,13 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
                 page = 1;
                 type = "all_count";
+
+                mAdapter.setEnableLoadMore(true);
+                mAdapter.loadMoreComplete();
+                mAdapter.getData().clear();
+                mAdapter.notifyDataSetChanged();
                 initCommentDetailsData(page, type);
+
             }
         });
         compositionCommentStatus2.setOnClickListener(new View.OnClickListener() {
@@ -302,7 +310,12 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_494949));
                 page = 1;
                 type = "good_count";
+                mAdapter.setEnableLoadMore(true);
+                mAdapter.loadMoreComplete();
+                mAdapter.getData().clear();
+                mAdapter.notifyDataSetChanged();
                 initCommentDetailsData(page, type);
+
             }
         });
         compositionCommentStatus3.setOnClickListener(new View.OnClickListener() {
@@ -316,7 +329,12 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 compositionCommentStatus3.setTextColor(getResources().getColor(R.color.color_2AAD67));
                 page = 1;
                 type = "difference_count";
+                mAdapter.setEnableLoadMore(true);
+                mAdapter.loadMoreComplete();
+                mAdapter.getData().clear();
+                mAdapter.notifyDataSetChanged();
                 initCommentDetailsData(page, type);
+
             }
         });
 
@@ -599,6 +617,47 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         }
     }
 
+    private void initCommentLike() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getCommentLike(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setCommentLike(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                if (!Utils.isNull(msg)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
     @Override
     public void setMoreData(CommentListResponse mCommentListResponse) {
         try {
@@ -795,11 +854,21 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.ll_collect) {
-
+            initCommentLike();
         } else if (id == R.id.ll_copy_phone_number) {
+            if (!Utils.isNull(shop_phone)) {
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(shop_phone);
+                ToastUtil.showToast(BaseApplication.getInstance(), "复制成功!");
+            }
 
         } else if (id == R.id.rl_call_phone) {
-
+            if (!Utils.isNull(shop_phone)) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                Uri data = Uri.parse("tel:" + shop_phone);
+                intent.setData(data);
+                startActivity(intent);
+            }
         } else if (id == R.id.main_title_back) {
             finish();
         }

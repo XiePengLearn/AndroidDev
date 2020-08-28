@@ -76,6 +76,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_GETCOMMON = "/api/v1/getCommon";
     //评论列表
     private static String GENERAL_COMMENTSLISTS = "/api/v1/commentslists";
+    //新增点赞
+    private static String GENERAL_GETLIKE = "/api/v1/getlike";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -416,5 +418,19 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getCommentsLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_COMMENTSLISTS, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 新增点赞
+     *     private static String GENERAL_GETLIKE = "/api/v1/getlike";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCommentsLike(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_GETLIKE, mapParameters, mapHeaders), consumer);
     }
 }
