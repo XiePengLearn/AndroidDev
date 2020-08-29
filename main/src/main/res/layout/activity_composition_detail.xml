@@ -53,6 +53,8 @@
 
             <ImageView
                 android:layout_width="@dimen/dp_22"
+
+                android:id="@+id/iv_collect"
                 android:layout_height="@dimen/dp_22"
                 android:layout_gravity="center"
                 android:src="@drawable/shou_cang_icon" />
