@@ -223,16 +223,21 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
                             ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
                         }
                     } else if (data.getExamine() == 1) {
-                        if (!Utils.isNull(msg) && !Utils.isNull(refuse_text)) {
-                            ConfirmDialog confirmDialog = new ConfirmDialog(MyWebActivity.this);
-                            confirmDialog.setTitleStr(msg);
-                            confirmDialog.setContentStr(refuse_text);
-                            confirmDialog.show();
+                        ARouter.getInstance().build("/dataAnalysisActivity/dataAnalysisActivity").greenChannel().navigation(MyWebActivity.this);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
                         }
                     } else if (data.getExamine() == 2) {
                         ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(MyWebActivity.this);
                         if (!TextUtils.isEmpty(msg)) {
                             ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
+                        }
+                    } else if (data.getExamine() == 3) {
+                        if (!Utils.isNull(msg) && !Utils.isNull(refuse_text)) {
+                            ConfirmDialog confirmDialog = new ConfirmDialog(MyWebActivity.this);
+                            confirmDialog.setTitleStr(msg);
+                            confirmDialog.setContentStr(refuse_text);
+                            confirmDialog.show();
                         }
                     } else {
                         ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(MyWebActivity.this);

@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,9 +68,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     @BindView(R2.id.tv_bottom_navigation_3)
     TextView tvBottomNavigation3;
     @BindView(R2.id.tv_bottom_navigation_4)
-    TextView tvBottomNavigation4;
+    ImageView tvBottomNavigation4;
     @BindView(R2.id.tv_bottom_navigation_5)
-    TextView tvBottomNavigation5;
+    ImageView tvBottomNavigation5;
     private UnlockingFragment mUnlockingFragment;
     private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
@@ -96,6 +97,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         instance = this;
         registerMessageBroadcast();
         mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        //        mRoleType =0;
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
@@ -399,8 +401,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
                     //                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
                     .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
                     .setFirstSelectedPosition(0)
                     .initialise();
             tvBottomNavigation2.setVisibility(View.GONE);
@@ -410,8 +412,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
                     .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
                     .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
                     .setFirstSelectedPosition(0)
                     .initialise();
             tvBottomNavigation2.setVisibility(View.VISIBLE);

@@ -14,7 +14,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ AROUTER_MODULE_NAME : project.getName() ]
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
 
@@ -91,4 +91,5 @@ dependencies {
     api 'top.zibin:Luban:1.1.8'
     api 'com.github.LRH1993:AutoFlowLayout:1.0.5'
     api 'me.zhanghai.android.materialratingbar:library:1.4.0'
+    api 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

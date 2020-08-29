@@ -39,16 +39,18 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_bottom_navigation_4"
             android:layout_width="0dp"
+            android:src="@drawable/bar_store_bg"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_bottom_navigation_5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:src="@drawable/bar_mine_bg"
             android:layout_weight="1" />
 
     </LinearLayout>

@@ -135,6 +135,9 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.me.data.DataAnalysisActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
