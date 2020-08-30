@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.me.merchants;
+package com.xiaoanjujia.home.composition.me.post_message;
 
 import android.content.Context;
 import android.content.Intent;
@@ -60,9 +60,9 @@ import butterknife.OnClick;
  * 商户认证
  */
 @Route(path = "/publishActivity/publishActivity")
-public class PublishActivity extends BaseActivity implements PublishContract.View {
+public class PostMessageActivity extends BaseActivity implements PostMessageContract.View {
     @Inject
-    PublishPresenter mPresenter;
+    PostMessagePresenter mPresenter;
 
 
     private static final String TAG = "PostMessageActivity";
@@ -102,8 +102,8 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     LinearLayout llKnowledgePublishRoot;
 
 
-    private GridImageAdapter mAdapter;
-    private GridImageAdapter2 mAdapter2;
+    private PostMessageGridImageAdapter mAdapter;
+    private PostMessageGridImageAdapter2 mAdapter2;
     private int themeId;
     private int chooseMode;
     private List<LocalMedia> selectList = new ArrayList<>();
@@ -119,7 +119,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_knowledge_publish);
+        setContentView(R.layout.activity_post_message);
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
@@ -133,25 +133,25 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
      */
     public void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText(R.string.ren_zheng_shang_hu);
+        mainTitleText.setText("发布信息");
     }
 
 
     private void initView() {
-        DaggerPublishActivityComponent.builder()
+        DaggerPostMessageActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .publishPresenterModule(new PublishPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .postMessagePresenterModule(new PostMessagePresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 
 
-        FullyGridLayoutManager manager = new FullyGridLayoutManager(PublishActivity.this, 3, GridLayoutManager.VERTICAL, false);
+        PostMessageFullyGridLayoutManager manager = new PostMessageFullyGridLayoutManager(PostMessageActivity.this, 3, GridLayoutManager.VERTICAL, false);
         companyCertificateRecycler.setLayoutManager(manager);
-        mAdapter = new GridImageAdapter(PublishActivity.this, onAddPicClickListener);
+        mAdapter = new PostMessageGridImageAdapter(PostMessageActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
         //        mAdapter.setSelectMax(5);
         companyCertificateRecycler.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new PostMessageGridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 isfirst = true;
@@ -164,18 +164,18 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                     switch (mediaType) {
                         case PictureConfig.TYPE_VIDEO:
                             // 预览视频
-                            PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
+                            PictureSelector.create(PostMessageActivity.this).externalPictureVideo(media.getPath());
                             break;
                         case PictureConfig.TYPE_AUDIO:
                             // 预览音频
-                            PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
+                            PictureSelector.create(PostMessageActivity.this).externalPictureAudio(media.getPath());
                             break;
                         default:
                             // 预览图片 可自定长按保存路径
                             //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
                             //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
                             //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
-                            PictureSelector.create(PublishActivity.this)
+                            PictureSelector.create(PostMessageActivity.this)
                                     .themeStyle(themeId) // xml设置主题
                                     //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                                     //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
@@ -189,13 +189,13 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         });
 
 
-        LinearLayoutManager manager2 = new LinearLayoutManager(PublishActivity.this, GridLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager manager2 = new LinearLayoutManager(PostMessageActivity.this, GridLayoutManager.HORIZONTAL, false);
         uploadingSpecialCertificateRv.setLayoutManager(manager2);
-        mAdapter2 = new GridImageAdapter2(PublishActivity.this, onAddPicClickListener2);
+        mAdapter2 = new PostMessageGridImageAdapter2(PostMessageActivity.this, onAddPicClickListener2);
         mAdapter2.setList(selectList2);
         //        mAdapter2.setSelectMax(5);
         uploadingSpecialCertificateRv.setAdapter(mAdapter2);
-        mAdapter2.setOnItemClickListener(new GridImageAdapter2.OnItemClickListener() {
+        mAdapter2.setOnItemClickListener(new PostMessageGridImageAdapter2.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 isfirst = false;
@@ -208,18 +208,18 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
                     switch (mediaType) {
                         case PictureConfig.TYPE_VIDEO:
                             // 预览视频
-                            PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
+                            PictureSelector.create(PostMessageActivity.this).externalPictureVideo(media.getPath());
                             break;
                         case PictureConfig.TYPE_AUDIO:
                             // 预览音频
-                            PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
+                            PictureSelector.create(PostMessageActivity.this).externalPictureAudio(media.getPath());
                             break;
                         default:
                             // 预览图片 可自定长按保存路径
                             //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
                             //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
                             //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
-                            PictureSelector.create(PublishActivity.this)
+                            PictureSelector.create(PostMessageActivity.this)
                                     .themeStyle(themeId) // xml设置主题
                                     //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                                     //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
@@ -563,7 +563,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
     }
 
-    private GridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new GridImageAdapter.onAddPicClickListener1() {
+    private PostMessageGridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new PostMessageGridImageAdapter.onAddPicClickListener1() {
         @Override
         public void onAddPicClick1() {
             isfirst = true;
@@ -573,7 +573,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
         }
 
     };
-    private GridImageAdapter2.onAddPicClickListener onAddPicClickListener2 = new GridImageAdapter2.onAddPicClickListener() {
+    private PostMessageGridImageAdapter2.onAddPicClickListener onAddPicClickListener2 = new PostMessageGridImageAdapter2.onAddPicClickListener() {
         @Override
         public void onAddPicClick() {
             mMaxSelectNum = 5;
@@ -586,7 +586,7 @@ public class PublishActivity extends BaseActivity implements PublishContract.Vie
 
     private void selectPictureSetting(Boolean isCameraButton, List<LocalMedia> selectList, int mMaxSelectNum) {
         // 进入相册 以下是例子：不需要的api可以不写
-        PictureSelector.create(PublishActivity.this)
+        PictureSelector.create(PostMessageActivity.this)
                 .openGallery(chooseMode)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
                 .theme(themeId)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style v2.3.3后 建议使用setPictureStyle()动态方式

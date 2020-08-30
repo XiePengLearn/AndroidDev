@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.me.merchants;
+package com.xiaoanjujia.home.composition.me.post_message;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -29,13 +29,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/13 22:09
  * @Description: ChangeAuthenticationPresenter
  */
-public class PublishPresenter extends BasePresenter implements PublishContract.Presenter {
+public class PostMessagePresenter extends BasePresenter implements PostMessageContract.Presenter {
     private MainDataManager mDataManager;
-    private PublishContract.View mContractView;
+    private PostMessageContract.View mContractView;
     private static final String TAG = "PostMessagePresenter";
 
     @Inject
-    public PublishPresenter(MainDataManager mDataManager, PublishContract.View view) {
+    public PostMessagePresenter(MainDataManager mDataManager, PostMessageContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
