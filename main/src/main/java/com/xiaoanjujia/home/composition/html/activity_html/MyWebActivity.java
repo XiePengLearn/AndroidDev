@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -29,6 +30,7 @@ import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.dialog.ConfirmDialog;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.me.data.DataAnalysisActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -66,6 +68,8 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
 
 
     private static final String TAG = "NationExamActivity";
+    @BindView(R2.id.data_fen_xi)
+    Button dataFenXi;
     private Intent mIntent;
     private String mWebUrl;
 
@@ -163,6 +167,11 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         presenter.getRequestData(headersTreeMap, mapParameters);
     }
 
+    @OnClick(R2.id.data_fen_xi)
+    public void onViewClicked() {
+        initData();
+    }
+
     class MyWebChromClient extends WebChromeClient {
 
         @Override
@@ -223,7 +232,11 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
                             ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
                         }
                     } else if (data.getExamine() == 1) {
-                        ARouter.getInstance().build("/dataAnalysisActivity/dataAnalysisActivity").greenChannel().navigation(MyWebActivity.this);
+                        int id = data.getId();
+                        Intent intent = new Intent(MyWebActivity.this, DataAnalysisActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                        //                        ARouter.getInstance().build("/dataAnalysisActivity/dataAnalysisActivity").greenChannel().navigation(MyWebActivity.this);
                         if (!TextUtils.isEmpty(msg)) {
                             ToastUtil.showToast(MyWebActivity.this.getApplicationContext(), msg);
                         }

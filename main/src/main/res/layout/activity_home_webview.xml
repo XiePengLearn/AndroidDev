@@ -6,6 +6,13 @@
 
     <include layout="@layout/jkx_public_title_home" />
 
+    <Button
+        android:id="@+id/data_fen_xi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="数据分析" />
+
     <include layout="@layout/jkx_x5webview_view" />
+
 
 </LinearLayout>

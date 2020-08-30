@@ -42,7 +42,7 @@ public class SupervisorPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
         }
 
         RequestOptions options = new RequestOptions()
-                .error(R.drawable.ic_launcher);
+                .error(R.drawable.default_icon);
         //头像
         Glide.with(mContext)
                 .load(info.getLog_imgs())

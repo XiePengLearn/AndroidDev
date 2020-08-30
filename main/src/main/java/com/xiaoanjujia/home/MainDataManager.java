@@ -78,6 +78,20 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_COMMENTSLISTS = "/api/v1/commentslists";
     //新增点赞
     private static String GENERAL_GETLIKE = "/api/v1/getlike";
+    //商户统计
+    private static String GENERAL_CONUT = "/api/v1/conut";
+
+    //新增访客
+    private static String GENERAL_ADDVISIT = "/api/v1/addvisit";
+    //新增联系
+    private static String GENERAL_ADDCONTACT = "/api/v1/addcontact";
+    //新增粉丝
+    private static String GENERAL_ADDFANS = "/api/v1/addfans";
+
+    //详情判断是否能领取红包
+    private static String GENERAL_ACTIONCHECKBONUS = "/api/v1/actioncheckbonus";
+    //领取红包
+    private static String GENERAL_WATCHBONUS = "/api/v1/watchbonus";
 
     public MainDataManager(DataManager mDataManager) {
         super(mDataManager);
@@ -422,7 +436,7 @@ public class MainDataManager extends BaseDataManager {
 
     /**
      * 新增点赞
-     *     private static String GENERAL_GETLIKE = "/api/v1/getlike";
+     * private static String GENERAL_GETLIKE = "/api/v1/getlike";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -432,5 +446,76 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getCommentsLike(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GETLIKE, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 商户统计
+     * private static String GENERAL_CONUT = "/api/v1/conut";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCount(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_CONUT, mapParameters, mapHeaders), consumer);
+    }
+
+
+    /**
+     * 新增访客
+     * private static String GENERAL_ADDVISIT = "/api/v1/addvisit";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAddVisit(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ADDVISIT, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 新增联系
+     * private static String GENERAL_ADDCONTACT = "/api/v1/addcontact";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAddContact(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ADDCONTACT, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 详情判断是否能领取红包
+     * private static String GENERAL_ACTIONCHECKBONUS = "/api/v1/actioncheckbonus";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getActionCheckBonus(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_ACTIONCHECKBONUS, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 领取红包
+     * private static String GENERAL_WATCHBONUS = "/api/v1/watchbonus";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getWatchBonus(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_WATCHBONUS, mapParameters, mapHeaders), consumer);
     }
 }

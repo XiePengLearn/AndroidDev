@@ -40,7 +40,7 @@ public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentLis
         }
 
         RequestOptions options = new RequestOptions()
-                .error(R.drawable.tou_xiang_icon);
+                .error(R.drawable.default_icon);
         //头像
         Glide.with(mContext)
                 .load(info.getComment_img())

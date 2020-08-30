@@ -30,7 +30,7 @@ public class CommunityHomePageClassificationAdapter extends BaseQuickAdapter<Com
         }
 
         RequestOptions options = new RequestOptions()
-                .error(R.drawable.ic_launcher);
+                .error(R.drawable.default_icon);
         //头像
         Glide.with(mContext)
                 .load(info.getCate_iimg_url())

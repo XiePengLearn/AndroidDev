@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.composition.me.data;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.DataAnalysisResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface DataAnalysisContract {
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
+        void setResponseData(DataAnalysisResponse mDataAnalysisResponse);
 
         void showProgressDialogView();
 

@@ -176,7 +176,7 @@ public class StaffGridImageAdapter extends
             } else {
                 RequestOptions options = new RequestOptions()
                         .centerCrop()
-                        .placeholder(R.color.app_color_f6)
+                        .placeholder(R.drawable.default_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL);
                 Glide.with(viewHolder.itemView.getContext())
                         .load(path)

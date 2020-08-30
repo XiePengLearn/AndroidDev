@@ -52,10 +52,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp_22"
-
                 android:id="@+id/iv_collect"
-                android:layout_height="@dimen/dp_22"
+
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/shou_cang_icon" />
 
@@ -63,6 +63,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_collect"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp_6"
                 android:ellipsize="end"

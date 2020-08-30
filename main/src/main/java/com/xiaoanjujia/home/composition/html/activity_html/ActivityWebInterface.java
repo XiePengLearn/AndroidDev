@@ -62,10 +62,11 @@ public class ActivityWebInterface extends WebInterFace {
 
 
     @JavascriptInterface
-    public void getUserId() {
+    public String getUserId() {
         if (jsCallBack != null) {
-            jsCallBack.jsGetUserId();
+            return jsCallBack.jsGetUserId();
         }
+        return "";
     }
 
     public interface JSActivityCallBack {

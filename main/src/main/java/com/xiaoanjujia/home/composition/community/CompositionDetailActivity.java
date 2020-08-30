@@ -83,6 +83,8 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     TextView mainTitleText;
     @BindView(R2.id.main_title_right)
     ImageView mainTitleRight;
+    @BindView(R2.id.iv_collect)
+    ImageView ivCollect;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.chat_list)
@@ -152,6 +154,10 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         //        type = "all_count";
         //        initCommentDetailsData(page,type);
         initCommentCount();
+        //新增访客
+        initAddVisit();
+        //用户领取商户红包
+        initActionCheckBonus();
 
     }
 
@@ -462,7 +468,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     if (!Utils.isNull(advertisement_img)) {
                         RequestOptions options = new RequestOptions()
                                 .centerCrop()
-                                .placeholder(R.color.app_color_f6)
+                                .placeholder(R.drawable.default_icon)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL);
                         Glide.with(CompositionDetailActivity.this)
                                 .load(advertisement_img)
@@ -640,6 +646,174 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
             int code = mCommentPublishResponse.getStatus();
             String msg = mCommentPublishResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
+                ivCollect.setImageResource(R.drawable.star_icon);
+                if (!Utils.isNull(msg)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initAddVisit() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getAddVisit(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setAddVisit(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                //                if (!Utils.isNull(msg)) {
+                //                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                //                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initAddContact() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getAddContact(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setAddContact(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                //                if (!Utils.isNull(msg)) {
+                //                    ToastUtil.showToast(BaseApplication.getInstance(), msg);
+                //                }
+                if (!Utils.isNull(shop_phone)) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    Uri data = Uri.parse("tel:" + shop_phone);
+                    intent.setData(data);
+                    startActivity(intent);
+                }
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initActionCheckBonus() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getActionCheckBonus(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setActionCheckBonus(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                initWatchBonus();
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initWatchBonus() {
+        /**
+         * user_id:用户id
+         * community_id:商户id
+         * id:此信息(订单)id
+         * star_rating:12345星(传对应数值就行)
+         * common_text:内容
+         */
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("id", String.valueOf(mId));
+        mapParameters.put("community_id", mCommunityId);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getWatchBonus(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setWatchBonus(CommentPublishResponse mCommentPublishResponse) {
+        try {
+            int code = mCommentPublishResponse.getStatus();
+            String msg = mCommentPublishResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
                 if (!Utils.isNull(msg)) {
                     ToastUtil.showToast(BaseApplication.getInstance(), msg);
                 }
@@ -722,6 +896,13 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     int all_count = messageDate.getAll_count();
                     int good_count = messageDate.getGood_count();
                     int difference_count = messageDate.getDifference_count();
+                    int liksestatus = messageDate.getLiksestatus();
+                    // liksestatus:1已点,0未点
+                    if (liksestatus == 1) {
+                        ivCollect.setImageResource(R.drawable.star_icon);
+                    } else {
+                        ivCollect.setImageResource(R.drawable.shou_cang_icon);
+                    }
                     compositionCommentStatus1.setText(String.format("全部%s", String.valueOf(all_count)));
                     compositionCommentStatus2.setText(String.format("好评%s", String.valueOf(good_count)));
                     compositionCommentStatus3.setText(String.format("差评%s", String.valueOf(difference_count)));
@@ -863,12 +1044,8 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
             }
 
         } else if (id == R.id.rl_call_phone) {
-            if (!Utils.isNull(shop_phone)) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + shop_phone);
-                intent.setData(data);
-                startActivity(intent);
-            }
+
+            initAddContact();
         } else if (id == R.id.main_title_back) {
             finish();
         }

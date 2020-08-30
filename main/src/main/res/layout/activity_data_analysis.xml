@@ -125,7 +125,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
                         android:id="@+id/invitation_leave_time_ll"
                         android:layout_width="match_parent"
@@ -137,6 +136,7 @@
 
                         <TextView
                             android:layout_width="0dp"
+                            android:id="@+id/tv_day_time_text"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_3"
                             android:layout_weight="1"
@@ -368,11 +368,17 @@
 
                     </LinearLayout>
 
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/line_chart_lc"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_0_5"
                         android:layout_marginLeft="@dimen/dp_18"
-                        android:layout_marginTop="@dimen/dp_174"
+                        android:layout_marginTop="@dimen/dp_19"
                         android:layout_marginRight="@dimen/dp_18"
                         android:background="#D1D1D1" />
 
@@ -445,7 +451,11 @@
 
 
                     </LinearLayout>
-
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chart"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="345dp" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -484,6 +494,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="@dimen/dp_13"
+                        android:layout_marginBottom="@dimen/dp_50"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp_18"
                         android:paddingRight="@dimen/dp_18">
@@ -496,6 +507,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="昨日浏览次数:"
+
                             android:textColor="@color/color_585858"
                             android:textSize="@dimen/sp_14" />
 

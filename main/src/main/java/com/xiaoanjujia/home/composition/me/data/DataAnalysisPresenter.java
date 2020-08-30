@@ -5,7 +5,7 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.DataAnalysisResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
@@ -23,8 +23,8 @@ import okhttp3.ResponseBody;
  */
 public class DataAnalysisPresenter extends BasePresenter implements DataAnalysisContract.Presenter {
     private MainDataManager mDataManager;
-    private              DataAnalysisContract.View mContractView;
-    private static final String               TAG = "ChangeAuthenticationPresenter";
+    private DataAnalysisContract.View mContractView;
+    private static final String TAG = "ChangeAuthenticationPresenter";
 
     @Inject
     public DataAnalysisPresenter(MainDataManager mDataManager, DataAnalysisContract.View view) {
@@ -54,9 +54,9 @@ public class DataAnalysisPresenter extends BasePresenter implements DataAnalysis
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getCount(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LoginResponse mDataResponse;
+            private DataAnalysisResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -67,9 +67,9 @@ public class DataAnalysisPresenter extends BasePresenter implements DataAnalysis
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, LoginResponse.class);
+                        mDataResponse = gson.fromJson(response, DataAnalysisResponse.class);
                     } else {
-                        mDataResponse = new LoginResponse();
+                        mDataResponse = new DataAnalysisResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
