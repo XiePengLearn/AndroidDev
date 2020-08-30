@@ -1,6 +1,9 @@
 package com.xiaoanjujia.home.composition.me.data;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +16,18 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
@@ -30,6 +45,7 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.DataAnalysisResponse;
 import com.xiaoanjujia.home.tool.Api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +124,9 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
 
     private int dayType = 1;//1今天,2昨天
     private int mId;
+    private Typeface mTf;
+    private SpannableString mCenterText;
+    private String time_status = "1";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,8 +136,11 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         unbinder = ButterKnife.bind(this);
         mId = getIntent().getIntExtra("id", -1);
 
+        mTf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        mCenterText = generateCenterText();
         initView();
-        initData();
+        time_status = "1";
+        initData(time_status);
         initTitle();
     }
 
@@ -139,7 +161,7 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         findPullRefreshHeader.setPtrHandler(this);
     }
 
-    private void initData() {
+    private void initData(String time_status) {
 
         //user_id:用户id
         //id:商家id
@@ -147,7 +169,7 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
         mapParameters.put("id", String.valueOf(mId));//商户Id
-        mapParameters.put("time_status", "1");
+        mapParameters.put("time_status", time_status);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -188,7 +210,51 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                 int day_contact = data.getDay_contact();
                 tvContactNum.setText(String.valueOf(day_contact));
                 List<DataAnalysisResponse.DataBean.StatisticsBean> statistics = data.getStatistics();
+                ArrayList<Entry> values1 = new ArrayList<>();
 
+                for (int i = 0; i < statistics.size(); i++) {
+                    int count = statistics.get(i).getCount();
+                    values1.add(new Entry(i, count));
+                }
+
+                LineDataSet d1 = new LineDataSet(values1, "单位:小时");
+                d1.setLineWidth(1f);
+                d1.setCircleRadius(1.5f);
+                d1.setCircleHoleRadius(0.5f);
+                d1.setHighLightColor(Color.rgb(244, 117, 117));
+                d1.setColor(Color.rgb(204, 204, 204));
+                d1.setCircleColor(Color.rgb(204, 204, 204));
+                d1.setDrawValues(true);
+                ArrayList<ILineDataSet> sets = new ArrayList<>();
+                sets.add(d1);
+                LineData lineData = new LineData(sets);
+
+                lineChartLc.getDescription().setEnabled(false);
+                lineChartLc.setDrawGridBackground(false);
+
+                XAxis xAxis = lineChartLc.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setTypeface(mTf);
+                xAxis.setDrawGridLines(false);
+                xAxis.setDrawAxisLine(true);
+
+                YAxis leftAxis = lineChartLc.getAxisLeft();
+                leftAxis.setTypeface(mTf);
+                leftAxis.setLabelCount(5, false);
+                leftAxis.setAxisMinimum(0); // this replaces setStartAtZero(true)
+
+                YAxis rightAxis = lineChartLc.getAxisRight();
+                rightAxis.setTypeface(mTf);
+                rightAxis.setLabelCount(5, false);
+                rightAxis.setDrawGridLines(false);
+                rightAxis.setAxisMinimum(0); // this replaces setStartAtZero(true)
+
+                // set data
+                lineChartLc.setData(lineData);
+
+                // do not forget to refresh the chart
+                // lineChartLc.invalidate();
+                lineChartLc.animateX(750);
                 //"datetime": "2020-07-24",---统计时间
                 //    "day_new_visit_num": 0,今天访问新增客户数量
                 //    "day_new_visit_bai": "0%",今天访问新增客户百分比
@@ -209,19 +275,62 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                 int yesterday_browse = data.getYesterday_browse();
                 int yesterday_contact = data.getYesterday_contact();
                 //1今天,2昨天
-                if (dayType == 1) {
+                if (time_status.equals("1")) {
                     tvCountNum1.setText(String.format("今日联系客户: %s", yesterday_contact));
                     tvCountNum2.setText(String.format("今日访客数: %s", yesterday_visit));
                     tvCountNum3.setText(String.format("今日浏览次数: %s", yesterday_browse));
                     tvDayTimeText.setText("今日时时");
+                    dayYesterday.setTextColor(getResources().getColor(R.color.color_494949));
+                    dayToday.setTextColor(getResources().getColor(R.color.color_ff3333));
                 } else {
                     tvCountNum1.setText(String.format("昨日联系客户: %s", yesterday_contact));
                     tvCountNum2.setText(String.format("昨日访客数: %s", yesterday_visit));
                     tvCountNum3.setText(String.format("昨日浏览次数: %s", yesterday_browse));
                     tvDayTimeText.setText("昨日时时");
+                    dayYesterday.setTextColor(getResources().getColor(R.color.color_ff3333));
+                    dayToday.setTextColor(getResources().getColor(R.color.color_494949));
                 }
 
+                ArrayList<PieEntry> entries = new ArrayList<>();
+                entries.add(new PieEntry((float) (day_new_visit_num), "新客户占  " + day_new_visit_bai + "\n" + day_new_visit_num + "人"));
+                entries.add(new PieEntry((float) (day_old_visit_num), "回头户占  " + day_old_visit_bai + "\n" + day_old_visit_num + "人"));
 
+                //
+                //                entries.add(new PieEntry((float) (20), "新客户占  " + day_new_visit_bai + "\n" + 20 + "人"));
+                //                entries.add(new PieEntry((float) (60), "回头户占  " + day_old_visit_bai + "\n" + 60 + "人"));
+                PieDataSet d = new PieDataSet(entries, "");
+                // space between slices
+                d.setSliceSpace(2f);
+                d.setColors(ColorTemplate.VORDIPLOM_COLORS);
+                PieData pieData = new PieData(d);
+                // apply styling
+                chart.getDescription().setEnabled(false);
+                chart.setHoleRadius(62f);
+                chart.setTransparentCircleRadius(67f);
+                chart.setCenterText(mCenterText);
+                chart.setCenterTextTypeface(mTf);
+                chart.setCenterTextSize(9f);
+                chart.setUsePercentValues(true);
+                chart.setExtraOffsets(25, 1, 25, 1);
+                chart.setRotationEnabled(false);  // 是否可以旋转
+                pieData.setValueFormatter(new PercentFormatter());
+                pieData.setValueTypeface(mTf);
+                pieData.setValueTextSize(11f);
+                pieData.setValueTextColor(getResources().getColor(R.color.color_585858));
+                // set data
+                chart.setData(pieData);
+
+                Legend l = chart.getLegend();
+                l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+                l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+                l.setOrientation(Legend.LegendOrientation.VERTICAL);
+                l.setDrawInside(false);
+                l.setYEntrySpace(0f);
+                l.setYOffset(0f);
+
+                // do not forget to refresh the chart
+                // chart.invalidate();
+                chart.animateY(900);
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
@@ -238,6 +347,16 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
 
     }
 
+    private SpannableString generateCenterText() {
+        SpannableString s = new SpannableString("");
+        //        s.setSpan(new RelativeSizeSpan(1.6f), 0, 14, 0);
+        //        s.setSpan(new ForegroundColorSpan(ColorTemplate.VORDIPLOM_COLORS[0]), 0, 14, 0);
+        //        s.setSpan(new RelativeSizeSpan(.9f), 14, 25, 0);
+        //        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, 25, 0);
+        //        s.setSpan(new RelativeSizeSpan(1.4f), 25, s.length(), 0);
+        //        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), 25, s.length(), 0);
+        return s;
+    }
 
     @Override
     public void showProgressDialogView() {
@@ -263,13 +382,20 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.day_yesterday) {
+            time_status = "2";
+            initData(time_status);
+            dayYesterday.setTextColor(getResources().getColor(R.color.color_ff3333));
+            dayToday.setTextColor(getResources().getColor(R.color.color_494949));
 
         } else if (id == R.id.day_today) {
-
+            time_status = "1";
+            initData(time_status);
+            dayYesterday.setTextColor(getResources().getColor(R.color.color_494949));
+            dayToday.setTextColor(getResources().getColor(R.color.color_ff3333));
         } else if (id == R.id.immediate_promotion_btn) {
 
         } else if (id == R.id.refresh_data_btn) {
-
+            initData(time_status);
         }
     }
 
@@ -278,7 +404,7 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initData();
+                initData(time_status);
                 frame.refreshComplete();
             }
         }, 500);

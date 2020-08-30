@@ -339,7 +339,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="单位:小时"
+                            android:text="单位:个数"
                             android:textColor="@color/color_494949"
                             android:textSize="@dimen/sp_15" />
 
@@ -351,7 +351,7 @@
                             android:layout_marginRight="@dimen/dp_20"
                             android:padding="@dimen/dp_3"
                             android:text="昨日"
-                            android:textColor="#FF3333"
+                            android:textColor="@color/color_ff3333"
                             android:textSize="@dimen/sp_15" />
 
                         <TextView
@@ -455,12 +455,12 @@
                         android:id="@+id/chart"
                         android:layout_marginTop="@dimen/dp_5"
                         android:layout_width="match_parent"
-                        android:layout_height="345dp" />
+                        android:layout_height="325dp" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginTop="@dimen/dp_19"
+
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp_18"
                         android:paddingRight="@dimen/dp_18">

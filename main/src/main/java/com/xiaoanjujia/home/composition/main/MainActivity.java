@@ -32,6 +32,7 @@ import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
@@ -648,15 +649,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.tv_bottom_navigation_4) {
-            String url = "https://www.xiaoanjujia.com/mobile/index.php";
-            Intent intent = new Intent(this, MyWebActivity.class);
-            intent.putExtra("url", url);
-            startActivity(intent);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                String url = "https://www.xiaoanjujia.com/mobile/index.php";
+                Intent intent = new Intent(this, MyWebActivity.class);
+                intent.putExtra("url", url);
+                startActivity(intent);
+            }
         } else if (id == R.id.tv_bottom_navigation_5) {
-            String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-            Intent intent = new Intent(this, MyWebActivity.class);
-            intent.putExtra("url", url);
-            startActivity(intent);
+
+
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+                Intent intent = new Intent(this, MyWebActivity.class);
+                intent.putExtra("url", url);
+                startActivity(intent);
+            }
         }
     }
 }
