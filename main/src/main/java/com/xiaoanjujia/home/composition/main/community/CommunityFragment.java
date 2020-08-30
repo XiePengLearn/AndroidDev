@@ -24,6 +24,7 @@ import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.widget.SearchLayout;
@@ -276,9 +277,8 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     }
 
     private void initTypeRoieData() {
-        // roletype :1是物业主管.2普通物业
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("roletype", "1");
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getTypesOfRoleData(headersTreeMap, mapParameters);

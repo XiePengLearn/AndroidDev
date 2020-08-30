@@ -5,7 +5,7 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ComcateListsResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.Map;
@@ -23,8 +23,8 @@ import okhttp3.ResponseBody;
  */
 public class CategoryPresenter extends BasePresenter implements CategoryContract.Presenter {
     private MainDataManager mDataManager;
-    private              CategoryContract.View mContractView;
-    private static final String               TAG = "ChangeAuthenticationPresenter";
+    private CategoryContract.View mContractView;
+    private static final String TAG = "ChangeAuthenticationPresenter";
 
     @Inject
     public CategoryPresenter(MainDataManager mDataManager, CategoryContract.View view) {
@@ -51,29 +51,29 @@ public class CategoryPresenter extends BasePresenter implements CategoryContract
     }
 
     @Override
-    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getComcateLists(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LoginResponse mDataResponse;
+            private ComcateListsResponse mComcateListsResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
 
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response);
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, LoginResponse.class);
+                        mComcateListsResponse = gson.fromJson(response, ComcateListsResponse.class);
                     } else {
-                        mDataResponse = new LoginResponse();
-                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                        mComcateListsResponse = new ComcateListsResponse();
+                        mComcateListsResponse.setMessage(ProjectResponse.getMessage(response));
+                        mComcateListsResponse.setStatus(ProjectResponse.getStatus(response));
                     }
-                    mContractView.setResponseData(mDataResponse);
+                    mContractView.setResponseData(mComcateListsResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

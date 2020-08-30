@@ -8,21 +8,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.library.AutoFlowLayout;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.composition.main.community.CommunityGridLayoutManager;
+import com.xiaoanjujia.home.entities.ComcateListsResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,8 +56,9 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.category_af)
-    AutoFlowLayout categoryAf;
+    @BindView(R2.id.rl_category)
+    RecyclerView aflCotent;
+    private CategoryAdapter mAdapterResult;
 
 
     @Override
@@ -71,7 +78,7 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("商城");
+        mainTitleText.setText("选择发布类别");
     }
 
     private void initView() {
@@ -80,17 +87,33 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
                 .categoryPresenterModule(new CategoryPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-
+        CommunityGridLayoutManager manager = new CommunityGridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
+        aflCotent.setLayoutManager(manager);
+        mAdapterResult = new CategoryAdapter(R.layout.item_category_grald);
+        mAdapterResult.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //                List data = adapter.getData();
+                //                SearchKeywordResultResponse.DataBean servicehistoryBean = (SearchKeywordResultResponse.DataBean) data.get(position);
+                //                String id = servicehistoryBean.getID();
+                //                String date = servicehistoryBean.getDATE();
+                //                Intent intent = new Intent(mContext, ChatRecordActivity.class);
+                //                intent.putExtra("title", "服务历史");
+                //                intent.putExtra("id", id);
+                //                intent.putExtra("date", date);
+                //                intent.putExtra("mMedicalOrgId", mMedicalOrgId);
+                //                startActivity(intent);
+                ToastUtil.showToast(BaseApplication.getInstance(), "position:" + position);
+            }
+        });
+        aflCotent.setAdapter(mAdapterResult);
     }
 
     private void initData() {
 
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
-
-
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
@@ -102,18 +125,22 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(ComcateListsResponse mComcateListsResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = mComcateListsResponse.getStatus();
+            String msg = mComcateListsResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
-
-
+                List<ComcateListsResponse.DataBean> dataList = mComcateListsResponse.getData();
+                if (dataList != null) {
+                    if (dataList.size() > 0) {
+                        List<ComcateListsResponse.DataBean> dataHistory = mAdapterResult.getData();
+                        dataHistory.clear();
+                        mAdapterResult.addData(dataList);
+                    }
+                }
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
-                finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(this.getApplicationContext(), msg);

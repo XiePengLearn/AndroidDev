@@ -30,10 +30,10 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="com.xiaoanjujia.home.composition.main.MainActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
 
         </activity>
 
@@ -119,24 +119,27 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.staff.StaffActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.supervisor.SupervisorActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
             android:name="com.xiaoanjujia.home.composition.community.CompositionDetailActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name="com.xiaoanjujia.home.composition.me.data.DataAnalysisActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.me.category.CategoryActivity"
             android:screenOrientation="portrait" />
     </application>
 

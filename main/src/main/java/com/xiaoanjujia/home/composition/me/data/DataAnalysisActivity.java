@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.me.data;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.me.category.CategoryActivity;
 import com.xiaoanjujia.home.entities.DataAnalysisResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -393,7 +395,8 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
             dayYesterday.setTextColor(getResources().getColor(R.color.color_494949));
             dayToday.setTextColor(getResources().getColor(R.color.color_ff3333));
         } else if (id == R.id.immediate_promotion_btn) {
-
+            Intent intent = new Intent(DataAnalysisActivity.this, CategoryActivity.class);
+            startActivity(intent);
         } else if (id == R.id.refresh_data_btn) {
             initData(time_status);
         }

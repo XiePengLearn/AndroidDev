@@ -8,11 +8,44 @@
 
     <include layout="@layout/jkx_public_title_home" />
 
-    <com.example.library.AutoFlowLayout
-        android:id="@+id/category_af"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnNumbers="5"
-        app:rowNumbers="12" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_26"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="选择发布类别"
+            android:textColor="@color/color_494949"
+            android:textSize="@dimen/sp_15" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_12"
+        android:background="#D1D1D1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rl_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:overScrollMode="never"
+        android:visibility="visible" />
 
 </LinearLayout>

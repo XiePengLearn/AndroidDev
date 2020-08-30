@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.composition.me.category;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ComcateListsResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface CategoryContract {
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
+        void setResponseData(ComcateListsResponse mComcateListsResponse);
 
         void showProgressDialogView();
 
