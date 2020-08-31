@@ -69,6 +69,16 @@ public class DataAnalysisResponse implements Serializable {
         private int day_like;
         private int day_contact;
         private String datetime;
+        private String day_time;
+
+        public String getDay_time() {
+            return day_time;
+        }
+
+        public void setDay_time(String day_time) {
+            this.day_time = day_time;
+        }
+
         private int day_new_visit_num;
         private String day_new_visit_bai;
         private int day_old_visit_num;

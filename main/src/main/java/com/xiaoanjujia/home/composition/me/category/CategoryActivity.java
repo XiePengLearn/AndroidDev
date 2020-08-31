@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.me.category;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,8 +23,10 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.main.community.CommunityGridLayoutManager;
+import com.xiaoanjujia.home.composition.me.post_message.PostMessageActivity;
 import com.xiaoanjujia.home.entities.ComcateListsResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -59,6 +62,7 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
     @BindView(R2.id.rl_category)
     RecyclerView aflCotent;
     private CategoryAdapter mAdapterResult;
+    private List<ComcateListsResponse.DataBean> dataList;
 
 
     @Override
@@ -93,17 +97,16 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
         mAdapterResult.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                //                List data = adapter.getData();
-                //                SearchKeywordResultResponse.DataBean servicehistoryBean = (SearchKeywordResultResponse.DataBean) data.get(position);
-                //                String id = servicehistoryBean.getID();
-                //                String date = servicehistoryBean.getDATE();
-                //                Intent intent = new Intent(mContext, ChatRecordActivity.class);
-                //                intent.putExtra("title", "服务历史");
-                //                intent.putExtra("id", id);
-                //                intent.putExtra("date", date);
-                //                intent.putExtra("mMedicalOrgId", mMedicalOrgId);
-                //                startActivity(intent);
-                ToastUtil.showToast(BaseApplication.getInstance(), "position:" + position);
+                ComcateListsResponse.DataBean dataBean = dataList.get(position);
+                int cate_id = dataBean.getCate_id();
+                String cate_name = dataBean.getCate_name();
+                Intent intent = new Intent(CategoryActivity.this, PostMessageActivity.class);
+                intent.putExtra("cate_id", cate_id);
+                startActivity(intent);
+                if (!Utils.isNull(cate_name)) {
+                    ToastUtil.showToast(BaseApplication.getInstance(), "发布类别:" + cate_name);
+                }
+
             }
         });
         aflCotent.setAdapter(mAdapterResult);
@@ -130,7 +133,7 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
             int code = mComcateListsResponse.getStatus();
             String msg = mComcateListsResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                List<ComcateListsResponse.DataBean> dataList = mComcateListsResponse.getData();
+                dataList = mComcateListsResponse.getData();
                 if (dataList != null) {
                     if (dataList.size() > 0) {
                         List<ComcateListsResponse.DataBean> dataHistory = mAdapterResult.getData();

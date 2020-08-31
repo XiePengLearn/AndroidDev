@@ -60,13 +60,21 @@ public class MeWebInterface extends WebInterFace {
         }
     }
 
+    @Override
+    public String getUserId() {
+        if (jsCallBack != null) {
+            return jsCallBack.jsGetUserId();
+        }
+        return "";
+    }
+
     public interface JSMeCallBack {
         String jsGetUserName();
 
         String jsGetPassWord();
 
         String jsGetUserToken();
-
+        String jsGetUserId();
         void jsMerchantsCertification();
 
         void jsGetLogOut();

@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.me.post_message;
+package com.xiaoanjujia.home.composition.tenement.quary_detail;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,24 +28,24 @@ import java.util.List;
  * email：893855882@qq.com
  * data：16/7/27
  */
-public class PostMessageGridImageAdapter2 extends
-        RecyclerView.Adapter<PostMessageGridImageAdapter2.ViewHolder> {
+public class QuaryDetailGridImageAdapter extends
+        RecyclerView.Adapter<QuaryDetailGridImageAdapter.ViewHolder> {
     private static final int TYPE_CAMERA = 1;
     private static final int TYPE_PICTURE = 2;
-    private final PostMessageActivity mContext;
+    private final QuaryDetailActivity mContext;
     private LayoutInflater mInflater;
     private List<LocalMedia> list = new ArrayList<>();
-    private int selectMax = 1;
+    private int selectMax = 3;
     /**
      * 点击添加图片跳转
      */
-    private onAddPicClickListener mOnAddPicClickListener;
+    private onAddPicClickListener1 mOnAddPicClickListener;
 
-    public interface onAddPicClickListener {
-        void onAddPicClick();
+    public interface onAddPicClickListener1 {
+        void onAddPicClick1();
     }
 
-    PostMessageGridImageAdapter2(PostMessageActivity context, onAddPicClickListener mOnAddPicClickListener) {
+    QuaryDetailGridImageAdapter(QuaryDetailActivity context, onAddPicClickListener1 mOnAddPicClickListener) {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         this.mOnAddPicClickListener = mOnAddPicClickListener;
@@ -76,7 +76,7 @@ public class PostMessageGridImageAdapter2 extends
     @Override
     public int getItemCount() {
         if (list.size() < selectMax) {
-            return list.size() + 1;
+            return list.size() ;
         } else {
             return list.size();
         }
@@ -96,7 +96,7 @@ public class PostMessageGridImageAdapter2 extends
      */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = mInflater.inflate(R.layout.gv_filter_image2,
+        View view = mInflater.inflate(R.layout.gv_filter_image_staff,
                 viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -105,7 +105,7 @@ public class PostMessageGridImageAdapter2 extends
     private boolean isShowAddItem(int position) {
         int size = list.size() == 0 ? 0 : list.size();
 
-        return position == size;
+        return false;
     }
 
     /**
@@ -121,26 +121,26 @@ public class PostMessageGridImageAdapter2 extends
             viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnAddPicClickListener.onAddPicClick();
+                    mOnAddPicClickListener.onAddPicClick1();
                 }
             });
             viewHolder.llDel.setVisibility(View.INVISIBLE);
         } else {
-            viewHolder.llDel.setVisibility(View.VISIBLE);
+            viewHolder.llDel.setVisibility(View.GONE);
             viewHolder.llDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int index = viewHolder.getAdapterPosition();
-                    // 这里有时会返回-1造成数据下标越界,具体可参考getAdapterPosition()源码，
-                    // 通过源码分析应该是bindViewHolder()暂未绘制完成导致，知道原因的也可联系我~感谢
-                    if (index != RecyclerView.NO_POSITION) {
-                        list.remove(index);
-                        PostMessageGridImageAdapter2.this.notifyItemRemoved(index);
-                        PostMessageGridImageAdapter2.this.notifyItemRangeChanged(index, list.size());
-                        if (list.size() == 0) {
-                            mContext.refershAddPictureButton2();
-                        }
-                    }
+//                    int index = viewHolder.getAdapterPosition();
+//                    // 这里有时会返回-1造成数据下标越界,具体可参考getAdapterPosition()源码，
+//                    // 通过源码分析应该是bindViewHolder()暂未绘制完成导致，知道原因的也可联系我~感谢
+//                    if (index != RecyclerView.NO_POSITION) {
+//                        list.remove(index);
+//                        CompositionDetailGridImageAdapter.this.notifyItemRemoved(index);
+//                        CompositionDetailGridImageAdapter.this.notifyItemRangeChanged(index, list.size());
+//                        if (list.size() == 0) {
+//                            mContext.refershAddPictureButton();
+//                        }
+//                    }
                 }
             });
             LocalMedia media = list.get(position);

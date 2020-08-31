@@ -50,12 +50,21 @@ public class StoreWebInterface extends WebInterFace {
         }
 
     }
+
     @JavascriptInterface
     @Override
     public void getLogOut() {
         if (jsCallBack != null) {
             jsCallBack.jsGetLogOut();
         }
+    }
+
+    @Override
+    public String getUserId() {
+        if (jsCallBack != null) {
+            return jsCallBack.jsGetUserId();
+        }
+        return "";
     }
 
     public interface JSStoreCallBack {
@@ -65,7 +74,10 @@ public class StoreWebInterface extends WebInterFace {
 
         String jsGetUserToken();
 
+        String jsGetUserId();
+
         void jsMerchantsCertification();
+
         void jsGetLogOut();
     }
 

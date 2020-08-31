@@ -114,6 +114,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     private boolean isfirst = false;
     private String mCompanyPath;
     private String mMSpecialImgsPath;
+    private int cate_id;
 
 
     @Override
@@ -123,6 +124,8 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
+        Intent intent = getIntent();
+        cate_id = intent.getIntExtra("cate_id", -1);
         initTitle();
         initView();
 
@@ -149,7 +152,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         companyCertificateRecycler.setLayoutManager(manager);
         mAdapter = new PostMessageGridImageAdapter(PostMessageActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
-        //        mAdapter.setSelectMax(5);
+        //        mAdapter.setSelectMax(1);
         companyCertificateRecycler.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new PostMessageGridImageAdapter.OnItemClickListener() {
             @Override
@@ -193,7 +196,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         uploadingSpecialCertificateRv.setLayoutManager(manager2);
         mAdapter2 = new PostMessageGridImageAdapter2(PostMessageActivity.this, onAddPicClickListener2);
         mAdapter2.setList(selectList2);
-        //        mAdapter2.setSelectMax(5);
+        //        mAdapter2.setSelectMax(1);
         uploadingSpecialCertificateRv.setAdapter(mAdapter2);
         mAdapter2.setOnItemClickListener(new PostMessageGridImageAdapter2.OnItemClickListener() {
             @Override
@@ -473,20 +476,20 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         if (isFirst) {
             //上传公司证件：
             isCameraButton = true;
-            mMaxSelectNum = 3;
-            //            mAdapter.setSelectMax(3);
+            mMaxSelectNum = 9;
+            //            mAdapter.setSelectMax(9);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton, selectList, 3);
+            selectPictureSetting(isCameraButton, selectList, 9);
             mAdapter.notifyDataSetChanged();
         } else {
             //*上传特殊材料：
             isCameraButton = true;
-            mMaxSelectNum = 5;
-            //            mAdapter2.setSelectMax(5);
+            mMaxSelectNum = 1;
+            //            mAdapter2.setSelectMax(1);
             // 单独拍照和相册
             chooseMode = PictureMimeType.ofImage();
-            selectPictureSetting(isCameraButton, selectList2, 5);
+            selectPictureSetting(isCameraButton, selectList2, 1);
             mAdapter2.notifyDataSetChanged();
         }
     }
@@ -567,8 +570,8 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         @Override
         public void onAddPicClick1() {
             isfirst = true;
-            mMaxSelectNum = 3;
-            selectPictureSetting(isCameraButton, selectList, 3);
+            mMaxSelectNum = 9;
+            selectPictureSetting(isCameraButton, selectList, 9);
 
         }
 
@@ -576,9 +579,9 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     private PostMessageGridImageAdapter2.onAddPicClickListener onAddPicClickListener2 = new PostMessageGridImageAdapter2.onAddPicClickListener() {
         @Override
         public void onAddPicClick() {
-            mMaxSelectNum = 5;
+            mMaxSelectNum = 1;
             isfirst = false;
-            selectPictureSetting(isCameraButton, selectList2, 5);
+            selectPictureSetting(isCameraButton, selectList2, 1);
 
         }
 

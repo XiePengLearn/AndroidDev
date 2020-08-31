@@ -13,10 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +36,6 @@ import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.html.me_html.MeWebFragment;
 import com.xiaoanjujia.home.composition.html.store_html.StoreWebFragment;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
@@ -51,7 +47,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 @Route(path = "/main/MainActivity")
 public class MainActivity extends BaseActivity implements MainContract.View, BottomNavigationBar.OnTabSelectedListener {
@@ -62,16 +57,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     BottomNavigationBar bottomNavigationBar;
     @BindView(R2.id.main_container)
     FrameLayout mainContainer;
-    @BindView(R2.id.tv_bottom_navigation_1)
-    TextView tvBottomNavigation1;
-    @BindView(R2.id.tv_bottom_navigation_2)
-    TextView tvBottomNavigation2;
-    @BindView(R2.id.tv_bottom_navigation_3)
-    TextView tvBottomNavigation3;
-    @BindView(R2.id.tv_bottom_navigation_4)
-    ImageView tvBottomNavigation4;
-    @BindView(R2.id.tv_bottom_navigation_5)
-    ImageView tvBottomNavigation5;
     private UnlockingFragment mUnlockingFragment;
     private TenementFragment mTenementFragment;
     private FragmentManager mFragmentManager;
@@ -232,41 +217,45 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
             } else if (position == 2) {
 
-                //                if (mStoreFragment == null) {
-                //                    mStoreFragment = StoreWebFragment.newInstance();
-                //                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
-                //                }
-                //
-                //                hideHomeFragment();
-                //                hideTenementFragment();
-                //                hideCommunityFragment();
-                //                hideMyFragment();
-                //                mFragmentManager.beginTransaction()
-                //                        .show(mStoreFragment)
-                //                        .commitAllowingStateLoss();
-                String url = "https://www.xiaoanjujia.com/mobile/index.php";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
+                if (mStoreFragment == null) {
+                    mStoreFragment = StoreWebFragment.newInstance();
+                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mStoreFragment)
+                        .commitAllowingStateLoss();
+                //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
+                //                Intent intent = new Intent(this, MyWebActivity.class);
+                //                intent.putExtra("url", url);
+                //                startActivity(intent);
 
             } else if (position == 3) {
-                //
-                //                if (mMyFragment == null) {
-                //                    mMyFragment = MeWebFragment.newInstance();
-                //                    addFragment(R.id.main_container, mMyFragment, "my_fg");
-                //                }
-                //
-                //                hideHomeFragment();
-                //                hideTenementFragment();
-                //                hideCommunityFragment();
-                //                hideStoreFragment();
-                //                mFragmentManager.beginTransaction()
-                //                        .show(mMyFragment)
-                //                        .commitAllowingStateLoss();
-                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
+
+                if (mMyFragment == null) {
+                    mMyFragment = MeWebFragment.newInstance();
+                    addFragment(R.id.main_container, mMyFragment, "my_fg");
+                }else {
+                    if (!NoDoubleClickUtils.isDoubleClick()) {
+                        mMyFragment.refreshView();
+                    }
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mMyFragment)
+                        .commitAllowingStateLoss();
+                //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+                //                Intent intent = new Intent(this, MyWebActivity.class);
+                //                intent.putExtra("url", url);
+                //                startActivity(intent);
 
             }
         } else {
@@ -311,43 +300,47 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
             } else if (position == 3) {
 
-                //                if (mStoreFragment == null) {
-                //                    mStoreFragment = StoreWebFragment.newInstance();
-                //                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
-                //                }
-                //
-                //                hideHomeFragment();
-                //                hideTenementFragment();
-                //                hideCommunityFragment();
-                //                hideMyFragment();
-                //                mFragmentManager.beginTransaction()
-                //                        .show(mStoreFragment)
-                //                        .commitAllowingStateLoss();
-                String url = "https://www.xiaoanjujia.com/mobile/index.php";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
+                if (mStoreFragment == null) {
+                    mStoreFragment = StoreWebFragment.newInstance();
+                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mStoreFragment)
+                        .commitAllowingStateLoss();
+                //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
+                //                Intent intent = new Intent(this, MyWebActivity.class);
+                //                intent.putExtra("url", url);
+                //                startActivity(intent);
 
 
             } else if (position == 4) {
 
-                //                if (mMyFragment == null) {
-                //                    mMyFragment = MeWebFragment.newInstance();
-                //                    addFragment(R.id.main_container, mMyFragment, "my_fg");
-                //                }
-                //
-                //                hideHomeFragment();
-                //                hideTenementFragment();
-                //                hideCommunityFragment();
-                //                hideStoreFragment();
-                //                mFragmentManager.beginTransaction()
-                //                        .show(mMyFragment)
-                //                        .commitAllowingStateLoss();
+                if (mMyFragment == null) {
+                    mMyFragment = MeWebFragment.newInstance();
+                    addFragment(R.id.main_container, mMyFragment, "my_fg");
+                }else {
+                    if (!NoDoubleClickUtils.isDoubleClick()) {
+                        mMyFragment.refreshView();
+                    }
+                }
 
-                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mMyFragment)
+                        .commitAllowingStateLoss();
+
+                //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+                //                Intent intent = new Intent(this, MyWebActivity.class);
+                //                intent.putExtra("url", url);
+                //                startActivity(intent);
             }
         }
 
@@ -406,18 +399,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
                     .setFirstSelectedPosition(0)
                     .initialise();
-            tvBottomNavigation2.setVisibility(View.GONE);
+            //            tvBottomNavigation2.setVisibility(View.GONE);
         } else {
             //物业人员
             bottomNavigationBar
                     .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
                     .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
                     .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
+                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
                     .setFirstSelectedPosition(0)
                     .initialise();
-            tvBottomNavigation2.setVisibility(View.VISIBLE);
+            //            tvBottomNavigation2.setVisibility(View.VISIBLE);
         }
 
 
@@ -645,25 +638,25 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     }
 
 
-    @OnClick({R2.id.tv_bottom_navigation_4, R2.id.tv_bottom_navigation_5})
-    public void onViewClicked(View view) {
-        int id = view.getId();
-        if (id == R.id.tv_bottom_navigation_4) {
-            if (!NoDoubleClickUtils.isDoubleClick()) {
-                String url = "https://www.xiaoanjujia.com/mobile/index.php";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
-            }
-        } else if (id == R.id.tv_bottom_navigation_5) {
-
-
-            if (!NoDoubleClickUtils.isDoubleClick()) {
-                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-                Intent intent = new Intent(this, MyWebActivity.class);
-                intent.putExtra("url", url);
-                startActivity(intent);
-            }
-        }
-    }
+    //    @OnClick({R2.id.tv_bottom_navigation_4, R2.id.tv_bottom_navigation_5})
+    //    public void onViewClicked(View view) {
+    //        int id = view.getId();
+    //        if (id == R.id.tv_bottom_navigation_4) {
+    //            if (!NoDoubleClickUtils.isDoubleClick()) {
+    //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
+    //                Intent intent = new Intent(this, MyWebActivity.class);
+    //                intent.putExtra("url", url);
+    //                startActivity(intent);
+    //            }
+    //        } else if (id == R.id.tv_bottom_navigation_5) {
+    //
+    //
+    //            if (!NoDoubleClickUtils.isDoubleClick()) {
+    //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+    //                Intent intent = new Intent(this, MyWebActivity.class);
+    //                intent.putExtra("url", url);
+    //                startActivity(intent);
+    //            }
+    //        }
+    //    }
 }

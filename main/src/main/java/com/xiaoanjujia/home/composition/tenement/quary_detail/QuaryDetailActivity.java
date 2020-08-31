@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.tenement.detail;
+package com.xiaoanjujia.home.composition.tenement.quary_detail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,10 +51,10 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/recordDetailActivity/recordDetailActivity")
-public class RecordDetailActivity extends BaseActivity implements RecordDetailContract.View {
+@Route(path = "/quaryDetailActivity/quaryDetailActivity")
+public class QuaryDetailActivity extends BaseActivity implements QuaryDetailContract.View {
     @Inject
-    RecordDetailPresenter mPresenter;
+    QuaryDetailPresenter mPresenter;
     private static final String TAG = "CompositionDetailActivity";
 
     public static final String KEY_IMAGE_PATH = "imagePath";
@@ -96,16 +96,20 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
     AlphaButton confirmRejectLayoutBtn;
     @BindView(R2.id.reject_layout_ll)
     LinearLayout rejectLayoutLl;
+    @BindView(R2.id.invitation_particulars_of_matter_ll_top_text)
+    TextView invitationParticularsOfMatterLlTopText;
+    @BindView(R2.id.invitation_particulars_of_matter_ll_top)
+    LinearLayout invitationParticularsOfMatterLlTop;
 
     private List<LocalMedia> selectList = new ArrayList<>();
-    private RecordDetailGridImageAdapter mAdapter;
+    private QuaryDetailGridImageAdapter mAdapter;
     private int themeId;
     private int mId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_detail);
+        setContentView(R.layout.activity_quary_detail);
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
@@ -127,25 +131,25 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
     }
 
     private void initView() {
-        DaggerRecordDetailActivityComponent.builder()
+        DaggerQuaryDetailActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .recordDetailPresenterModule(new RecordDetailPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .quaryDetailPresenterModule(new QuaryDetailPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 
-        RecordDetailGridLayoutManager manager = new RecordDetailGridLayoutManager(RecordDetailActivity.this, 3, GridLayoutManager.VERTICAL, false);
+        QuaryDetailGridLayoutManager manager = new QuaryDetailGridLayoutManager(QuaryDetailActivity.this, 3, GridLayoutManager.VERTICAL, false);
         recordDetailRv.setLayoutManager(manager);
-        mAdapter = new RecordDetailGridImageAdapter(RecordDetailActivity.this, onAddPicClickListener);
+        mAdapter = new QuaryDetailGridImageAdapter(QuaryDetailActivity.this, onAddPicClickListener);
         mAdapter.setList(selectList);
         //        mAdapter.setSelectMax(5);
         recordDetailRv.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new RecordDetailGridImageAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new QuaryDetailGridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
 
                 LogUtil.e(TAG, "长度---->" + selectList.size());
                 if (selectList.size() > 0) {
-                    PictureSelector.create(RecordDetailActivity.this)
+                    PictureSelector.create(QuaryDetailActivity.this)
                             .themeStyle(themeId) // xml设置主题
                             //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                             //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
@@ -157,10 +161,10 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
         });
     }
 
-    private RecordDetailGridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new RecordDetailGridImageAdapter.onAddPicClickListener1() {
+    private QuaryDetailGridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new QuaryDetailGridImageAdapter.onAddPicClickListener1() {
         @Override
         public void onAddPicClick1() {
-            CameraActivity.startMe(RecordDetailActivity.this, 2005, CameraActivity.MongolianLayerType.IDCARD_POSITIVE);
+            CameraActivity.startMe(QuaryDetailActivity.this, 2005, CameraActivity.MongolianLayerType.IDCARD_POSITIVE);
 
         }
 
@@ -254,16 +258,18 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
                     //examinestatus:0是未审核1是通过2被拒绝
                     if (examinestatus == 1) {
                         agreeLayoutBtn.setVisibility(View.INVISIBLE);
-                        rejectLayoutBtn.setText("审核通过");
-                        rejectLayoutBtn.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_gray));
+                        invitationParticularsOfMatterLlTopText.setText("审核通过");
+                        invitationParticularsOfMatterLlTop.setBackgroundColor(getResources().getColor(R.color.color_2AAD67));
                         rejectLayoutBtn.setClickable(false);
                     } else if (examinestatus == 2) {
                         agreeLayoutBtn.setVisibility(View.INVISIBLE);
-                        rejectLayoutBtn.setText("审核被拒");
-                        rejectLayoutBtn.setBackground(getResources().getDrawable(R.drawable.bg_shap_button_gray));
+                        invitationParticularsOfMatterLlTopText.setText("审核被拒");
+                        invitationParticularsOfMatterLlTop.setBackgroundColor(getResources().getColor(R.color.color_e5353b));
                         rejectLayoutBtn.setClickable(false);
                     } else {
                         //未审核
+                        invitationParticularsOfMatterLlTopText.setText("等待审核");
+                        invitationParticularsOfMatterLlTop.setBackgroundColor(getResources().getColor(R.color.color_f1ab11));
                     }
 
 

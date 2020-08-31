@@ -83,3 +83,14 @@
  #Okio
  -dontwarn org.codehaus.mojo.animal_sniffer.*
 
+ #x5Webview
+ -dontwarn dalvik.**
+   -dontwarn com.tencent.smtt.**
+
+   -keep class com.tencent.smtt.** {
+       *;
+   }
+
+   -keep class com.tencent.tbs.** {
+       *;
+   }

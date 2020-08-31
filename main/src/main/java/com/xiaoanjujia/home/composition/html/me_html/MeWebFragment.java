@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.composition.html.me_html;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -88,6 +89,9 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
         WebSettings settings = webView.getSettings();
         String userAgentString = settings.getUserAgentString();
         settings.setUserAgent(userAgentString + "xiaoan");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         webView.addJavascriptInterface(new MeWebInterface().setJsCallback(jSMeCallBack), "JsToAndroidBridge");
     }
 
@@ -138,6 +142,11 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     }
 
     @Override
+    public String jsGetUserId() {
+        return PrefUtils.readUserId(BaseApplication.getInstance());
+    }
+
+    @Override
     public void jsMerchantsCertification() {
         initData();
     }
@@ -154,6 +163,13 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
                     startActivity(intent);
                 }
             });
+        }
+    }
+
+    public void refreshView() {
+
+        if(webView != null){
+            webView.loadUrl(mWebUrl);
         }
     }
 

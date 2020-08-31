@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.tenement.supervisor;
+package com.xiaoanjujia.home.composition.tenement.issue_query;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.library.AutoFlowLayout;
-import com.example.library.FlowAdapter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
@@ -31,6 +29,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity;
+import com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -50,10 +49,10 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/supervisorActivity/supervisorActivity")
-public class SupervisorActivity extends BaseActivity implements SupervisorContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
+@Route(path = "/issueQueryActivity/issueQueryActivity")
+public class IssueQueryActivity extends BaseActivity implements IssueQueryContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
-    SupervisorPresenter mPresenter;
+    IssueQueryPresenter mPresenter;
     private static final String TAG = "IssueQueryActivity";
 
     @BindView(R2.id.fake_status_bar)
@@ -81,21 +80,20 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     private List<Integer> listDateType = new ArrayList<>();
     private List<String> listWork = new ArrayList<>();
     private List<Integer> listWorkId = new ArrayList<>();
-    private SupervisorPreviewsAdapter adapter;
+    private IssueQueryPreviewsAdapter adapter;
     private int page = 1, datetype = 1, id = 0;
-    private AutoFlowLayout aflCotent;
-    private AutoFlowLayout aflJobsToChoose;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervisor);
+        setContentView(R.layout.activity_issue_query);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
 
         initView();
 
-        initTypeRoieData();
+        //        initTypeRoieData();
+        initData(page);
         initTitle();
     }
 
@@ -104,13 +102,13 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("商城");
+        mainTitleText.setText("往期查询");
     }
 
     private void initView() {
-        DaggerSupervisorActivityComponent.builder()
+        DaggerIssueQueryActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .supervisorPresenterModule(new SupervisorPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .issueQueryPresenterModule(new IssueQueryPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
         mLayoutInflater = LayoutInflater.from(this);
@@ -118,48 +116,18 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
 
         findPullRefreshHeader.setPtrHandler(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SupervisorPreviewsAdapter(R.layout.item_supervisor_recyclerview);
+        adapter = new IssueQueryPreviewsAdapter(R.layout.item_supervisor_recyclerview);
         adapter.setOnLoadMoreListener(this);
 
-        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
-        aflCotent = itemHeader.findViewById(R.id.afl_cotent);
-        aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
-        adapter.addHeaderView(itemHeader);
+        //        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
+        //        aflCotent = itemHeader.findViewById(R.id.afl_cotent);
+        //        aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
+        //        adapter.addHeaderView(itemHeader);
         adapter.setEnableLoadMore(true);
         adapter.loadMoreComplete();
         mRecyclerView.setAdapter(adapter);
 
-        aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                //时间
-                if (view.isSelected()) {
-                    datetype = listDateType.get(position);
 
-                } else {
-                    datetype = 1;//默认
-                }
-                page = 1;
-                initData(page, datetype, id);
-            }
-        });
-
-        aflJobsToChoose.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                //职位
-                //时间
-                if (view.isSelected()) {
-                    id = listWorkId.get(position);
-
-                } else {
-                    id = 0;//默认
-                }
-                page = 1;
-                initData(page, datetype, id);
-
-            }
-        });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
@@ -169,7 +137,7 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                     List data = adapter.getData();
                     PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
                     int id = dateBean.getId();
-                    Intent intent = new Intent(SupervisorActivity.this, RecordDetailActivity.class);
+                    Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
                 }
@@ -183,7 +151,7 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                 List data = adapter.getData();
                 PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
                 int id = dateBean.getId();
-                Intent intent = new Intent(SupervisorActivity.this, RecordDetailActivity.class);
+                Intent intent = new Intent(IssueQueryActivity.this, RecordDetailActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
@@ -194,12 +162,10 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
     //page
     //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
     //id:角色id  默认0  全部
-    private void initData(int page, int datetype, int id) {
+    private void initData(int page) {
 
         Map<String, Object> mapParameters = new HashMap<>(3);
         mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("datetype", String.valueOf(datetype));
-        mapParameters.put("id", String.valueOf(id));
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -340,26 +306,8 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
                     listWorkId.add(ordinaryrole.get(i).getId());
                 }
 
-                aflCotent.setAdapter(new FlowAdapter(listDate) {
-                    @Override
-                    public View getView(int position) {
-                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
-                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
-                        tvAttrTag.setText(listDate.get(position));
-                        return item;
-                    }
-                });
 
-                aflJobsToChoose.setAdapter(new FlowAdapter(listWork) {
-                    @Override
-                    public View getView(int position) {
-                        View item = mLayoutInflater.inflate(R.layout.item_supervisor, null);
-                        TextView tvAttrTag = (TextView) item.findViewById(R.id.tv_attr_tag);
-                        tvAttrTag.setText(listWork.get(position));
-                        return item;
-                    }
-                });
-                initData(page, datetype, id);
+                initData(page);
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
@@ -428,7 +376,7 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
             @Override
             public void run() {
                 page = 1;
-                initData(page, datetype, id);
+                initData(page);
                 frame.refreshComplete();
             }
         }, 500);

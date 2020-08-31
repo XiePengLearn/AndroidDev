@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.composition.html.store_html;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -88,6 +89,9 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
         WebSettings settings = webView.getSettings();
         String userAgentString = settings.getUserAgentString();
         settings.setUserAgent(userAgentString + "xiaoan");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         webView.addJavascriptInterface(new StoreWebInterface().setJsCallback(jSStoreCallBack), "JsToAndroidBridge");
     }
 
@@ -135,6 +139,11 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     @Override
     public String jsGetUserToken() {
         return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetUserId() {
+        return PrefUtils.readUserId(BaseApplication.getInstance());
     }
 
     @Override

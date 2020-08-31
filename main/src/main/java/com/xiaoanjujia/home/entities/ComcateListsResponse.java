@@ -53,6 +53,15 @@ public class ComcateListsResponse implements Serializable {
 
         private String cate_name;
         private String cate_iimg_url;
+        private int cate_id;
+
+        public int getCate_id() {
+            return cate_id;
+        }
+
+        public void setCate_id(int cate_id) {
+            this.cate_id = cate_id;
+        }
 
         public String getCate_name() {
             return cate_name;

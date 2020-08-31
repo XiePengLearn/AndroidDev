@@ -35,7 +35,7 @@ public class PostMessageGridImageAdapter extends
     private final PostMessageActivity mContext;
     private LayoutInflater mInflater;
     private List<LocalMedia> list = new ArrayList<>();
-    private int selectMax = 3;
+    private int selectMax = 9;
     /**
      * 点击添加图片跳转
      */

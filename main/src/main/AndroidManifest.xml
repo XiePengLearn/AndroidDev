@@ -132,6 +132,12 @@
             android:name="com.xiaoanjujia.home.composition.tenement.supervisor.SupervisorActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.xiaoanjujia.home.composition.tenement.issue_query.IssueQueryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"

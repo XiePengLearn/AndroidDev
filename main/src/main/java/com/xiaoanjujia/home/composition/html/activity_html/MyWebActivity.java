@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.composition.html.activity_html;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -89,6 +90,9 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         WebSettings settings = webView.getSettings();
         String userAgentString = settings.getUserAgentString();
         settings.setUserAgent(userAgentString + "xiaoan");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         webView.addJavascriptInterface(new ActivityWebInterface().setJsCallback(jSActivityCallBack), "JsToAndroidBridge");
     }
 

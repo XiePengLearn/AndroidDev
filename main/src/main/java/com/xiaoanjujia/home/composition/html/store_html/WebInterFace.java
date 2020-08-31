@@ -19,4 +19,6 @@ public abstract class WebInterFace {
 
     @JavascriptInterface
     public abstract void getLogOut ();
+    @JavascriptInterface
+    public abstract String getUserId ();
 }

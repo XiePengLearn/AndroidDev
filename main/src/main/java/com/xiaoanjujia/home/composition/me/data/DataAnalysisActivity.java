@@ -269,6 +269,11 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                 if (!Utils.isNull(datetime)) {
                     tvCountTime.setText(String.format("统计时间: %s", datetime));
                 }
+
+                String day_time = data.getDay_time();
+                if (!Utils.isNull(day_time)) {
+                    tvByTheEndTime.setText(String.format("截止 %s", day_time));
+                }
                 int day_new_visit_num = data.getDay_new_visit_num();
                 String day_new_visit_bai = data.getDay_new_visit_bai();
                 int day_old_visit_num = data.getDay_old_visit_num();
@@ -276,11 +281,13 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                 int yesterday_visit = data.getYesterday_visit();
                 int yesterday_browse = data.getYesterday_browse();
                 int yesterday_contact = data.getYesterday_contact();
+
+
                 //1今天,2昨天
                 if (time_status.equals("1")) {
-                    tvCountNum1.setText(String.format("今日联系客户: %s", yesterday_contact));
-                    tvCountNum2.setText(String.format("今日访客数: %s", yesterday_visit));
-                    tvCountNum3.setText(String.format("今日浏览次数: %s", yesterday_browse));
+                    tvCountNum1.setText(String.format("昨日联系客户: %s", yesterday_contact));
+                    tvCountNum2.setText(String.format("昨日访客数: %s", yesterday_visit));
+                    tvCountNum3.setText(String.format("昨日浏览次数: %s", yesterday_browse));
                     tvDayTimeText.setText("今日时时");
                     dayYesterday.setTextColor(getResources().getColor(R.color.color_494949));
                     dayToday.setTextColor(getResources().getColor(R.color.color_ff3333));
@@ -288,7 +295,7 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                     tvCountNum1.setText(String.format("昨日联系客户: %s", yesterday_contact));
                     tvCountNum2.setText(String.format("昨日访客数: %s", yesterday_visit));
                     tvCountNum3.setText(String.format("昨日浏览次数: %s", yesterday_browse));
-                    tvDayTimeText.setText("昨日时时");
+                    tvDayTimeText.setText("今日时时");
                     dayYesterday.setTextColor(getResources().getColor(R.color.color_ff3333));
                     dayToday.setTextColor(getResources().getColor(R.color.color_494949));
                 }

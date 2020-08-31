@@ -19,6 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
@@ -226,7 +227,7 @@
                 android:id="@+id/ll_recharge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_9"
+                android:layout_marginStart="@dimen/dp_18"
                 android:orientation="horizontal">
 
                 <TextView
@@ -237,7 +238,7 @@
                     android:gravity="center_vertical"
                     android:text="您的账户余额："
                     android:textColor="@color/color_343434"
-                    android:textSize="@dimen/sp_11" />
+                    android:textSize="@dimen/sp_13" />
 
                 <TextView
                     android:id="@+id/tv_current_money"
@@ -246,8 +247,8 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:text="500元"
-                    android:textColor="@color/color_b8b8b8"
-                    android:textSize="@dimen/sp_10" />
+                    android:textColor="@color/color_ff3333"
+                    android:textSize="@dimen/sp_13" />
 
                 <TextView
                     android:id="@+id/tv_current_money_des"
@@ -257,7 +258,7 @@
                     android:gravity="center_vertical"
                     android:text="余额不足，"
                     android:textColor="@color/color_b8b8b8"
-                    android:textSize="@dimen/sp_10" />
+                    android:textSize="@dimen/sp_13" />
 
                 <TextView
                     android:id="@+id/item_shop_name_publish_number_tv"
@@ -266,8 +267,8 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:text="立即充值"
-                    android:textColor="@color/color_b8b8b8"
-                    android:textSize="@dimen/sp_10" />
+                    android:textColor="@color/color_ff3333"
+                    android:textSize="@dimen/sp_13" />
 
             </LinearLayout>
 
@@ -321,7 +322,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="联系号码："
+                    android:text="手机号："
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -333,7 +334,7 @@
                     android:background="@null"
                     android:cursorVisible="true"
                     android:gravity="left|center_vertical"
-                    android:hint="客户可联系的电话号码"
+                    android:hint="请输入手机号码"
                     android:inputType="phone"
                     android:maxLength="11"
                     android:singleLine="true"
@@ -363,7 +364,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="商户代码："
+                    android:text="区域："
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -375,7 +376,7 @@
                     android:background="@null"
                     android:cursorVisible="true"
                     android:gravity="left|center_vertical"
-                    android:hint="公司填写组织代码，个人填写身份证号码"
+                    android:hint="请输入您所在区域"
                     android:singleLine="true"
                     android:text=""
                     android:textColor="#494949"
@@ -392,6 +393,48 @@
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="详细地址：："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <EditText
+                    android:id="@+id/edit_merchant_code_dizhi"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="请输入您的详细地址"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+
+
 
             <View
                 android:layout_width="match_parent"
@@ -410,7 +453,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_18"
-                    android:text="*上传特殊材料："
+                    android:text="插入广告图片："
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -419,7 +462,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="带*可选填"
+                    android:text=""
                     android:textColor="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_10" />
             </LinearLayout>
@@ -452,10 +495,101 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="（限制五张，如食品安全证书，商标授权证书等）"
+                    android:text="（最多一张）"
                     android:textColor="@color/bg_red"
                     android:textSize="10sp" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+            <LinearLayout
+                android:id="@+id/invitation_visiting_time_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="发布时间:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:id="@+id/invitation_visiting_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:hint="请选择"
+                    android:gravity="right"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+            <LinearLayout
+                android:id="@+id/invitation_leave_time_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="结束时间:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:id="@+id/invitation_leave_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:hint="请选择"
+                    android:gravity="right"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
+
             </LinearLayout>
 
             <com.xiaoanjujia.common.widget.alphaview.AlphaButton
@@ -471,7 +605,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_8"
-                android:text="立即上传"
+                android:text="立即发布"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>
