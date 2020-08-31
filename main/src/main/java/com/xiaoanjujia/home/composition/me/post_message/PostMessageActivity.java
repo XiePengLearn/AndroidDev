@@ -59,7 +59,7 @@ import butterknife.OnClick;
  * @author xiepeng
  * 商户认证
  */
-@Route(path = "/publishActivity/publishActivity")
+@Route(path = "/postMessageActivity/postMessageActivity")
 public class PostMessageActivity extends BaseActivity implements PostMessageContract.View {
     @Inject
     PostMessagePresenter mPresenter;

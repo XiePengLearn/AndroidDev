@@ -43,6 +43,6 @@ public class ResponseCode {
      * Session失效
      */
 
-    public static final int SEESION_ERROR = 403;
+    public static final int SEESION_ERROR = 401;
 
 }

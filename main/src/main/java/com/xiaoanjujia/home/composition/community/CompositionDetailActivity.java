@@ -468,7 +468,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     if (!Utils.isNull(advertisement_img)) {
                         RequestOptions options = new RequestOptions()
                                 .centerCrop()
-                                .placeholder(R.drawable.default_icon)
+                                .placeholder(R.color.app_color_f6)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL);
                         Glide.with(CompositionDetailActivity.this)
                                 .load(advertisement_img)
