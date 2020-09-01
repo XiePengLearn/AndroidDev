@@ -45,6 +45,7 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
 import com.xiaoanjujia.home.entities.CommentDetailsResponse;
 import com.xiaoanjujia.home.entities.CommentListResponse;
@@ -135,6 +136,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private MaterialRatingBar comNormalRatingbar;
     private int mCommunityId;
     private String shop_phone;
+    private String advertisement_url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -226,7 +228,14 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         compositionCommentStatus1.setTextColor(getResources().getColor(R.color.color_2AAD67));
         compositionCommentStatus2 = itemHeader.findViewById(R.id.composition_comment_status_2);
         compositionCommentStatus3 = itemHeader.findViewById(R.id.composition_comment_status_3);
-
+        itemCompositionImageAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CompositionDetailActivity.this, MyWebActivity.class);
+                intent.putExtra("url", advertisement_url);
+                startActivity(intent);
+            }
+        });
         itemCompositionBtnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -463,7 +472,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     if (!Utils.isNull(detailed_address)) {
                         itemCompositionAddressTv.setText(detailed_address);
                     }
-
+                    advertisement_url = data.getAdvertisement_url();
                     String advertisement_img = data.getAdvertisement_img();
                     if (!Utils.isNull(advertisement_img)) {
                         RequestOptions options = new RequestOptions()

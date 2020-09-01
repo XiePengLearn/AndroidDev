@@ -68,7 +68,8 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     ProgressBar progressBar;
     @BindView(R2.id.webView)
     X5WebView webView;
-
+    @BindView(R2.id.deposit_page_loading)
+    LinearLayout depositPageLoading;
     private String mWebUrl;
 
 
@@ -81,6 +82,7 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
         initViewMethod();
         initTitle();
         initSetting(this);
+        depositPageLoading.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -189,6 +191,7 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
         public void onProgressChanged(WebView view, int newProgress) {
             if (newProgress == 100) {
                 progressBar.setVisibility(View.GONE);
+                depositPageLoading.setVisibility(View.GONE);
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setProgress(newProgress);

@@ -47,6 +47,8 @@ public class CommunityDetailsActivityAdapter extends BaseQuickAdapter<CommentLis
                 .apply(options)
                 .into((ImageView) helper.getView(R.id.item_com_image_one));
 
+
+
     }
 
 

@@ -403,6 +403,7 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
             dayToday.setTextColor(getResources().getColor(R.color.color_ff3333));
         } else if (id == R.id.immediate_promotion_btn) {
             Intent intent = new Intent(DataAnalysisActivity.this, CategoryActivity.class);
+            intent.putExtra("id", mId);
             startActivity(intent);
         } else if (id == R.id.refresh_data_btn) {
             initData(time_status);

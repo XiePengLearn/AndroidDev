@@ -66,7 +66,8 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
     ProgressBar progressBar;
     @BindView(R2.id.webView)
     X5WebView webView;
-
+    @BindView(R2.id.deposit_page_loading)
+    LinearLayout depositPageLoading;
 
     private static final String TAG = "NationExamActivity";
     @BindView(R2.id.data_fen_xi)
@@ -82,7 +83,7 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         unbinder = ButterKnife.bind(this);
         initTitle();
         initView();
-
+        depositPageLoading.setVisibility(View.VISIBLE);
         initSetting(this);
     }
 
@@ -182,6 +183,7 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         public void onProgressChanged(WebView view, int newProgress) {
             if (newProgress == 100) {
                 progressBar.setVisibility(View.GONE);
+                depositPageLoading.setVisibility(View.GONE);
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setProgress(newProgress);

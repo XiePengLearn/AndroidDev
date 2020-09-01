@@ -68,6 +68,8 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     ProgressBar progressBar;
     @BindView(R2.id.webView)
     X5WebView webView;
+    @BindView(R2.id.deposit_page_loading)
+    LinearLayout depositPageLoading;
 
     private String mWebUrl;
 
@@ -81,6 +83,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
         initViewMethod();
         initTitle();
         initSetting(this);
+        depositPageLoading.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -106,13 +109,13 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
     @Override
     public void initEvent() {
         initView();
-        //
+
 
     }
 
     @Override
     public void onLazyLoad() {
-
+        //        showJDLoadingDialog();
     }
 
     private void initViewMethod() {
@@ -183,6 +186,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
         public void onProgressChanged(WebView view, int newProgress) {
             if (newProgress == 100) {
                 progressBar.setVisibility(View.GONE);
+                depositPageLoading.setVisibility(View.GONE);
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setProgress(newProgress);

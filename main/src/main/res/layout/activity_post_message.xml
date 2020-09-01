@@ -166,8 +166,8 @@
                     android:cursorVisible="true"
                     android:gravity="left|center_vertical"
                     android:hint="请输入"
-                    android:singleLine="true"
                     android:inputType="numberDecimal"
+                    android:singleLine="true"
                     android:text=""
                     android:textColor="#494949"
                     android:textColorHint="#C5C3C3"
@@ -209,6 +209,7 @@
                     android:hint="请输入"
                     android:singleLine="true"
                     android:text=""
+                    android:inputType="numberDecimal"
                     android:textColor="#494949"
                     android:textColorHint="#C5C3C3"
                     android:textCursorDrawable="@drawable/text_cursor"
@@ -228,8 +229,8 @@
                 android:id="@+id/ll_recharge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_10"
                 android:orientation="horizontal">
 
                 <TextView
@@ -395,6 +396,7 @@
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -434,8 +436,6 @@
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
-
-
 
 
             <View
@@ -509,14 +509,54 @@
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
             <LinearLayout
-                android:id="@+id/invitation_visiting_time_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="广告图片链接地址："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <EditText
+                    android:id="@+id/edit_post_message_id_pic_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="请输入点击广告图片跳转链接地址"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+            <LinearLayout
+                android:id="@+id/post_message_visiting_time_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_19"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18">
-
 
 
                 <TextView
@@ -528,12 +568,12 @@
                     android:textSize="@dimen/sp_15" />
 
                 <TextView
-                    android:id="@+id/invitation_visiting_time"
+                    android:id="@+id/post_message_visiting_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -556,14 +596,13 @@
                 android:background="#D1D1D1" />
 
             <LinearLayout
-                android:id="@+id/invitation_leave_time_ll"
+                android:id="@+id/post_message_leave_time_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_19"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18">
-
 
 
                 <TextView
@@ -575,12 +614,12 @@
                     android:textSize="@dimen/sp_15" />
 
                 <TextView
-                    android:id="@+id/invitation_leave_time"
+                    android:id="@+id/post_message_leave_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -595,7 +634,7 @@
             </LinearLayout>
 
             <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                android:id="@+id/register_success_entry"
+                android:id="@+id/post_message_btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_42"
                 android:layout_gravity="center"

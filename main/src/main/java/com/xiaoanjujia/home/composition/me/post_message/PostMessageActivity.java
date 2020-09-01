@@ -20,16 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
-import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -44,6 +45,7 @@ import com.xiaoanjujia.home.tool.Util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.xiaoanjujia.common.util.Tool.getTime;
+
 /**
  * @author xiepeng
  * 商户认证
@@ -63,8 +67,6 @@ import butterknife.OnClick;
 public class PostMessageActivity extends BaseActivity implements PostMessageContract.View {
     @Inject
     PostMessagePresenter mPresenter;
-
-
     private static final String TAG = "PostMessageActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
@@ -76,31 +78,54 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.edit_merchant_name)
-    EditText editMerchantName; //标题
-
-    @BindView(R2.id.edit_company_name)
-    EditText editCompanyName;
-    @BindView(R2.id.edit_merchant_phone)
-    EditText editMerchantPhone;
-    @BindView(R2.id.edit_merchant_code)
-    EditText editMerchantCode;
-
-
     @BindView(R2.id.company_certificate_im)
     ImageView companyCertificateIm;
     @BindView(R2.id.company_certificate_recycler)
     RecyclerView companyCertificateRecycler;
+    @BindView(R2.id.edit_post_message_title)
+    EditText editPostMessageTitle;
+    @BindView(R2.id.edit_post_message_des)
+    EditText editPostMessageDes;
+    @BindView(R2.id.edit_post_message_single_price)
+    EditText editPostMessageSinglePrice;
+    @BindView(R2.id.edit_post_message_all_price)
+    EditText editPostMessageAllPrice;
+    @BindView(R2.id.item_shop_name_tv)
+    TextView itemShopNameTv;
+    @BindView(R2.id.tv_current_money)
+    TextView tvCurrentMoney;
+    @BindView(R2.id.tv_current_money_des)
+    TextView tvCurrentMoneyDes;
+    @BindView(R2.id.item_shop_name_publish_number_tv)
+    TextView itemShopNamePublishNumberTv;
+    @BindView(R2.id.ll_recharge)
+    LinearLayout llRecharge;
+    @BindView(R2.id.edit_post_message_contact_name)
+    EditText editPostMessageContactName;
+    @BindView(R2.id.edit_post_message_phone_number)
+    EditText editPostMessagePhoneNumber;
+    @BindView(R2.id.edit_post_message_area)
+    EditText editPostMessageArea;
+    @BindView(R2.id.edit_post_message_area_detailed_address)
+    EditText editPostMessageAreaDetailedAddress;
     @BindView(R2.id.uploading_special_certificate_iv)
     ImageView uploadingSpecialCertificateIv;
     @BindView(R2.id.uploading_special_certificate_rv)
     RecyclerView uploadingSpecialCertificateRv;
-
-
-    @BindView(R2.id.register_success_entry)
-    AlphaButton registerSuccessEntry;
+    @BindView(R2.id.post_message_visiting_time)
+    TextView postMessageVisitingTime;
+    @BindView(R2.id.post_message_visiting_time_ll)
+    LinearLayout postMessageVisitingTimeLl;
+    @BindView(R2.id.post_message_leave_time)
+    TextView postMessageLeaveTime;
+    @BindView(R2.id.post_message_leave_time_ll)
+    LinearLayout postMessageLeaveTimeLl;
+    @BindView(R2.id.post_message_btn)
+    AlphaButton postMessageBtn;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+    @BindView(R2.id.edit_post_message_id_pic_address)
+    EditText editPostMessageIdPicAddress;
 
 
     private PostMessageGridImageAdapter mAdapter;
@@ -116,7 +141,11 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     private String mCompanyPath;
     private String mMSpecialImgsPath;
     private int cate_id;
-
+    private int mId;
+    private TimePickerView mPvTime;
+    private TimePickerView mPvTimeLeave;
+    private String mLeaveTime;
+    private String mVisitorTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,6 +156,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
         cate_id = intent.getIntExtra("cate_id", -1);
+        mId = intent.getIntExtra("id", -1);
         initTitle();
         initView();
 
@@ -138,6 +168,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     public void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("发布信息");
+
     }
 
 
@@ -147,7 +178,8 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
                 .postMessagePresenterModule(new PostMessagePresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-
+        initTimePicker();
+        initTimePickerLeave();
 
         PostMessageFullyGridLayoutManager manager = new PostMessageFullyGridLayoutManager(PostMessageActivity.this, 3, GridLayoutManager.VERTICAL, false);
         companyCertificateRecycler.setLayoutManager(manager);
@@ -239,30 +271,48 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     }
 
     /**
-     * user_id:用户id
-     * name_acronym:商户简称
-     * shop_name:商户全称
-     * shop_phone:手机号
-     * code:身份证或者组织代码
-     * status:0个人,1企业( 可不传 ) *
-     * imgs_url:公司证件图片链接
-     * special_imgs_url:特殊证件图片链接
+     * 'id':商户id
+     * 'cate_id'类别id----之前是category_id
+     * 'top_imgs',顶部九张图片链接
+     * 'title':标题
+     * 'title_text', 描述
+     * 'single_money', 单个金额
+     * 'count_money', 预算
+     * 'contacts_name', 联系人名字
+     * 'contacts_phone',手机号
+     * 'region',区域
+     * 'detailed_address',详细地址
+     * 'advertisement_img',广告图片
+     * 'advertisement_url',广告图片链接地址
+     * 'release_time',开始时间
+     * 'end_time结束时间
      */
     private void initData() {
-        String editMerchantNameText = editMerchantName.getText().toString().trim();
-        String editCompanyNameText = editCompanyName.getText().toString().trim();
-        String editMerchantPhoneText = editMerchantPhone.getText().toString().trim();
-        String editMerchantCodeText = editMerchantCode.getText().toString().trim();
+        String editPostMessageTitleText = editPostMessageTitle.getText().toString().trim();
+        String editPostMessageDesText = editPostMessageDes.getText().toString().trim();
+        String editPostMessageSinglePriceText = editPostMessageSinglePrice.getText().toString().trim();
+        String editPostMessageAllPriceText = editPostMessageAllPrice.getText().toString().trim();
+        String editPostMessageContactNameText = editPostMessageContactName.getText().toString().trim();
+        String editPostMessagePhoneNumberText = editPostMessagePhoneNumber.getText().toString().trim();
+        String editPostMessageAreaText = editPostMessageArea.getText().toString().trim();
+        String editPostMessageAreaDetailedAddressText = editPostMessageAreaDetailedAddress.getText().toString().trim();
+        String editPostMessageIdPicAddressText = editPostMessageIdPicAddress.getText().toString().trim();
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
-        mapParameters.put("name_acronym", editMerchantNameText);
-        mapParameters.put("shop_name", editCompanyNameText);
-        mapParameters.put("shop_phone", editMerchantPhoneText);
-        mapParameters.put("code", editMerchantCodeText);
-        mapParameters.put("imgs_url", mCompanyPath);
-        if (!Utils.isNull(mMSpecialImgsPath)) {
-            mapParameters.put("special_imgs_url", mMSpecialImgsPath);
-        }
+        mapParameters.put("id", mId);
+        mapParameters.put("cate_id", cate_id);
+        mapParameters.put("top_imgs", mCompanyPath);
+        mapParameters.put("title", editPostMessageTitleText);
+        mapParameters.put("title_text", editPostMessageDesText);
+        mapParameters.put("single_money", editPostMessageSinglePriceText);
+        mapParameters.put("count_money", editPostMessageAllPriceText);
+        mapParameters.put("contacts_name", editPostMessageContactNameText);
+        mapParameters.put("contacts_phone", editPostMessagePhoneNumberText);
+        mapParameters.put("region", editPostMessageAreaText);
+        mapParameters.put("detailed_address", editPostMessageAreaDetailedAddressText);
+        mapParameters.put("advertisement_img", mMSpecialImgsPath);
+        mapParameters.put("advertisement_url", editPostMessageIdPicAddressText);
+        mapParameters.put("release_time", mVisitorTime);
+        mapParameters.put("end_time", mLeaveTime);
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getRequestData(headersTreeMap, mapParameters);
@@ -283,8 +333,8 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
             String msg = feedBackResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
 
-                ToastUtil.showToast(this.getApplicationContext(), "提交成功");
-                ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(mContext);
+                ToastUtil.showToast(this.getApplicationContext(), "发布信息成功");
+                ARouter.getInstance().build("/PublishSuccessActivity/PublishSuccessActivity").greenChannel().navigation(mContext);
                 finish();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -373,40 +423,13 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         }
     }
 
-
-    @OnClick({R2.id.main_title_back, R2.id.register_success_entry, R2.id.company_certificate_im, R2.id.uploading_special_certificate_iv})
+    @OnClick({R2.id.main_title_back, R2.id.company_certificate_im,
+            R2.id.uploading_special_certificate_iv, R2.id.post_message_visiting_time_ll,
+            R2.id.post_message_leave_time_ll, R2.id.post_message_btn})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
-        } else if (id == R.id.register_success_entry) {
-            String editMerchantNameText = editMerchantName.getText().toString().trim();
-            String editCompanyNameText = editCompanyName.getText().toString().trim();
-            String editMerchantPhoneText = editMerchantPhone.getText().toString().trim();
-            String editMerchantCodeText = editMerchantCode.getText().toString().trim();
-            if (Util.isNull(editMerchantNameText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入商户简称");
-                return;
-            }
-            if (Util.isNull(editCompanyNameText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入公司名称");
-                return;
-            }
-            if (Util.isNull(editMerchantPhoneText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入联系号码");
-                return;
-            }
-            if (Util.isNull(editMerchantCodeText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入商户代码");
-                return;
-            }
-            //先上传公司证件  ,公司证件上传成功后 在上传特殊材料选择图片
-            if (selectList.size() == 0) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "请选择上传公司证件");
-                return;
-            }
-            uploadPictureToServer(selectList);
-
         } else if (id == R.id.company_certificate_im) {
             hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -435,9 +458,114 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
                 }
             });
             selectPicPopupWindow.showPopWindow();
+        } else if (id == R.id.post_message_visiting_time_ll) {
+            mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+        } else if (id == R.id.post_message_leave_time_ll) {
+            mPvTimeLeave.show(view);
+        } else if (id == R.id.post_message_btn) {
+            String editPostMessageTitleText = editPostMessageTitle.getText().toString().trim();
+            String editPostMessageDesText = editPostMessageDes.getText().toString().trim();
+            String editPostMessageSinglePriceText = editPostMessageSinglePrice.getText().toString().trim();
+            String editPostMessageAllPriceText = editPostMessageAllPrice.getText().toString().trim();
+            String editPostMessageContactNameText = editPostMessageContactName.getText().toString().trim();
+            String editPostMessagePhoneNumberText = editPostMessagePhoneNumber.getText().toString().trim();
+            String editPostMessageAreaText = editPostMessageArea.getText().toString().trim();
+            String editPostMessageAreaDetailedAddressText = editPostMessageAreaDetailedAddress.getText().toString().trim();
+            String editPostMessageIdPicAddressText = editPostMessageIdPicAddress.getText().toString().trim();
+
+            //先上传公司证件  ,公司证件上传成功后 在上传特殊材料选择图片
+            if (selectList.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择发布图片");
+                return;
+            }
+            if (Util.isNull(editPostMessageTitleText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入发布标题");
+                return;
+            }
+            if (Util.isNull(editPostMessageDesText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入描述");
+                return;
+            }
+            if (Util.isNull(editPostMessageSinglePriceText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入单个价格");
+                return;
+            }
+            if (Util.isNull(editPostMessageAllPriceText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入发布金额");
+                return;
+            }
+            if (Util.isNull(editPostMessageContactNameText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入联系人");
+                return;
+            }
+            if (Util.isNull(editPostMessagePhoneNumberText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入手机号");
+                return;
+            }
+            if (Util.isNull(editPostMessageAreaText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入您所在区域");
+                return;
+            }
+            if (Util.isNull(editPostMessageAreaDetailedAddressText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入您的详细地址");
+                return;
+            }
+            if (selectList2.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择插入广告图片");
+            }
+            if (Util.isNull(editPostMessageIdPicAddressText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入点击广告图片跳转链接地址");
+                return;
+            }
+
+            String postMessageVisitingTimeText = postMessageVisitingTime.getText().toString().trim();
+            String postMessageLeaveTimeText = postMessageLeaveTime.getText().toString().trim();
+            if (Util.isNull(postMessageVisitingTimeText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入发布时间");
+                return;
+            }
+            if (Util.isNull(postMessageLeaveTimeText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入结束时间");
+                return;
+            }
+            uploadPictureToServer(selectList);
         }
     }
 
+    private void initTimePicker() {//Dialog 模式下，在底部弹出
+        //时间选择器
+
+        mPvTime = new TimePickerBuilder(PostMessageActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                mVisitorTime = Utils.getTime(date);
+                postMessageVisitingTime.setText(mVisitorTime);
+            }
+        })
+                .setItemVisibleCount(5)
+                .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
+    }
+
+    private void initTimePickerLeave() {//Dialog 模式下，在底部弹出
+        //时间选择器
+        mPvTimeLeave = new TimePickerBuilder(PostMessageActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                mLeaveTime = Utils.getTime(date);
+                postMessageLeaveTime.setText(mLeaveTime);
+            }
+        })
+                .setItemVisibleCount(5)
+                .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
+    }
 
     private void postError() {
         runOnUiThread(new Runnable() {

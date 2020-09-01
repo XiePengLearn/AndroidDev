@@ -43,6 +43,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_UPLOAD_IMAGE = "/api/image";
     //提交商户认证
     private static String GENERAL_GET_COMMUNITY = "/api/v1/getcommunity";
+    //商户发布订单(有更改字段)
+    private static String GENERAL_GETCOMUORDER = "/api/v1/getcomuorder";
     //获取商户认证状态
     private static String GENERAL_COMEXAMINE = "/api/v1/comexamine";
     //角色类型页面
@@ -208,6 +210,19 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getFeedBackData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GET_COMMUNITY, mapParameters, mapHeaders), consumer);
+    }
+ /**
+     * 商户发布订单(有更改字段)
+  *     private static String GENERAL_GETCOMUORDER = "/api/v1/getcomuorder";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getComuorder(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_GETCOMUORDER, mapParameters, mapHeaders), consumer);
     }
 
     /**

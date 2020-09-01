@@ -63,6 +63,7 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
     RecyclerView aflCotent;
     private CategoryAdapter mAdapterResult;
     private List<ComcateListsResponse.DataBean> dataList;
+    private int mId;
 
 
     @Override
@@ -71,6 +72,8 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
         setContentView(R.layout.activity_category);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
+        Intent intent = getIntent();
+        mId = intent.getIntExtra("id", -1);
 
         initView();
         initData();
@@ -102,11 +105,12 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
                 String cate_name = dataBean.getCate_name();
                 Intent intent = new Intent(CategoryActivity.this, PostMessageActivity.class);
                 intent.putExtra("cate_id", cate_id);
+                intent.putExtra("id", mId);
                 startActivity(intent);
                 if (!Utils.isNull(cate_name)) {
                     ToastUtil.showToast(BaseApplication.getInstance(), "发布类别:" + cate_name);
                 }
-
+                finish();
             }
         });
         aflCotent.setAdapter(mAdapterResult);

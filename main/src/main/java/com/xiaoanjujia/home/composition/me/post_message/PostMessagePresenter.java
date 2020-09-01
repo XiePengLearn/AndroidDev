@@ -62,7 +62,7 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         //        mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getFeedBackData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getComuorder(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             private FeedBackResponse mfeedBackResponse;
 
             @Override
