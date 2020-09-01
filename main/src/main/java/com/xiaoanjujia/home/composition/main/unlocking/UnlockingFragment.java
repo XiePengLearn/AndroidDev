@@ -1,12 +1,16 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,15 +19,23 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.X5WebView;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
+import com.xiaoanjujia.home.composition.login.login.LoginActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -42,7 +54,7 @@ import butterknife.OnClick;
  * @Date: 2019/10
  * @Description: 快速开发Fragment
  */
-public class UnlockingFragment extends BaseFragment implements UnlockingFragmentContract.View, PtrHandler {
+public class UnlockingFragment extends BaseFragment implements UnlockingFragmentContract.View, PtrHandler, UnlockingWebInterface.JSUnlockingCallBack {
     @Inject
     UnlockingFragmentPresenter mPresenter;
     private static final String TAG = "NationExamActivity";
@@ -70,11 +82,17 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     RelativeLayout rlFragmentNoData;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R2.id.webView)
+    X5WebView webView;
+    private String mWebUrl;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_unlocking, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=category&a=ceshi";
         return view;
     }
 
@@ -83,6 +101,27 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initView();
         //        initData();
         initTitle();
+        initWebView();
+        initSetting(this);
+    }
+
+    private void initWebView() {
+
+        webView.loadUrl(mWebUrl);
+        MyWebChromClient webChromClient = new MyWebChromClient();
+        webView.setWebChromeClient(webChromClient);
+
+
+    }
+
+    private void initSetting(UnlockingWebInterface.JSUnlockingCallBack jSMeCallBack) {
+        WebSettings settings = webView.getSettings();
+        String userAgentString = settings.getUserAgentString();
+        settings.setUserAgent(userAgentString + "xiaoan");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        webView.addJavascriptInterface(new UnlockingWebInterface().setJsCallback(jSMeCallBack), "JsToAndroidBridge");
     }
 
     /**
@@ -169,12 +208,6 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         }, 500);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
-
 
     @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
     public void onViewClicked(View view) {
@@ -188,6 +221,104 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_visitors_store) {
             ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
+        }
+    }
+
+    @Override
+    public String jsGetUserName() {
+
+        return PrefUtils.readUserName(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetPassWord() {
+        return PrefUtils.readPassword(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetUserToken() {
+        return PrefUtils.readSESSION_ID(BaseApplication.getInstance());
+    }
+
+    @Override
+    public String jsGetUserId() {
+        return PrefUtils.readUserId(BaseApplication.getInstance());
+    }
+
+    @Override
+    public void jsMerchantsCertification() {
+        initData();
+    }
+
+    @Override
+    public void jsGetLogOut() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("param", "web");
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+            Intent intent = new Intent(getActivity(), MyWebActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
+
+            return true;
+        }
+    }
+
+    class MyWebChromClient extends WebChromeClient {
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            if (newProgress == 100) {
+                progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(newProgress);
+            }
+            super.onProgressChanged(view, newProgress);
+        }
+
+
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+            if (title.contains("404")) {
+                webView.setVisibility(View.GONE);
+            } else {
+                //                jkxTitleCenter.setText(title);
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        try {
+            if (webView != null) {
+
+                ViewParent parent = webView.getParent();
+                if (parent != null) {
+                    ((ViewGroup) parent).removeView(webView);
+                }
+                webView.removeAllViews();
+                webView.destroy();
+                webView = null;
+            }
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            super.onDestroyView();
         }
     }
 }
