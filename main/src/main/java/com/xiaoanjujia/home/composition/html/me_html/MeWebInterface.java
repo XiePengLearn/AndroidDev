@@ -59,7 +59,7 @@ public class MeWebInterface extends WebInterFace {
             jsCallBack.jsGetLogOut();
         }
     }
-
+    @JavascriptInterface
     @Override
     public String getUserId() {
         if (jsCallBack != null) {
