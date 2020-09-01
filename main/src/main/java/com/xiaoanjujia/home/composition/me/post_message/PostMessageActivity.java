@@ -77,7 +77,8 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.edit_merchant_name)
-    EditText editMerchantName;
+    EditText editMerchantName; //标题
+
     @BindView(R2.id.edit_company_name)
     EditText editCompanyName;
     @BindView(R2.id.edit_merchant_phone)

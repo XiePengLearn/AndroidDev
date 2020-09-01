@@ -28,13 +28,12 @@ import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.widget.X5WebView;
-import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
-import com.xiaoanjujia.common.widget.dialog.ConfirmDialog;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.me.data.DataAnalysisActivity;
 import com.xiaoanjujia.home.entities.ComExamineStatusResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -262,11 +261,13 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
                             ToastUtil.showToast(mActivity.getApplicationContext(), msg);
                         }
                     } else if (data.getExamine() == 1) {
-                        if (!Utils.isNull(msg) && !Utils.isNull(refuse_text) && getActivity() != null) {
-                            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
-                            confirmDialog.setTitleStr(msg);
-                            confirmDialog.setContentStr(refuse_text);
-                            confirmDialog.show();
+                        int id = data.getId();
+                        Intent intent = new Intent(getActivity(), DataAnalysisActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                        //                        ARouter.getInstance().build("/dataAnalysisActivity/dataAnalysisActivity").greenChannel().navigation(MyWebActivity.this);
+                        if (!TextUtils.isEmpty(msg)) {
+                            ToastUtil.showToast(getActivity(), msg);
                         }
                     } else if (data.getExamine() == 2) {
                         ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(getActivity());
