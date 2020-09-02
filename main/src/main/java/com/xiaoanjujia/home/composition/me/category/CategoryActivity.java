@@ -19,6 +19,7 @@ import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -100,17 +101,19 @@ public class CategoryActivity extends BaseActivity implements CategoryContract.V
         mAdapterResult.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ComcateListsResponse.DataBean dataBean = dataList.get(position);
-                int cate_id = dataBean.getCate_id();
-                String cate_name = dataBean.getCate_name();
-                Intent intent = new Intent(CategoryActivity.this, PostMessageActivity.class);
-                intent.putExtra("cate_id", cate_id);
-                intent.putExtra("id", mId);
-                startActivity(intent);
-                if (!Utils.isNull(cate_name)) {
-                    ToastUtil.showToast(BaseApplication.getInstance(), "发布类别:" + cate_name);
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    ComcateListsResponse.DataBean dataBean = dataList.get(position);
+                    int cate_id = dataBean.getCate_id();
+                    String cate_name = dataBean.getCate_name();
+                    Intent intent = new Intent(CategoryActivity.this, PostMessageActivity.class);
+                    intent.putExtra("cate_id", cate_id);
+                    intent.putExtra("id", mId);
+                    startActivity(intent);
+                    if (!Utils.isNull(cate_name)) {
+                        ToastUtil.showToast(BaseApplication.getInstance(), "发布类别:" + cate_name);
+                    }
+                    finish();
                 }
-                finish();
             }
         });
         aflCotent.setAdapter(mAdapterResult);

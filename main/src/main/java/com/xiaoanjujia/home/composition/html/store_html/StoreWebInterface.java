@@ -2,6 +2,8 @@ package com.xiaoanjujia.home.composition.html.store_html;
 
 import android.webkit.JavascriptInterface;
 
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
+
 /**
  * JavascriptInterface（首页非弹窗活动webView调用）
  */
@@ -46,7 +48,9 @@ public class StoreWebInterface extends WebInterFace {
     @Override
     public void getMerchantsCertification() {
         if (jsCallBack != null) {
-            jsCallBack.jsMerchantsCertification();
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                jsCallBack.jsMerchantsCertification();
+            }
         }
 
     }

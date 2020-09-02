@@ -21,6 +21,7 @@ import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -28,7 +29,6 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity;
 import com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
@@ -133,13 +133,15 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
             public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
                 int i = view.getId();
                 if (i == R.id.item_supervisor_btn_status) {
+                    if (!NoDoubleClickUtils.isDoubleClick()) {
 
-                    List data = adapter.getData();
-                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                    int id = dateBean.getId();
-                    Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
+                        List data = adapter.getData();
+                        PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+                        int id = dateBean.getId();
+                        Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                    }
                 }
 
                 return true;
@@ -148,12 +150,14 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List data = adapter.getData();
-                PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                int id = dateBean.getId();
-                Intent intent = new Intent(IssueQueryActivity.this, RecordDetailActivity.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    List data = adapter.getData();
+                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+                    int id = dateBean.getId();
+                    Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
             }
         });
 

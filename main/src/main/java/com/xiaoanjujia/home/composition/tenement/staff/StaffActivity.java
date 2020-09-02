@@ -32,6 +32,7 @@ import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.CommonUtil;
 import com.xiaoanjujia.common.util.DensityUtils;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -345,8 +346,10 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
         } else if (id == R.id.staff_select_id_name_rl) {
             classifyMethod();
         } else if (id == R.id.main_title_right) {
-            //往期查询
-            ARouter.getInstance().build("/issueQueryActivity/issueQueryActivity").greenChannel().navigation(this);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                //往期查询
+                ARouter.getInstance().build("/issueQueryActivity/issueQueryActivity").greenChannel().navigation(this);
+            }
 
         } else if (id == R.id.staff_take_picture_add_iv) {
 

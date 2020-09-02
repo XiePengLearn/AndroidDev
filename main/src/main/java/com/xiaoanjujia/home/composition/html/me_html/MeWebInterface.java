@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.html.me_html;
 
 import android.webkit.JavascriptInterface;
 
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.home.composition.html.store_html.WebInterFace;
 
 /**
@@ -48,7 +49,9 @@ public class MeWebInterface extends WebInterFace {
     @Override
     public void getMerchantsCertification() {
         if (jsCallBack != null) {
-            jsCallBack.jsMerchantsCertification();
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                jsCallBack.jsMerchantsCertification();
+            }
         }
     }
 
@@ -59,6 +62,7 @@ public class MeWebInterface extends WebInterFace {
             jsCallBack.jsGetLogOut();
         }
     }
+
     @JavascriptInterface
     @Override
     public String getUserId() {
@@ -74,7 +78,9 @@ public class MeWebInterface extends WebInterFace {
         String jsGetPassWord();
 
         String jsGetUserToken();
+
         String jsGetUserId();
+
         void jsMerchantsCertification();
 
         void jsGetLogOut();

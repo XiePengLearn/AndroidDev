@@ -77,8 +77,8 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me_html, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-        //        mWebUrl = "https://www.xiaoanjujia.com/mobile/";
+                mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+//        mWebUrl = "https://www.xiaoanjujia.com/mobile/index.php?m=category&a=ceshi";
         initViewMethod();
         initTitle();
         initSetting(this);
@@ -158,7 +158,7 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                    PrefUtils.writeSESSION_ID("", BaseApplication.getInstance());
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.putExtra("param", "web");
                     startActivity(intent);
@@ -169,7 +169,7 @@ public class MeWebFragment extends BaseFragment implements MeWebFragmentContract
 
     public void refreshView() {
 
-        if(webView != null){
+        if (webView != null) {
             webView.loadUrl(mWebUrl);
         }
     }

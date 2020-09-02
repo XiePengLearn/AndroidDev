@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.html.activity_html;
 
 import android.webkit.JavascriptInterface;
 
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.home.composition.html.store_html.WebInterFace;
 
 /**
@@ -48,7 +49,9 @@ public class ActivityWebInterface extends WebInterFace {
     @Override
     public void getMerchantsCertification() {
         if (jsCallBack != null) {
-            jsCallBack.jsMerchantsCertification();
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                jsCallBack.jsMerchantsCertification();
+            }
         }
     }
 
