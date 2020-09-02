@@ -249,7 +249,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="500元"
+                    android:text="0元"
                     android:textColor="@color/color_ff3333"
                     android:textSize="@dimen/sp_14" />
 
@@ -259,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="余额不足，"
+                    android:text="  余额不足?   "
                     android:textColor="@color/color_b8b8b8"
                     android:textSize="@dimen/sp_14" />
 

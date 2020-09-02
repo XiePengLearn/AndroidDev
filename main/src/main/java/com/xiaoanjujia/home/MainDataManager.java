@@ -45,6 +45,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_GET_COMMUNITY = "/api/v1/getcommunity";
     //商户发布订单(有更改字段)
     private static String GENERAL_GETCOMUORDER = "/api/v1/getcomuorder";
+    //用户余额用户余额
+    private static String GENERAL_BALANCE = "/api/v1/balance";
     //获取商户认证状态
     private static String GENERAL_COMEXAMINE = "/api/v1/comexamine";
     //角色类型页面
@@ -211,9 +213,10 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GET_COMMUNITY, mapParameters, mapHeaders), consumer);
     }
- /**
+
+    /**
      * 商户发布订单(有更改字段)
-  *     private static String GENERAL_GETCOMUORDER = "/api/v1/getcomuorder";
+     * private static String GENERAL_GETCOMUORDER = "/api/v1/getcomuorder";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -223,6 +226,19 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getComuorder(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GETCOMUORDER, mapParameters, mapHeaders), consumer);
+    }
+    /**
+     * 用户余额用户余额
+     *     private static String GENERAL_BALANCE = "/api/v1/balance";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getBalance(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_BALANCE, mapParameters, mapHeaders), consumer);
     }
 
     /**
@@ -292,9 +308,10 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_PROPERTYLOGLISTS, mapParameters, mapHeaders), consumer);
     }
- /**
+
+    /**
      * 普通物业往期查询
-  *     private static String GENERAL_ORDINARYLOGLISTS = "/api/v1/ordinaryloglists";
+     * private static String GENERAL_ORDINARYLOGLISTS = "/api/v1/ordinaryloglists";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数

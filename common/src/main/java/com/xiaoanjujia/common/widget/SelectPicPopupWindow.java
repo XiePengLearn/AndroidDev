@@ -20,17 +20,18 @@ import com.sxjs.common.R;
  * @Date: 2019/9/15 08:04
  * @Description:
  */
-public class SelectPicPopupWindow extends PopupWindow implements View.OnClickListener  {
+public class SelectPicPopupWindow extends PopupWindow implements View.OnClickListener {
 
     private Button btn_select_1, btn_select_2, btn_cancel;
-    private View         mMenuView;
-    private LinearLayout pop_layout ;
-    private Context      context;
-    private View         view;
-    public SelectPicPopupWindow(Context context , View view) {
+    private View mMenuView;
+    private LinearLayout pop_layout;
+    private Context context;
+    private View view;
+
+    public SelectPicPopupWindow(Context context, View view) {
         super(context);
-        this.context=context;
-        this.view =view;
+        this.context = context;
+        this.view = view;
         mMenuView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null);
         btn_select_1 = (Button) mMenuView.findViewById(R.id.btn_select_1);
         btn_select_2 = (Button) mMenuView.findViewById(R.id.btn_select_2);
@@ -71,15 +72,18 @@ public class SelectPicPopupWindow extends PopupWindow implements View.OnClickLis
 
 
     }
-    public void showPopWindow(){
+
+    public void showPopWindow() {
         pop_layout.startAnimation(AnimationUtils.loadAnimation(
                 context, R.anim.activity_translate_in));
         showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
+
     /**
      * 设置选项内容
+     *
      * @param select1 选项一
-     * @param select2  选项二
+     * @param select2 选项二
      * @param btnName
      */
     public void setData(String select1, String select2, String btnName) {
@@ -88,6 +92,29 @@ public class SelectPicPopupWindow extends PopupWindow implements View.OnClickLis
 
         }
         if (!TextUtils.isEmpty(select2)) {
+            btn_select_2.setText(select2);
+
+        }
+        if (!TextUtils.isEmpty(btnName)) {
+            btn_cancel.setText(btnName);
+
+        }
+    }
+
+    /**
+     * 设置选项内容
+     *
+     * @param select1 选项一
+     * @param select2 选项二
+     * @param btnName
+     */
+    public void setData2(String select1, String select2, String btnName) {
+        if (!TextUtils.isEmpty(select1)) {
+            btn_select_1.setText(select1);
+
+        }
+        if (!TextUtils.isEmpty(select2)) {
+            btn_select_2.setVisibility(View.VISIBLE);
             btn_select_2.setText(select2);
 
         }
@@ -112,8 +139,10 @@ public class SelectPicPopupWindow extends PopupWindow implements View.OnClickLis
             pop_layout.clearAnimation();
         }
     }
-    private  OnSelectItemOnclickListener onSelectItemOnclickListener;
-    public interface  OnSelectItemOnclickListener{
+
+    private OnSelectItemOnclickListener onSelectItemOnclickListener;
+
+    public interface OnSelectItemOnclickListener {
         void selectItem(String str);
     }
 

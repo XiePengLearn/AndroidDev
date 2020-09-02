@@ -9,6 +9,7 @@ import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.UserBalanceResponse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,9 +95,57 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
                 mContractView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= ");
                 mfeedBackResponse = new FeedBackResponse();
-                mfeedBackResponse.setMessage("商户认证数据提交失败......");
+                mfeedBackResponse.setMessage("发布信息失败......");
                 mfeedBackResponse.setStatus(0);
                 mContractView.setResponseData(mfeedBackResponse);
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getUserBalance(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        //        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getBalance(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private UserBalanceResponse mUserBalanceResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonArrayData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonArrayData) {
+                        mUserBalanceResponse = gson.fromJson(response, UserBalanceResponse.class);
+                    } else {
+                        mUserBalanceResponse = new UserBalanceResponse();
+                        mUserBalanceResponse.setMessage(ProjectResponse.getMessage(response));
+                        mUserBalanceResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setUserBalance(mUserBalanceResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= ");
             }
 
             @Override

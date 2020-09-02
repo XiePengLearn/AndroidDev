@@ -4,6 +4,7 @@ package com.xiaoanjujia.home.composition.me.post_message;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.UserBalanceResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public interface PostMessageContract {
 
 
         void setResponseData(FeedBackResponse feedBackResponse);
+        void setUserBalance(UserBalanceResponse userBalanceResponse);
 
         void setUploadImage(UploadImageResponse uploadImageResponse);
 
@@ -40,6 +42,7 @@ public interface PostMessageContract {
         Map getData();
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getUserBalance(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getUploadImage(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList);
 

@@ -29,8 +29,10 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -38,8 +40,10 @@ import com.xiaoanjujia.common.widget.SelectPicPopupWindow;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.me.deposit.DepositActivity;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.UserBalanceResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.xiaoanjujia.home.tool.Util;
 
@@ -159,7 +163,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         mId = intent.getIntExtra("id", -1);
         initTitle();
         initView();
-
+        initUserBalance();
     }
 
     /**
@@ -352,6 +356,44 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         }
     }
 
+    private void initUserBalance() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getUserBalance(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setUserBalance(UserBalanceResponse userBalanceResponse) {
+        try {
+            int code = userBalanceResponse.getStatus();
+            String msg = userBalanceResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                UserBalanceResponse.DataBean data = userBalanceResponse.getData();
+                if (data != null) {
+                    String user_money = data.getUser_money();
+                    if (!Utils.isNull(user_money)) {
+                        tvCurrentMoney.setText(String.format("%s元", user_money));
+                    }
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
     @Override
     public void setUploadImage(UploadImageResponse uploadImageResponse) {
         try {
@@ -425,7 +467,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
 
     @OnClick({R2.id.main_title_back, R2.id.company_certificate_im,
             R2.id.uploading_special_certificate_iv, R2.id.post_message_visiting_time_ll,
-            R2.id.post_message_leave_time_ll, R2.id.post_message_btn})
+            R2.id.post_message_leave_time_ll, R2.id.post_message_btn, R2.id.ll_recharge})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
@@ -462,6 +504,11 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         } else if (id == R.id.post_message_leave_time_ll) {
             mPvTimeLeave.show(view);
+        } else if (id == R.id.ll_recharge) {
+            Intent intent = new Intent(PostMessageActivity.this, DepositActivity.class);
+            startActivity(intent);
+
+
         } else if (id == R.id.post_message_btn) {
             String editPostMessageTitleText = editPostMessageTitle.getText().toString().trim();
             String editPostMessageDesText = editPostMessageDes.getText().toString().trim();
