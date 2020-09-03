@@ -104,7 +104,7 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("商城");
+        mainTitleText.setText("物业管理");
     }
 
     private void initView() {

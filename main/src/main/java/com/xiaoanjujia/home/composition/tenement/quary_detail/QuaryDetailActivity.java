@@ -126,7 +126,7 @@ public class QuaryDetailActivity extends BaseActivity implements QuaryDetailCont
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("审核通知");
+        mainTitleText.setText("审核日志");
         mainTitleRight.setText("");
     }
 
