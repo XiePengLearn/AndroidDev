@@ -35,24 +35,24 @@ import com.sxjs.common.R;
 public class SearchLayout extends LinearLayout {
 
 
-    private int       defaultSize = 32;//DIP
-    private TextView  tvTag;
-    private EditText  etInput;
+    private int defaultSize = 32;//DIP
+    private TextView tvTag;
+    private EditText etInput;
     private ImageView ivCancel;
     private ImageView ivTag;
 
 
     private int tagResId = 0;// R.drawable.ic_search;
 
-    private String tagStr   = "";
-    private int    tagSize  = 16;//sp
-    private int    tagColor = R.color.color_black;
+    private String tagStr = "";
+    private int tagSize = 16;//sp
+    private int tagColor = R.color.color_black;
 
-    private int    inputSize      = 16;//sp
-    private int    inputColor     = R.color.color_black;
-    private int    inputHintSize  = 13;
-    private String inputHint      = "";
-    private int    inputHintColor = 0;
+    private int inputSize = 16;//sp
+    private int inputColor = R.color.color_black;
+    private int inputHintSize = 13;
+    private String inputHint = "";
+    private int inputHintColor = 0;
 
     private int cancelResId = R.drawable.cancel_search;
 
@@ -162,7 +162,7 @@ public class SearchLayout extends LinearLayout {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 if (keyCode == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-//                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    //                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     String searchStr = etInput.getText().toString();
                     if (mListener != null) {
                         mListener.onSearchKeyLister(searchStr);
@@ -203,8 +203,14 @@ public class SearchLayout extends LinearLayout {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())) {
                     ivCancel.setVisibility(View.VISIBLE);
+                    if (mListener != null) {
+                        mListener.onCurrentText(s.toString());
+                    }
                 } else {
                     ivCancel.setVisibility(View.GONE);
+                    if (mListener != null) {
+                        mListener.onCurrentText("");
+                    }
                 }
             }
         });
@@ -334,6 +340,10 @@ public class SearchLayout extends LinearLayout {
          * 键盘回车键
          */
         void onSearchKeyLister(String input);
+
+        void onCurrentText(String text);
+
+
     }
 
 }

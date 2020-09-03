@@ -171,7 +171,8 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 if (adapter != null) {
                     adapter.setEnableLoadMore(true);
                 }
-
+                //隐藏软键盘
+                mSlSearchLayout.hideSoftInput();
                 initData(page, mInputTheKeyWord);
             }
         });
@@ -205,6 +206,11 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                     adapter.setEnableLoadMore(true);
                 }
                 initData(page, mInputTheKeyWord);
+            }
+
+            @Override
+            public void onCurrentText(String text) {
+                mInputTheKeyWord = text;
             }
         });
         mStoreHotMoreLl.setOnClickListener(new View.OnClickListener() {

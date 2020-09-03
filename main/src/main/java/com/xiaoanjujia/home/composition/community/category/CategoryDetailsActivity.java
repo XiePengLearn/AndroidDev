@@ -123,7 +123,7 @@ public class CategoryDetailsActivity extends BaseActivity implements CategoryDet
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        if(!Utils.isNull(cateName)){
+        if (!Utils.isNull(cateName)) {
             mainTitleText.setText(cateName);
         }
 
@@ -196,6 +196,11 @@ public class CategoryDetailsActivity extends BaseActivity implements CategoryDet
                     adapter.setEnableLoadMore(true);
                 }
                 initData(page, mInputTheKeyWord);
+            }
+
+            @Override
+            public void onCurrentText(String text) {
+                mInputTheKeyWord = text;
             }
         });
         mStoreHotMoreLl.setOnClickListener(new View.OnClickListener() {

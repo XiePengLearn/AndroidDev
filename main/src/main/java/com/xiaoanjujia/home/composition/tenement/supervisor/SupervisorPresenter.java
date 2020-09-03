@@ -164,7 +164,7 @@ public class SupervisorPresenter extends BasePresenter implements SupervisorCont
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, PropertyManagementListLogResponse.class);
                     } else {

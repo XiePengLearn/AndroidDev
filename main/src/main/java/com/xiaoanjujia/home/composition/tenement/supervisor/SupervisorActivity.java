@@ -132,6 +132,8 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         aflCotent.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
+                adapter.setEnableLoadMore(true);
+                adapter.loadMoreComplete();
                 //时间
                 if (view.isSelected()) {
                     datetype = listDateType.get(position);
@@ -147,6 +149,8 @@ public class SupervisorActivity extends BaseActivity implements SupervisorContra
         aflJobsToChoose.setOnItemClickListener(new AutoFlowLayout.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
+                adapter.setEnableLoadMore(true);
+                adapter.loadMoreComplete();
                 //职位
                 //时间
                 if (view.isSelected()) {
