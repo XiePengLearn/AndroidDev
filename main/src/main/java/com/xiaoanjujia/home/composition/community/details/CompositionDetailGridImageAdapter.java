@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.community;
+package com.xiaoanjujia.home.composition.community.details;
 
 import android.view.LayoutInflater;
 import android.view.View;

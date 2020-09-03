@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/details_top_bar_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_search"
+                android:visibility="gone" />
+
+            <com.xiaoanjujia.common.widget.SearchLayout
+                android:id="@+id/sl_searchLayout"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_35"
+
+                android:layout_weight="1"
+                android:background="@drawable/bg_shap_button_42"
+
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+
+                app:input_Color="@color/color_53"
+                app:input_Hint="搜索您想要的信息"
+                app:input_Hint_Size="14sp"
+                app:input_Hint_color="@color/gray"
+                app:input_Size="14sp"
+                app:tag_src="@drawable/ic_search" />
+
+
+            <TextView
+                android:id="@+id/tv_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="搜索"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_156"
+            android:layout_marginTop="@dimen/dp_16">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rl_community_home_page_classification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_38"
+            android:layout_marginBottom="@dimen/sp_9"
+            android:background="@drawable/item_child_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_34"
+                android:layout_height="@dimen/dp_27"
+                android:layout_marginLeft="@dimen/sp_12"
+                android:src="@drawable/store_hot" />
+
+            <com.xiaoanjujia.common.widget.view_switcher.UpDownViewSwitcher
+                android:id="@+id/home_view_switcher"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingRight="@dimen/dp_10"
+                app:animator_duration="400"
+                app:animator_translate_distance="40dp"
+                app:switch_duration="3000"
+                app:up_to_down="false" />
+
+            <LinearLayout
+                android:id="@+id/store_hot_more_ll"
+                android:layout_width="@dimen/dp_75"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="8dp"
+                    android:background="#9A9898" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableRight="@drawable/arrows_icon_right_orientation"
+                    android:drawablePadding="@dimen/dp_20"
+                    android:text="更多"
+                    android:textColor="@color/color_494949"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

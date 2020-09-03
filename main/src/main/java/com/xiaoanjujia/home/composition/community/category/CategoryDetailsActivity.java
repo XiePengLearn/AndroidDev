@@ -1,11 +1,10 @@
-package com.xiaoanjujia.home.composition.main.community;
+package com.xiaoanjujia.home.composition.community.category;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,24 +16,27 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
-import com.xiaoanjujia.common.base.BaseFragment;
+import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.SearchLayout;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.common.widget.view_switcher.UpDownViewSwitcher;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.community.category.CategoryDetailsActivity;
 import com.xiaoanjujia.home.composition.community.details.CompositionDetailActivity;
+import com.xiaoanjujia.home.composition.main.community.CommunityGridLayoutManager;
 import com.xiaoanjujia.home.entities.ComcateListsResponse;
 import com.xiaoanjujia.home.entities.CommunitySearchResponse;
 import com.xiaoanjujia.home.entities.StoreHot2Response;
@@ -54,14 +56,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * @Auther: xp
- * @Date: 2019/10
- * @Description: 快速开发Fragment
+ * @author xiepeng
  */
-public class CommunityFragment extends BaseFragment implements CommunityFragmentContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
+@Route(path = "/categoryDetailsActivity/categoryDetailsActivity")
+public class CategoryDetailsActivity extends BaseActivity implements CategoryDetailsContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
-    CommunityFragmentPresenter mPresenter;
-    private static final String TAG = "CommunityFragment";
+    CategoryDetailsPresenter mPresenter;
+    private static final String TAG = "CompositionDetailActivity";
 
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
@@ -88,27 +89,28 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     private List<Integer> listDateType = new ArrayList<>();
     private List<String> listWork = new ArrayList<>();
     private List<Integer> listWorkId = new ArrayList<>();
-    private CommunityFragmentAdapter adapter;
-    private int page = 1;
+    private CategoryDetailsAdapter adapter;
+    private int page = 1, datetype = 1, id = 0;
     private RecyclerView aflCotent;
-    private CommunityHomePageClassificationAdapter mAdapterResult;
+    private CategoryDetailsClassificationAdapter mAdapterResult;
     private UpDownViewSwitcher mHomeViewSwitcher;
     private LinearLayout mStoreHotMoreLl;
     private SearchLayout mSlSearchLayout;
     private String mInputTheKeyWord = "";
     private TextView mTvSearchButton;
+    private String cateName;
+    private int cate_id;
 
 
     @Override
-    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_community, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void initEvent() {
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_category_details);
+        StatusBarUtil.setImmersiveStatusBar(this, true);
+        unbinder = ButterKnife.bind(this);
+        Intent intent = getIntent();
+        cateName = intent.getStringExtra("cateName");
+        cate_id = intent.getIntExtra("cate_id", -1);
         initView();
 
         initTypeRoieData();
@@ -121,22 +123,11 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText("社区");
-    }
-
-    @Override
-    public void onLazyLoad() {
+        if(!Utils.isNull(cateName)){
+            mainTitleText.setText(cateName);
+        }
 
     }
-
-    public static CommunityFragment newInstance() {
-        CommunityFragment newInstanceFragment = new CommunityFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("key", "key");
-        newInstanceFragment.setArguments(bundle);
-        return newInstanceFragment;
-    }
-
 
     private void initView() {
 
@@ -145,20 +136,20 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         //                .communityFragmentModule(new CommunityFragmentModule(this, MainDataManager.getInstance(mDataManager)))
         //                .build()
         //                .inject(this);
-        DaggerCommunityFragmentComponent.builder()
+        DaggerCategoryDetailsActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .communityFragmentModule(new CommunityFragmentModule(this, MainDataManager.getInstance(mDataManager)))
+                .categoryDetailsPresenterModule(new CategoryDetailsPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
-        mLayoutInflater = LayoutInflater.from(getActivity());
+        mLayoutInflater = LayoutInflater.from(CategoryDetailsActivity.this);
 
 
         findPullRefreshHeader.setPtrHandler(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new CommunityFragmentAdapter(R.layout.item_community_fragment);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(CategoryDetailsActivity.this));
+        adapter = new CategoryDetailsAdapter(R.layout.item_community_fragment);
         adapter.setOnLoadMoreListener(this);
 
-        View itemHeader = mLayoutInflater.inflate(R.layout.item_community_fragment_header, null);
+        View itemHeader = mLayoutInflater.inflate(R.layout.item_categorydetails_header, null);
         aflCotent = itemHeader.findViewById(R.id.rl_community_home_page_classification);
         mHomeViewSwitcher = itemHeader.findViewById(R.id.home_view_switcher);
         mStoreHotMoreLl = itemHeader.findViewById(R.id.store_hot_more_ll);
@@ -215,21 +206,23 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         });
 
         //搜索结果的展示
-        CommunityGridLayoutManager manager = new CommunityGridLayoutManager(getActivity(), 5, GridLayoutManager.VERTICAL, false);
+        CommunityGridLayoutManager manager = new CommunityGridLayoutManager(CategoryDetailsActivity.this, 5, GridLayoutManager.VERTICAL, false);
         aflCotent.setLayoutManager(manager);
-        mAdapterResult = new CommunityHomePageClassificationAdapter(R.layout.item_community_fragment_header_grald);
+        mAdapterResult = new CategoryDetailsClassificationAdapter(R.layout.item_community_fragment_header_grald);
         mAdapterResult.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List data = adapter.getData();
-                ComcateListsResponse.DataBean servicehistoryBean = (ComcateListsResponse.DataBean) data.get(position);
-                String cateName = servicehistoryBean.getCate_name();
-                int cate_id = servicehistoryBean.getCate_id();
-                Intent intent = new Intent(mContext, CategoryDetailsActivity.class);
-                intent.putExtra("cateName", cateName);
-                intent.putExtra("cate_id", cate_id);
-                startActivity(intent);
-                //                ToastUtil.showToast(BaseApplication.getInstance(), "position:" + position);
+                //                List data = adapter.getData();
+                //                SearchKeywordResultResponse.DataBean servicehistoryBean = (SearchKeywordResultResponse.DataBean) data.get(position);
+                //                String id = servicehistoryBean.getID();
+                //                String date = servicehistoryBean.getDATE();
+                //                Intent intent = new Intent(mContext, ChatRecordActivity.class);
+                //                intent.putExtra("title", "服务历史");
+                //                intent.putExtra("id", id);
+                //                intent.putExtra("date", date);
+                //                intent.putExtra("mMedicalOrgId", mMedicalOrgId);
+                //                startActivity(intent);
+                ToastUtil.showToast(BaseApplication.getInstance(), "position:" + position);
             }
         });
         aflCotent.setAdapter(mAdapterResult);
@@ -246,7 +239,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 CommunitySearchResponse.DataBean dateBean = (CommunitySearchResponse.DataBean) data.get(position);
                 int id = dateBean.getId();
                 int community_id = dateBean.getCommunity_id();
-                Intent intent = new Intent(getActivity(), CompositionDetailActivity.class);
+                Intent intent = new Intent(CategoryDetailsActivity.this, CompositionDetailActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("community_id", community_id);
                 startActivity(intent);
@@ -267,7 +260,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
         Map<String, Object> mapParameters = new HashMap<>(3);
         mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("shop_name", shopName);
+        mapParameters.put("cate_id", cate_id);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -321,15 +314,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -398,15 +391,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 initData(page, mInputTheKeyWord);
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -420,15 +413,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -472,15 +465,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 }
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -500,15 +493,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
                 }
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -549,15 +542,15 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -598,34 +591,28 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(CategoryDetailsActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                    ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), msg);
                 }
 
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+            ToastUtil.showToast(CategoryDetailsActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
     @Override
     public void showProgressDialogView() {
-        showJDLoadingDialog();
+        showProgressDialog();
     }
 
     @Override
     public void hiddenProgressDialogView() {
-        hideJDLoadingDialog();
+        hiddenProgressDialog();
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
 
     @Override
     public void onLoadMoreRequested() {
@@ -634,7 +621,7 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
             @Override
             public void run() {
                 page++;
-                initMoreData(page, mInputTheKeyWord);
+                initMoreData(page);
             }
         }, 500);
     }
@@ -642,12 +629,13 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
     //page
     //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
     //id:角色id  默认0  全部
-    private void initMoreData(int page, String mInputTheKeyWord) {
+    private void initMoreData(int page) {
 
         Map<String, Object> mapParameters = new HashMap<>(3);
-
         mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("shop_name", mInputTheKeyWord);
+        mapParameters.put("cate_id", cate_id);
+
+
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getMoreData(headersTreeMap, mapParameters);
@@ -668,4 +656,11 @@ public class CommunityFragment extends BaseFragment implements CommunityFragment
         }, 500);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null) {
+            mPresenter.destory();
+        }
+    }
 }

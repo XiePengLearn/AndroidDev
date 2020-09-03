@@ -27,9 +27,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat_list"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_18"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_18"
-            android:layout_marginTop="@dimen/dp_18"
             android:layout_marginRight="@dimen/dp_18"
             android:overScrollMode="never"
             android:visibility="visible" />
@@ -43,9 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_layout"
         android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/dp_250"
 
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

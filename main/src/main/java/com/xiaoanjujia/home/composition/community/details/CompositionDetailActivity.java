@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.community;
+package com.xiaoanjujia.home.composition.community.details;
 
 import android.content.ClipboardManager;
 import android.content.Context;

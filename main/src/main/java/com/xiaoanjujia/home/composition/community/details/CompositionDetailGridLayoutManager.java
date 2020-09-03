@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.community;
+package com.xiaoanjujia.home.composition.community.details;
 
 import android.content.Context;
 import android.view.View;

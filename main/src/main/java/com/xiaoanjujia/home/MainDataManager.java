@@ -67,6 +67,8 @@ public class MainDataManager extends BaseDataManager {
     private static String GENERAL_COMMUNITYSEARCH = "/api/v1/communitysearch";
     //社区列表
     private static String GENERAL_ORDERLISTS = "/api/v1/orderlists";
+    //分类列表
+    private static String GENERAL_CATEODLISTS = "/api/v1/cateodlists";
     //日志详情
     private static String GENERAL_LOGDETAILS = "/api/v1/logdetails";
     //审核通过
@@ -387,6 +389,20 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getOrderLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_ORDERLISTS, mapParameters, mapHeaders), consumer);
+    }
+
+    /**
+     * 分类列表
+     *     private static String GENERAL_CATEODLISTS = "/api/v1/cateodlists";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getCateodLists(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_CATEODLISTS, mapParameters, mapHeaders), consumer);
     }
 
     /**

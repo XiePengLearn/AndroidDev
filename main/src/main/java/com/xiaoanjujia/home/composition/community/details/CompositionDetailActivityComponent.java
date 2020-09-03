@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.community;
+package com.xiaoanjujia.home.composition.community.details;
 
 
 import com.xiaoanjujia.common.AppComponent;
