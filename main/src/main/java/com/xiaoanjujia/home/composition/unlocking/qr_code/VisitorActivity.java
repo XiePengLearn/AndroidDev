@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.visitor;
+package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,7 +17,6 @@ import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
-import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -35,7 +34,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/VisitorActivity/VisitorActivity")
+@Route(path = "/visitorActivity/visitorActivity")
 public class VisitorActivity extends BaseActivity implements VisitorContract.View {
     @Inject
     VisitorPresenter mPresenter;
@@ -50,12 +49,10 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.visiting_cancel)
-    AlphaButton visitingCancel;
-    @BindView(R2.id.visiting_confirm)
-    AlphaButton visitingConfirm;
-    @BindView(R2.id.visiting_return_the_home_page)
-    AlphaButton visitingReturnTheHomePage;
+    @BindView(R2.id.qr_house_title_tv)
+    TextView qrHouseTitleTv;
+    @BindView(R2.id.qr_house_code_iv)
+    ImageView qrHouseCodeIv;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
 
@@ -71,12 +68,14 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
         initData();
         initTitle();
     }
+
     /**
      * 初始化title
      */
     private void initTitle() {
-        mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("自主邀约");
+        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleText.setText("");
+        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.close_white));
     }
 
     private void initView() {
@@ -150,17 +149,13 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
         }
     }
 
-    @OnClick({R2.id.main_title_back, R2.id.visiting_cancel, R2.id.visiting_confirm, R2.id.visiting_return_the_home_page})
+    @OnClick({R2.id.main_title_back, R2.id.main_title_right})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
-        } else if (id == R.id.visiting_cancel) {
-
-        } else if (id == R.id.visiting_confirm) {
-
-        }else if (id == R.id.visiting_return_the_home_page) {
-
+        } else if (id == R.id.main_title_right) {
+            finish();
         }
     }
 

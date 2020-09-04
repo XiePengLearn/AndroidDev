@@ -122,7 +122,7 @@
             android:name="com.xiaoanjujia.home.composition.unlocking.visitor_audit.VisitorAuditActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.xiaoanjujia.home.composition.unlocking.visitor.VisitorActivity"
+            android:name="com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.tenement.staff.StaffActivity"

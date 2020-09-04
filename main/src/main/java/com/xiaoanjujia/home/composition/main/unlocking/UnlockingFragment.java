@@ -11,7 +11,6 @@ import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,8 +27,8 @@ import com.xiaoanjujia.common.base.BaseFragment;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.LoadingView;
 import com.xiaoanjujia.common.widget.X5WebView;
-import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
@@ -58,6 +57,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     @Inject
     UnlockingFragmentPresenter mPresenter;
     private static final String TAG = "NationExamActivity";
+
+
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -68,24 +69,44 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.unlocking_independent_booking_for_visitors)
-    AlphaButton unlockingIndependentBookingForVisitors;
-    @BindView(R2.id.unlocking_visiting_scholar)
-    AlphaButton unlockingVisitingScholar;
-    @BindView(R2.id.unlocking_visitors_to_review)
-    AlphaButton unlockingVisitorsToReview;
-    @BindView(R2.id.unlocking_visitors_store)
-    AlphaButton unlockingVisitorsStore;
-    @BindView(R2.id.no_data_img)
-    ImageView noDataImg;
-    @BindView(R2.id.rl_fragment_no_data)
-    RelativeLayout rlFragmentNoData;
-    @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.unlocking_house_title)
+    TextView unlockingHouseTitle;
+    @BindView(R2.id.unlocking_add_house_ll)
+    LinearLayout unlockingAddHouseLl;
+    @BindView(R2.id.unlocking_one_line_1)
+    LinearLayout unlockingOneLine1;
+    @BindView(R2.id.unlocking_one_line_2)
+    LinearLayout unlockingOneLine2;
+    @BindView(R2.id.unlocking_one_line_3)
+    LinearLayout unlockingOneLine3;
+    @BindView(R2.id.unlocking_two_line_1)
+    LinearLayout unlockingTwoLine1;
+    @BindView(R2.id.unlocking_two_line_2)
+    LinearLayout unlockingTwoLine2;
+    @BindView(R2.id.unlocking_two_line_3)
+    LinearLayout unlockingTwoLine3;
+    @BindView(R2.id.unlocking_three_line_1)
+    LinearLayout unlockingThreeLine1;
+    @BindView(R2.id.unlocking_three_line_2)
+    LinearLayout unlockingThreeLine2;
+    @BindView(R2.id.unlocking_three_line_3)
+    LinearLayout unlockingThreeLine3;
+    @BindView(R2.id.unlocking_four_line_1)
+    LinearLayout unlockingFourLine1;
+    @BindView(R2.id.unlocking_four_line_2)
+    LinearLayout unlockingFourLine2;
+    @BindView(R2.id.unlocking_four_line_3)
+    LinearLayout unlockingFourLine3;
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
     @BindView(R2.id.webView)
     X5WebView webView;
+    @BindView(R2.id.betslip_order_loading)
+    LoadingView betslipOrderLoading;
+    @BindView(R2.id.deposit_page_loading)
+    LinearLayout depositPageLoading;
+    @BindView(R2.id.find_pull_refresh_header)
+    JDHeaderView findPullRefreshHeader;
     private String mWebUrl;
 
     @Override
@@ -209,20 +230,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
 
-    @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
-    public void onViewClicked(View view) {
-        int id = view.getId();
-        if (id == R.id.unlocking_independent_booking_for_visitors) {
 
-            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
-        } else if (id == R.id.unlocking_visiting_scholar) {
-            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
-        } else if (id == R.id.unlocking_visitors_to_review) {
-            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
-        } else if (id == R.id.unlocking_visitors_store) {
-            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
-        }
-    }
 
     @Override
     public String jsGetUserName() {
@@ -262,6 +270,59 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                     startActivity(intent);
                 }
             });
+        }
+    }
+
+
+//    @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
+//    public void onViewClicked(View view) {
+//        int id = view.getId();
+//        if (id == R.id.unlocking_independent_booking_for_visitors) {
+//
+//            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
+//        } else if (id == R.id.unlocking_visiting_scholar) {
+//            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
+//        } else if (id == R.id.unlocking_visitors_to_review) {
+//            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
+//        } else if (id == R.id.unlocking_visitors_store) {
+//            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
+//        }
+//    }
+    @OnClick({R2.id.main_title_back, R2.id.unlocking_add_house_ll, R2.id.unlocking_one_line_1,
+            R2.id.unlocking_one_line_2, R2.id.unlocking_one_line_3, R2.id.unlocking_two_line_1,
+            R2.id.unlocking_two_line_2, R2.id.unlocking_two_line_3, R2.id.unlocking_three_line_1,
+            R2.id.unlocking_three_line_2, R2.id.unlocking_three_line_3, R2.id.unlocking_four_line_1,
+            R2.id.unlocking_four_line_2, R2.id.unlocking_four_line_3})
+    public void onViewClicked(View view) {
+        int id = view.getId();
+        if (id == R.id.main_title_back) {
+
+        } else if (id == R.id.unlocking_add_house_ll) {
+
+        } else if (id == R.id.unlocking_one_line_1) {
+            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
+        } else if (id == R.id.unlocking_one_line_2) {
+
+        } else if (id == R.id.unlocking_one_line_3) {
+
+        } else if (id == R.id.unlocking_two_line_1) {
+
+        } else if (id == R.id.unlocking_two_line_2) {
+
+        } else if (id == R.id.unlocking_two_line_3) {
+            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
+        } else if (id == R.id.unlocking_three_line_1) {
+
+        } else if (id == R.id.unlocking_three_line_2) {
+
+        } else if (id == R.id.unlocking_three_line_3) {
+
+        } else if (id == R.id.unlocking_four_line_1) {
+
+        } else if (id == R.id.unlocking_four_line_2) {
+
+        } else if (id == R.id.unlocking_four_line_3) {
+
         }
     }
 

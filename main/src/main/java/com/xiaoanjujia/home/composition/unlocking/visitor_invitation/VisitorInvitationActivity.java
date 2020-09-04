@@ -47,7 +47,7 @@ import static com.xiaoanjujia.common.util.Tool.getTime;
 /**
  * @author xiepeng
  */
-@Route(path = "/VisitorInvitationActivity/VisitorInvitationActivity")
+@Route(path = "/visitorInvitationActivity/visitorInvitationActivity")
 public class VisitorInvitationActivity extends BaseActivity implements VisitorInvitationContract.View {
     @Inject
     VisitorInvitationPresenter mPresenter;

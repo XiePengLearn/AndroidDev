@@ -3,6 +3,7 @@
     android:id="@+id/ll_knowledge_publish_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
 
     >
@@ -20,50 +21,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
-                android:id="@+id/invitation_particulars_of_matter_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_19"
-                android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
+                    android:text=""
                     android:textColor="@color/bg_red"
                     android:textSize="@dimen/sp_15" />
 
                 <TextView
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="来访事由:"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
-
-                <TextView
-                    android:id="@+id/invitation_particulars_of_matter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
-                    android:gravity="right"
-                    android:textColor="@color/color_494949"
-                    android:textColorHint="@color/color_C5C3C3"
-                    android:textSize="@dimen/sp_15" />
-
-                <ImageView
-                    android:layout_width="@dimen/dp_6"
-                    android:layout_height="@dimen/dp_10"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/arrows_icon_right_orientation" />
+                    android:text="访客姓名"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
 
+                <EditText
+                    android:id="@+id/edit_invitation_visiting_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:gravity="right|center_vertical"
+                    android:hint="请输入访客姓名（必填）"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
 
             </LinearLayout>
 
@@ -74,6 +70,57 @@
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text=""
+                    android:textColor="@color/bg_red"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机号码："
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <EditText
+                    android:id="@+id/edit_invitation_visiting_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:background="@null"
+                    android:cursorVisible="true"
+                    android:gravity="right|center_vertical"
+                    android:hint="请输入访客手机号（必填）"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#494949"
+                    android:textColorHint="#C5C3C3"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
 
             <LinearLayout
                 android:id="@+id/invitation_visiting_time_ll"
@@ -88,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
+                    android:text=""
                     android:textColor="@color/bg_red"
                     android:textSize="@dimen/sp_15" />
 
@@ -98,15 +145,15 @@
                     android:layout_weight="1"
                     android:text="来访时间:"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <TextView
                     android:id="@+id/invitation_visiting_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择访客来访时间（必填）"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -141,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
+                    android:text=""
                     android:textColor="@color/bg_red"
                     android:textSize="@dimen/sp_15" />
 
@@ -151,15 +198,15 @@
                     android:layout_weight="1"
                     android:text="离开时间:"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <TextView
                     android:id="@+id/invitation_leave_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择访客离开时间（必填）"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -182,55 +229,60 @@
                 android:background="#D1D1D1" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_37"
                 android:layout_marginTop="@dimen/dp_20"
+                android:background="#F9FAFB"
+                android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18"
-                android:text="访客信息:"
+                android:text="预计来访时间和预计离开时间最多相差24小时"
                 android:textColor="@color/color_494949"
-                android:textSize="@dimen/sp_17"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_10" />
 
             <LinearLayout
+                android:id="@+id/invitation_particulars_of_matter_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
+                    android:text=""
                     android:textColor="@color/bg_red"
                     android:textSize="@dimen/sp_15" />
 
                 <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="来访事由:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:id="@+id/invitation_particulars_of_matter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="来访姓名:"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="right"
+                    android:hint="请选择"
                     android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
 
-                <EditText
-                    android:id="@+id/edit_invitation_visiting_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:background="@null"
-                    android:cursorVisible="true"
-                    android:gravity="right|center_vertical"
-                    android:hint="请输入访客信息"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="@color/color_494949"
-                    android:textColorHint="#C5C3C3"
-                    android:textCursorDrawable="@drawable/text_cursor"
-                    android:textSize="@dimen/sp_14" />
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
 
             </LinearLayout>
 
@@ -255,7 +307,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
+                    android:text=""
                     android:textColor="@color/bg_red"
                     android:textSize="@dimen/sp_15" />
 
@@ -266,15 +318,15 @@
                     android:layout_weight="1"
                     android:text="性别:"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <TextView
                     android:id="@+id/invitation_visiting_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -296,55 +348,6 @@
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_19"
-                android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_3"
-                    android:text="*"
-                    android:textColor="@color/bg_red"
-                    android:textSize="@dimen/sp_15" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="手机号码："
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
-
-                <EditText
-                    android:id="@+id/edit_invitation_visiting_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:background="@null"
-                    android:cursorVisible="true"
-                    android:gravity="right|center_vertical"
-                    android:hint="请输入手机号码"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#494949"
-                    android:textColorHint="#C5C3C3"
-                    android:textCursorDrawable="@drawable/text_cursor"
-                    android:textSize="@dimen/sp_14" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_0_5"
-                android:layout_marginLeft="@dimen/dp_18"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_marginRight="@dimen/dp_18"
-                android:background="#D1D1D1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -358,7 +361,7 @@
                     android:layout_height="wrap_content"
                     android:text="车牌号码:"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <EditText
                     android:id="@+id/edit_invitation_visiting_license_number"
@@ -402,15 +405,15 @@
                     android:layout_weight="1"
                     android:text="证件类型:"
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <TextView
                     android:id="@+id/invitation_visiting_id_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_16"
-                    android:hint="请选择"
                     android:gravity="right"
+                    android:hint="请选择"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />
@@ -444,7 +447,7 @@
                     android:layout_height="wrap_content"
                     android:text="证件号码："
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <EditText
                     android:id="@+id/edit_invitation_visiting_id_number"
@@ -484,7 +487,7 @@
                     android:layout_height="wrap_content"
                     android:text="来访单位："
                     android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_15" />
+                    android:textSize="@dimen/sp_17" />
 
                 <EditText
                     android:id="@+id/edit_invitation_visiting_units"

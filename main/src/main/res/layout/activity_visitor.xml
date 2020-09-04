@@ -3,6 +3,7 @@
     android:id="@+id/ll_knowledge_publish_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#575CED"
     android:orientation="vertical"
 
     >
@@ -20,98 +21,82 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_27"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_18"
-                android:text="访客自主预约"
-                android:textColor="@color/color_959595"
-                android:textSize="@dimen/sp_14"
-                android:textStyle="bold" />
-
-
-            <ImageView
-                android:layout_width="@dimen/dp_139"
-                android:layout_height="@dimen/dp_139"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_30"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:text="二维码通行"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_24" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="476dp"
+                android:layout_marginLeft="@dimen/dp_18"
                 android:layout_marginTop="@dimen/dp_15"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="@drawable/qr_code_bg_white"
+                android:orientation="vertical">
 
-                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                    android:id="@+id/visiting_cancel"
-                    android:layout_width="@dimen/dp_70"
-                    android:layout_height="@dimen/dp_17"
-                    android:layout_gravity="center"
+                <TextView
+                    android:id="@+id/qr_house_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_50"
+                    android:paddingLeft="@dimen/dp_18"
+                    android:paddingRight="@dimen/dp_18"
+                    android:text="小安"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_24" />
 
-                    android:layout_marginEnd="@dimen/dp_15"
-                    android:background="@drawable/bg_shape_button_visitor"
-                    android:gravity="center"
-                    android:text="下载二维码"
-                    android:textColor="@color/color_757575"
-                    android:textSize="@dimen/sp_11" />
+                <ImageView
+                    android:id="@+id/qr_house_code_iv"
+                    android:layout_width="@dimen/dp_184"
+                    android:layout_height="@dimen/dp_184"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_53"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/default_icon" />
 
-                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                    android:id="@+id/visiting_confirm"
-                    android:layout_width="@dimen/dp_36"
-                    android:layout_height="@dimen/dp_17"
-                    android:layout_gravity="center"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
-                    android:background="@drawable/bg_shape_button_visitor"
-                    android:gravity="center"
-                    android:text="刷新"
-                    android:textColor="@color/color_757575"
-                    android:textSize="@dimen/sp_11" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_69"
+                    android:paddingLeft="@dimen/dp_18"
+                    android:paddingRight="@dimen/dp_18"
+                    android:text="当前二维码有效时间为24小时"
+                    android:textColor="@color/color_767676"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_18"
+                    android:paddingRight="@dimen/dp_18"
+                    android:text="有效时间内限制使用4次"
+                    android:textColor="@color/color_767676"
+                    android:textSize="@dimen/sp_12" />
+
+
             </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_15"
-                android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18"
-                android:text="扫码此二维码进入手机页面可进行"
-                android:textColor="@color/color_767676"
-                android:textSize="@dimen/sp_12" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_3"
-                android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18"
-                android:text="访客预约或邀约访客"
-                android:textColor="@color/color_767676"
-                android:textSize="@dimen/sp_12" />
-
-            <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                android:id="@+id/visiting_return_the_home_page"
-                android:layout_width="@dimen/dp_195"
-                android:layout_height="@dimen/dp_33"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginRight="@dimen/dp_30"
-                android:layout_marginBottom="@dimen/dp_32"
-                android:background="@drawable/bg_shap_button_1"
-                android:gravity="center"
-                android:paddingTop="@dimen/dp_8"
-                android:paddingBottom="@dimen/dp_8"
-                android:text="返回主页"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/sp_14" />
         </LinearLayout>
     </com.xiaoanjujia.common.util.MyScrollView>
 

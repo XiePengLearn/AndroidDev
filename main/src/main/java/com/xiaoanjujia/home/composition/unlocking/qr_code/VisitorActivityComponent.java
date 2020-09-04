@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.visitor;
+package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
 
 import com.xiaoanjujia.common.AppComponent;

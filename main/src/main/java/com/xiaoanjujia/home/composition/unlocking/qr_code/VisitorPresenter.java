@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.visitor;
+package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
 import com.google.gson.Gson;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
@@ -54,7 +54,7 @@ public class VisitorPresenter extends BasePresenter implements VisitorContract.P
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getVisitorPersonInfo(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
             private LoginResponse mLoginResponse;
 

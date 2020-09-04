@@ -31,6 +31,7 @@ import okhttp3.ResponseBody;
 public class MainDataManager extends BaseDataManager {
 
     private static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
+    private static String HK_ROOT_URL = "http://hk.xiaoanjujia.com";//预生产环境接口
     //注册
     private static String GENERAL_REGISTER = "/api/v1/register";
     //获取验证码
@@ -229,9 +230,10 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_GETCOMUORDER, mapParameters, mapHeaders), consumer);
     }
+
     /**
      * 用户余额用户余额
-     *     private static String GENERAL_BALANCE = "/api/v1/balance";
+     * private static String GENERAL_BALANCE = "/api/v1/balance";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -393,7 +395,7 @@ public class MainDataManager extends BaseDataManager {
 
     /**
      * 分类列表
-     *     private static String GENERAL_CATEODLISTS = "/api/v1/cateodlists";
+     * private static String GENERAL_CATEODLISTS = "/api/v1/cateodlists";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -581,4 +583,25 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_WATCHBONUS, mapParameters, mapHeaders), consumer);
     }
+
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //以下是海康 接口
+    //根据人员唯一字段获取人员详细信息
+    private static String HK_INTERFACE_VISITOR_PERSONINFO = "/artemis/visitor/personInfo";
+
+    /**
+     * 根据人员唯一字段获取人员详细信息
+     * private static String HK_INTERFACE_VISITOR_PERSONINFO = "/artemis/visitor/personInfo";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getVisitorPersonInfo(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + HK_INTERFACE_VISITOR_PERSONINFO, mapParameters, mapHeaders), consumer);
+    }
+
 }
