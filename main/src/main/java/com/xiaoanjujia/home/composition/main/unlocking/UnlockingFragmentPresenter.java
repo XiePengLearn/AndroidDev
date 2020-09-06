@@ -5,8 +5,8 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,8 +56,8 @@ public class UnlockingFragmentPresenter extends BasePresenter implements Unlocki
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-            private LoginResponse mDataResponse;
+        Disposable disposable = mDataManager.getVisitorPersonInfo(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private VisitorPersonInfoResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -65,13 +65,13 @@ public class UnlockingFragmentPresenter extends BasePresenter implements Unlocki
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, LoginResponse.class);
+                        mDataResponse = gson.fromJson(response, VisitorPersonInfoResponse.class);
                     } else {
-                        mDataResponse = new LoginResponse();
+                        mDataResponse = new VisitorPersonInfoResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
                     }
                     mContractView.setResponseData(mDataResponse);
                 } catch (Exception e) {

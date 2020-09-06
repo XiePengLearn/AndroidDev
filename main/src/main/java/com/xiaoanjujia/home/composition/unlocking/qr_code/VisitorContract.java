@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.QrCodeResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface VisitorContract {
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
+        void setResponseData(QrCodeResponse mQrCodeResponse);
 
         void showProgressDialogView();
 

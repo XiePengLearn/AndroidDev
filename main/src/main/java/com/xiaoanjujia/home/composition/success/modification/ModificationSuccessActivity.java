@@ -116,6 +116,7 @@ public class ModificationSuccessActivity extends BaseActivity implements Modific
                 String SESSION_ID = data.getToken();
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(mUserName, this.getApplicationContext());
+                PrefUtils.writePhone(mUserName, this.getApplicationContext());
                 PrefUtils.writePassword(mPassword, this.getApplicationContext());
                 PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                 PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());

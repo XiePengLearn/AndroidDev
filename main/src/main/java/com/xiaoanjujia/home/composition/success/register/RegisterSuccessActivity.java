@@ -123,6 +123,7 @@ public class RegisterSuccessActivity extends BaseActivity implements RegisterSuc
                 PrefUtils.writeUserId(String.valueOf(user_id), BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(mUserName, this.getApplicationContext());
+                PrefUtils.writePhone(mUserName, this.getApplicationContext());
                 PrefUtils.writePassword(mPassword, this.getApplicationContext());
                 PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                 PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());

@@ -589,6 +589,8 @@ public class MainDataManager extends BaseDataManager {
     //以下是海康 接口
     //根据人员唯一字段获取人员详细信息
     private static String HK_INTERFACE_VISITOR_PERSONINFO = "/artemis/visitor/personInfo";
+    //查询二维码
+    private static String HK_INTERFACE_BAR_CODE = "/artemis/persionHouse/barCode";
 
     /**
      * 根据人员唯一字段获取人员详细信息
@@ -600,8 +602,21 @@ public class MainDataManager extends BaseDataManager {
      * @return Disposable
      */
     public Disposable getVisitorPersonInfo(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
-        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
-                (KPI_ROOT_URL + HK_INTERFACE_VISITOR_PERSONINFO, mapParameters, mapHeaders), consumer);
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_INTERFACE_VISITOR_PERSONINFO, mapParameters), consumer);
     }
 
+    /**
+     * 查询二维码
+     * private static String HK_INTERFACE_BAR_CODE = "/artemis/persionHouse/barCode";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getBarCode(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_INTERFACE_BAR_CODE, mapParameters), consumer);
+    }
 }

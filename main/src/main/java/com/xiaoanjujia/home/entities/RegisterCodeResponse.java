@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @Date: 2019/9/15 08:52
  * @Description:
  */
-public class RegisterCodeResponse {
+public class RegisterCodeResponse  implements Serializable {
     /**
      * status : 1
      * message : OK

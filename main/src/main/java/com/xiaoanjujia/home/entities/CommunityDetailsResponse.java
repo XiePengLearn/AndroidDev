@@ -1,12 +1,13 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @Auther: xp
  * @Description:
  */
-public class CommunityDetailsResponse {
+public class CommunityDetailsResponse  implements Serializable {
 
 
     /**

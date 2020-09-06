@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +25,6 @@ import com.xiaoanjujia.common.util.StringUtils;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
-import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.ForgerResponse;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
@@ -143,6 +141,7 @@ public class ForgerPasswordActivity extends BaseActivity implements ForgerPasswo
             if (code == ResponseCode.SUCCESS_OK) {
                 ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.forger_successfully));
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
+                PrefUtils.writePhone(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 finish();

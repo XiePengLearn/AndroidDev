@@ -1,12 +1,13 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by xp on 2017/3/10.
  */
 
-public class FindsBean {
+public class FindsBean  implements Serializable {
 
     /**
      * typeName : 精选

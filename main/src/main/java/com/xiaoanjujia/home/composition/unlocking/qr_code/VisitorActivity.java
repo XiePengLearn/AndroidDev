@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
@@ -18,7 +20,7 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.QrCodeResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
@@ -88,10 +90,8 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     }
 
     private void initData() {
-
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
-
+        mapParameters.put("personId", "65277007e605477fb80eaa25dd91e4b8");
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -106,12 +106,20 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(QrCodeResponse mQrCodeResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = Integer.parseInt(mQrCodeResponse.getStatus());
+            String msg = mQrCodeResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
+                QrCodeResponse.DataBean data = mQrCodeResponse.getData();
+                String barCode = data.getBarCode();
+                RequestOptions options = new RequestOptions()
+                        .error(R.drawable.default_icon);
+                //头像
+                Glide.with(mContext)
+                        .load(barCode)
+                        .apply(options)
+                        .into(qrHouseCodeIv);
 
 
             } else if (code == ResponseCode.SEESION_ERROR) {

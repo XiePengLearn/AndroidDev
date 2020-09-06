@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -139,6 +138,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             if (code == ResponseCode.SUCCESS_OK) {
                 ToastUtil.showToast(this.getApplicationContext(), getResources().getString(R.string.registered_successfully));
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
+                PrefUtils.writePhone(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writePassword(regPassword.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 ARouter.getInstance().build("/RegisterSuccess/RegisterSuccess").greenChannel().navigation(this);

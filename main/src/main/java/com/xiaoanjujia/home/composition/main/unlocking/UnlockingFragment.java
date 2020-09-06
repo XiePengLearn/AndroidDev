@@ -29,16 +29,18 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.widget.LoadingView;
 import com.xiaoanjujia.common.widget.X5WebView;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -65,8 +67,12 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     ImageView mainTitleBack;
     @BindView(R2.id.main_title_text)
     TextView mainTitleText;
+    @BindView(R2.id.unlocking_add_house_tv)
+    TextView unlockingAddHouseTv;
     @BindView(R2.id.main_title_right)
     ImageView mainTitleRight;
+    @BindView(R2.id.unlocking_add_house_iv)
+    ImageView unlockingAddHouseIv;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
     @BindView(R2.id.unlocking_house_title)
@@ -124,6 +130,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initTitle();
         initWebView();
         initSetting(this);
+        initData();
     }
 
     private void initWebView() {
@@ -179,20 +186,49 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
     public void initData() {
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("paramName", "phoneNo");
+        mapParameters.put("paramValue", PrefUtils.readPhone(BaseApplication.getInstance()));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(VisitorPersonInfoResponse mVisitorPersonInfoResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = Integer.parseInt(mVisitorPersonInfoResponse.getStatus());
+            String msg = mVisitorPersonInfoResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
+                List<VisitorPersonInfoResponse.DataBean> data = mVisitorPersonInfoResponse.getData();
+                if (data != null && data.size() > 0) {
+                    VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
+                    if (dataBean != null) {
+                        String personName = dataBean.getPersonName();
+                        String orgPathName = dataBean.getOrgPathName();
+                        if (!Utils.isNull(personName)) {
+                            unlockingHouseTitle.setText(personName);
+                        } else {
+                            unlockingHouseTitle.setText("后台还未录入");
+                            unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                        }
+                        if (!Utils.isNull(orgPathName)) {
+                            unlockingAddHouseTv.setText(orgPathName);
+                        } else {
+                            if (!Utils.isNull(personName)) {
+                                unlockingAddHouseTv.setText("暂无房屋信息，请先添加房屋");
+                            } else {
+                                unlockingAddHouseTv.setText("暂无房屋信息");
+                                unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                        unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    unlockingHouseTitle.setText("后台还未录入");
+                    unlockingAddHouseTv.setText("暂无房屋信息");
+                    unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                }
 
 
             } else if (code == ResponseCode.SEESION_ERROR) {
@@ -230,8 +266,6 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
 
-
-
     @Override
     public String jsGetUserName() {
 
@@ -255,7 +289,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
     @Override
     public void jsMerchantsCertification() {
-        initData();
+
     }
 
     @Override
@@ -274,20 +308,20 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
 
-//    @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
-//    public void onViewClicked(View view) {
-//        int id = view.getId();
-//        if (id == R.id.unlocking_independent_booking_for_visitors) {
-//
-//            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
-//        } else if (id == R.id.unlocking_visiting_scholar) {
-//            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
-//        } else if (id == R.id.unlocking_visitors_to_review) {
-//            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
-//        } else if (id == R.id.unlocking_visitors_store) {
-//            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
-//        }
-//    }
+    //    @OnClick({R2.id.unlocking_independent_booking_for_visitors, R2.id.unlocking_visiting_scholar, R2.id.unlocking_visitors_to_review, R2.id.unlocking_visitors_store})
+    //    public void onViewClicked(View view) {
+    //        int id = view.getId();
+    //        if (id == R.id.unlocking_independent_booking_for_visitors) {
+    //
+    //            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
+    //        } else if (id == R.id.unlocking_visiting_scholar) {
+    //            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
+    //        } else if (id == R.id.unlocking_visitors_to_review) {
+    //            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
+    //        } else if (id == R.id.unlocking_visitors_store) {
+    //            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
+    //        }
+    //    }
     @OnClick({R2.id.main_title_back, R2.id.unlocking_add_house_ll, R2.id.unlocking_one_line_1,
             R2.id.unlocking_one_line_2, R2.id.unlocking_one_line_3, R2.id.unlocking_two_line_1,
             R2.id.unlocking_two_line_2, R2.id.unlocking_two_line_3, R2.id.unlocking_three_line_1,

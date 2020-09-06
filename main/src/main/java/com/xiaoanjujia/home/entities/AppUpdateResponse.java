@@ -1,11 +1,13 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
+
 /**
  * @Auther: xp
  * @Date: 2019/9/18 09:15
  * @Description:
  */
-public class AppUpdateResponse {
+public class AppUpdateResponse  implements Serializable {
 
 
     /**

@@ -1,11 +1,13 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
+
 /**
  * @Auther: xp
  * @Date: 2019/10/8 16:43
  * @Description:
  */
-public class LegalPersonAuditResponse {
+public class LegalPersonAuditResponse  implements Serializable {
 
 
     /**

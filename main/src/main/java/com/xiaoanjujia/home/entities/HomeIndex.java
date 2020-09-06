@@ -3,13 +3,14 @@ package com.xiaoanjujia.home.entities;
 import com.xiaoanjujia.common.base.baseadapter.entity.MultiItemEntity;
 import com.xiaoanjujia.home.data.Constant;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author：xp on 2017/3/28 14:18.
  */
 
-public class HomeIndex  {
+public class HomeIndex  implements Serializable {
 
 
     /**

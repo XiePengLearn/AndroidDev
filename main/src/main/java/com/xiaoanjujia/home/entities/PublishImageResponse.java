@@ -1,6 +1,8 @@
 package com.xiaoanjujia.home.entities;
 
-public class PublishImageResponse {
+import java.io.Serializable;
+
+public class PublishImageResponse  implements Serializable {
 
     private String TYPE;
     private String URI;

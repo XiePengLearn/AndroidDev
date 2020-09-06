@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @Date: 2019/9/18 09:15
  * @Description:
  */
-public class HomePageResponse {
+public class HomePageResponse  implements Serializable {
 
     /**
      * code : 200200

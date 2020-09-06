@@ -5,8 +5,8 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
-import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.QrCodeResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -54,9 +54,9 @@ public class VisitorPresenter extends BasePresenter implements VisitorContract.P
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getVisitorPersonInfo(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getBarCode(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private LoginResponse mLoginResponse;
+            private QrCodeResponse mLoginResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -67,11 +67,11 @@ public class VisitorPresenter extends BasePresenter implements VisitorContract.P
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, LoginResponse.class);
+                        mLoginResponse = gson.fromJson(response, QrCodeResponse.class);
                     } else {
-                        mLoginResponse = new LoginResponse();
+                        mLoginResponse = new QrCodeResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(ProjectResponse.getStatus(response));
+                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
                     }
                     mContractView.setResponseData(mLoginResponse);
                 } catch (Exception e) {

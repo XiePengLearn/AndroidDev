@@ -42,7 +42,7 @@
                         android:layout_marginTop="@dimen/dp_23"
                         android:paddingLeft="@dimen/dp_24"
                         android:paddingRight="@dimen/dp_24"
-                        android:text="老谢"
+                        android:text="后台还未录入"
                         android:textColor="@color/color_494949"
                         android:textSize="@dimen/sp_24"
                         android:textStyle="bold" />
@@ -52,22 +52,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_24"
+                        android:layout_marginRight="@dimen/dp_24"
                         android:layout_marginTop="@dimen/dp_10"
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/unlocking_add_house_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxWidth="@dimen/dp_290"
                             android:layout_gravity="center_horizontal"
-                            android:text="暂无房屋信息，请先添加房屋"
+                            android:text="暂无房屋信息"
                             android:textColor="@color/color_767676"
                             android:textSize="@dimen/sp_12" />
 
                         <ImageView
                             android:layout_width="@dimen/dp_10"
                             android:layout_height="@dimen/dp_10"
+                            android:layout_marginRight="@dimen/dp_40"
                             android:layout_gravity="center_vertical"
-
+                            android:id="@+id/unlocking_add_house_iv"
                             android:layout_marginLeft="@dimen/dp_15"
                             android:src="@drawable/arrows_icon_right_orientation" />
                     </LinearLayout>

@@ -60,7 +60,13 @@ public interface BaseApiService {
             @FieldMap Map<String, Object> maps,
             @HeaderMap TreeMap<String, String> headers
     );
+    @POST()
+    @FormUrlEncoded
+    Observable<ResponseBody> executePostHk(
+            @Url() String url,
+            @FieldMap Map<String, Object> maps
 
+    );
     @Multipart
     @POST()
     Observable<ResponseBody> executePostImageHeader(

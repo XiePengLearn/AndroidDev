@@ -1,7 +1,7 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
 
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public interface UnlockingFragmentContract {
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
+        void setResponseData(VisitorPersonInfoResponse mVisitorPersonInfoResponse);
 
         void showProgressDialogView();
 

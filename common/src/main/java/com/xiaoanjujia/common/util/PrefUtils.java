@@ -64,12 +64,24 @@ public class PrefUtils {
         editor.putString("userName", userName);
         editor.apply();
     }
-
     public static String readUserName(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getString("userName", "");
     }
+    public static void writePhone(String userName, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("userPhone", userName);
+        editor.apply();
+    }
+    public static String readPhone(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getString("userPhone", "");
+    }
+
 
     public static void writeUserInfoName(String userName, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(

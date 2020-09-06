@@ -1,10 +1,12 @@
 package com.xiaoanjujia.home.entities;
 
+import java.io.Serializable;
+
 /**
  * @Auther: xp
  * @Description:
  */
-public class CommentDetailsResponse {
+public class CommentDetailsResponse  implements Serializable {
 
     /**
      * status : 1

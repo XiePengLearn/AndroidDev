@@ -142,6 +142,7 @@ public class CodeLoginActivity extends BaseActivity implements CodeLoginContract
                 PrefUtils.writeUserId(String.valueOf(user_id), BaseApplication.getInstance());
                 //保存账号密码   储存状态 SESSION_ID
                 PrefUtils.writeUserName(regPhone.getText().toString().trim(), BaseApplication.getInstance());
+                PrefUtils.writePhone(regPhone.getText().toString().trim(), BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 PrefUtils.writeCheckRemember(true, BaseApplication.getInstance());
                 PrefUtils.writeSESSION_ID(SESSION_ID, BaseApplication.getInstance());

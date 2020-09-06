@@ -2,12 +2,14 @@ package com.xiaoanjujia.home.entities;
 
 // FIXME generate failure  field _$Data281
 
+import java.io.Serializable;
+
 /**
  * @Auther: xp
  * @Date: 2019/9/9 17:18
  * @Description:
  */
-public class UserInfoResponse {
+public class UserInfoResponse implements Serializable {
 
 
     /**
