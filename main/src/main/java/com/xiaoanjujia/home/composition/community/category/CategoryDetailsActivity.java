@@ -54,6 +54,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author xiepeng
@@ -122,7 +123,7 @@ public class CategoryDetailsActivity extends BaseActivity implements CategoryDet
      * 初始化title
      */
     private void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
+        mainTitleBack.setVisibility(View.VISIBLE);
         if (!Utils.isNull(cateName)) {
             mainTitleText.setText(cateName);
         }
@@ -666,6 +667,15 @@ public class CategoryDetailsActivity extends BaseActivity implements CategoryDet
         super.onDestroy();
         if (mPresenter != null) {
             mPresenter.destory();
+        }
+    }
+
+    @OnClick({R2.id.main_title_back, R2.id.main_title_text})
+    public void onViewClicked(View view) {
+        int viewId = view.getId();
+        if (viewId == R.id.main_title_back) {
+            finish();
+        } else if (viewId == R.id.main_title_text) {
         }
     }
 }

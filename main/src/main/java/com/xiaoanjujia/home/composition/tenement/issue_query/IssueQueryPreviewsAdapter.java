@@ -5,8 +5,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.jd.R;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.base.baseadapter.BaseViewHolder;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 
@@ -53,12 +55,16 @@ public class IssueQueryPreviewsAdapter extends BaseQuickAdapter<PropertyManageme
         helper.addOnClickListener(R.id.item_supervisor_btn_status);
         //examinestatus:0是未审核1是通过2被拒绝
         int examinestatus = info.getExaminestatus();
+        AlphaButton mAlphaButton = helper.getView(R.id.item_supervisor_btn_status);
         if (examinestatus == 1) {
             helper.setText(R.id.item_supervisor_btn_status, "审核通过");
+            mAlphaButton.setBackground(BaseApplication.getInstance().getResources().getDrawable(R.drawable.bg_shap_button_3));
         } else if (examinestatus == 2) {
-            helper.setText(R.id.item_supervisor_btn_status, "审核已拒绝");
+            helper.setText(R.id.item_supervisor_btn_status, "审核被拒");
+            mAlphaButton.setBackground(BaseApplication.getInstance().getResources().getDrawable(R.drawable.bg_shap_button_3_3));
         } else {
-            helper.setText(R.id.item_supervisor_btn_status, "未审核");
+            helper.setText(R.id.item_supervisor_btn_status, "等待审核");
+            mAlphaButton.setBackground(BaseApplication.getInstance().getResources().getDrawable(R.drawable.bg_shap_button_3_2));
         }
 
     }
