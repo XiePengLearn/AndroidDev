@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
@@ -22,6 +22,7 @@ import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.QrCodeResponse;
 import com.xiaoanjujia.home.tool.Api;
+import com.yzq.zxinglibrary.encode.CodeCreator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,11 +117,31 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
                 RequestOptions options = new RequestOptions()
                         .error(R.drawable.default_icon);
                 //头像
-                Glide.with(mContext)
-                        .load(barCode)
-                        .apply(options)
-                        .into(qrHouseCodeIv);
 
+                //                Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                Bitmap bitmap = CodeCreator.createQRCode(barCode, 400, 400, null);
+                qrHouseCodeIv.setImageBitmap(bitmap);
+                //                Glide.with(mContext)
+                //                        .load(barCode)
+                //                        .apply(options)
+                //                        .into(qrHouseCodeIv);
+                //                // 生成中间带log二维码
+                //                Glide.with(VisitorActivity.this)
+                //                        .asBitmap()
+                //                        .load(barCode)
+                //                        .into(new CustomTarget<Bitmap>() {
+                //                            @Override
+                //                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                //                                //生成普通的二维码
+                //                                Bitmap image = CodeUtils.createImage("请输入文本", 400, 400, resource);
+                //                                imageview.setImageBitmap(image);
+                //                            }
+                //
+                //                            @Override
+                //                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                //
+                //                            }
+                //                        });
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面

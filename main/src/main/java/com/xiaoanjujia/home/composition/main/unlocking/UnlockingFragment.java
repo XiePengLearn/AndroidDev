@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.widget.LoadingView;
 import com.xiaoanjujia.common.widget.X5WebView;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
+import com.xiaoanjujia.common.widget.dialog.NormalDialog;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
@@ -114,6 +116,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
     private String mWebUrl;
+    private NormalDialog mNormalDialog;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -164,6 +167,36 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     public void onLazyLoad() {
 
     }
+
+    private void normalDialog() {
+        if (mNormalDialog == null) {
+            mNormalDialog = new NormalDialog(getActivity(), onLoadBookCodeDialogClickListener);
+            mNormalDialog.setDialogContent(String.format("确定拨打物业电话吗?%s", "15610267550"));
+            mNormalDialog.setFirstAlTvStr("取消");
+            mNormalDialog.setSecondAlTvStr("确定");
+            mNormalDialog.setDialogTitle("提示!");
+        }
+        mNormalDialog.show();
+    }
+
+    private View.OnClickListener onLoadBookCodeDialogClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            if (id == R.id.dialog_normal_first_btn_tv) {
+                mNormalDialog.dismiss();
+            } else if (id == R.id.dialog_normal_second_btn_tv) {
+                String shop_phone = "15601267550";
+                if (!Utils.isNull(shop_phone)) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    Uri data = Uri.parse("tel:" + shop_phone);
+                    intent.setData(data);
+                    startActivity(intent);
+                }
+            }
+            mNormalDialog.dismiss();
+        }
+    };
 
     public static UnlockingFragment newInstance() {
         UnlockingFragment newInstanceFragment = new UnlockingFragment();
@@ -346,13 +379,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_two_line_3) {
             ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
-
+            normalDialog();
         } else if (id == R.id.unlocking_three_line_2) {
-
+            normalDialog();
         } else if (id == R.id.unlocking_three_line_3) {
-
+            normalDialog();
         } else if (id == R.id.unlocking_four_line_1) {
-
+            normalDialog();
         } else if (id == R.id.unlocking_four_line_2) {
 
         } else if (id == R.id.unlocking_four_line_3) {
