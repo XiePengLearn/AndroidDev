@@ -240,50 +240,96 @@
                 android:textColor="@color/color_494949"
                 android:textSize="@dimen/sp_10" />
 
-            <LinearLayout
-                android:id="@+id/invitation_particulars_of_matter_ll"
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_13"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18"
+                android:text="来访事由:"
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_17" />
+
+            <EditText
+                android:id="@+id/reg_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_19"
-                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:drawablePadding="@dimen/dp_10"
+                android:hint="请输入来访事由，最多50字"
                 android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18">
+                android:paddingRight="@dimen/dp_18"
+                android:textCursorDrawable="@drawable/text_cursor"
+                android:textSize="14sp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_3"
-                    android:text=""
-                    android:textColor="@color/bg_red"
-                    android:textSize="@dimen/sp_15" />
-
-                <TextView
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="来访事由:"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:text="人脸照片："
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
                 <TextView
-                    android:id="@+id/invitation_particulars_of_matter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:gravity="right"
-                    android:hint="请选择"
-                    android:textColor="@color/color_494949"
-                    android:textColorHint="@color/color_C5C3C3"
-                    android:textSize="@dimen/sp_15" />
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
 
                 <ImageView
-                    android:layout_width="@dimen/dp_6"
-                    android:layout_height="@dimen/dp_10"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/arrows_icon_right_orientation" />
+                    android:id="@+id/uploading_special_certificate_iv"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_add_image" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/uploading_special_certificate_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:overScrollMode="never"
+                    android:visibility="gone" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="（最多一张）"
+                    android:textColor="@color/bg_red"
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <View
@@ -304,81 +350,39 @@
                 android:paddingRight="@dimen/dp_18">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_3"
-                    android:text=""
-                    android:textColor="@color/bg_red"
-                    android:textSize="@dimen/sp_15" />
-
-                <TextView
 
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:text="性别:"
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
-                <TextView
-                    android:id="@+id/invitation_visiting_gender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:gravity="right"
-                    android:hint="请选择"
-                    android:textColor="@color/color_494949"
-                    android:textColorHint="@color/color_C5C3C3"
-                    android:textSize="@dimen/sp_15" />
-
-                <ImageView
-                    android:layout_width="@dimen/dp_6"
-                    android:layout_height="@dimen/dp_10"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/arrows_icon_right_orientation" />
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_0_5"
-                android:layout_marginLeft="@dimen/dp_18"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_marginRight="@dimen/dp_18"
-                android:background="#D1D1D1" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_19"
-                android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="车牌号码:"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_17" />
-
-                <EditText
-                    android:id="@+id/edit_invitation_visiting_license_number"
-                    android:layout_width="match_parent"
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/sex_man"
+                    android:layout_width="@dimen/dp_66"
                     android:layout_height="@dimen/dp_30"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:background="@null"
-                    android:cursorVisible="true"
-                    android:gravity="right|center_vertical"
-                    android:hint="请输入车牌号码"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#494949"
-                    android:textColorHint="#C5C3C3"
-                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:layout_gravity="center"
+
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:background="@drawable/sex_select"
+                    android:gravity="center"
+                    android:text="男"
+                    android:textColor="@color/color_2AAD67"
                     android:textSize="@dimen/sp_14" />
 
+                <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                    android:id="@+id/sex_woman"
+                    android:layout_width="@dimen/dp_66"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center"
+
+                    android:background="@drawable/sex_normal"
+                    android:gravity="center"
+                    android:text="女"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_14" />
             </LinearLayout>
 
             <View
@@ -389,51 +393,6 @@
                 android:layout_marginRight="@dimen/dp_18"
                 android:background="#D1D1D1" />
 
-            <LinearLayout
-                android:id="@+id/invitation_visiting_id_type_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_19"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_18"
-                android:paddingRight="@dimen/dp_18">
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="证件类型:"
-                    android:textColor="@color/color_494949"
-                    android:textSize="@dimen/sp_17" />
-
-                <TextView
-                    android:id="@+id/invitation_visiting_id_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:gravity="right"
-                    android:hint="请选择"
-                    android:textColor="@color/color_494949"
-                    android:textColorHint="@color/color_C5C3C3"
-                    android:textSize="@dimen/sp_15" />
-
-                <ImageView
-                    android:layout_width="@dimen/dp_6"
-                    android:layout_height="@dimen/dp_10"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/arrows_icon_right_orientation" />
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_0_5"
-                android:layout_marginLeft="@dimen/dp_18"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_marginRight="@dimen/dp_18"
-                android:background="#D1D1D1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -445,7 +404,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="证件号码："
+                    android:text="身份证号："
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -485,19 +444,45 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="来访单位："
+                    android:text="车牌号码:"
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
+
+                <LinearLayout
+                    android:id="@+id/capital_abbreviation_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_54"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/capital_abbreviation_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="京"
+                        android:textColor="@color/color_494949"
+                        android:textSize="@dimen/sp_17" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:src="@drawable/jian_tou_xiang_xia" />
+                </LinearLayout>
+
+
                 <EditText
-                    android:id="@+id/edit_invitation_visiting_units"
+                    android:id="@+id/edit_invitation_visiting_license_number"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_30"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:background="@null"
                     android:cursorVisible="true"
                     android:gravity="right|center_vertical"
-                    android:hint="请输入来访单位"
+                    android:hint="请输入车牌号码"
                     android:singleLine="true"
                     android:text=""
                     android:textColor="#494949"

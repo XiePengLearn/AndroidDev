@@ -42,7 +42,7 @@
                         android:layout_marginTop="@dimen/dp_23"
                         android:paddingLeft="@dimen/dp_24"
                         android:paddingRight="@dimen/dp_24"
-                        android:text="后台还未录入"
+                        android:text="平台基本信息未录入"
                         android:textColor="@color/color_494949"
                         android:textSize="@dimen/sp_24"
                         android:textStyle="bold" />
@@ -115,7 +115,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/unlocking_one_line_2"
+                        android:id="@+id/unlocking_two_line_3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -128,7 +128,7 @@
                             android:layout_height="@dimen/dp_55"
                             android:layout_gravity="center_horizontal"
                             android:scaleType="fitXY"
-                            android:src="@drawable/unlocking_1_2" />
+                            android:src="@drawable/unlocking_2_3" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -136,80 +136,12 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/dp_8"
                             android:gravity="center"
-                            android:text="房屋管理"
+                            android:text="访客预约"
                             android:textColor="@color/color_494949"
 
                             android:textSize="@dimen/sp_13" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/unlocking_one_line_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/dp_55"
-                            android:layout_height="@dimen/dp_55"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/unlocking_1_3" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/dp_8"
-                            android:gravity="center"
-                            android:text="住户审核"
-                            android:textColor="@color/color_494949"
-
-                            android:textSize="@dimen/sp_13" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_18"
-                    android:layout_marginTop="@dimen/dp_21"
-                    android:layout_marginRight="@dimen/dp_18"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/unlocking_two_line_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/dp_55"
-                            android:layout_height="@dimen/dp_55"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/unlocking_2_1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/dp_8"
-                            android:gravity="center"
-                            android:text="添加住户"
-                            android:textColor="@color/color_494949"
-
-                            android:textSize="@dimen/sp_13" />
-
-                    </LinearLayout>
-
                     <LinearLayout
                         android:id="@+id/unlocking_two_line_2"
                         android:layout_width="0dp"
@@ -239,8 +171,17 @@
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginTop="@dimen/dp_21"
+                    android:layout_marginRight="@dimen/dp_18"
+                    android:orientation="horizontal">
                     <LinearLayout
-                        android:id="@+id/unlocking_two_line_3"
+                        android:id="@+id/unlocking_one_line_2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -253,7 +194,7 @@
                             android:layout_height="@dimen/dp_55"
                             android:layout_gravity="center_horizontal"
                             android:scaleType="fitXY"
-                            android:src="@drawable/unlocking_2_3" />
+                            android:src="@drawable/unlocking_1_2" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -261,12 +202,73 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/dp_8"
                             android:gravity="center"
-                            android:text="访客预约"
+                            android:text="房屋管理"
                             android:textColor="@color/color_494949"
 
                             android:textSize="@dimen/sp_13" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/unlocking_two_line_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_55"
+                            android:layout_height="@dimen/dp_55"
+                            android:layout_gravity="center_horizontal"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/unlocking_2_1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dp_8"
+                            android:gravity="center"
+                            android:text="添加住户"
+                            android:textColor="@color/color_494949"
+
+                            android:textSize="@dimen/sp_13" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/unlocking_one_line_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_55"
+                            android:layout_height="@dimen/dp_55"
+                            android:layout_gravity="center_horizontal"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/unlocking_1_3" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dp_8"
+                            android:gravity="center"
+                            android:text="住户审核"
+                            android:textColor="@color/color_494949"
+
+                            android:textSize="@dimen/sp_13" />
+
+                    </LinearLayout>
+
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -274,6 +276,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_18"
                     android:layout_marginTop="@dimen/dp_21"
+                    android:visibility="gone"
                     android:layout_marginRight="@dimen/dp_18"
                     android:orientation="horizontal">
 
@@ -283,6 +286,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:visibility="invisible"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
@@ -312,6 +316,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:visibility="invisible"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
@@ -342,6 +347,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:visibility="invisible"
                         android:orientation="vertical">
 
                         <ImageView
@@ -370,6 +376,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_18"
                     android:layout_marginTop="@dimen/dp_21"
+                    android:visibility="gone"
                     android:layout_marginRight="@dimen/dp_18"
                     android:layout_marginBottom="@dimen/dp_20"
                     android:orientation="horizontal">

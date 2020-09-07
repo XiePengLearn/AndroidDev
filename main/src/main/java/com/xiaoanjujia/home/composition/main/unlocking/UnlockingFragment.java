@@ -38,6 +38,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -117,6 +118,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     JDHeaderView findPullRefreshHeader;
     private String mWebUrl;
     private NormalDialog mNormalDialog;
+    private String personName;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -237,7 +239,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 if (data != null && data.size() > 0) {
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
                     if (dataBean != null) {
-                        String personName = dataBean.getPersonName();
+                        personName = dataBean.getPersonName();
                         String orgPathName = dataBean.getOrgPathName();
                         if (!Utils.isNull(personName)) {
                             unlockingHouseTitle.setText(personName);
@@ -258,7 +260,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         unlockingAddHouseIv.setVisibility(View.INVISIBLE);
                     }
                 } else {
-                    unlockingHouseTitle.setText("后台还未录入");
+                    unlockingHouseTitle.setText("平台基本信息未录入");
                     unlockingAddHouseTv.setText("暂无房屋信息");
                     unlockingAddHouseIv.setVisibility(View.INVISIBLE);
                 }
@@ -367,16 +369,24 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_add_house_ll) {
 
         } else if (id == R.id.unlocking_one_line_1) {
-            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
+//            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
+            Intent intent = new Intent(mContext, VisitorActivity.class);
+            if (!Utils.isNull(personName)) {
+                intent.putExtra("houseName", personName);
+            }
+            startActivity(intent);
         } else if (id == R.id.unlocking_one_line_2) {
+            //房屋管理
 
         } else if (id == R.id.unlocking_one_line_3) {
 
         } else if (id == R.id.unlocking_two_line_1) {
 
         } else if (id == R.id.unlocking_two_line_2) {
+            //人脸识别
 
         } else if (id == R.id.unlocking_two_line_3) {
+            //访客预约
             ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();

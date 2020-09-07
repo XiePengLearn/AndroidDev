@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.unlocking.qr_code;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.QrCodeResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -66,7 +68,13 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
         setContentView(R.layout.activity_visitor);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-
+        Intent intent = getIntent();
+        String houseName = intent.getStringExtra("houseName");
+        if(!Utils.isNull(houseName)){
+            qrHouseTitleTv.setText(houseName);
+        }else {
+            qrHouseTitleTv.setText("");
+        }
         initView();
         initData();
         initTitle();
