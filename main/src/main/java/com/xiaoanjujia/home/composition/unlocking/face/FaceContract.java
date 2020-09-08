@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.visitor_invitation;
+package com.xiaoanjujia.home.composition.unlocking.face;
 
 
 import com.luck.picture.lib.entity.LocalMedia;
@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * @Date: 2019/10
  * @Description:
  */
-public interface VisitorInvitationContract {
+public interface FaceContract {
 
     interface View {
 

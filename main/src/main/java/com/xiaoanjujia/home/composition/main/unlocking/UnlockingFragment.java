@@ -38,7 +38,9 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
+import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -119,6 +121,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private String mWebUrl;
     private NormalDialog mNormalDialog;
     private String personName;
+    private String personId;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -240,6 +243,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
                     if (dataBean != null) {
                         personName = dataBean.getPersonName();
+                        personId = dataBean.getPersonId();
                         String orgPathName = dataBean.getOrgPathName();
                         if (!Utils.isNull(personName)) {
                             unlockingHouseTitle.setText(personName);
@@ -350,7 +354,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     //
     //            ARouter.getInstance().build("/VisitorActivity/VisitorActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visiting_scholar) {
-    //            ARouter.getInstance().build("/VisitorInvitationActivity/VisitorInvitationActivity").greenChannel().navigation(mContext);
+    //            ARouter.getInstance().build("/FaceActivity/FaceActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_to_review) {
     //            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_store) {
@@ -384,10 +388,19 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
-
+            Intent intent = new Intent(mContext, FaceActivity.class);
+            if (!Utils.isNull(personId)) {
+                intent.putExtra("personId", personId);
+            }
+            startActivity(intent);
         } else if (id == R.id.unlocking_two_line_3) {
             //访客预约
-            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
+            Intent intent = new Intent(mContext, VisitorInvitationActivity.class);
+            if (!Utils.isNull(personId)) {
+                intent.putExtra("personId", personId);
+            }
+            startActivity(intent);
+//            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_three_line_2) {

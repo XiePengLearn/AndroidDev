@@ -143,7 +143,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="来访时间:"
+                    android:text="预计来访时间:"
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -196,7 +196,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="离开时间:"
+                    android:text="预计离开时间:"
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 
@@ -253,7 +253,7 @@
                 android:textSize="@dimen/sp_17" />
 
             <EditText
-                android:id="@+id/reg_phone"
+                android:id="@+id/edit_invitation_thing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -502,7 +502,7 @@
 
 
             <com.xiaoanjujia.common.widget.alphaview.AlphaButton
-                android:id="@+id/register_success_entry"
+                android:id="@+id/generate_visitor_card"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_42"
                 android:layout_gravity="center"
@@ -514,7 +514,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_8"
-                android:text="立即提交"
+                android:text="生成访客证"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>

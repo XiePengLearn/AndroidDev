@@ -109,15 +109,16 @@
             android:name="com.xiaoanjujia.home.composition.me.merchants.PublishActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.xiaoanjujia.home.composition.me.post_message.PostMessageActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.visitor_audit.VisitorAuditActivity"
             android:screenOrientation="portrait" />
@@ -141,13 +142,13 @@
             android:name="com.xiaoanjujia.home.composition.tenement.detail.RecordDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name="com.xiaoanjujia.home.composition.community.details.CompositionDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.xiaoanjujia.home.composition.me.data.DataAnalysisActivity"
             android:screenOrientation="portrait" />
@@ -159,6 +160,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.xiaoanjujia.home.composition.community.category.CategoryDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.face.FaceActivity"
             android:screenOrientation="portrait" />
     </application>
 

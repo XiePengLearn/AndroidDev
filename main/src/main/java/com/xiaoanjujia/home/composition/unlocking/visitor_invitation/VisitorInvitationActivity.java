@@ -28,6 +28,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ResponseCode;
@@ -41,8 +42,10 @@ import com.xiaoanjujia.home.composition.me.post_message.GlideEngine;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceGenderDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceIdTypeDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceRriginIncidentDialog;
-import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
 import com.xiaoanjujia.home.tool.Api;
+import com.xiaoanjujia.home.tool.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ import static com.xiaoanjujia.common.util.Tool.getTime;
  * @author xiepeng
  */
 @Route(path = "/visitorInvitationActivity/visitorInvitationActivity")
-public class VisitorInvitationActivity extends BaseActivity implements VisitorInvitationContract.View {
+public class VisitorInvitationActivity extends BaseActivity implements VisitorInvitationContract.View, PlateNumberDialog.PlateNumberCallBack {
     @Inject
     VisitorInvitationPresenter mPresenter;
     private static final String TAG = "VisitorActivity";
@@ -90,8 +93,8 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     TextView invitationLeaveTime;
     @BindView(R2.id.invitation_leave_time_ll)
     LinearLayout invitationLeaveTimeLl;
-    @BindView(R2.id.reg_phone)
-    EditText regPhone;
+    @BindView(R2.id.edit_invitation_thing)
+    EditText editInvitationThing;
     @BindView(R2.id.uploading_special_certificate_iv)
     ImageView uploadingSpecialCertificateIv;
     @BindView(R2.id.uploading_special_certificate_rv)
@@ -110,10 +113,10 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     LinearLayout capitalAbbreviationLl;
     @BindView(R2.id.edit_invitation_visiting_license_number)
     EditText editInvitationVisitingLicenseNumber;
-    @BindView(R2.id.register_success_entry)
-    AlphaButton registerSuccessEntry;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+    @BindView(R2.id.generate_visitor_card)
+    AlphaButton generateVisitorCard;
 
     private ChoiceGenderDialog mChoiceGenderDialog;
     private ChoiceRriginIncidentDialog mChoiceRriginIncidentDialog;
@@ -125,6 +128,13 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
 
     private List<LocalMedia> selectList2 = new ArrayList<>();
     private int themeId;
+    private String mImagePath;
+
+    private boolean isCameraButton;
+    private int chooseMode;
+    private int gender = 1;
+    private String personId;
+    private PlateNumberDialog reStartOtherCountryDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,9 +143,10 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
+        Intent intent = getIntent();
+        personId = intent.getStringExtra("personId");
 
         initView();
-        initData();
         initTitle();
     }
 
@@ -144,7 +155,8 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("访客邀约");
+        mainTitleText.setText("访客预约");
+        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.visitor_invitation_record));
     }
 
     private VisitorGridImageAdapter mAdapter2;
@@ -215,9 +227,46 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     }
 
     private void initData() {
+        // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
+        // visitorName=井号2&
+        // phoneNo=18635805566&
+        // visitStartTime=2020-09-01 15:00:00&
+        // visitEndTime=2020-09-01 19:00:00&
+        // visitPurpose=参观&
+        // gender=1&
+        // certificateType=111&
+        // nation=1
 
+        String editInvitationVisitingNameText = editInvitationVisitingName.getText().toString().trim();
+        String editInvitationVisitingPhoneText = editInvitationVisitingPhone.getText().toString().trim();
+        String invitationVisitingTimeText = invitationVisitingTime.getText().toString().trim();
+        String invitationLeaveTimeText = invitationLeaveTime.getText().toString().trim();
+
+        String editInvitationThingText = editInvitationThing.getText().toString().trim();
+        String editInvitationVisitingIdNumberText = editInvitationVisitingIdNumber.getText().toString().trim();
+        String editInvitationVisitingLicenseNumberText = editInvitationVisitingLicenseNumber.getText().toString().trim();
+        String capitalAbbreviationTvText = capitalAbbreviationTv.getText().toString().trim();
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("ACTION", "I002");
+        //        mapParameters.put("receptionistId", "aebcf3a7b59b4fb889daaea2b45c2bf5");
+        if (!Utils.isNull(personId)) {
+            mapParameters.put("receptionistId", personId);
+        } else {
+            mapParameters.put("receptionistId", "");
+        }
+
+        mapParameters.put("visitorName", editInvitationVisitingNameText);
+        mapParameters.put("phoneNo", editInvitationVisitingPhoneText);
+        mapParameters.put("visitStartTime", invitationVisitingTimeText);
+        mapParameters.put("visitEndTime", invitationLeaveTimeText);
+        mapParameters.put("visitPurpose", editInvitationThingText);
+        mapParameters.put("gender", gender);
+
+        mapParameters.put("certificateNo", editInvitationVisitingIdNumberText);
+        mapParameters.put("plateNo", capitalAbbreviationTvText + editInvitationVisitingLicenseNumberText);
+
+        mapParameters.put("certificateType", "111");
+        mapParameters.put("nation", "1");
+        //        mapParameters.put("visitorPhoto", mImagePath);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -233,13 +282,13 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
 
 
     @Override
-    public void setResponseData(LoginResponse loginResponse) {
+    public void setResponseData(VisitorInvitationResponse mVisitorInvitationResponse) {
         try {
-            int code = loginResponse.getStatus();
-            String msg = loginResponse.getMessage();
+            int code = Integer.parseInt(mVisitorInvitationResponse.getStatus());
+            String msg = mVisitorInvitationResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                LoginResponse.DataBean data = loginResponse.getData();
-
+                VisitorInvitationResponse.DataBean data = mVisitorInvitationResponse.getData();
+                ToastUtil.showToast(BaseApplication.getInstance(), "生成访客证成功");
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -414,22 +463,110 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         }
     }
 
+    private void showReStartOtherCountryDialog() {
+        if (reStartOtherCountryDialog == null) {
+            reStartOtherCountryDialog = new PlateNumberDialog(this, reStartOtherCountryDialogClickListener);
+            reStartOtherCountryDialog.setJsCallback(this);
+        }
+
+        reStartOtherCountryDialog.show();
+    }
+
+    private View.OnClickListener reStartOtherCountryDialogClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //            if (view.getId() == R.id.dialog_normal_first_btn_tv) {
+            //
+            //            } else if (view.getId() == R.id.dialog_normal_second_btn_tv) {
+            //
+            //            }
+        }
+    };
+
     @OnClick({R2.id.main_title_back, R2.id.invitation_visiting_time_ll, R2.id.invitation_leave_time_ll,
-            R2.id.sex_man, R2.id.sex_woman, R2.id.capital_abbreviation_ll, R2.id.uploading_special_certificate_iv})
+            R2.id.sex_man, R2.id.sex_woman, R2.id.capital_abbreviation_ll,
+            R2.id.uploading_special_certificate_iv, R2.id.generate_visitor_card, R2.id.main_title_right})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
+        } else if (id == R.id.main_title_right) {
+            ToastUtil.showToast(BaseApplication.getInstance(), "记录");
         } else if (id == R.id.invitation_visiting_time_ll) {
+            hideKeyboard(view);
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         } else if (id == R.id.invitation_leave_time_ll) {
+            hideKeyboard(view);
             mPvTimeLeave.show(view);
         } else if (id == R.id.sex_man) {
+            hideKeyboard(view);
+            gender = 1;
+            sexMan.setBackground(getResources().getDrawable(R.drawable.sex_select));
+            sexMan.setTextColor(getResources().getColor(R.color.color_2AAD67));
 
+            sexWoman.setBackground(getResources().getDrawable(R.drawable.sex_normal));
+            sexWoman.setTextColor(getResources().getColor(R.color.color_494949));
         } else if (id == R.id.sex_woman) {
+            hideKeyboard(view);
+            gender = 2;
 
+            sexMan.setBackground(getResources().getDrawable(R.drawable.sex_normal));
+            sexMan.setTextColor(getResources().getColor(R.color.color_494949));
+
+            sexWoman.setBackground(getResources().getDrawable(R.drawable.sex_select));
+            sexWoman.setTextColor(getResources().getColor(R.color.color_2AAD67));
         } else if (id == R.id.capital_abbreviation_ll) {
+            showReStartOtherCountryDialog();
+        } else if (id == R.id.generate_visitor_card) {
+            String editInvitationVisitingNameText = editInvitationVisitingName.getText().toString().trim();
+            String editInvitationVisitingPhoneText = editInvitationVisitingPhone.getText().toString().trim();
+            String invitationVisitingTimeText = invitationVisitingTime.getText().toString().trim();
+            String invitationLeaveTimeText = invitationLeaveTime.getText().toString().trim();
 
+            String editInvitationThingText = editInvitationThing.getText().toString().trim();
+            String editInvitationVisitingIdNumberText = editInvitationVisitingIdNumber.getText().toString().trim();
+            String editInvitationVisitingLicenseNumberText = editInvitationVisitingLicenseNumber.getText().toString().trim();
+
+            if (Util.isNull(editInvitationVisitingNameText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入访客姓名");
+                return;
+            }
+            if (Util.isNull(editInvitationVisitingPhoneText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入手机号码");
+                return;
+            }
+
+
+            if (Util.isNull(invitationVisitingTimeText)) {
+
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入预计来访时间");
+                return;
+            }
+            if (Util.isNull(invitationLeaveTimeText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入预计离开时间");
+                return;
+            }
+
+
+            if (Util.isNull(editInvitationThingText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入来访事由");
+                return;
+            }
+            if (selectList2.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择人脸照片");
+                return;
+            }
+            if (Util.isNull(editInvitationVisitingIdNumberText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入身份证号");
+                return;
+            }
+            if (Util.isNull(editInvitationVisitingLicenseNumberText)) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "其输入车牌号码");
+                return;
+            }
+
+
+            uploadPictureToServer(selectList2);
         } else if (id == R.id.uploading_special_certificate_iv) {
             hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -447,9 +584,34 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         }
     }
 
-    private boolean isCameraButton;
-    private int chooseMode;
-    private List<LocalMedia> selectList = new ArrayList<>();
+    //上传公司证件(方法)
+    private void uploadPictureToServer(List<LocalMedia> selectList) {
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getUploadPicture(headersTreeMap, selectList);
+    }
+
+    @Override
+    public void setUploadPicture(UploadImageResponse uploadImageResponse) {
+        try {
+            int code = uploadImageResponse.getStatus();
+            String msg = uploadImageResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                mImagePath = uploadImageResponse.getData().getPath();
+
+                initData();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+                finish();
+            } else {
+                ToastUtil.showToast(this.getApplicationContext(), msg);
+                hiddenProgressDialogView();
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
 
     public void photoSelection(boolean isFirst, List<LocalMedia> selectList) {
         //*上传特殊材料：
@@ -620,4 +782,8 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
+    @Override
+    public void jsPlateNumber(String param) {
+        capitalAbbreviationTv.setText(param);
+    }
 }

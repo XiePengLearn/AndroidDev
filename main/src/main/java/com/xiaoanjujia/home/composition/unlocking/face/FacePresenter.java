@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.visitor_invitation;
+package com.xiaoanjujia.home.composition.unlocking.face;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -29,13 +29,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/10
  * @Description: ChangeAuthenticationPresenter
  */
-public class VisitorInvitationPresenter extends BasePresenter implements VisitorInvitationContract.Presenter {
+public class FacePresenter extends BasePresenter implements FaceContract.Presenter {
     private MainDataManager mDataManager;
-    private              VisitorInvitationContract.View mContractView;
+    private              FaceContract.View mContractView;
     private static final String               TAG = "ChangeAuthenticationPresenter";
 
     @Inject
-    public VisitorInvitationPresenter(MainDataManager mDataManager, VisitorInvitationContract.View view) {
+    public FacePresenter(MainDataManager mDataManager, FaceContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
