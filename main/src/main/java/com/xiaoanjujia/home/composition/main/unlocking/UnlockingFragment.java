@@ -373,7 +373,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_add_house_ll) {
 
         } else if (id == R.id.unlocking_one_line_1) {
-//            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
+            //            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
             Intent intent = new Intent(mContext, VisitorActivity.class);
             if (!Utils.isNull(personName)) {
                 intent.putExtra("houseName", personName);
@@ -382,6 +382,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_one_line_2) {
             //房屋管理
 
+            ToastUtil.showToast(BaseApplication.getInstance(), "开发中");
         } else if (id == R.id.unlocking_one_line_3) {
 
         } else if (id == R.id.unlocking_two_line_1) {
@@ -400,7 +401,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 intent.putExtra("personId", personId);
             }
             startActivity(intent);
-//            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
+            //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_three_line_2) {

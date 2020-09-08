@@ -491,7 +491,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.main_title_right) {
-            ToastUtil.showToast(BaseApplication.getInstance(), "记录");
+            ToastUtil.showToast(BaseApplication.getInstance(), "开发中");
         } else if (id == R.id.invitation_visiting_time_ll) {
             hideKeyboard(view);
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
