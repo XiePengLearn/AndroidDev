@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -61,8 +60,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.xiaoanjujia.common.util.Tool.getTime;
-
 /**
  * @author xiepeng
  */
@@ -70,7 +67,7 @@ import static com.xiaoanjujia.common.util.Tool.getTime;
 public class VisitorInvitationActivity extends BaseActivity implements VisitorInvitationContract.View, PlateNumberDialog.PlateNumberCallBack {
     @Inject
     VisitorInvitationPresenter mPresenter;
-    private static final String TAG = "VisitorActivity";
+    private static final String TAG = "PermitActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -288,6 +285,10 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
             String msg = mVisitorInvitationResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
                 VisitorInvitationResponse.DataBean data = mVisitorInvitationResponse.getData();
+                List<VisitorInvitationResponse.DataBean.AppointmentInfoListBean> appointmentInfoList = data.getAppointmentInfoList();
+                if (appointmentInfoList != null && appointmentInfoList.size() > 0) {
+                    VisitorInvitationResponse.DataBean.AppointmentInfoListBean appointmentInfoListBean = appointmentInfoList.get(0);
+                }
                 ToastUtil.showToast(BaseApplication.getInstance(), "生成访客证成功");
 
             } else if (code == ResponseCode.SEESION_ERROR) {
@@ -332,7 +333,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         mPvTime = new TimePickerBuilder(VisitorInvitationActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View view) {
-                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 mVisitorTime = Utils.getTime(date);
                 invitationVisitingTime.setText(mVisitorTime);
             }
@@ -349,7 +350,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         mPvTimeLeave = new TimePickerBuilder(VisitorInvitationActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View view) {
-                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 mLeaveTime = Utils.getTime(date);
                 invitationLeaveTime.setText(mLeaveTime);
             }
@@ -528,7 +529,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
             String editInvitationVisitingLicenseNumberText = editInvitationVisitingLicenseNumber.getText().toString().trim();
 
             if (Util.isNull(editInvitationVisitingNameText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入访客姓名");
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入访客姓名");
                 return;
             }
             if (Util.isNull(editInvitationVisitingPhoneText)) {
@@ -549,7 +550,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
 
 
             if (Util.isNull(editInvitationThingText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入来访事由");
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入来访事由");
                 return;
             }
             if (selectList2.size() == 0) {
@@ -557,11 +558,11 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 return;
             }
             if (Util.isNull(editInvitationVisitingIdNumberText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入身份证号");
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入身份证号");
                 return;
             }
             if (Util.isNull(editInvitationVisitingLicenseNumberText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "其输入车牌号码");
+                ToastUtil.showToast(mContext.getApplicationContext(), "请输入车牌号码");
                 return;
             }
 

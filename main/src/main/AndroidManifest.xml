@@ -164,6 +164,10 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.face.FaceActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

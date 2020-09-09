@@ -1,4 +1,4 @@
-package com.xiaoanjujia.home.composition.unlocking.qr_code;
+package com.xiaoanjujia.home.composition.unlocking.permit;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,9 +40,9 @@ import butterknife.OnClick;
  * @author xiepeng
  */
 @Route(path = "/visitorActivity/visitorActivity")
-public class VisitorActivity extends BaseActivity implements VisitorContract.View {
+public class PermitActivity extends BaseActivity implements PermitContract.View {
     @Inject
-    VisitorPresenter mPresenter;
+    PermitPresenter mPresenter;
     private static final String TAG = "PermitActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
@@ -65,7 +65,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visitor);
+        setContentView(R.layout.activity_permit);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
@@ -90,9 +90,9 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     }
 
     private void initView() {
-        DaggerVisitorActivityComponent.builder()
+        DaggerPermitActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .visitorPresenterModule(new VisitorPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .permitPresenterModule(new PermitPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
 

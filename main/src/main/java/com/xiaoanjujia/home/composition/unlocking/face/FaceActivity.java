@@ -59,7 +59,7 @@ import butterknife.OnClick;
 public class FaceActivity extends BaseActivity implements FaceContract.View {
     @Inject
     FacePresenter mPresenter;
-    private static final String TAG = "VisitorActivity";
+    private static final String TAG = "PermitActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)

@@ -61,8 +61,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.xiaoanjujia.common.util.Tool.getTime;
-
 /**
  * @author xiepeng
  * 商户认证
@@ -585,7 +583,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         mPvTime = new TimePickerBuilder(PostMessageActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View view) {
-                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 mVisitorTime = Utils.getTime(date);
                 postMessageVisitingTime.setText(mVisitorTime);
             }
@@ -602,7 +600,7 @@ public class PostMessageActivity extends BaseActivity implements PostMessageCont
         mPvTimeLeave = new TimePickerBuilder(PostMessageActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View view) {
-                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PostMessageActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 mLeaveTime = Utils.getTime(date);
                 postMessageLeaveTime.setText(mLeaveTime);
             }

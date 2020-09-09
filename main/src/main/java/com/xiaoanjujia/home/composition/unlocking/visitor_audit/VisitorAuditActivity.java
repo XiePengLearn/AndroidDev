@@ -39,7 +39,7 @@ import butterknife.OnClick;
 public class VisitorAuditActivity extends BaseActivity implements VisitorAuditContract.View {
     @Inject
     VisitorAuditPresenter mPresenter;
-    private static final String TAG = "VisitorActivity";
+    private static final String TAG = "PermitActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
