@@ -61,14 +61,13 @@
                     android:layout_width="@dimen/dp_19"
 
                     android:layout_height="@dimen/dp_19"
-                    android:background="@drawable/comment_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/item_supervisor_time_date"
-                        android:layout_width="@dimen/sp_12"
-                        android:layout_height="@dimen/sp_14"
+                        android:layout_width="@dimen/sp_19"
+                        android:layout_height="@dimen/sp_19"
                         android:src="@drawable/comment_icon" />
 
 
@@ -113,7 +112,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/dp_9"
                 android:layout_toEndOf="@id/item_item_community_btn_1"
-                android:background="@drawable/bg_shap_button_3"
+                android:background="@drawable/bg_shap_button_3_3"
                 android:gravity="center"
                 android:text="有红包领"
                 android:textColor="#FFFFFF"

@@ -5,8 +5,8 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.PermitResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
-import com.xiaoanjujia.home.entities.QrCodeResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -54,9 +54,9 @@ public class PermitPresenter extends BasePresenter implements PermitContract.Pre
     public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getBarCode(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getAppointmentRecords(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private QrCodeResponse mLoginResponse;
+            private PermitResponse mLoginResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -65,11 +65,11 @@ public class PermitPresenter extends BasePresenter implements PermitContract.Pre
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, QrCodeResponse.class);
+                        mLoginResponse = gson.fromJson(response, PermitResponse.class);
                     } else {
-                        mLoginResponse = new QrCodeResponse();
+                        mLoginResponse = new PermitResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
                         mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
                     }

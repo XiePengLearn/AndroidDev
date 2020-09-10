@@ -401,6 +401,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 intent.putExtra("personId", personId);
             }
             startActivity(intent);
+
+
+
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();

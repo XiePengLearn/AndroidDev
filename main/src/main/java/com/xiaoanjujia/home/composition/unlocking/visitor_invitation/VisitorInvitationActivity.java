@@ -41,6 +41,7 @@ import com.xiaoanjujia.home.composition.me.post_message.GlideEngine;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceGenderDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceIdTypeDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceRriginIncidentDialog;
+import com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -263,7 +264,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
 
         mapParameters.put("certificateType", "111");
         mapParameters.put("nation", "1");
-        //        mapParameters.put("visitorPhoto", mImagePath);
+//        mapParameters.put("visitorPhoto", mImagePath);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -287,7 +288,24 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 VisitorInvitationResponse.DataBean data = mVisitorInvitationResponse.getData();
                 List<VisitorInvitationResponse.DataBean.AppointmentInfoListBean> appointmentInfoList = data.getAppointmentInfoList();
                 if (appointmentInfoList != null && appointmentInfoList.size() > 0) {
+                    //"visitorName": "谢鹏",
+                    //			"QRCode": "VjAwMSuegkn65rEzw5qhIkCYQKvUzkGXpH87k1c3TA358ry/tkj393hzBrvHnOwmLHWlIHc=",
+                    //			"receptionistName": "老谢",
+                    //			"orderId": "413edb4a-f1ea-11ea-8dc9-6770aaf1588b",
+                    //			"receptionistId": "77edf8446c7c448e914caf14eeaf9f20",
+                    //			"verificationCode": "6490"
                     VisitorInvitationResponse.DataBean.AppointmentInfoListBean appointmentInfoListBean = appointmentInfoList.get(0);
+                    if (appointmentInfoListBean != null) {
+                        String qrCode = appointmentInfoListBean.getQRCode();
+                        String receptionistName = appointmentInfoListBean.getReceptionistName();
+                        String orderId = appointmentInfoListBean.getOrderId();
+                        Intent intent = new Intent(VisitorInvitationActivity.this, PermitActivity.class);
+                        intent.putExtra("qrCode", qrCode);
+                        intent.putExtra("receptionistName", receptionistName);
+                        intent.putExtra("orderId", orderId);
+                        startActivity(intent);
+
+                    }
                 }
                 ToastUtil.showToast(BaseApplication.getInstance(), "生成访客证成功");
 

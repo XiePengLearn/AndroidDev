@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
@@ -22,11 +21,12 @@ import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.entities.QrCodeResponse;
+import com.xiaoanjujia.home.entities.PermitResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.yzq.zxinglibrary.encode.CodeCreator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -54,12 +54,22 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
     ImageView mainTitleRight;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
-    @BindView(R2.id.qr_house_title_tv)
-    TextView qrHouseTitleTv;
-    @BindView(R2.id.qr_house_code_iv)
-    ImageView qrHouseCodeIv;
+    @BindView(R2.id.invitation_name)
+    TextView invitationName;
+    @BindView(R2.id.invitation_leave_time_ll)
+    LinearLayout invitationLeaveTimeLl;
+    @BindView(R2.id.invitation_card_number)
+    TextView invitationCardNumber;
+    @BindView(R2.id.invitation_vis_time)
+    TextView invitationVisTime;
+    @BindView(R2.id.invitation_leave_time)
+    TextView invitationLeaveTime;
+    @BindView(R2.id.qr_code_iv)
+    ImageView qrCodeIv;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+
+    private String orderId;
 
 
     @Override
@@ -69,12 +79,9 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
-        String houseName = intent.getStringExtra("houseName");
-        if(!Utils.isNull(houseName)){
-            qrHouseTitleTv.setText(houseName);
-        }else {
-            qrHouseTitleTv.setText("");
-        }
+        String qrCode = intent.getStringExtra("qrCode");
+        String receptionistName = intent.getStringExtra("receptionistName");
+        orderId = intent.getStringExtra("orderId");
         initView();
         initData();
         initTitle();
@@ -84,9 +91,9 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
      * 初始化title
      */
     private void initTitle() {
-        mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText("");
-        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.close_white));
+        mainTitleBack.setVisibility(View.VISIBLE);
+        mainTitleText.setText("访客通行证");
+//        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.close_white));
     }
 
     private void initView() {
@@ -100,7 +107,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
 
     private void initData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("personId", "65277007e605477fb80eaa25dd91e4b8");
+        mapParameters.put("orderId", orderId);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -115,41 +122,84 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
 
 
     @Override
-    public void setResponseData(QrCodeResponse mQrCodeResponse) {
+    public void setResponseData(PermitResponse mPermitResponse) {
         try {
-            int code = Integer.parseInt(mQrCodeResponse.getStatus());
-            String msg = mQrCodeResponse.getMessage();
+            int code = Integer.parseInt(mPermitResponse.getStatus());
+            String msg = mPermitResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
-                QrCodeResponse.DataBean data = mQrCodeResponse.getData();
-                String barCode = data.getBarCode();
-                RequestOptions options = new RequestOptions()
-                        .error(R.drawable.default_icon);
-                //头像
+                List<PermitResponse.DataBean> dataList = mPermitResponse.getData();
+                if (dataList != null && dataList.size() > 0) {
+                    PermitResponse.DataBean dataBean = dataList.get(0);
+                    /**
+                     * "gender": 1,
+                     * 		"nation": 1,
+                     * 		"orderId": "538a8726-f371-11ea-9cf0-cf99ee937498",
+                     * 		"plateNo": "京5666",
+                     * 		"visitStartTime": "2020-09-13T22:22:35+08:00",
+                     * 		"visitPurpose": "啦啦啦",
+                     * 		"customa": "",
+                     * 		"certificateNo": "411425199103199030",
+                     * 		"phoneNo": "15601276550",
+                     * 		"visitEndTime": "2020-09-14T15:22:35+08:00",
+                     * 		"verificationCode": "5570",
+                     * 		"privilegeGroupNames": ["访客权限门禁点"],
+                     * 		"visitorName": "谢鹏",
+                     * 		"QRCode": "VjAwMSupfzP4UohLB//laW9u1Sst/DpaOUILQTrQPTwlHsXwq2yT2bjGHl/A38Yefx8XTfQ=",
+                     * 		"receptionistName": "老谢",
+                     * 		"appointRecordId": "bb838787f6b540bdbd33cb20254801a4",
+                     * 		"receptionistCode": "01101002010010100102",
+                     * 		"visitorStatus": 1,
+                     * 		"receptionistId": "77edf8446c7c448e914caf14eeaf9f20",
+                     * 		"certificateType": 111,
+                     * 		"visitorId": "538a8726-f371-11ea-9cf0-cf99ee937498"
+                     */
+                    String visitorName = dataBean.getVisitorName();//姓名
+                    String phoneNo = dataBean.getPhoneNo();//车牌
+                    String plateNo = dataBean.getPlateNo();//车牌
+                    String visitStartTime = dataBean.getVisitStartTime();
+                    String visitEndTime = dataBean.getVisitEndTime();
 
-                //                Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                Bitmap bitmap = CodeCreator.createQRCode(barCode, 400, 400, null);
-                qrHouseCodeIv.setImageBitmap(bitmap);
-                //                Glide.with(mContext)
-                //                        .load(barCode)
-                //                        .apply(options)
-                //                        .into(qrHouseCodeIv);
-                //                // 生成中间带log二维码
-                //                Glide.with(PermitActivity.this)
-                //                        .asBitmap()
-                //                        .load(barCode)
-                //                        .into(new CustomTarget<Bitmap>() {
-                //                            @Override
-                //                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                //                                //生成普通的二维码
-                //                                Bitmap image = CodeUtils.createImage("请输入文本", 400, 400, resource);
-                //                                imageview.setImageBitmap(image);
-                //                            }
-                //
-                //                            @Override
-                //                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                //
-                //                            }
-                //                        });
+                    if (!Utils.isNull(visitorName)) {
+                        invitationName.setText(visitorName);
+                    }
+                    if (!Utils.isNull(plateNo)) {
+                        invitationCardNumber.setText(plateNo);
+                    }
+                    if (!Utils.isNull(visitStartTime)) {
+                        if (visitStartTime.contains("+")) {
+                            String[] split = visitStartTime.split("\\+");
+                            String timeDate = split[0];
+                            if (timeDate.contains("T")) {
+                                String[] ts = timeDate.split("T");
+                                invitationVisTime.setText(ts[0] + "  " + ts[1]);
+                            } else {
+                                invitationVisTime.setText(timeDate);
+                            }
+                        } else {
+                            invitationVisTime.setText(visitStartTime);
+                        }
+
+                    }
+                    if (!Utils.isNull(visitEndTime)) {
+                        if (visitEndTime.contains("+")) {
+                            String[] split = visitEndTime.split("\\+");
+                            String timeDate = split[0];
+                            if (timeDate.contains("T")) {
+                                String[] ts = timeDate.split("T");
+                                invitationLeaveTime.setText(ts[0] + "  " + ts[1]);
+                            } else {
+                                invitationLeaveTime.setText(timeDate);
+                            }
+                        } else {
+                            invitationLeaveTime.setText(visitEndTime);
+                        }
+                    }
+                    String qrCode = dataBean.getQRCode();
+                    Bitmap bitmap = CodeCreator.createQRCode(qrCode, 400, 400, null);
+                    qrCodeIv.setImageBitmap(bitmap);
+
+                }
+
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面

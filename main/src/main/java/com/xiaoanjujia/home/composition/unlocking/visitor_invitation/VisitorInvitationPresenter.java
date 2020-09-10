@@ -73,7 +73,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mLoginResponse = gson.fromJson(response, VisitorInvitationResponse.class);
                     } else {

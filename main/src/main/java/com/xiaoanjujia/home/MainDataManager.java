@@ -593,6 +593,10 @@ public class MainDataManager extends BaseDataManager {
     private static String HK_INTERFACE_BAR_CODE = "/artemis/persionHouse/barCode";
     //访客预约
     private static String HK_VISITOR_APPOINTMENT = "/artemis/visitor/appointment";
+    //查询访客来访记录
+    private static String HK_VISITING_RECORDS = "/artemis/visitor/visitingRecords";
+    //访客登记查询
+    private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
 
     /**
      * 根据人员唯一字段获取人员详细信息
@@ -621,9 +625,10 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHk
                 (HK_ROOT_URL + HK_INTERFACE_BAR_CODE, mapParameters), consumer);
     }
+
     /**
      * 访客预约
-     *     private static String HK_VISITOR_APPOINTMENT = "/artemis/visitor/appointment";
+     * private static String HK_VISITOR_APPOINTMENT = "/artemis/visitor/appointment";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -633,5 +638,32 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getVisitorAppointment(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHk
                 (HK_ROOT_URL + HK_VISITOR_APPOINTMENT, mapParameters), consumer);
+    }
+
+    /**
+     * 查询访客来访记录
+     * private static String HK_VISITING_RECORDS = "/artemis/visitor/visitingRecords";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getVisitingRecords(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_VISITING_RECORDS, mapParameters), consumer);
+    }
+    /**
+     * 访客登记查询
+     *     private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAppointmentRecords(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_APPOINTMENT_RECORDS, mapParameters), consumer);
     }
 }
