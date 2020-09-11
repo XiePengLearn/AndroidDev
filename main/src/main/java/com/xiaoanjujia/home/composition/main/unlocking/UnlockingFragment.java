@@ -211,6 +211,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         return newInstanceFragment;
     }
 
+    private int mRoleType;
+
+    //roletype:---0是普通用户---1是物业主管----2是物业人员
     public void initView() {
 
         String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
@@ -221,6 +224,18 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 .build()
                 .inject(this);
         findPullRefreshHeader.setPtrHandler(this);
+
+        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        if (mRoleType == 1) {
+            //1是物业主管
+            unlockingOneLine3.setVisibility(View.VISIBLE);
+        } else if (mRoleType == 2) {
+            //2是物业人员
+            unlockingOneLine3.setVisibility(View.VISIBLE);
+        } else {
+            //普通用户
+            unlockingOneLine3.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void initData() {
@@ -384,8 +399,19 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
             ToastUtil.showToast(BaseApplication.getInstance(), "开发中");
         } else if (id == R.id.unlocking_one_line_3) {
-
+            //物业
+            if (mRoleType == 1) {
+                //1是物业主管
+                ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
+            } else if (mRoleType == 2) {
+                //2是物业人员
+                ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+            } else {
+                //普通用户
+                unlockingOneLine3.setVisibility(View.INVISIBLE);
+            }
         } else if (id == R.id.unlocking_two_line_1) {
+            //添加个人信息
 
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
@@ -401,7 +427,6 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 intent.putExtra("personId", personId);
             }
             startActivity(intent);
-
 
 
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);

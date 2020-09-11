@@ -42,7 +42,6 @@
                         android:layout_height="@dimen/dp_76"
                         android:layout_marginLeft="@dimen/dp_41"
                         android:layout_marginTop="@dimen/dp_8"
-                        android:layout_marginRight="@dimen/dp_41"
                         android:layout_marginBottom="@dimen/dp_8"
                         android:scaleType="fitXY"
                         android:src="#D8D8D8" />
@@ -55,9 +54,9 @@
                         android:layout_marginStart="@dimen/dp_17"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:text="户主"
                         android:textColor="@color/color_494949"
-                        android:textSize="@dimen/sp_24" />
+                        android:textSize="@dimen/sp_24"
+                        tool:text="户主" />
 
                     <ImageView
                         android:id="@+id/sex_img"
@@ -94,9 +93,9 @@
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:lines="1"
-                        android:text="13701090917"
                         android:textColor="@color/color_494949"
-                        android:textSize="@dimen/sp_14" />
+                        android:textSize="@dimen/sp_14"
+                        tool:text="13701090917" />
 
                 </LinearLayout>
 
@@ -123,9 +122,9 @@
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:lines="1"
-                        android:text="141125********0058"
                         android:textColor="@color/color_494949"
-                        android:textSize="@dimen/sp_14" />
+                        android:textSize="@dimen/sp_14"
+                        tool:text="141125********0058" />
 
                 </LinearLayout>
             </LinearLayout>

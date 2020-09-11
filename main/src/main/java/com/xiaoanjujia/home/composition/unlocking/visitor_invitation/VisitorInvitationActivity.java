@@ -43,6 +43,7 @@ import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceIdTypeDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceRriginIncidentDialog;
 import com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.xiaoanjujia.home.tool.Util;
@@ -264,7 +265,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
 
         mapParameters.put("certificateType", "111");
         mapParameters.put("nation", "1");
-//        mapParameters.put("visitorPhoto", mImagePath);
+        mapParameters.put("visitorPhoto", mImagePath);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -616,8 +617,8 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
             String msg = uploadImageResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
                 mImagePath = uploadImageResponse.getData().getPath();
+                initFaceScoreData(mImagePath);
 
-                initData();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -628,6 +629,46 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
             }
         } catch (Exception e) {
             ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    //facePicUrl=http://hk.xiaoanjujia.com/image/renlian.jpg
+    public void initFaceScoreData(String facePicUrl) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("facePicUrl", facePicUrl);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getFaceScoreData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setFaceScoreData(VisitorFaceScoreResponse mVisitorFaceScoreResponsee) {
+        try {
+            int code = Integer.parseInt(mVisitorFaceScoreResponsee.getStatus());
+            String msg = mVisitorFaceScoreResponsee.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+
+
+                VisitorFaceScoreResponse.DataBean data = mVisitorFaceScoreResponsee.getData();
+                if (data != null) {
+                    int faceScore = data.getFaceScore();
+                    if (faceScore > 75) {
+                        initData();
+                    } else {
+                        ToastUtil.showToast(VisitorInvitationActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                    }
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(VisitorInvitationActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(VisitorInvitationActivity.this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(VisitorInvitationActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -762,11 +803,11 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 .isSingleDirectReturn(false)// 单选模式下是否直接返回，PictureConfig.SINGLE模式下有效
                 .previewImage(true)// 是否可预览图片
                 .previewVideo(true)// 是否可预览视频
-                //.querySpecifiedFormatSuffix(PictureMimeType.ofPNG())// 查询指定后缀格式资源
+                .querySpecifiedFormatSuffix(PictureMimeType.ofJPEG())// 查询指定后缀格式资源
                 .enablePreviewAudio(true) // 是否可播放音频
                 .isCamera(isCameraButton)// 是否显示拍照按钮
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-                //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .imageFormat(PictureMimeType.JPEG)// 拍照保存图片格式后缀,默认jpeg
                 .enableCrop(false)// 是否裁剪
                 .compress(true)// 是否压缩
                 .compressQuality(80)// 图片压缩后输出质量 0~ 100

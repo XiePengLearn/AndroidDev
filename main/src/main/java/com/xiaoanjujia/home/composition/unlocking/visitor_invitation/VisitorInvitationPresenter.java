@@ -8,6 +8,7 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
 
 import java.io.File;
@@ -31,8 +32,8 @@ import okhttp3.ResponseBody;
  */
 public class VisitorInvitationPresenter extends BasePresenter implements VisitorInvitationContract.Presenter {
     private MainDataManager mDataManager;
-    private              VisitorInvitationContract.View mContractView;
-    private static final String               TAG = "ChangeAuthenticationPresenter";
+    private VisitorInvitationContract.View mContractView;
+    private static final String TAG = "ChangeAuthenticationPresenter";
 
     @Inject
     public VisitorInvitationPresenter(MainDataManager mDataManager, VisitorInvitationContract.View view) {
@@ -106,6 +107,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
         });
         addDisposabe(disposable);
     }
+
     @Override
     public void getUploadPicture(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList) {
         mContractView.showProgressDialogView();
@@ -146,6 +148,55 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
                 //                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getFaceScoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getFaceCheckFace(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private VisitorFaceScoreResponse mLoginResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mLoginResponse = gson.fromJson(response, VisitorFaceScoreResponse.class);
+                    } else {
+                        mLoginResponse = new VisitorFaceScoreResponse();
+                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
+                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                    }
+                    mContractView.setFaceScoreData(mLoginResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);

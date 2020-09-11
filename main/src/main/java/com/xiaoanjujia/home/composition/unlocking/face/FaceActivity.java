@@ -26,6 +26,7 @@ import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -35,8 +36,11 @@ import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.me.post_message.GlideEngine;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.PlateNumberDialog;
+import com.xiaoanjujia.home.entities.AddFaceResponse;
+import com.xiaoanjujia.home.entities.QueryFaceResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
-import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
+import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
+import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.io.File;
@@ -114,6 +118,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
 
         initView();
         initTitle();
+        initData();
     }
 
     /**
@@ -190,59 +195,18 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
         facePicVisibility.setVisibility(View.GONE);
     }
 
-    private void initData() {
-
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("receptionistId", "aebcf3a7b59b4fb889daaea2b45c2bf5");
-        if (!Utils.isNull(personId)) {
-            mapParameters.put("receptionistId", personId);
-        } else {
-            mapParameters.put("receptionistId", "");
-        }
-
-        mapParameters.put("gender", gender);
-
-
-        mapParameters.put("certificateType", "111");
-        mapParameters.put("nation", "1");
-        //        mapParameters.put("visitorPhoto", mImagePath);
-
-
+    public void initData() {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("paramName", "phoneNo");
+        mapParameters.put("paramValue", PrefUtils.readPhone(BaseApplication.getInstance()));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
-        mPresenter.getRequestData(headersTreeMap, mapParameters);
+        mPresenter.getPersonalInformationData(headersTreeMap, mapParameters);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-
-    @Override
-    public void setResponseData(VisitorInvitationResponse mVisitorInvitationResponse) {
-        try {
-            int code = Integer.parseInt(mVisitorInvitationResponse.getStatus());
-            String msg = mVisitorInvitationResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
-                VisitorInvitationResponse.DataBean data = mVisitorInvitationResponse.getData();
-                ToastUtil.showToast(BaseApplication.getInstance(), "生成访客证成功");
-
-            } else if (code == ResponseCode.SEESION_ERROR) {
-                //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
-                finish();
-            } else {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
-                }
-
-            }
-        } catch (Exception e) {
-            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
-        }
-
     }
 
 
@@ -287,7 +251,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
             });
             selectPicPopupWindow.showPopWindow();
 
-//            uploadPictureToServer(selectList2);
+            //            uploadPictureToServer(selectList2);
         } else if (id == R.id.uploading_special_certificate_iv) {
             hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -312,6 +276,121 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     }
 
     @Override
+    public void setPersonalInformationData(VisitorPersonInfoResponse mVisitorPersonInfoResponse) {
+        try {
+            int code = Integer.parseInt(mVisitorPersonInfoResponse.getStatus());
+            String msg = mVisitorPersonInfoResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                List<VisitorPersonInfoResponse.DataBean> data = mVisitorPersonInfoResponse.getData();
+                if (data != null && data.size() > 0) {
+                    VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
+                    if (dataBean != null) {
+                        /**
+                         *      "marriaged": 0,
+                         * 		"orgName": "2户室",
+                         * 		"gender": 1,
+                         * 		"orgPath": "@root000000@67e12695-c84a-4237-8cc8-7704fa180e89@27891eaa-03fa-40da-9fce-47c3d19ecc69@83237a94-2226-42bd-9c21-adfe380699dd@e01dae84-10fc-4f21-8863-acac68ea41ae@f2c46644-fcae-441c-831c-196362f4e36b@d1e64845-9083-4c37-8bdd-a2a7eead2a09@",
+                         * 		"syncFlag": 0,
+                         * 		"orgPathName": "铭嘉地产/张营小区三栋楼/1管理分区/14号楼/1单元/1楼层/2户室",
+                         * 		"orgIndexCode": "d1e64845-9083-4c37-8bdd-a2a7eead2a09",
+                         * 		"orgList": ["d1e64845-9083-4c37-8bdd-a2a7eead2a09"],
+                         * 		"updateTime": "2020-09-01T21:27:04.290+08:00",
+                         * 		"certificateNo": "1411251999912354562",
+                         * 		"phoneNo": "15601267550",
+                         * 		"personName": "老谢",
+                         * 		"pinyin": "laoxie",
+                         * 		"personPhoto": [],
+                         * 		"createTime": "2020-09-01T21:24:22.641+08:00",
+                         * 		"jobNo": "0124",
+                         * 		"personId": "77edf8446c7c448e914caf14eeaf9f20",
+                         * 		"lodge": 0,
+                         * 		"age": 0,
+                         * 		"certificateType": 111
+                         *
+                         * 	            "marriaged": 0,
+                         *             "orgName": "铭嘉地产",
+                         *             "gender": 2,
+                         *             "orgPath": "@root000000@",
+                         *             "syncFlag": 0,
+                         *             "orgPathName": "铭嘉地产",
+                         *             "orgIndexCode": "root000000",
+                         *             "orgList": [
+                         *                 "root000000"
+                         *             ],
+                         *             "updateTime": "2020-08-11T17:13:13.687+08:00",
+                         *             "certificateNo": "13072719861044333",
+                         *             "phoneNo": "13683673419",
+                         *             "personName": "霍冉",
+                         *             "pinyin": "huoran",
+                         *             "roomNum": "101",
+                         *             "personPhoto": [
+                         *                 {
+                         *                     "personPhotoIndexCode": "f182e3c0-0eaf-49a7-8590-f8d0f8a59be5",
+                         *                     "picUri": "/pic?9ddc663bf-5do7b1l*46ed61i-z0e*3s0337781115m9ep=t=i9p*i=d1s*i=d3b*i7dce*8428fcd6a-b1=74a-40o11cpi0c1d=41ie8=",
+                         *                     "serverIndexCode": "7ef23451-2765-48a7-bdb5-dbfb118f0061"
+                         *                 }
+                         *             ],
+                         *             "createTime": "2020-08-11T10:06:28.427+08:00",
+                         *             "jobNo": "101",
+                         *             "personId": "3c17d5694a8c4f1aacd60ae44c1267db",
+                         *             "lodge": 0,
+                         *             "age": 0,
+                         *             "certificateType": 111
+                         */
+                        String personName = dataBean.getPersonName();
+                        if (!Utils.isNull(personName)) {
+                            huzhuTv.setText(personName);
+                            initQueryFace(personName);
+                        }
+                        personId = dataBean.getPersonId();
+                        String orgPathName = dataBean.getOrgPathName();
+                        int gender = dataBean.getGender();
+                        //++gender number False 性别，1：男；2：女；0：未知
+                        if (gender == 1) {
+                            //1：男
+                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_man));
+                        } else if (gender == 2) {
+                            //2：女
+                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_woman));
+                        } else {
+                            //0：未知
+                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_weizhi));
+                        }
+                        String phoneNo = dataBean.getPhoneNo();
+                        if (!Utils.isNull(phoneNo)) {
+                            phoneTv.setText(phoneNo);
+                        }
+
+                        String certificateNo = dataBean.getCertificateNo();
+                        if (!Utils.isNull(certificateNo)) {
+                            idCardTv.setText(certificateNo);
+                        }
+
+
+                    }
+                }
+
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setFaceScoreData(VisitorFaceScoreResponse mVisitorFaceScoreResponsee) {
+
+    }
+
+    @Override
     public void setUploadPicture(UploadImageResponse uploadImageResponse) {
         try {
             int code = uploadImageResponse.getStatus();
@@ -319,7 +398,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
             if (code == ResponseCode.SUCCESS_OK) {
                 mImagePath = uploadImageResponse.getData().getPath();
 
-                initData();
+
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -330,6 +409,75 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
             }
         } catch (Exception e) {
             ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setAddFace(AddFaceResponse mAddFaceResponse) {
+
+    }
+
+
+    public void initQueryFace(String name) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("name", "name");
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getQueryFace(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void seQueryFace(QueryFaceResponse mQueryFaceResponse) {
+        try {
+            int code = Integer.parseInt(mQueryFaceResponse.getStatus());
+            String msg = mQueryFaceResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                List<QueryFaceResponse.DataBean> data = mQueryFaceResponse.getData();
+                if (data != null && data.size() > 0) {
+                    QueryFaceResponse.DataBean dataBean = data.get(0);
+                    if (dataBean != null) {
+
+                        //                        String personName = dataBean.getPersonName();
+                        //                        if (!Utils.isNull(personName)) {
+                        //                            huzhuTv.setText(personName);
+                        //                        }
+                        //                        personId = dataBean.getPersonId();
+                        //                        String orgPathName = dataBean.getOrgPathName();
+                        //                        int gender = dataBean.getGender();
+                        //                        //++gender number False 性别，1：男；2：女；0：未知
+                        //                        if (gender == 1) {
+                        //                            //1：男
+                        //                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_man));
+                        //                        } else if (gender == 2) {
+                        //                            //2：女
+                        //                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_woman));
+                        //                        } else {
+                        //                            //0：未知
+                        //                            sexImg.setImageDrawable(getResources().getDrawable(R.drawable.sex_weizhi));
+                        //                        }
+                        //                        String phoneNo = dataBean.getPhoneNo();
+                        //                        if (!Utils.isNull(phoneNo)) {
+                        //                            phoneTv.setText(phoneNo);
+                        //                        }
+                        //
+                        //                        String certificateNo = dataBean.getCertificateNo();
+                        //                        if (!Utils.isNull(certificateNo)) {
+                        //                            idCardTv.setText(certificateNo);
+                        //                        }
+                    }
+                }
+
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "解析数据失败");
         }
     }
 

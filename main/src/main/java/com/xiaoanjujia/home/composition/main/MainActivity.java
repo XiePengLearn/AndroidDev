@@ -26,11 +26,9 @@ import androidx.fragment.app.FragmentManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
-import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
@@ -82,8 +80,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //在oncreate中添加
         instance = this;
         registerMessageBroadcast();
-        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
-        //        mRoleType =0;
+        //        mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
+        mRoleType = 0;
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
@@ -189,160 +187,76 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     public void onTabSelected(int position) {
         if (mRoleType == 0) {
             //普通用户
-            if (position == 0) {
-                if (mUnlockingFragment == null) {
-                    mUnlockingFragment = UnlockingFragment.newInstance();
-                    addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
-                }
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideStoreFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mUnlockingFragment)
-                        .commitAllowingStateLoss();
-            } else if (position == 1) {
-                if (mCommunityFragment == null) {
-                    mCommunityFragment = CommunityFragment.newInstance();
-                    addFragment(R.id.main_container, mCommunityFragment, "community_fg");
-                }
-                hideHomeFragment();
-                hideTenementFragment();
-                hideStoreFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mCommunityFragment)
-                        .commitAllowingStateLoss();
 
-
-            } else if (position == 2) {
-
-                if (mStoreFragment == null) {
-                    mStoreFragment = StoreWebFragment.newInstance();
-                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
-                }
-
-                hideHomeFragment();
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mStoreFragment)
-                        .commitAllowingStateLoss();
-                //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
-                //                Intent intent = new Intent(this, MyWebActivity.class);
-                //                intent.putExtra("url", url);
-                //                startActivity(intent);
-
-            } else if (position == 3) {
-
-                if (mMyFragment == null) {
-                    mMyFragment = MeWebFragment.newInstance();
-                    addFragment(R.id.main_container, mMyFragment, "my_fg");
-                }else {
-                    if (!NoDoubleClickUtils.isDoubleClick()) {
-                        mMyFragment.refreshView();
-                    }
-                }
-
-                hideHomeFragment();
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideStoreFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mMyFragment)
-                        .commitAllowingStateLoss();
-                //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-                //                Intent intent = new Intent(this, MyWebActivity.class);
-                //                intent.putExtra("url", url);
-                //                startActivity(intent);
-
+            if (mUnlockingFragment == null) {
+                mUnlockingFragment = UnlockingFragment.newInstance();
+                addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
             }
-        } else {
-            //物业人员
-            if (position == 0) {
-                if (mUnlockingFragment == null) {
-                    mUnlockingFragment = UnlockingFragment.newInstance();
-                    addFragment(R.id.main_container, mUnlockingFragment, "unlocking_fg");
-                }
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideStoreFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mUnlockingFragment)
-                        .commitAllowingStateLoss();
-            } else if (position == 1) {
-                if (mTenementFragment == null) {
-                    mTenementFragment = TenementFragment.newInstance();
-                    addFragment(R.id.main_container, mTenementFragment, "tenement_fg");
-                }
-                hideHomeFragment();
-                hideCommunityFragment();
-                hideStoreFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mTenementFragment)
-                        .commitAllowingStateLoss();
-            } else if (position == 2) {
-                if (mCommunityFragment == null) {
-                    mCommunityFragment = CommunityFragment.newInstance();
-                    addFragment(R.id.main_container, mCommunityFragment, "community_fg");
-                }
-                hideHomeFragment();
-                hideTenementFragment();
-                hideStoreFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mCommunityFragment)
-                        .commitAllowingStateLoss();
-
-
-            } else if (position == 3) {
-
-                if (mStoreFragment == null) {
-                    mStoreFragment = StoreWebFragment.newInstance();
-                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
-                }
-
-                hideHomeFragment();
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideMyFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mStoreFragment)
-                        .commitAllowingStateLoss();
-                //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
-                //                Intent intent = new Intent(this, MyWebActivity.class);
-                //                intent.putExtra("url", url);
-                //                startActivity(intent);
-
-
-            } else if (position == 4) {
-
-                if (mMyFragment == null) {
-                    mMyFragment = MeWebFragment.newInstance();
-                    addFragment(R.id.main_container, mMyFragment, "my_fg");
-                }else {
-                    if (!NoDoubleClickUtils.isDoubleClick()) {
-                        mMyFragment.refreshView();
-                    }
-                }
-
-                hideHomeFragment();
-                hideTenementFragment();
-                hideCommunityFragment();
-                hideStoreFragment();
-                mFragmentManager.beginTransaction()
-                        .show(mMyFragment)
-                        .commitAllowingStateLoss();
-
-                //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
-                //                Intent intent = new Intent(this, MyWebActivity.class);
-                //                intent.putExtra("url", url);
-                //                startActivity(intent);
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideStoreFragment();
+            hideMyFragment();
+            mFragmentManager.beginTransaction()
+                    .show(mUnlockingFragment)
+                    .commitAllowingStateLoss();
+        } else if (position == 1) {
+            if (mCommunityFragment == null) {
+                mCommunityFragment = CommunityFragment.newInstance();
+                addFragment(R.id.main_container, mCommunityFragment, "community_fg");
             }
+            hideHomeFragment();
+            hideTenementFragment();
+            hideStoreFragment();
+            hideMyFragment();
+            mFragmentManager.beginTransaction()
+                    .show(mCommunityFragment)
+                    .commitAllowingStateLoss();
+
+
+        } else if (position == 2) {
+
+            if (mStoreFragment == null) {
+                mStoreFragment = StoreWebFragment.newInstance();
+                addFragment(R.id.main_container, mStoreFragment, "store_fg");
+            }
+
+            hideHomeFragment();
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideMyFragment();
+            mFragmentManager.beginTransaction()
+                    .show(mStoreFragment)
+                    .commitAllowingStateLoss();
+            //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
+            //                Intent intent = new Intent(this, MyWebActivity.class);
+            //                intent.putExtra("url", url);
+            //                startActivity(intent);
+
+        } else if (position == 3) {
+
+            if (mMyFragment == null) {
+                mMyFragment = MeWebFragment.newInstance();
+                addFragment(R.id.main_container, mMyFragment, "my_fg");
+            } else {
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    mMyFragment.refreshView();
+                }
+            }
+
+            hideHomeFragment();
+            hideTenementFragment();
+            hideCommunityFragment();
+            hideStoreFragment();
+            mFragmentManager.beginTransaction()
+                    .show(mMyFragment)
+                    .commitAllowingStateLoss();
+            //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
+            //                Intent intent = new Intent(this, MyWebActivity.class);
+            //                intent.putExtra("url", url);
+            //                startActivity(intent);
+
         }
+
 
     }
 
@@ -389,29 +303,29 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
         //bottomNavigationBar.setAutoHideEnabled(true);
 
-        if (mRoleType == 0) {
-            //普通用户
-            bottomNavigationBar
-                    .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
-                    //                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.tou_ming, "").setInactiveIconResource(R.drawable.tou_ming).setActiveColorResource(R.color.colorAccent))
-                    .setFirstSelectedPosition(0)
-                    .initialise();
-            //            tvBottomNavigation2.setVisibility(View.GONE);
-        } else {
-            //物业人员
-            bottomNavigationBar
-                    .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
-                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
-                    .setFirstSelectedPosition(0)
-                    .initialise();
-            //            tvBottomNavigation2.setVisibility(View.VISIBLE);
-        }
+        //        if (mRoleType == 0) {
+        //普通用户
+        bottomNavigationBar
+                .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
+                //                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
+                .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
+                .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
+                .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+                .setFirstSelectedPosition(0)
+                .initialise();
+        //            tvBottomNavigation2.setVisibility(View.GONE);
+        //        } else {
+        //            //物业人员
+        //            bottomNavigationBar
+        //                    .addItem(new BottomNavigationItem(R.drawable.axh, "").setInactiveIconResource(R.drawable.axg).setActiveColorResource(R.color.colorAccent))
+        //                    .addItem(new BottomNavigationItem(R.drawable.axd, "").setInactiveIconResource(R.drawable.axc).setActiveColorResource(R.color.colorAccent))
+        //                    .addItem(new BottomNavigationItem(R.drawable.axf, "").setInactiveIconResource(R.drawable.axe).setActiveColorResource(R.color.colorAccent))
+        //                    .addItem(new BottomNavigationItem(R.drawable.axb, "").setInactiveIconResource(R.drawable.axa).setActiveColorResource(R.color.colorAccent))
+        //                    .addItem(new BottomNavigationItem(R.drawable.axj, "").setInactiveIconResource(R.drawable.axi).setActiveColorResource(R.color.colorAccent))
+        //                    .setFirstSelectedPosition(0)
+        //                    .initialise();
+        //            //            tvBottomNavigation2.setVisibility(View.VISIBLE);
+        //        }
 
 
         bottomNavigationBar.setTabSelectedListener(this);

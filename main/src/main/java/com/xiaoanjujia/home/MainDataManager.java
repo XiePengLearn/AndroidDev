@@ -593,10 +593,285 @@ public class MainDataManager extends BaseDataManager {
     private static String HK_INTERFACE_BAR_CODE = "/artemis/persionHouse/barCode";
     //访客预约
     private static String HK_VISITOR_APPOINTMENT = "/artemis/visitor/appointment";
-    //查询访客来访记录
+    //访客查询来访记录
     private static String HK_VISITING_RECORDS = "/artemis/visitor/visitingRecords";
-    //访客登记查询
+    //访客预约记录查询
     private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
+
+    //分页获取房屋信息
+    private static String HK_PERSION_HOUSE_HOUSES = "/artemis/persionHouse/houses";
+    //分页获取人房信息
+    private static String HK_PERSION_HOUSE_RELATION = "/artemis/persionHouse/relation";
+    //生成访客动态二维码内容
+    private static String HK_VISITOR_AUTH_QCODE = "/artemis/visitor/authQcode";
+    //添加人脸分组
+    private static String HK_ADDFACE_GROUP = "/artemis/face/addFaceGroup";
+    //查询人脸分组
+    private static String HK_QUERY_FACE_GROUP = "/artemis/face/queryFaceGroup";
+    //人脸评分
+    private static String HK_FACE_CHECK_FACE = "/artemis/face/checkFace";
+    //添加人脸
+    private static String HK_FACE_ADD_FACE = "/artemis/face/addFace";
+    //查询人脸
+    private static String HK_FACE_QUERY_FACE = "/artemis/face/queryFace";
+    //获取根区域
+    private static String HK_REGION_REGION_ROOT = "/artemis/region/regionRoot";
+    //查询区域列表v2
+    private static String HK_REGION_REGION_LIST = "/artemis/region/regionList";
+    //根据区域编号获取下一级区域列表v2
+    private static String HK_REGION_NEXT_REGION = "/artemis/region/nextRegion";
+    //添加人员
+    private static String HK_PERSION_HOUSE_SINGLE_ADD = "/artemis/persionHouse/singleAdd";
+    //分页获取区域列表V1.0
+    private static String HK_REGION_QUERY_REGION_PAGE = "/artemis/region/queryRegionPage";
+    //取单个区域信息
+    private static String HK_REGION_REGION_INFO = "/artemis/region/regionInfo";
+    //添加入住信息
+    private static String HK_PERSION_HOUSE_ADD = "/artemis/persionHouse/add";
+    //删除入住信息
+    private static String HK_PERSION_HOUSE_DELETE = "/artemis/persionHouse/delete";
+
+    //查询入住信息
+    private static String HK_PERSION_HOUSE_QUERY = "/artemis/persionHouse/query";
+
+
+    /**
+     * 查询入住信息
+     * private static String HK_PERSION_HOUSE_QUERY = "/artemis/persionHouse/query";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouseQuery(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_QUERY, mapParameters), consumer);
+    }
+
+    /**
+     * 删除入住信息
+     * private static String HK_PERSION_HOUSE_DELETE = "/artemis/persionHouse/delete";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouseDelete(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_DELETE, mapParameters), consumer);
+    }
+
+    /**
+     * 添加入住信息
+     * private static String HK_PERSION_HOUSE_ADD = "/artemis/persionHouse/add";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouseAdd(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_ADD, mapParameters), consumer);
+    }
+
+    /**
+     * 取单个区域信息
+     * private static String HK_REGION_REGION_INFO = "/artemis/region/regionInfo";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegioRegionInfo(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_REGION_REGION_INFO, mapParameters), consumer);
+    }
+
+    /**
+     * 分页获取区域列表V1.0
+     * private static String HK_REGION_QUERY_REGION_PAGE = "/artemis/region/queryRegionPage";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegionQueryRegionPage(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_REGION_QUERY_REGION_PAGE, mapParameters), consumer);
+    }
+
+    /**
+     * 添加人员
+     * private static String HK_PERSION_HOUSE_SINGLE_ADD = "/artemis/persionHouse/singleAdd";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouseSingleAdd(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_SINGLE_ADD, mapParameters), consumer);
+    }
+
+    /**
+     * 根据区域编号获取下一级区域列表v2
+     * private static String HK_REGION_NEXT_REGION = "/artemis/region/nextRegion";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegionNextRegion(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_REGION_NEXT_REGION, mapParameters), consumer);
+    }
+
+    /**
+     * 查询区域列表v2
+     * private static String HK_REGION_REGION_LIST = "/artemis/region/regionList";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegionRegionList(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_REGION_REGION_LIST, mapParameters), consumer);
+    }
+
+    /**
+     * 获取根区域
+     * private static String HK_REGION_REGION_ROOT = "/artemis/region/regionRoot";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getRegionRegionRoot(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_REGION_REGION_ROOT, mapParameters), consumer);
+    }
+
+    /**
+     * 查询人脸
+     * private static String HK_FACE_QUERY_FACE = "/artemis/face/queryFace";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getFaceQueryFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_FACE_QUERY_FACE, mapParameters), consumer);
+    }
+
+    /**
+     * 添加人脸
+     * private static String HK_FACE_ADD_FACE = "/artemis/face/addFace";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getFaceAddFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_FACE_ADD_FACE, mapParameters), consumer);
+    }
+
+    /**
+     * 人脸评分
+     * private static String HK_FACE_CHECK_FACE = "/artemis/face/checkFace";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getFaceCheckFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_FACE_CHECK_FACE, mapParameters), consumer);
+    }
+
+    /**
+     * 查询人脸分组
+     * private static String HK_QUERY_FACE_GROUP = "/artemis/face/queryFaceGroup";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getQueryFaceGroup(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_QUERY_FACE_GROUP, mapParameters), consumer);
+    }
+
+    /**
+     * 添加人脸分组
+     * private static String HK_ADDFACE_GROUP = "/artemis/face/addFaceGroup";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAddFaceGroup(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_ADDFACE_GROUP, mapParameters), consumer);
+    }
+
+    /**
+     * 生成访客动态二维码内容
+     * private static String HK_VISITOR_AUTH_QCODE = "/artemis/visitor/authQcode";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getVisitorAuthQcode(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_VISITOR_AUTH_QCODE, mapParameters), consumer);
+    }
+
+    /**
+     * 分页获取人房信息
+     * private static String HK_PERSION_HOUSE_RELATION = "/artemis/persionHouse/relation";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouseRelation(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_RELATION, mapParameters), consumer);
+    }
+
+    /**
+     * 分页获取房屋信息
+     * private static String HK_PERSION_HOUSE = "/artemis/persionHouse/houses";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPersionHouse(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_PERSION_HOUSE_HOUSES, mapParameters), consumer);
+    }
 
     /**
      * 根据人员唯一字段获取人员详细信息
@@ -653,9 +928,10 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHk
                 (HK_ROOT_URL + HK_VISITING_RECORDS, mapParameters), consumer);
     }
+
     /**
      * 访客登记查询
-     *     private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
+     * private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数

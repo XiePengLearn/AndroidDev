@@ -6,9 +6,11 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.AddFaceResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
+import com.xiaoanjujia.home.entities.QueryFaceResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
-import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
+import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,8 +33,8 @@ import okhttp3.ResponseBody;
  */
 public class FacePresenter extends BasePresenter implements FaceContract.Presenter {
     private MainDataManager mDataManager;
-    private              FaceContract.View mContractView;
-    private static final String               TAG = "ChangeAuthenticationPresenter";
+    private FaceContract.View mContractView;
+    private static final String TAG = "ChangeAuthenticationPresenter";
 
     @Inject
     public FacePresenter(MainDataManager mDataManager, FaceContract.View view) {
@@ -59,12 +61,12 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
     }
 
     @Override
-    public void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getPersonalInformationData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getVisitorAppointment(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getVisitorPersonInfo(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
-            private VisitorInvitationResponse mLoginResponse;
+            private VisitorPersonInfoResponse mLoginResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -75,13 +77,13 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
-                        mLoginResponse = gson.fromJson(response, VisitorInvitationResponse.class);
+                        mLoginResponse = gson.fromJson(response, VisitorPersonInfoResponse.class);
                     } else {
-                        mLoginResponse = new VisitorInvitationResponse();
+                        mLoginResponse = new VisitorPersonInfoResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
                         mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
                     }
-                    mContractView.setResponseData(mLoginResponse);
+                    mContractView.setPersonalInformationData(mLoginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -106,6 +108,13 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
         });
         addDisposabe(disposable);
     }
+
+    @Override
+    public void getFaceScoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+
+    }
+
+
     @Override
     public void getUploadPicture(TreeMap<String, String> headers, List<LocalMedia> LocalMediaList) {
         mContractView.showProgressDialogView();
@@ -146,6 +155,98 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
                 //                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getAddFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getFaceAddFace(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private AddFaceResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, AddFaceResponse.class);
+                    } else {
+                        mDataResponse = new AddFaceResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                    }
+                    mContractView.setAddFace(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getQueryFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getFaceQueryFace(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private QueryFaceResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, QueryFaceResponse.class);
+                    } else {
+                        mDataResponse = new QueryFaceResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                    }
+                    mContractView.seQueryFace(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
