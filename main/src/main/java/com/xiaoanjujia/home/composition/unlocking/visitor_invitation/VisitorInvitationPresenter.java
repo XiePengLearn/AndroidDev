@@ -138,7 +138,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                //                mContractView.hiddenProgressDialogView();
+                                mContractView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= ");
             }
 
@@ -196,7 +196,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mContractView.hiddenProgressDialogView();
+//                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);

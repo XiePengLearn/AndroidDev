@@ -102,6 +102,22 @@ public class Utils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         return format.format(date);
     }
+    public static String getTimeMonthWithHour(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        return format.format(date);
+    }
+    public static String getToday() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        return format.format(date);
+    }
+    public static String getTodayWithHour() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        return format.format(date);
+    }
     public static int compareDate(String DATE1, String DATE2) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         try {

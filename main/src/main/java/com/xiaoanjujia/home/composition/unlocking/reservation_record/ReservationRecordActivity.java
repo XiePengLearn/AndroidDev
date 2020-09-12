@@ -34,9 +34,7 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity;
 import com.xiaoanjujia.home.entities.AppointmentRecordsResponse;
-import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 import com.xiaoanjujia.home.entities.VisitingRecordsResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -91,6 +89,10 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     RelativeLayout rlNoData;
     @BindView(R2.id.no_data_tv)
     TextView noDataTv;
+    @BindView(R2.id.select_date_tv2)
+    TextView selectDateTv2;
+    @BindView(R2.id.select_date_ll2)
+    LinearLayout selectDateLl2;
 
 
     private LayoutInflater mLayoutInflater;
@@ -100,9 +102,14 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     private List<String> listWork = new ArrayList<>();
     private List<Integer> listWorkId = new ArrayList<>();
     private ReservationRecordPreviewsAdapter adapter;
-    private int page = 1, datetype = 1, id = 0;
+    private ReservationRecordPreviewsAdapter2 adapter2;
+    private int page = 1;
+    private int page2 = 1;
     private String personId;
     private String mPersonName;
+    private String mSelectTimeFangKe;
+    private String mSelectTimeFangKe2;
+    private int typePage = 1; //访客记录   2 来访记录
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,9 +123,17 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
         initView();
 
         //        initTypeRoieData();
-        initData(page);
+
         initTitle();
         initTimePicker();
+        initTimePicker2();
+        String today = Utils.getToday();
+        mSelectTimeFangKe = Utils.getTodayWithHour();
+        mSelectTimeFangKe2 = Utils.getTodayWithHour();
+
+        selectDateTv.setText(today);
+        selectDateTv2.setText(today);
+        initData(page, mSelectTimeFangKe);
     }
 
     /**
@@ -159,11 +174,11 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                     if (!NoDoubleClickUtils.isDoubleClick()) {
 
                         List data = adapter.getData();
-                        PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                        int id = dateBean.getId();
-                        Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
+                        AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
+                        //                        int id = dateBean.getId();
+                        //                        Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
+                        //                        intent.putExtra("id", id);
+                        //                        startActivity(intent);
                     }
                 }
 
@@ -175,11 +190,59 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (!NoDoubleClickUtils.isDoubleClick()) {
                     List data = adapter.getData();
-                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                    int id = dateBean.getId();
-                    Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
+                    AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
+                    //                    int id = dateBean.getId();
+                    //                    Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
+                    //                    intent.putExtra("id", id);
+                    //                    startActivity(intent);
+                }
+            }
+        });
+
+
+        findPullRefreshHeader2.setPtrHandler(this);
+        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
+        adapter2 = new ReservationRecordPreviewsAdapter2(R.layout.item_reservation_record_recyclerview);
+        adapter2.setOnLoadMoreListener(this);
+
+        //        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
+        //        aflCotent = itemHeader.findViewById(R.id.afl_cotent);
+        //        aflJobsToChoose = itemHeader.findViewById(R.id.afl_jobs_to_choose);
+        //        adapter.addHeaderView(itemHeader);
+        adapter2.setEnableLoadMore(true);
+        adapter2.loadMoreComplete();
+        mRecyclerView2.setAdapter(adapter2);
+
+
+        adapter2.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
+                int i = view.getId();
+                if (i == R.id.item_supervisor_btn_status) {
+                    if (!NoDoubleClickUtils.isDoubleClick()) {
+
+                        List data = adapter2.getData();
+                        AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
+                        //                        int id = dateBean.getId();
+                        //                        Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
+                        //                        intent.putExtra("id", id);
+                        //                        startActivity(intent);
+                    }
+                }
+
+                return true;
+            }
+        });
+        adapter2.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    List data = adapter2.getData();
+                    AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
+                    //                    int id = dateBean.getId();
+                    //                    Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
+                    //                    intent.putExtra("id", id);
+                    //                    startActivity(intent);
                 }
             }
         });
@@ -191,13 +254,13 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     // pageSize=10&
     // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
     // visitorName=井号
-    private void initData(int page) {
+    private void initData(int page, String time) {
 
         Map<String, Object> mapParameters = new HashMap<>(4);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
-//        mapParameters.put("visitorName", mPersonName);
+        mapParameters.put("visitStartTimeBegin", time);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -205,6 +268,23 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
+    //pageNo=1&
+    // pageSize=10&
+    // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
+    // visitorName=井号
+    private void initData2(int page, String time) {
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("pageNo", String.valueOf(page));
+        mapParameters.put("pageSize", String.valueOf(10));
+        mapParameters.put("receptionistId", personId);
+        mapParameters.put("visitStartTimeBegin", time);
+
+
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getLaiFangData(headersTreeMap, mapParameters);
+    }
 
     @Override
     protected void onResume() {
@@ -311,12 +391,98 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
 
     @Override
     public void setLaiFangData(VisitingRecordsResponse mVisitingRecordsResponse) {
+        try {
+            String code = mVisitingRecordsResponse.getStatus();
+            String msg = mVisitingRecordsResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                List<VisitingRecordsResponse.DataBean> messageDate = mVisitingRecordsResponse.getData();
+                if (messageDate != null) {
+                    if (messageDate.size() > 0) {
+                        if (messageDate.size() < 10) {
+                            adapter2.setEnableLoadMore(false);
+                        } else {
+                            adapter2.setEnableLoadMore(true);
+                        }
+                        List<VisitingRecordsResponse.DataBean> data = adapter2.getData();
+                        data.clear();
+                        adapter2.addData(messageDate);
+                        rlNoData.setVisibility(View.GONE);
+                    } else {
+                        rlNoData.setVisibility(View.VISIBLE);
+                        adapter2.setEnableLoadMore(false);
+                        List<VisitingRecordsResponse.DataBean> data = adapter2.getData();
+                        data.clear();
+                        adapter2.notifyDataSetChanged();
+                    }
 
+                } else {
+
+                    rlNoData.setVisibility(View.VISIBLE);
+                    adapter2.setEnableLoadMore(false);
+                    List<VisitingRecordsResponse.DataBean> data = adapter2.getData();
+                    data.clear();
+                    adapter2.notifyDataSetChanged();
+                }
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
     }
 
     @Override
-    public void setLaiFangMoreData(VisitingRecordsResponse mVisitingRecordsResponse) {
+    public void setLaiFangMoreData(VisitingRecordsResponse moreDate) {
+        try {
+            String code = moreDate.getStatus();
+            String msg = moreDate.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
+                List<VisitingRecordsResponse.DataBean> data = moreDate.getData();
+                if (data != null) {
+                    if (data.size() < 10) {
+                        adapter2.setEnableLoadMore(false);
+                    } else {
+                        adapter2.setEnableLoadMore(true);
+                    }
+                    for (int i = 0; i < data.size(); i++) {
+                        adapter2.getData().add(data.get(i));
+                    }
 
+                } else {
+                    adapter2.setEnableLoadMore(false);
+                }
+
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                adapter2.loadMoreComplete();
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                finish();
+            } else {
+                adapter2.loadMoreComplete();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            adapter2.loadMoreComplete();
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        } finally {
+            adapter2.loadMoreComplete();
+        }
     }
 
     @Override
@@ -344,7 +510,15 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             @Override
             public void run() {
                 page++;
-                initMoreData(page, datetype, id);
+                initMoreData(page, mSelectTimeFangKe);
+            }
+        }, 500);
+
+        mRecyclerView2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page2++;
+                initMoreData2(page2, mSelectTimeFangKe2);
             }
         }, 500);
     }
@@ -352,14 +526,31 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     //page
     //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
     //id:角色id  默认0  全部
-    private void initMoreData(int page, int datetype, int id) {
+    private void initMoreData2(int page, String time) {
 
         Map<String, Object> mapParameters = new HashMap<>(4);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
-        mapParameters.put("visitorName", mPersonName);
+        //        mapParameters.put("visitorName", mPersonName);
+        mapParameters.put("visitStartTimeBegin", time);
 
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getLaiFangMoreData(headersTreeMap, mapParameters);
+    }
+
+    //page
+    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
+    //id:角色id  默认0  全部
+    private void initMoreData(int page, String time) {
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("pageNo", String.valueOf(page));
+        mapParameters.put("pageSize", String.valueOf(10));
+        mapParameters.put("receptionistId", personId);
+        //        mapParameters.put("visitorName", mPersonName);
+        mapParameters.put("visitStartTimeBegin", time);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -371,30 +562,63 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                page = 1;
-                initData(page);
-                frame.refreshComplete();
+                if (typePage == 1) {
+                    page = 1;
+                    initData(page, mSelectTimeFangKe);
+                    frame.refreshComplete();
+                } else {
+                    page2 = 1;
+                    initData2(page2, mSelectTimeFangKe2);
+                    frame.refreshComplete();
+                }
+
             }
         }, 500);
     }
 
-    @OnClick({R2.id.main_title_back, R2.id.fang_ke_record, R2.id.lai_fang_record, R2.id.select_date_ll})
+    @OnClick({R2.id.main_title_back, R2.id.fang_ke_record, R2.id.lai_fang_record, R2.id.select_date_ll, R2.id.select_date_ll2})
     public void onViewClicked(View view) {
         int viewId = view.getId();
         if (viewId == R.id.main_title_back) {
             finish();
         } else if (viewId == R.id.fang_ke_record) {
+            typePage = 1;
             noDataTv.setText("暂无预约记录");
             fangKeRecord.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             //设置不为加粗
             laiFangRecord.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            selectDateLl.setVisibility(View.VISIBLE);
+            selectDateLl2.setVisibility(View.GONE);
+            rlNoData.setVisibility(View.GONE);
+            findPullRefreshHeader.setVisibility(View.VISIBLE);
+            findPullRefreshHeader2.setVisibility(View.GONE);
+
+
+            page = 1;
+            adapter.setEnableLoadMore(true);
+            adapter.loadMoreComplete();
+            initData(page, mSelectTimeFangKe);
         } else if (viewId == R.id.lai_fang_record) {
+            typePage = 2;
             noDataTv.setText("暂无来访记录");
             fangKeRecord.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             //设置不为加粗
             laiFangRecord.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            selectDateLl.setVisibility(View.GONE);
+            selectDateLl2.setVisibility(View.VISIBLE);
+            rlNoData.setVisibility(View.GONE);
+            findPullRefreshHeader.setVisibility(View.GONE);
+            findPullRefreshHeader2.setVisibility(View.VISIBLE);
+
+            page2 = 1;
+            adapter2.setEnableLoadMore(true);
+            adapter2.loadMoreComplete();
+            initData2(page2, mSelectTimeFangKe2);
+
         } else if (viewId == R.id.select_date_ll) {
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+        } else if (viewId == R.id.select_date_ll2) {
+            mPvTime2.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         }
     }
 
@@ -408,7 +632,37 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             public void onTimeSelect(Date date, View view) {
                 //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 String mVisitorTime = Utils.getTimeMonth(date);
+                mSelectTimeFangKe = Utils.getTimeMonthWithHour(date);
                 selectDateTv.setText(mVisitorTime);
+                page = 1;
+                adapter.setEnableLoadMore(true);
+                adapter.loadMoreComplete();
+                initData(page, mSelectTimeFangKe);
+            }
+        })
+                .setItemVisibleCount(2)
+                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
+    }
+
+    private TimePickerView mPvTime2;
+
+    private void initTimePicker2() {//Dialog 模式下，在底部弹出
+        //时间选择器
+
+        mPvTime2 = new TimePickerBuilder(ReservationRecordActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                String mVisitorTime = Utils.getTimeMonth(date);
+                mSelectTimeFangKe2 = Utils.getTimeMonthWithHour(date);
+                selectDateTv2.setText(mVisitorTime);
+                page2 = 1;
+                adapter2.setEnableLoadMore(true);
+                adapter2.loadMoreComplete();
+                initData(page2, mSelectTimeFangKe2);
             }
         })
                 .setItemVisibleCount(2)
