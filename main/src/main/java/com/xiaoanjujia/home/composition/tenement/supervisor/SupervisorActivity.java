@@ -54,7 +54,7 @@ import butterknife.OnClick;
 public class SupervisorActivity extends BaseActivity implements SupervisorContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
     SupervisorPresenter mPresenter;
-    private static final String TAG = "IssueQueryActivity";
+    private static final String TAG = "ReservationRecordActivity";
 
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;

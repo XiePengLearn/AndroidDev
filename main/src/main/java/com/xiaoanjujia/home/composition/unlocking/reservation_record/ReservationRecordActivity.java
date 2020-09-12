@@ -1,6 +1,7 @@
-package com.xiaoanjujia.home.composition.tenement.issue_query;
+package com.xiaoanjujia.home.composition.unlocking.reservation_record;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.base.BaseActivity;
@@ -25,16 +29,19 @@ import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity;
+import com.xiaoanjujia.home.entities.AppointmentRecordsResponse;
 import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
-import com.xiaoanjujia.home.entities.TypeOfRoleResponse;
+import com.xiaoanjujia.home.entities.VisitingRecordsResponse;
 import com.xiaoanjujia.home.tool.Api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,30 +56,42 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/issueQueryActivity/issueQueryActivity")
-public class IssueQueryActivity extends BaseActivity implements IssueQueryContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
+@Route(path = "/reservationRecordActivity/reservationRecordActivity")
+public class ReservationRecordActivity extends BaseActivity implements ReservationRecordContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
     @Inject
-    IssueQueryPresenter mPresenter;
+    ReservationRecordPresenter mPresenter;
     private static final String TAG = "ReservationRecordActivity";
-
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
     ImageView mainTitleBack;
-    @BindView(R2.id.main_title_text)
-    TextView mainTitleText;
-    @BindView(R2.id.main_title_right)
-    ImageView mainTitleRight;
+    @BindView(R2.id.fang_ke_record)
+    TextView fangKeRecord;
+    @BindView(R2.id.lai_fang_record)
+    TextView laiFangRecord;
     @BindView(R2.id.main_title_container)
     LinearLayout mainTitleContainer;
+    @BindView(R2.id.title_ll)
+    LinearLayout titleLl;
+    @BindView(R2.id.select_date_tv)
+    TextView selectDateTv;
+    @BindView(R2.id.select_date_ll)
+    LinearLayout selectDateLl;
     @BindView(R2.id.chat_list)
     RecyclerView mRecyclerView;
+    @BindView(R2.id.find_pull_refresh_header)
+    JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.chat_list2)
+    RecyclerView mRecyclerView2;
+    @BindView(R2.id.find_pull_refresh_header2)
+    JDHeaderView findPullRefreshHeader2;
     @BindView(R2.id.no_data_img)
     ImageView noDataImg;
     @BindView(R2.id.rl_no_data)
     RelativeLayout rlNoData;
-    @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.no_data_tv)
+    TextView noDataTv;
+
 
     private LayoutInflater mLayoutInflater;
 
@@ -80,21 +99,26 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
     private List<Integer> listDateType = new ArrayList<>();
     private List<String> listWork = new ArrayList<>();
     private List<Integer> listWorkId = new ArrayList<>();
-    private IssueQueryPreviewsAdapter adapter;
+    private ReservationRecordPreviewsAdapter adapter;
     private int page = 1, datetype = 1, id = 0;
+    private String personId;
+    private String mPersonName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue_query);
+        setContentView(R.layout.activity_reservation_record);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-
+        Intent intent = getIntent();
+        personId = intent.getStringExtra("personId");
+        mPersonName = intent.getStringExtra("personName");
         initView();
 
         //        initTypeRoieData();
         initData(page);
         initTitle();
+        initTimePicker();
     }
 
     /**
@@ -102,13 +126,12 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("往期查询");
     }
 
     private void initView() {
-        DaggerIssueQueryActivityComponent.builder()
+        DaggerReservationRecordActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .issueQueryPresenterModule(new IssueQueryPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .reservationRecordPresenterModule(new ReservationRecordPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
         mLayoutInflater = LayoutInflater.from(this);
@@ -116,7 +139,7 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
 
         findPullRefreshHeader.setPtrHandler(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new IssueQueryPreviewsAdapter(R.layout.item_supervisor_recyclerview);
+        adapter = new ReservationRecordPreviewsAdapter(R.layout.item_reservation_record_recyclerview);
         adapter.setOnLoadMoreListener(this);
 
         //        View itemHeader = mLayoutInflater.inflate(R.layout.item_supervisor_recyclerview_header, null);
@@ -138,7 +161,7 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
                         List data = adapter.getData();
                         PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
                         int id = dateBean.getId();
-                        Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
+                        Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
                         intent.putExtra("id", id);
                         startActivity(intent);
                     }
@@ -154,7 +177,7 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
                     List data = adapter.getData();
                     PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
                     int id = dateBean.getId();
-                    Intent intent = new Intent(IssueQueryActivity.this, QuaryDetailActivity.class);
+                    Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
                 }
@@ -163,13 +186,18 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
 
     }
 
-    //page
-    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
-    //id:角色id  默认0  全部
+
+    //pageNo=1&
+    // pageSize=10&
+    // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
+    // visitorName=井号
     private void initData(int page) {
 
-        Map<String, Object> mapParameters = new HashMap<>(3);
-        mapParameters.put("page", String.valueOf(page));
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("pageNo", String.valueOf(page));
+        mapParameters.put("pageSize", String.valueOf(10));
+        mapParameters.put("receptionistId", personId);
+//        mapParameters.put("visitorName", mPersonName);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -177,28 +205,19 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
         mPresenter.getRequestData(headersTreeMap, mapParameters);
     }
 
-    private void initTypeRoieData() {
-        // roletype :1是物业主管.2普通物业
-        Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("roletype", "1");
-        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
-
-        mPresenter.getTypesOfRoleData(headersTreeMap, mapParameters);
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
     }
 
-
     @Override
-    public void setResponseData(PropertyManagementListLogResponse mPropertyManagementListLogResponse) {
+    public void setResponseData(AppointmentRecordsResponse mAppointmentRecordsResponse) {
         try {
-            int code = mPropertyManagementListLogResponse.getStatus();
-            String msg = mPropertyManagementListLogResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
-                List<PropertyManagementListLogResponse.DataBean> messageDate = mPropertyManagementListLogResponse.getData();
+            String code = mAppointmentRecordsResponse.getStatus();
+            String msg = mAppointmentRecordsResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                List<AppointmentRecordsResponse.DataBean> messageDate = mAppointmentRecordsResponse.getData();
                 if (messageDate != null) {
                     if (messageDate.size() > 0) {
                         if (messageDate.size() < 10) {
@@ -206,14 +225,14 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
                         } else {
                             adapter.setEnableLoadMore(true);
                         }
-                        List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                        List<AppointmentRecordsResponse.DataBean> data = adapter.getData();
                         data.clear();
                         adapter.addData(messageDate);
                         rlNoData.setVisibility(View.GONE);
                     } else {
                         rlNoData.setVisibility(View.VISIBLE);
                         adapter.setEnableLoadMore(false);
-                        List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                        List<AppointmentRecordsResponse.DataBean> data = adapter.getData();
                         data.clear();
                         adapter.notifyDataSetChanged();
                     }
@@ -222,12 +241,12 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
 
                     rlNoData.setVisibility(View.VISIBLE);
                     adapter.setEnableLoadMore(false);
-                    List<PropertyManagementListLogResponse.DataBean> data = adapter.getData();
+                    List<AppointmentRecordsResponse.DataBean> data = adapter.getData();
                     data.clear();
                     adapter.notifyDataSetChanged();
                 }
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
                 finish();
@@ -244,13 +263,13 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
     }
 
     @Override
-    public void setMoreData(PropertyManagementListLogResponse moreDate) {
+    public void setMoreData(AppointmentRecordsResponse moreDate) {
         try {
-            int code = moreDate.getStatus();
+            String code = moreDate.getStatus();
             String msg = moreDate.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
-                List<PropertyManagementListLogResponse.DataBean> data = moreDate.getData();
+                List<AppointmentRecordsResponse.DataBean> data = moreDate.getData();
                 if (data != null) {
                     if (data.size() < 10) {
                         adapter.setEnableLoadMore(false);
@@ -266,7 +285,7 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
                 }
 
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 adapter.loadMoreComplete();
                 //SESSION_ID过期或者报错  要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -289,44 +308,16 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
         }
     }
 
+
     @Override
-    public void setTypesOfRoleData(TypeOfRoleResponse mTypeOfRoleResponse) {
-        try {
-            int code = mTypeOfRoleResponse.getStatus();
-            String msg = mTypeOfRoleResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+    public void setLaiFangData(VisitingRecordsResponse mVisitingRecordsResponse) {
 
-                TypeOfRoleResponse.DataBean data = mTypeOfRoleResponse.getData();
-                listDate.clear();
-                listWork.clear();
-                List<TypeOfRoleResponse.DataBean.OrdinarydateBean> ordinarydate = data.getOrdinarydate();
-                List<TypeOfRoleResponse.DataBean.OrdinaryroleBean> ordinaryrole = data.getOrdinaryrole();
-                for (int i = 0; i < ordinarydate.size(); i++) {
-                    listDate.add(ordinarydate.get(i).getName());
-                    listDateType.add(ordinarydate.get(i).getDatetype());
-                }
-                for (int i = 0; i < ordinaryrole.size(); i++) {
-                    listWork.add(ordinaryrole.get(i).getName());
-                    listWorkId.add(ordinaryrole.get(i).getId());
-                }
-
-
-                initData(page);
-            } else if (code == ResponseCode.SEESION_ERROR) {
-                //SESSION_ID为空别的页面 要调起登录页面
-                ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
-                finish();
-            } else {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
-                }
-
-            }
-        } catch (Exception e) {
-            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
-        }
     }
 
+    @Override
+    public void setLaiFangMoreData(VisitingRecordsResponse mVisitingRecordsResponse) {
+
+    }
 
     @Override
     public void showProgressDialogView() {
@@ -363,10 +354,11 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
     //id:角色id  默认0  全部
     private void initMoreData(int page, int datetype, int id) {
 
-        Map<String, Object> mapParameters = new HashMap<>(3);
-        mapParameters.put("page", String.valueOf(page));
-        mapParameters.put("datetype", String.valueOf(datetype));
-        mapParameters.put("id", String.valueOf(id));
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("pageNo", String.valueOf(page));
+        mapParameters.put("pageSize", String.valueOf(10));
+        mapParameters.put("receptionistId", personId);
+        mapParameters.put("visitorName", mPersonName);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -386,12 +378,43 @@ public class IssueQueryActivity extends BaseActivity implements IssueQueryContra
         }, 500);
     }
 
-    @OnClick({R2.id.main_title_back, R2.id.no_data_img})
+    @OnClick({R2.id.main_title_back, R2.id.fang_ke_record, R2.id.lai_fang_record, R2.id.select_date_ll})
     public void onViewClicked(View view) {
         int viewId = view.getId();
         if (viewId == R.id.main_title_back) {
             finish();
-        } else if (viewId == R.id.no_data_img) {
+        } else if (viewId == R.id.fang_ke_record) {
+            noDataTv.setText("暂无预约记录");
+            fangKeRecord.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            //设置不为加粗
+            laiFangRecord.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        } else if (viewId == R.id.lai_fang_record) {
+            noDataTv.setText("暂无来访记录");
+            fangKeRecord.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            //设置不为加粗
+            laiFangRecord.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        } else if (viewId == R.id.select_date_ll) {
+            mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         }
+    }
+
+    private TimePickerView mPvTime;
+
+    private void initTimePicker() {//Dialog 模式下，在底部弹出
+        //时间选择器
+
+        mPvTime = new TimePickerBuilder(ReservationRecordActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                String mVisitorTime = Utils.getTimeMonth(date);
+                selectDateTv.setText(mVisitorTime);
+            }
+        })
+                .setItemVisibleCount(2)
+                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
     }
 }

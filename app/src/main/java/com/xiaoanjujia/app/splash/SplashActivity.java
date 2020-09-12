@@ -3,12 +3,13 @@ package com.xiaoanjujia.app.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.xiaoanjujia.app.MyApplication;
 import com.example.app.R;
+import com.xiaoanjujia.app.MyApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -46,19 +47,19 @@ public class SplashActivity extends BaseActivity {
                       小安居家现在是的需求是直接打开应用就是登录页，后期该需求的话，可以把下面打开，是登录之后获取SESSION_ID不为空就跳主页
                      */
 
-                    /*String SESSION_ID = PrefUtils.readSESSION_ID(SplashActivity.this);
+                    String SESSION_ID = PrefUtils.readSESSION_ID(SplashActivity.this);
                     if (!TextUtils.isEmpty(SESSION_ID)) {
                         ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(SplashActivity.this);
 
                     } else {
                         ARouter.getInstance().build("/login/login").greenChannel().navigation(SplashActivity.this);
 
-                    }*/
+                    }
 
-                    /*
-                      暂时都写跳登录页
-                     */
-                    ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+//                    /*
+//                      暂时都写跳登录页
+//                     */
+//                    ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
 
                 }
                 finish();

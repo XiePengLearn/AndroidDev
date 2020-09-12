@@ -931,7 +931,7 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
-     * 访客登记查询
+     * 访客预约记录查询
      * private static String HK_APPOINTMENT_RECORDS = "/artemis/visitor/appointmentRecords";
      *
      * @param mapHeaders    请求头

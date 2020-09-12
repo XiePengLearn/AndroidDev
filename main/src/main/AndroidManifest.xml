@@ -168,6 +168,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.reservation_record.ReservationRecordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

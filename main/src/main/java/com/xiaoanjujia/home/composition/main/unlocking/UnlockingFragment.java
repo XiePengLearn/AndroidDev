@@ -425,6 +425,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             Intent intent = new Intent(mContext, VisitorInvitationActivity.class);
             if (!Utils.isNull(personId)) {
                 intent.putExtra("personId", personId);
+                intent.putExtra("personName", personName);
             }
             startActivity(intent);
 

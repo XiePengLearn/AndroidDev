@@ -42,6 +42,7 @@ import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceGenderDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceIdTypeDialog;
 import com.xiaoanjujia.home.composition.unlocking.dialog.ChoiceRriginIncidentDialog;
 import com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity;
+import com.xiaoanjujia.home.composition.unlocking.reservation_record.ReservationRecordActivity;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorInvitationResponse;
@@ -134,6 +135,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     private int gender = 1;
     private String personId;
     private PlateNumberDialog reStartOtherCountryDialog;
+    private String mPersonName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,6 +146,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
         personId = intent.getStringExtra("personId");
+        mPersonName = intent.getStringExtra("personName");
 
         initView();
         initTitle();
@@ -511,7 +514,13 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.main_title_right) {
-            ToastUtil.showToast(BaseApplication.getInstance(), "开发中");
+            //人脸识别
+            Intent intent = new Intent(mContext, ReservationRecordActivity.class);
+            if (!Utils.isNull(personId)) {
+                intent.putExtra("personId", personId);
+                intent.putExtra("personName", mPersonName);
+            }
+            startActivity(intent);
         } else if (id == R.id.invitation_visiting_time_ll) {
             hideKeyboard(view);
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
