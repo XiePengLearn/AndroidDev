@@ -35,7 +35,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/VisitorAuditActivity/VisitorAuditActivity")
+@Route(path = "/visitorAuditActivity/visitorAuditActivity")
 public class VisitorAuditActivity extends BaseActivity implements VisitorAuditContract.View {
     @Inject
     VisitorAuditPresenter mPresenter;

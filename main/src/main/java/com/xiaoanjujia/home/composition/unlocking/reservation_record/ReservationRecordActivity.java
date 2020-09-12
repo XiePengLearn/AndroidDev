@@ -34,6 +34,7 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.unlocking.reservation_record_details.ReservationRecordDetailsActivity;
 import com.xiaoanjujia.home.entities.AppointmentRecordsResponse;
 import com.xiaoanjujia.home.entities.VisitingRecordsResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -172,13 +173,59 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                 int i = view.getId();
                 if (i == R.id.item_supervisor_btn_status) {
                     if (!NoDoubleClickUtils.isDoubleClick()) {
-
+                        //"gender": 1,
+                        //				"svrIndexCode": "abb8078f-a284-4d93-814d-7adc8f290fbf",
+                        //				"nation": 1,
+                        //				"orderId": "28397468-f445-11ea-9a3d-bf995f83655c",
+                        //				"plateNo": "京626773",
+                        //				"visitStartTime": "2020-09-16T13:39:23+08:00",
+                        //				"visitPurpose": "看朋友",
+                        //				"customa": "",
+                        //				"certificateNo": "41142519910399030",
+                        //				"phoneNo": "15601267550",
+                        //				"visitEndTime": "2020-09-16T18:39:23+08:00",
+                        //				"verificationCode": "7189",
+                        //				"privilegeGroupNames": ["访客权限门禁点"],
+                        //				"visitorName": "谢鹏",
+                        //				"QRCode": "VjAwMSu1FSBN1YQz6qes4SYch8iaJUxjmweh1nl+9aU4rp/Np+y+PpB5WrjR9J3vs9ox9+E=",
+                        //				"receptionistName": "老谢",
+                        //				"picUri": "/pic?2ddc965bf-2do7b1l*36ed7=s-i6z24*5328989=81i5m*ep=t2p5i=d1s*i=d4b*i7dce*8428fcd6a-b1e34a-17o11cpi9c1d=92ie8=",
+                        //				"appointRecordId": "027fd04d5dae47bf87766a28da75ac68",
+                        //				"receptionistCode": "01101002010010100102",
+                        //				"visitorStatus": 1,
+                        //				"receptionistId": "77edf8446c7c448e914caf14eeaf9f20",
+                        //				"certificateType": 111,
+                        //				"visitorId": "28397468-f445-11ea-9a3d-bf995f83655c"
                         List data = adapter.getData();
                         AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
-                        //                        int id = dateBean.getId();
-                        //                        Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
-                        //                        intent.putExtra("id", id);
-                        //                        startActivity(intent);
+
+                        int visitorStatus = dateBean.getVisitorStatus();
+                        String visitorName = dateBean.getVisitorName();
+                        String receptionistName = dateBean.getReceptionistName();
+                        String phoneNo = dateBean.getPhoneNo();
+                        String visitStartTime = dateBean.getVisitStartTime();
+                        String visitEndTime = dateBean.getVisitEndTime();
+                        String visitPurpose = dateBean.getVisitPurpose();
+                        String picUri = dateBean.getPicUri();
+                        int gender = dateBean.getGender();
+                        String certificateNo = dateBean.getCertificateNo();
+                        String plateNo = dateBean.getPlateNo();
+                        String orderId = dateBean.getOrderId();
+
+                        Intent intent = new Intent(ReservationRecordActivity.this, ReservationRecordDetailsActivity.class);
+                        intent.putExtra("visitorStatus", visitorStatus);
+                        intent.putExtra("visitorName", visitorName);
+                        intent.putExtra("receptionistName", receptionistName);
+                        intent.putExtra("phoneNo", phoneNo);
+                        intent.putExtra("visitStartTime", visitStartTime);
+                        intent.putExtra("visitEndTime", visitEndTime);
+                        intent.putExtra("visitPurpose", visitPurpose);
+                        intent.putExtra("picUri", picUri);
+                        intent.putExtra("gender", gender);
+                        intent.putExtra("certificateNo", certificateNo);
+                        intent.putExtra("plateNo", plateNo);
+                        intent.putExtra("orderId", orderId);
+                        startActivity(intent);
                     }
                 }
 
@@ -191,10 +238,34 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                 if (!NoDoubleClickUtils.isDoubleClick()) {
                     List data = adapter.getData();
                     AppointmentRecordsResponse.DataBean dateBean = (AppointmentRecordsResponse.DataBean) data.get(position);
-                    //                    int id = dateBean.getId();
-                    //                    Intent intent = new Intent(ReservationRecordActivity.this, QuaryDetailActivity.class);
-                    //                    intent.putExtra("id", id);
-                    //                    startActivity(intent);
+
+                    int visitorStatus = dateBean.getVisitorStatus();
+                    String visitorName = dateBean.getVisitorName();
+                    String receptionistName = dateBean.getReceptionistName();
+                    String phoneNo = dateBean.getPhoneNo();
+                    String visitStartTime = dateBean.getVisitStartTime();
+                    String visitEndTime = dateBean.getVisitEndTime();
+                    String visitPurpose = dateBean.getVisitPurpose();
+                    String picUri = dateBean.getPicUri();
+                    int gender = dateBean.getGender();
+                    String certificateNo = dateBean.getCertificateNo();
+                    String plateNo = dateBean.getPlateNo();
+                    String orderId = dateBean.getOrderId();
+
+                    Intent intent = new Intent(ReservationRecordActivity.this, ReservationRecordDetailsActivity.class);
+                    intent.putExtra("visitorStatus", visitorStatus);
+                    intent.putExtra("visitorName", visitorName);
+                    intent.putExtra("receptionistName", receptionistName);
+                    intent.putExtra("phoneNo", phoneNo);
+                    intent.putExtra("visitStartTime", visitStartTime);
+                    intent.putExtra("visitEndTime", visitEndTime);
+                    intent.putExtra("visitPurpose", visitPurpose);
+                    intent.putExtra("picUri", picUri);
+                    intent.putExtra("gender", gender);
+                    intent.putExtra("certificateNo", certificateNo);
+                    intent.putExtra("plateNo", plateNo);
+                    intent.putExtra("orderId", orderId);
+                    startActivity(intent);
                 }
             }
         });

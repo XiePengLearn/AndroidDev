@@ -81,6 +81,24 @@ public class AppointmentRecordsResponse {
         private String receptionistId;
         private String visitorId;
         private String plateNo;
+        private String picUri;
+        private String certificateNo;
+
+        public String getCertificateNo() {
+            return certificateNo;
+        }
+
+        public void setCertificateNo(String certificateNo) {
+            this.certificateNo = certificateNo;
+        }
+
+        public String getPicUri() {
+            return picUri;
+        }
+
+        public void setPicUri(String picUri) {
+            this.picUri = picUri;
+        }
 
         public String getPlateNo() {
             return plateNo;

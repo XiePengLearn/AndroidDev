@@ -25,6 +25,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseFragment;
+import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -371,7 +372,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     //        } else if (id == R.id.unlocking_visiting_scholar) {
     //            ARouter.getInstance().build("/FaceActivity/FaceActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_to_review) {
-    //            ARouter.getInstance().build("/VisitorAuditActivity/VisitorAuditActivity").greenChannel().navigation(mContext);
+    //            ARouter.getInstance().build("/ReservationRecordDetailsActivity/ReservationRecordDetailsActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_store) {
     //            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
     //        }
@@ -389,11 +390,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_one_line_1) {
             //            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
-            Intent intent = new Intent(mContext, VisitorActivity.class);
-            if (!Utils.isNull(personName)) {
-                intent.putExtra("houseName", personName);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, VisitorActivity.class);
+                if (!Utils.isNull(personName)) {
+                    intent.putExtra("houseName", personName);
+                }
+                startActivity(intent);
             }
-            startActivity(intent);
         } else if (id == R.id.unlocking_one_line_2) {
             //房屋管理
 
@@ -402,10 +405,14 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             //物业
             if (mRoleType == 1) {
                 //1是物业主管
-                ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
+                }
             } else if (mRoleType == 2) {
                 //2是物业人员
-                ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+                }
             } else {
                 //普通用户
                 unlockingOneLine3.setVisibility(View.INVISIBLE);
@@ -415,20 +422,23 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
-            Intent intent = new Intent(mContext, FaceActivity.class);
-            if (!Utils.isNull(personId)) {
-                intent.putExtra("personId", personId);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, FaceActivity.class);
+                if (!Utils.isNull(personId)) {
+                    intent.putExtra("personId", personId);
+                }
+                startActivity(intent);
             }
-            startActivity(intent);
         } else if (id == R.id.unlocking_two_line_3) {
             //访客预约
-            Intent intent = new Intent(mContext, VisitorInvitationActivity.class);
-            if (!Utils.isNull(personId)) {
-                intent.putExtra("personId", personId);
-                intent.putExtra("personName", personName);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, VisitorInvitationActivity.class);
+                if (!Utils.isNull(personId)) {
+                    intent.putExtra("personId", personId);
+                    intent.putExtra("personName", personName);
+                }
+                startActivity(intent);
             }
-            startActivity(intent);
-
 
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
