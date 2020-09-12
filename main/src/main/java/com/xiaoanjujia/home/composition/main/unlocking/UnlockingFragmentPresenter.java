@@ -71,7 +71,7 @@ public class UnlockingFragmentPresenter extends BasePresenter implements Unlocki
                     } else {
                         mDataResponse = new VisitorPersonInfoResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mDataResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setResponseData(mDataResponse);
                 } catch (Exception e) {

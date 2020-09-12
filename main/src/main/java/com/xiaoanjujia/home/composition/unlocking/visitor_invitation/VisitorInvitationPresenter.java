@@ -80,7 +80,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                     } else {
                         mLoginResponse = new VisitorInvitationResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setResponseData(mLoginResponse);
                 } catch (Exception e) {
@@ -174,7 +174,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                     } else {
                         mLoginResponse = new VisitorFaceScoreResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setFaceScoreData(mLoginResponse);
                 } catch (Exception e) {

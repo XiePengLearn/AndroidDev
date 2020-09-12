@@ -60,4 +60,14 @@ public class ProjectResponse implements Serializable {
             return 0;
         }
     }
+
+    public static String getStatusString(String content) {
+        try {
+            JSONObject jsonObject = new JSONObject(content);
+            return jsonObject.optString("status");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+    }
 }

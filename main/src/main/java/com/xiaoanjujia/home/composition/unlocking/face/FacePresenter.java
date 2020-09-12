@@ -2,14 +2,17 @@ package com.xiaoanjujia.home.composition.unlocking.face;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.AddFaceResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.QueryFaceResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
+import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.io.File;
@@ -81,7 +84,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     } else {
                         mLoginResponse = new VisitorPersonInfoResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setPersonalInformationData(mLoginResponse);
                 } catch (Exception e) {
@@ -111,7 +114,52 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
 
     @Override
     public void getFaceScoreData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getFaceCheckFace(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
+            private VisitorFaceScoreResponse mLoginResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mLoginResponse = gson.fromJson(response, VisitorFaceScoreResponse.class);
+                    } else {
+                        mLoginResponse = new VisitorFaceScoreResponse();
+                        mLoginResponse.setMessage(ProjectResponse.getMessage(response));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
+                    }
+                    mContractView.setFaceScoreData(mLoginResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtil.showToast(BaseApplication.getInstance(),"人脸检测失败,请更换人脸照片");
+                }
+
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
     }
 
 
@@ -173,13 +221,13 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, AddFaceResponse.class);
                     } else {
                         mDataResponse = new AddFaceResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mDataResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setAddFace(mDataResponse);
                 } catch (Exception e) {
@@ -225,7 +273,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     } else {
                         mDataResponse = new QueryFaceResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
-                        mDataResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mDataResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.seQueryFace(mDataResponse);
                 } catch (Exception e) {

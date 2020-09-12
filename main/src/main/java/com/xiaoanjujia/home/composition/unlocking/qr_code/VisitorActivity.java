@@ -70,9 +70,9 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
         String houseName = intent.getStringExtra("houseName");
-        if(!Utils.isNull(houseName)){
+        if (!Utils.isNull(houseName)) {
             qrHouseTitleTv.setText(houseName);
-        }else {
+        } else {
             qrHouseTitleTv.setText("");
         }
         initView();
@@ -117,9 +117,9 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     @Override
     public void setResponseData(QrCodeResponse mQrCodeResponse) {
         try {
-            int code = Integer.parseInt(mQrCodeResponse.getStatus());
+            String code = mQrCodeResponse.getStatus();
             String msg = mQrCodeResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 QrCodeResponse.DataBean data = mQrCodeResponse.getData();
                 String barCode = data.getBarCode();
                 RequestOptions options = new RequestOptions()
@@ -151,7 +151,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
                 //                            }
                 //                        });
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
                 finish();

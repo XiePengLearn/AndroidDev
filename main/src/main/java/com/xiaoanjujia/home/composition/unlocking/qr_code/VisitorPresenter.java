@@ -71,7 +71,7 @@ public class VisitorPresenter extends BasePresenter implements VisitorContract.P
                     } else {
                         mLoginResponse = new QrCodeResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setResponseData(mLoginResponse);
                 } catch (Exception e) {

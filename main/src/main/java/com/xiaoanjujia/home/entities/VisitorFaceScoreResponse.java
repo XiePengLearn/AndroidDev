@@ -8,9 +8,9 @@ package com.xiaoanjujia.home.entities;
 public class VisitorFaceScoreResponse {
 
     /**
-     * data : {"facePicAnalysisResult":{"glasses":"NO","recommendFaceRect":{"width":0,"x":0,"y":0,"height":0},"gender":"male","facePose":{"colorConfidence":1,"roll":5.715253829956055,"eyeDistance":60.7224006652832,"grayMean":165.064697265625,"pitch":-0.0021992474794387817,"visibleScore":1,"yaw":7.998233795166016,"clearityScore":0.949999988079071},"ageGroup":"YOUNG","faceRect":{"width":0.21306690573692322,"x":0.3645472228527069,"y":0.30906248092651367,"height":0.11936527490615845},"id":0,"faceScore":76,"smile":"NO"},"checkResult":true,"faceScore":76}
-     * message : OK
-     * status : 1
+     * data : {"facePicAnalysisResult":{"glasses":"NO","recommendFaceRect":{"width":0,"x":0,"y":0,"height":0},"gender":"male","facePose":{"colorConfidence":1,"roll":39.46773910522461,"eyeDistance":98.12940216064453,"grayMean":148.36178588867188,"pitch":-10.029699325561523,"visibleScore":0.9913488626480103,"yaw":17.000213623046875,"clearityScore":0.7984173893928528},"ageGroup":"YOUNG","faceRect":{"width":0.33171921968460083,"x":0.23827292025089264,"y":0.46583881974220276,"height":0.18586692214012146},"id":0,"faceScore":40,"smile":"YES"},"checkResult":false,"faceScore":40,"statusMessage":"face score too low","statusCode":"0x1f902309"}
+     * message : face detect failed
+     * status : 0x1f913016
      */
 
     private DataBean data;
@@ -43,14 +43,18 @@ public class VisitorFaceScoreResponse {
 
     public static class DataBean {
         /**
-         * facePicAnalysisResult : {"glasses":"NO","recommendFaceRect":{"width":0,"x":0,"y":0,"height":0},"gender":"male","facePose":{"colorConfidence":1,"roll":5.715253829956055,"eyeDistance":60.7224006652832,"grayMean":165.064697265625,"pitch":-0.0021992474794387817,"visibleScore":1,"yaw":7.998233795166016,"clearityScore":0.949999988079071},"ageGroup":"YOUNG","faceRect":{"width":0.21306690573692322,"x":0.3645472228527069,"y":0.30906248092651367,"height":0.11936527490615845},"id":0,"faceScore":76,"smile":"NO"}
-         * checkResult : true
-         * faceScore : 76
+         * facePicAnalysisResult : {"glasses":"NO","recommendFaceRect":{"width":0,"x":0,"y":0,"height":0},"gender":"male","facePose":{"colorConfidence":1,"roll":39.46773910522461,"eyeDistance":98.12940216064453,"grayMean":148.36178588867188,"pitch":-10.029699325561523,"visibleScore":0.9913488626480103,"yaw":17.000213623046875,"clearityScore":0.7984173893928528},"ageGroup":"YOUNG","faceRect":{"width":0.33171921968460083,"x":0.23827292025089264,"y":0.46583881974220276,"height":0.18586692214012146},"id":0,"faceScore":40,"smile":"YES"}
+         * checkResult : false
+         * faceScore : 40
+         * statusMessage : face score too low
+         * statusCode : 0x1f902309
          */
 
         private FacePicAnalysisResultBean facePicAnalysisResult;
         private boolean checkResult;
         private int faceScore;
+        private String statusMessage;
+        private String statusCode;
 
         public FacePicAnalysisResultBean getFacePicAnalysisResult() {
             return facePicAnalysisResult;
@@ -76,17 +80,33 @@ public class VisitorFaceScoreResponse {
             this.faceScore = faceScore;
         }
 
+        public String getStatusMessage() {
+            return statusMessage;
+        }
+
+        public void setStatusMessage(String statusMessage) {
+            this.statusMessage = statusMessage;
+        }
+
+        public String getStatusCode() {
+            return statusCode;
+        }
+
+        public void setStatusCode(String statusCode) {
+            this.statusCode = statusCode;
+        }
+
         public static class FacePicAnalysisResultBean {
             /**
              * glasses : NO
              * recommendFaceRect : {"width":0,"x":0,"y":0,"height":0}
              * gender : male
-             * facePose : {"colorConfidence":1,"roll":5.715253829956055,"eyeDistance":60.7224006652832,"grayMean":165.064697265625,"pitch":-0.0021992474794387817,"visibleScore":1,"yaw":7.998233795166016,"clearityScore":0.949999988079071}
+             * facePose : {"colorConfidence":1,"roll":39.46773910522461,"eyeDistance":98.12940216064453,"grayMean":148.36178588867188,"pitch":-10.029699325561523,"visibleScore":0.9913488626480103,"yaw":17.000213623046875,"clearityScore":0.7984173893928528}
              * ageGroup : YOUNG
-             * faceRect : {"width":0.21306690573692322,"x":0.3645472228527069,"y":0.30906248092651367,"height":0.11936527490615845}
+             * faceRect : {"width":0.33171921968460083,"x":0.23827292025089264,"y":0.46583881974220276,"height":0.18586692214012146}
              * id : 0
-             * faceScore : 76
-             * smile : NO
+             * faceScore : 40
+             * smile : YES
              */
 
             private String glasses;
@@ -220,13 +240,13 @@ public class VisitorFaceScoreResponse {
             public static class FacePoseBean {
                 /**
                  * colorConfidence : 1
-                 * roll : 5.715253829956055
-                 * eyeDistance : 60.7224006652832
-                 * grayMean : 165.064697265625
-                 * pitch : -0.0021992474794387817
-                 * visibleScore : 1
-                 * yaw : 7.998233795166016
-                 * clearityScore : 0.949999988079071
+                 * roll : 39.46773910522461
+                 * eyeDistance : 98.12940216064453
+                 * grayMean : 148.36178588867188
+                 * pitch : -10.029699325561523
+                 * visibleScore : 0.9913488626480103
+                 * yaw : 17.000213623046875
+                 * clearityScore : 0.7984173893928528
                  */
 
                 private int colorConfidence;
@@ -234,7 +254,7 @@ public class VisitorFaceScoreResponse {
                 private double eyeDistance;
                 private double grayMean;
                 private double pitch;
-                private int visibleScore;
+                private double visibleScore;
                 private double yaw;
                 private double clearityScore;
 
@@ -278,11 +298,11 @@ public class VisitorFaceScoreResponse {
                     this.pitch = pitch;
                 }
 
-                public int getVisibleScore() {
+                public double getVisibleScore() {
                     return visibleScore;
                 }
 
-                public void setVisibleScore(int visibleScore) {
+                public void setVisibleScore(double visibleScore) {
                     this.visibleScore = visibleScore;
                 }
 
@@ -305,10 +325,10 @@ public class VisitorFaceScoreResponse {
 
             public static class FaceRectBean {
                 /**
-                 * width : 0.21306690573692322
-                 * x : 0.3645472228527069
-                 * y : 0.30906248092651367
-                 * height : 0.11936527490615845
+                 * width : 0.33171921968460083
+                 * x : 0.23827292025089264
+                 * y : 0.46583881974220276
+                 * height : 0.18586692214012146
                  */
 
                 private double width;

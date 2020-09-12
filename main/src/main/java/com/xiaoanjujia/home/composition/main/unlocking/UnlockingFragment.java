@@ -250,9 +250,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     @Override
     public void setResponseData(VisitorPersonInfoResponse mVisitorPersonInfoResponse) {
         try {
-            int code = Integer.parseInt(mVisitorPersonInfoResponse.getStatus());
+            String code = mVisitorPersonInfoResponse.getStatus();
             String msg = mVisitorPersonInfoResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 List<VisitorPersonInfoResponse.DataBean> data = mVisitorPersonInfoResponse.getData();
                 if (data != null && data.size() > 0) {
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
@@ -285,7 +285,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 }
 
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mActivity);
             } else {

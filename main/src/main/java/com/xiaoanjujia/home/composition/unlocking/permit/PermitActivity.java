@@ -124,9 +124,9 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
     @Override
     public void setResponseData(PermitResponse mPermitResponse) {
         try {
-            int code = Integer.parseInt(mPermitResponse.getStatus());
+            String code =mPermitResponse.getStatus();
             String msg = mPermitResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 List<PermitResponse.DataBean> dataList = mPermitResponse.getData();
                 if (dataList != null && dataList.size() > 0) {
                     PermitResponse.DataBean dataBean = dataList.get(0);
@@ -201,7 +201,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
                 }
 
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
                 finish();

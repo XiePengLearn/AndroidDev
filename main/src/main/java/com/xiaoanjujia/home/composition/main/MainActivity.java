@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
     @Override
     public void onTabSelected(int position) {
-        if (mRoleType == 0) {
+        if (position == 0) {
             //普通用户
 
             if (mUnlockingFragment == null) {

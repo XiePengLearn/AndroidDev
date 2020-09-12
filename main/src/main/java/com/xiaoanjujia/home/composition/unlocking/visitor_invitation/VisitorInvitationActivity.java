@@ -283,9 +283,9 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     @Override
     public void setResponseData(VisitorInvitationResponse mVisitorInvitationResponse) {
         try {
-            int code = Integer.parseInt(mVisitorInvitationResponse.getStatus());
+            String code = mVisitorInvitationResponse.getStatus();
             String msg = mVisitorInvitationResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 VisitorInvitationResponse.DataBean data = mVisitorInvitationResponse.getData();
                 List<VisitorInvitationResponse.DataBean.AppointmentInfoListBean> appointmentInfoList = data.getAppointmentInfoList();
                 if (appointmentInfoList != null && appointmentInfoList.size() > 0) {
@@ -310,7 +310,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 }
                 ToastUtil.showToast(BaseApplication.getInstance(), "生成访客证成功");
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
                 finish();
@@ -643,9 +643,9 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
     @Override
     public void setFaceScoreData(VisitorFaceScoreResponse mVisitorFaceScoreResponsee) {
         try {
-            int code = Integer.parseInt(mVisitorFaceScoreResponsee.getStatus());
+            String code = mVisitorFaceScoreResponsee.getStatus();
             String msg = mVisitorFaceScoreResponsee.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
 
 
                 VisitorFaceScoreResponse.DataBean data = mVisitorFaceScoreResponsee.getData();
@@ -658,7 +658,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                     }
                 }
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(VisitorInvitationActivity.this);
             } else {

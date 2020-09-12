@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -94,6 +97,8 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     AlphaButton generateVisitorCard;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+    @BindView(R2.id.generate_visitor_uploading_face_pic)
+    AlphaButton generateVisitorUploadingFacePic;
 
 
     private List<LocalMedia> selectList2 = new ArrayList<>();
@@ -105,6 +110,8 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     private int gender = 1;
     private String personId;
     private PlateNumberDialog reStartOtherCountryDialog;
+    private String mPersonId;
+    private String mPersonName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -229,13 +236,21 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     }
 
 
-    @OnClick({R2.id.main_title_back, R2.id.generate_visitor_card})
+    @OnClick({R2.id.main_title_back, R2.id.generate_visitor_card, R2.id.generate_visitor_uploading_face_pic})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.main_title_right) {
             ToastUtil.showToast(BaseApplication.getInstance(), "记录");
+        } else if (id == R.id.generate_visitor_uploading_face_pic) {
+            //            上传人脸
+            if (selectList2.size() == 0) {
+                ToastUtil.showToast(mContext.getApplicationContext(), "请选择人脸照片");
+                return;
+            }
+            uploadPictureToServer(selectList2);
+
         } else if (id == R.id.generate_visitor_card) {
             hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);
@@ -278,9 +293,9 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     @Override
     public void setPersonalInformationData(VisitorPersonInfoResponse mVisitorPersonInfoResponse) {
         try {
-            int code = Integer.parseInt(mVisitorPersonInfoResponse.getStatus());
+            String code = mVisitorPersonInfoResponse.getStatus();
             String msg = mVisitorPersonInfoResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 List<VisitorPersonInfoResponse.DataBean> data = mVisitorPersonInfoResponse.getData();
                 if (data != null && data.size() > 0) {
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
@@ -337,10 +352,10 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                          *             "age": 0,
                          *             "certificateType": 111
                          */
-                        String personName = dataBean.getPersonName();
-                        if (!Utils.isNull(personName)) {
-                            huzhuTv.setText(personName);
-                            initQueryFace(personName);
+                        mPersonName = dataBean.getPersonName();
+                        if (!Utils.isNull(mPersonName)) {
+                            huzhuTv.setText(mPersonName);
+
                         }
                         personId = dataBean.getPersonId();
                         String orgPathName = dataBean.getOrgPathName();
@@ -365,13 +380,36 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                         if (!Utils.isNull(certificateNo)) {
                             idCardTv.setText(certificateNo);
                         }
+                        mPersonId = dataBean.getPersonId();
+                        List<VisitorPersonInfoResponse.DataBean.PersonPhotoBean> personPhoto = dataBean.getPersonPhoto();
+                        if (personPhoto != null && personPhoto.size() > 0) {
+                            String picUri = personPhoto.get(0).getPicUri();
+                            //                            initQueryFace(picUri, mPersonId);
+
+                            RequestOptions options = RequestOptions
+                                    .bitmapTransform(new CircleCrop());
+
+                            if (!Utils.isNull(picUri)) {
+                                if (!picUri.startsWith("http")) {
+                                    picUri = MainDataManager.HK_ROOT_URL_PIC + picUri;
+                                }
+                                //头像
+                                Glide.with(mContext)
+                                        .load(picUri)
+                                        .apply(options)
+                                        .into(huzhuIv);
+                                
+
+                            }
+
+                        }
 
 
                     }
                 }
 
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
@@ -385,10 +423,45 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
         }
     }
 
+    //facePicUrl=http://hk.xiaoanjujia.com/image/renlian.jpg
+    public void initFaceScoreData(String facePicUrl) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("facePicUrl", facePicUrl);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getFaceScoreData(headersTreeMap, mapParameters);
+    }
+
     @Override
     public void setFaceScoreData(VisitorFaceScoreResponse mVisitorFaceScoreResponsee) {
+        try {
+            String code = mVisitorFaceScoreResponsee.getStatus();
+            String msg = mVisitorFaceScoreResponsee.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                VisitorFaceScoreResponse.DataBean data = mVisitorFaceScoreResponsee.getData();
+                if (data != null) {
+                    int faceScore = data.getFaceScore();
+                    if (faceScore > 75) {
+                        //                        initData();
+                        initAddFace(mImagePath);
+                    } else {
+                        ToastUtil.showToast(FaceActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                    }
+                }
 
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(FaceActivity.this, msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "解析数据失败");
+        }
     }
+
 
     @Override
     public void setUploadPicture(UploadImageResponse uploadImageResponse) {
@@ -397,7 +470,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
             String msg = uploadImageResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
                 mImagePath = uploadImageResponse.getData().getPath();
-
+                initFaceScoreData(mImagePath);
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -412,15 +485,56 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
         }
     }
 
+    //http://hk.xiaoanjujia.com/artemis/face/addFace?personId=e5cab658a0024ae29837755c4933f04f&faceUrl=https://a.xiaoanjujia.com/uploads/images/2020/09-09/20200910105707.jpg
+    public void initAddFace(String facePicUrl) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("personId", mPersonId);
+        mapParameters.put("faceUrl", facePicUrl);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getAddFace(headersTreeMap, mapParameters);
+    }
+
     @Override
     public void setAddFace(AddFaceResponse mAddFaceResponse) {
+        try {
+            String code = mAddFaceResponse.getStatus();
+            String msg = mAddFaceResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                AddFaceResponse.DataBean data = mAddFaceResponse.getData();
+                //                String faceId = data.getFaceId();
+                //                String faceUrl = data.getFaceUrl();
+                //                String personId = data.getPersonId();
+                //                initQueryFace(faceUrl, personId);
+                initData();
 
+                //                if (data != null) {
+                //                    int faceScore = data.getFaceScore();
+                //                    if (faceScore > 75) {
+                //                        //                        initData();
+                //                    } else {
+                //                        ToastUtil.showToast(FaceActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                //                    }
+                //                }
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "解析数据失败");
+        }
     }
 
 
-    public void initQueryFace(String name) {
+    public void initQueryFace(String faceUrl, String personId) {
         Map<String, Object> mapParameters = new HashMap<>(2);
-        mapParameters.put("name", "name");
+        //        mapParameters.put("faceUrl", faceUrl);
+        mapParameters.put("personId", personId);
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
         mPresenter.getQueryFace(headersTreeMap, mapParameters);
     }
@@ -428,9 +542,9 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     @Override
     public void seQueryFace(QueryFaceResponse mQueryFaceResponse) {
         try {
-            int code = Integer.parseInt(mQueryFaceResponse.getStatus());
+            String code = mQueryFaceResponse.getStatus();
             String msg = mQueryFaceResponse.getMessage();
-            if (code == ResponseCode.SUCCESS_OK) {
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 List<QueryFaceResponse.DataBean> data = mQueryFaceResponse.getData();
                 if (data != null && data.size() > 0) {
                     QueryFaceResponse.DataBean dataBean = data.get(0);
@@ -467,7 +581,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 }
 
 
-            } else if (code == ResponseCode.SEESION_ERROR) {
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
@@ -599,5 +713,6 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径  注：已废弃
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
+
 
 }

@@ -20,7 +20,8 @@ public class ResponseCode {
      * request  成功
      */
     public static final int SUCCESS_OK = 1;
-
+    public static final String SUCCESS_OK_STRING = "1";
+    public static final String SEESION_ERROR_STRING = "401";
     /**
      * 请求头缺少参数{}
      */

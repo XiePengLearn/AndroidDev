@@ -71,7 +71,7 @@ public class PermitPresenter extends BasePresenter implements PermitContract.Pre
                     } else {
                         mLoginResponse = new PermitResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
-                        mLoginResponse.setStatus(String.valueOf(ProjectResponse.getStatus(response)));
+                        mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
                     mContractView.setResponseData(mLoginResponse);
                 } catch (Exception e) {
