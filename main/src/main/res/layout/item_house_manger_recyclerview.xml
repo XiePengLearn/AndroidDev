@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_170"
+        android:layout_marginTop="@dimen/sp_9"
+        android:layout_marginBottom="@dimen/sp_9"
+        android:background="@drawable/house_manager"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_29"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/huzhu_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_27"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_24"
+                tool:text="户主" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_27"
+            android:layout_marginTop="@dimen/sp_14"
+            android:layout_marginEnd="@dimen/dp_27"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/xiao_qu_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_16"
+                tool:text="何营小区A地块" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/id_address_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_marginRight="@dimen/dp_60"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/sp_16"
+                tool:text="1管理分区4号院1号楼1单元102室" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

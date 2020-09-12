@@ -611,9 +611,6 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
         mPresenter.getLaiFangMoreData(headersTreeMap, mapParameters);
     }
 
-    //page
-    //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
-    //id:角色id  默认0  全部
     private void initMoreData(int page, String time) {
 
         Map<String, Object> mapParameters = new HashMap<>(4);

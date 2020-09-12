@@ -40,6 +40,7 @@ import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
 import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
+import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
@@ -399,8 +400,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_one_line_2) {
             //房屋管理
-
-            ToastUtil.showToast(BaseApplication.getInstance(), "开发中");
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, HouseManagerActivity.class);
+                if (!Utils.isNull(personId)) {
+                    intent.putExtra("personId", personId);
+                }
+                startActivity(intent);
+            }
         } else if (id == R.id.unlocking_one_line_3) {
             //物业
             if (mRoleType == 1) {
