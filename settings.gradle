@@ -1,1 +1,1 @@
-include ':main', ':common', ':testmodule', ':app_common', ':app', ':Camera'
+include ':main', ':common', ':testmodule', ':app_common', ':app', ':Camera', ':address_library'

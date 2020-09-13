@@ -99,4 +99,5 @@ dependencies {
     /*添加依赖*/
     api 'com.github.yuzhiqiang1993:zxing:2.2.5'
     api files('libs/pinyin4j-2.5.0.jar')
+    api project(path: ':address_library')
 }
