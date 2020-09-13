@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.unlocking.add_personal_information;
 
 
 import com.xiaoanjujia.home.entities.RootAreaResponse;
+import com.xiaoanjujia.home.entities.RootNextRegionResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
@@ -21,6 +22,8 @@ public interface AddPersonalInformationContract {
 
         void setRootAreaData(RootAreaResponse mRootAreaResponse);
 
+        void setRootNextRegionData(RootNextRegionResponse mRootNextRegionResponse);
+
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -38,5 +41,7 @@ public interface AddPersonalInformationContract {
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getRootAreaData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+
+        void getRootNextRegionData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

@@ -127,10 +127,18 @@ public class SelectHousingActivity extends BaseActivity implements SelectHousing
                 String name = item.getName();
                 Intent intent = new Intent();
                 intent.putExtra("name", name); //添加额外的值
-                if (mData.size() > position) {
-                    String indexCode = mData.get(position).getIndexCode();
-                    intent.putExtra("indexCode", indexCode); //添加额外的值
+                for (int i = 0; i < mData.size(); i++) {
+                    if (mData.get(i).getName().equals(name)) {
+                        String indexCode = mData.get(i).getIndexCode();
+                        intent.putExtra("indexCode", indexCode); //添加额外的值
+                    }
+
+
                 }
+                //                if (mData.size() > position) {
+                //                    String indexCode = mData.get(position).getIndexCode();
+                //                    intent.putExtra("indexCode", indexCode); //添加额外的值
+                //                }
                 setResult(RESULT_OK, intent); //返回子Activity的值
                 finish();
 

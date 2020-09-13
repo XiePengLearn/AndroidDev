@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -34,6 +36,7 @@ import com.xiaoanjujia.home.composition.unlocking.reservation_record_details.Res
 import com.xiaoanjujia.home.composition.unlocking.select_housing.SelectHousingActivity;
 import com.xiaoanjujia.home.entities.ChooseYourAreaInfo;
 import com.xiaoanjujia.home.entities.RootAreaResponse;
+import com.xiaoanjujia.home.entities.RootNextRegionResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
@@ -48,6 +52,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import chihane.jdaddressselector.BottomDialog;
+import chihane.jdaddressselector.DataProvider;
+import chihane.jdaddressselector.ISelectAble;
+import chihane.jdaddressselector.SelectedListener;
+import chihane.jdaddressselector.Selector;
 
 /**
  * @author xiepeng
@@ -108,6 +117,10 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
     private String mParentIndexCodes;
     private final int SUBACTIVITY1 = 1, SUBACTIVITY2 = 2; //requestCode请求码
     private String mIndexCode;
+    private String mIndexCodeNext;
+    private ArrayList<ISelectAble> mDataNextRegionList;
+    private List<RootNextRegionResponse.DataBean> mRootNextRegionDateList;
+    private boolean mIsFirstPop = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +129,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
         themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-
+        mDataNextRegionList = new ArrayList<>();
 
         initView();
         initData();
@@ -237,6 +250,91 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
         }
     }
 
+    public void initRootNextRegionData() {
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("pageNo", "1");
+        mapParameters.put("pageSize", "1000");
+        mapParameters.put("resourceType", "region");
+        mapParameters.put("parentIndexCode", mIndexCodeNext);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getRootNextRegionData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setRootNextRegionData(RootNextRegionResponse mRootNextRegionResponse) {
+        try {
+            String code = mRootNextRegionResponse.getStatus();
+            String msg = mRootNextRegionResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                mRootNextRegionDateList = mRootNextRegionResponse.getData();
+                if (mRootNextRegionDateList != null && mRootNextRegionDateList.size() > 0) {
+                    /**
+                     * "regionPath": "@root000000@92067959-1cc4-4429-9093-05a1ed827a5a@4d863400-b023-44ad-b1eb-991cdbb8a862@",
+                     * 		"cascadeType": 0,
+                     * 		"catalogType": 12,
+                     * 		"cascadeCode": "0",
+                     * 		"available": true,
+                     * 		"indexCode": "4d863400-b023-44ad-b1eb-991cdbb8a862",
+                     * 		"updateTime": "2020-08-06T15:27:24.376+08:00",
+                     * 		"sort": 2,
+                     * 		"nodeType": 2,
+                     * 		"leaf": false,
+                     * 		"regionCode": "01201005010000000000",
+                     * 		"createTime": "2020-08-06T15:27:24.376+08:00",
+                     * 		"name": "1管理分区",
+                     * 		"parentIndexCode": "92067959-1cc4-4429-9093-05a1ed827a5a"
+                     */
+
+                    mDataNextRegionList.clear();
+
+                    for (int i = 0; i < mRootNextRegionDateList.size(); i++) {
+                        final int finalJ = i;
+                        final String indexCode = mRootNextRegionDateList.get(i).getIndexCode();
+                        final String name = mRootNextRegionDateList.get(i).getName();
+                        mDataNextRegionList.add(new ISelectAble() {
+                            @Override
+                            public String getName() {
+                                return name;
+                            }
+
+                            @Override
+                            public String getIndexCode() {
+                                return indexCode;
+                            }
+
+                            @Override
+                            public int getId() {
+                                return finalJ;
+                            }
+
+                            @Override
+                            public Object getArg() {
+                                return this;
+                            }
+                        });
+
+                    }
+                    Myreceiver.send(mDataNextRegionList);
+                }else {
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "暂无数据");
+                }
+
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(AddPersonalInformationActivity.this, "解析数据失败");
+        }
+    }
+
 
     @Override
     public void showProgressDialogView() {
@@ -292,6 +390,9 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
                 ToastUtil.showToast(BaseApplication.getInstance(), "请先选择小区");
                 return;
             }
+            mIsFirstPop = true;
+            showDialog();
+
         } else if (id == R.id.generate_add_personal_info_submit) {
 
         }
@@ -315,6 +416,8 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
                     String name = data.getStringExtra("name");
                     mIndexCode = data.getStringExtra("indexCode");
                     addPersonalInfoHousingTv.setText(name);
+                    mIndexCodeNext = mIndexCode;
+                    //                    initRootNextRegionData();
                 }
                 break;
 
@@ -324,4 +427,80 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
         }
     }
 
+    private ArrayList<ISelectAble> getDatas() {
+        int count = new Random().nextInt(99) + 1;
+        ArrayList<ISelectAble> data = new ArrayList<>(count);
+        for (int j = 0; j < count; j++) {
+            final int finalJ = j;
+            data.add(new ISelectAble() {
+                @Override
+                public String getName() {
+                    return "随机" + finalJ;
+                }
+
+                @Override
+                public String getIndexCode() {
+                    return null;
+                }
+
+                @Override
+                public int getId() {
+                    return finalJ;
+                }
+
+                @Override
+                public Object getArg() {
+                    return this;
+                }
+            });
+        }
+        return data;
+    }
+
+    private DataProvider.DataReceiver Myreceiver;
+
+    private void showDialog() {
+        Selector selector = new Selector(this, 5);
+
+        selector.setDataProvider(new DataProvider() {
+            @Override
+            public void provideData(int currentDeep, int preId, DataReceiver receiver) {
+                Myreceiver = receiver;
+                if (mIsFirstPop) {
+                    mIndexCodeNext = mIndexCode;
+                    mIsFirstPop = false;
+                } else {
+                    if (mRootNextRegionDateList.size() > preId) {
+                        mIndexCodeNext = mRootNextRegionDateList.get(preId).getIndexCode();
+                    }
+
+                }
+                initRootNextRegionData();
+
+                //根据tab的深度和前一项选择的id，获取下一级菜单项
+                //                Log.i(TAG, "provideData: currentDeep >>> " + currentDeep + " preId >>> " + preId);
+                //                mIndexCodeNext = mRootNextRegionDateList.get(preId).getIndexCode();
+                ////                receiver.send(mDataNextRegionList);
+                //                initRootNextRegionData();
+            }
+        });
+        selector.setSelectedListener(new SelectedListener() {
+            @Override
+            public void onAddressSelected(ArrayList<ISelectAble> selectAbles) {
+                String result = "";
+                String indexCode = "";
+                for (ISelectAble selectAble : selectAbles) {
+                    result += selectAble.getName() + " ";
+                    indexCode += selectAble.getIndexCode() + " ";
+                }
+
+                LogUtil.e(TAG, "=======result:=======" + result + "=======indexCode:=======" + indexCode);
+                Toast.makeText(AddPersonalInformationActivity.this, result, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        BottomDialog dialog = new BottomDialog(this);
+        dialog.init(this, selector);
+        dialog.show();
+    }
 }
