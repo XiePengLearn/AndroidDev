@@ -188,18 +188,18 @@ public class PrefUtils {
     }
 
     //绩时查 token
-    public static void writeXinGeToken(String xinGeToken, Context context) {
+    public static void writePersonInfo(String personInfo, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = mySharedPreferences.edit();
-        editor.putString("xin_ge_token", xinGeToken);
+        editor.putString("personInfo", personInfo);
         editor.apply();
     }
 
-    public static String readXinGeToken(Context context) {
+    public static String readPersonInfo(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
-        return mySharedPreferences.getString("xin_ge_token", "");
+        return mySharedPreferences.getString("personInfo", "");
 
     }
 

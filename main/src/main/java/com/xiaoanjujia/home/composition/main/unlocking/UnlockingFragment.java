@@ -266,14 +266,18 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         String orgPathName = dataBean.getOrgPathName();
                         if (!Utils.isNull(personName)) {
                             unlockingHouseTitle.setText(personName);
+                            PrefUtils.writePersonInfo("true",BaseApplication.getInstance());
                         } else {
                             unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                             unlockingAddHouseIv.setVisibility(View.GONE);
+                            PrefUtils.writePersonInfo("",BaseApplication.getInstance());
                         }
                         if (!Utils.isNull(orgPathName)) {
                             unlockingAddHouseTv.setText(orgPathName);
+                            PrefUtils.writePersonInfo("true",BaseApplication.getInstance());
                         } else {
                             unlockingAddHouseTv.setText("暂无房屋信息");
+                            PrefUtils.writePersonInfo("",BaseApplication.getInstance());
                             //                            if (!Utils.isNull(personName)) {
                             //                                unlockingAddHouseTv.setText("暂无房屋信息");
                             //                            } else {
@@ -286,6 +290,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                     unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                     unlockingAddHouseTv.setText("暂无房屋信息");
                     unlockingAddHouseIv.setVisibility(View.GONE);
+                    PrefUtils.writePersonInfo("",BaseApplication.getInstance());
                 }
 
 
@@ -393,6 +398,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_one_line_1) {
             //            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
+            String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
+            if(Utils.isNull(mPersonInfo)){
+                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+                return;
+            }
             if (!NoDoubleClickUtils.isDoubleClick()) {
                 Intent intent = new Intent(mContext, VisitorActivity.class);
                 if (!Utils.isNull(personName)) {
@@ -402,6 +412,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_one_line_2) {
             //房屋管理
+            String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
+            if(Utils.isNull(mPersonInfo)){
+                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+                return;
+            }
             if (!NoDoubleClickUtils.isDoubleClick()) {
                 Intent intent = new Intent(mContext, HouseManagerActivity.class);
                 if (!Utils.isNull(personId)) {
@@ -436,6 +451,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
+            String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
+            if(Utils.isNull(mPersonInfo)){
+                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+                return;
+            }
             if (!NoDoubleClickUtils.isDoubleClick()) {
                 Intent intent = new Intent(mContext, FaceActivity.class);
                 if (!Utils.isNull(personId)) {
@@ -445,6 +465,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_two_line_3) {
             //访客预约
+            String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
+            if(Utils.isNull(mPersonInfo)){
+                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+                return;
+            }
             if (!NoDoubleClickUtils.isDoubleClick()) {
                 Intent intent = new Intent(mContext, VisitorInvitationActivity.class);
                 if (!Utils.isNull(personId)) {
