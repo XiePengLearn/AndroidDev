@@ -40,15 +40,34 @@ public class HouseManagerPreviewsAdapter extends BaseQuickAdapter<VisitorPersonI
         } else {
             helper.setText(R.id.huzhu_tv, "  -  ");
         }
-        String orgName = info.getOrgName();
-        if (!Utils.isNull(orgName)) {
-            helper.setText(R.id.xiao_qu_tv, orgName);
-        } else {
-            helper.setText(R.id.xiao_qu_tv, "  -  ");
-        }
+        //        String orgName = info.getOrgName();
+        //        if (!Utils.isNull(orgName)) {
+        //            helper.setText(R.id.xiao_qu_tv, orgName);
+        //        } else {
+        //            helper.setText(R.id.xiao_qu_tv, "  -  ");
+        //        }
         String orgPathName = info.getOrgPathName();
+
         if (!Utils.isNull(orgPathName)) {
-            helper.setText(R.id.id_address_tv, orgPathName);
+            if (orgPathName.contains("/")) {
+                String[] split = orgPathName.split("/");
+                if (split.length >= 2) {
+                    helper.setText(R.id.xiao_qu_tv, split[0]);
+                    StringBuffer buffer = new StringBuffer();
+
+                    for (int i = 0; i < split.length; i++) {
+                        if (i != 0) {
+                            buffer.append(split[i]);
+                        }
+                    }
+                    helper.setText(R.id.id_address_tv, buffer);
+                } else {
+                    helper.setText(R.id.id_address_tv, orgPathName);
+                }
+            } else {
+                helper.setText(R.id.id_address_tv, orgPathName);
+            }
+
         } else {
             helper.setText(R.id.id_address_tv, "  -  ");
         }
