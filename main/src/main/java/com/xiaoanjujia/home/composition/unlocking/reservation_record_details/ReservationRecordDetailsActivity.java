@@ -58,7 +58,7 @@ import butterknife.OnClick;
 public class ReservationRecordDetailsActivity extends BaseActivity implements ReservationRecordDetailsContract.View {
     @Inject
     ReservationRecordDetailsPresenter mPresenter;
-    private static final String TAG = "AddPersonalInformationActivity";
+    private static final String TAG = "SelectHousingActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)

@@ -83,7 +83,6 @@ dependencies {
     api 'com.teprinciple:updateapputils:2.0.4'
     api 'com.jude:easyrecyclerview:4.2.3'
     api 'com.alibaba:fastjson:1.2.46'
-
     api 'com.squareup.picasso:picasso:2.4.0'
     api 'com.github.bumptech.glide:glide:4.10.0'
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.3.4'
@@ -93,8 +92,11 @@ dependencies {
     api 'com.github.LRH1993:AutoFlowLayout:1.0.5'
     api 'me.zhanghai.android.materialratingbar:library:1.4.0'
     api 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     //#x5内核
     api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
+
     /*添加依赖*/
     api 'com.github.yuzhiqiang1993:zxing:2.2.5'
+    api files('libs/pinyin4j-2.5.0.jar')
 }

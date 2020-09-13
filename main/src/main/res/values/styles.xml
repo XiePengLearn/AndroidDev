@@ -20,4 +20,11 @@
         <item name="android:windowEnterAnimation">@anim/translation_enter_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/translation_exit_to_bottom</item>
     </style>
+
+    <style name="mypopwindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/activity_open</item>
+        <!-- 指定显示的动画xml -->
+        <item name="android:windowExitAnimation">@anim/activity_exit</item>
+        <!-- 指定消失的动画xml -->
+    </style>
 </resources>

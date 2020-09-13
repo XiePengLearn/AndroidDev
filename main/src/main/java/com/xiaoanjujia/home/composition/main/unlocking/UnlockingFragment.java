@@ -375,7 +375,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     //        } else if (id == R.id.unlocking_visiting_scholar) {
     //            ARouter.getInstance().build("/FaceActivity/FaceActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_to_review) {
-    //            ARouter.getInstance().build("/AddPersonalInformationActivity/AddPersonalInformationActivity").greenChannel().navigation(mContext);
+    //            ARouter.getInstance().build("/SelectHousingActivity/SelectHousingActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_store) {
     //            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
     //        }

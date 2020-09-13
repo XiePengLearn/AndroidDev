@@ -1,7 +1,7 @@
-package com.xiaoanjujia.home.composition.unlocking.add_personal_information;
+package com.xiaoanjujia.home.composition.unlocking.select_housing;
 
 
-import com.xiaoanjujia.home.entities.RootAreaResponse;
+import com.xiaoanjujia.home.entities.SelectHousingResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
@@ -12,14 +12,14 @@ import java.util.TreeMap;
  * @Date: 2019/10
  * @Description:
  */
-public interface AddPersonalInformationContract {
+public interface SelectHousingContract {
 
     interface View {
 
 
         void setResponseData(VisitorPersonInfoResponse mVisitorPersonInfoResponse);
 
-        void setRootAreaData(RootAreaResponse mRootAreaResponse);
+        void setSelectHousingData(SelectHousingResponse mSelectHousingResponse);
 
         void showProgressDialogView();
 
@@ -37,6 +37,6 @@ public interface AddPersonalInformationContract {
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-        void getRootAreaData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getSelectHousingData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }
