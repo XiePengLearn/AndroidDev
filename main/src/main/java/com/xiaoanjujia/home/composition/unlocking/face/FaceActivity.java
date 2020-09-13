@@ -427,6 +427,9 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                                 isHaveFace = false;
                             }
 
+                        }else {
+                            generateVisitorCard.setText("采集人脸");
+                            isHaveFace = false;
                         }
 
 

@@ -186,6 +186,9 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.select_housing.SelectHousingActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.add_info_go_on.AddInfoGoOnActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -1,14 +1,14 @@
-package com.xiaoanjujia.home.composition.unlocking.add_personal_information;
+package com.xiaoanjujia.home.composition.unlocking.add_info_go_on;
 
 import com.google.gson.Gson;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.GoOnSingleAddDataResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.RootAreaResponse;
 import com.xiaoanjujia.home.entities.RootNextRegionResponse;
-import com.xiaoanjujia.home.entities.SingleAddDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
@@ -24,13 +24,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/10
  * @Description: ChangeAuthenticationPresenter
  */
-public class AddPersonalInformationPresenter extends BasePresenter implements AddPersonalInformationContract.Presenter {
+public class AddInfoGoOnPresenter extends BasePresenter implements AddInfoGoOnContract.Presenter {
     private MainDataManager mDataManager;
-    private AddPersonalInformationContract.View mContractView;
+    private AddInfoGoOnContract.View mContractView;
     private static final String TAG = "ChangeAuthenticationPresenter";
 
     @Inject
-    public AddPersonalInformationPresenter(MainDataManager mDataManager, AddPersonalInformationContract.View view) {
+    public AddInfoGoOnPresenter(MainDataManager mDataManager, AddInfoGoOnContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -192,11 +192,11 @@ public class AddPersonalInformationPresenter extends BasePresenter implements Ad
     }
 
     @Override
-    public void getSingleAddData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+    public void getGoOnSingleAddData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getPersionHouseSingleAdd(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
-            private SingleAddDataResponse mDataResponse;
+        Disposable disposable = mDataManager.getPersionHouseAdd(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private GoOnSingleAddDataResponse mDataResponse;
 
             @Override
             public void onNext(ResponseBody responseBody) {
@@ -206,13 +206,13 @@ public class AddPersonalInformationPresenter extends BasePresenter implements Ad
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isStringData(response);
                     if (jsonObjectData) {
-                        mDataResponse = gson.fromJson(response, SingleAddDataResponse.class);
+                        mDataResponse = gson.fromJson(response, GoOnSingleAddDataResponse.class);
                     } else {
-                        mDataResponse = new SingleAddDataResponse();
+                        mDataResponse = new GoOnSingleAddDataResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatusString(response));
                     }
-                    mContractView.setSingleAddData(mDataResponse);
+                    mContractView.setGoOnSingleAddData(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

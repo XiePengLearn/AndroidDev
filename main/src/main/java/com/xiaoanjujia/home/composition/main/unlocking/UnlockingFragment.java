@@ -449,6 +449,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 }
                 startActivity(intent);
             }
+
+//            if (!NoDoubleClickUtils.isDoubleClick()) {
+//                Intent intent = new Intent(mContext, AddInfoGoOnActivity.class);
+//                startActivity(intent);
+//            }
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
             String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());

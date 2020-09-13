@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_knowledge_publish_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/jkx_public_title_home" />
+
+
+    <com.xiaoanjujia.common.util.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/add_personal_info_room_number_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_40"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text=""
+                    android:textColor="@color/bg_red"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="房屋信息:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:id="@+id/add_personal_info_room_number_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="right"
+                    android:maxWidth="200dp"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="#F9FAFB"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18"
+                android:textColor="@color/color_494949"
+                android:textSize="@dimen/sp_10" />
+
+            <LinearLayout
+                android:id="@+id/add_personal_info_type_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text=""
+                    android:textColor="@color/bg_red"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="住户类型:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:id="@+id/add_personal_info_type_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="right"
+                    android:hint="请选择"
+                    android:maxWidth="210dp"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+            <LinearLayout
+                android:id="@+id/invitation_visiting_time_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:visibility="invisible"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text=""
+                    android:textColor="@color/bg_red"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="租赁开始时间:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:id="@+id/invitation_visiting_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="right"
+                    android:hint="请选择租赁开始时间（必选）"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:id="@+id/line_start"
+                android:visibility="invisible"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+            <LinearLayout
+                android:id="@+id/invitation_leave_time_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_19"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_18"
+                android:visibility="invisible"
+                android:paddingRight="@dimen/dp_18">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text=""
+                    android:textColor="@color/bg_red"
+                    android:textSize="@dimen/sp_15" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="租赁结束时间:"
+                    android:textColor="@color/color_494949"
+                    android:textSize="@dimen/sp_17" />
+
+                <TextView
+                    android:id="@+id/invitation_leave_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="right"
+                    android:hint="请选择租赁结束时间（必选）"
+                    android:textColor="@color/color_494949"
+                    android:textColorHint="@color/color_C5C3C3"
+                    android:textSize="@dimen/sp_15" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_6"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arrows_icon_right_orientation" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:id="@+id/line_end"
+                android:visibility="invisible"
+                android:layout_marginLeft="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_18"
+                android:background="#D1D1D1" />
+
+            <com.xiaoanjujia.common.widget.alphaview.AlphaButton
+                android:id="@+id/go_on_add_personal_info_submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_42"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_291"
+                android:layout_marginRight="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_32"
+                android:background="@drawable/bg_shap_button_1"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:text="提交"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </com.xiaoanjujia.common.util.MyScrollView>
+
+
+</LinearLayout>

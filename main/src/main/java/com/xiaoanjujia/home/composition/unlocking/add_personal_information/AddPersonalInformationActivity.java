@@ -1,15 +1,16 @@
 package com.xiaoanjujia.home.composition.unlocking.add_personal_information;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
+import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
@@ -31,12 +33,14 @@ import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailGridLayoutManager;
+import com.xiaoanjujia.home.composition.unlocking.add_info_go_on.AddInfoGoOnActivity;
 import com.xiaoanjujia.home.composition.unlocking.dialog.SelectAreaDialog;
 import com.xiaoanjujia.home.composition.unlocking.reservation_record_details.ReservationRecordDetailGridImageAdapter;
 import com.xiaoanjujia.home.composition.unlocking.select_housing.SelectHousingActivity;
 import com.xiaoanjujia.home.entities.ChooseYourAreaInfo;
 import com.xiaoanjujia.home.entities.RootAreaResponse;
 import com.xiaoanjujia.home.entities.RootNextRegionResponse;
+import com.xiaoanjujia.home.entities.SingleAddDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -91,9 +95,9 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
     @BindView(R2.id.edit_add_personal_info_visiting_name)
     EditText editAddPersonalInfoVisitingName;
     @BindView(R2.id.add_personal_info_sex_man)
-    AlphaButton addPersonalInfoSexMan;
+    AlphaButton sexMan;
     @BindView(R2.id.add_personal_info_sex_woman)
-    AlphaButton addPersonalInfoSexWoman;
+    AlphaButton sexWoman;
     @BindView(R2.id.invitation_add_personal_info_gender_ll)
     LinearLayout invitationAddPersonalInfoGenderLl;
     @BindView(R2.id.edit_add_personal_info_id_number)
@@ -121,6 +125,9 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
     private ArrayList<ISelectAble> mDataNextRegionList;
     private List<RootNextRegionResponse.DataBean> mRootNextRegionDateList;
     private boolean mIsFirstPop = true;
+    private String mIndexCodeLastRoom;
+    private BottomDialog mDialog;
+    private int gender = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -316,11 +323,72 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
                     }
                     Myreceiver.send(mDataNextRegionList);
-                }else {
+                } else {
                     ToastUtil.showToast(AddPersonalInformationActivity.this, "暂无数据");
                 }
 
 
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(AddPersonalInformationActivity.this, "解析数据失败");
+        }
+    }
+
+    //http://localhost:8080/artemis/persionHouse/singleAdd?
+    // personName=景郝11&
+    // gender=1&
+    // orgIndexCode=e3769762-45a5-4128-af84-f444bb0474c6&
+    // certificateType=111&
+    // certificateNo=141125189401290056
+
+
+    public void initSingleAddData() {
+        String addPersonalInfoAreaTvText = addPersonalInfoAreaTv.getText().toString();
+        String addPersonalInfoHousingTvText = addPersonalInfoHousingTv.getText().toString();
+        String addPersonalInfoRoomNumberTvText = addPersonalInfoRoomNumberTv.getText().toString();
+
+        String editAddPersonalInfoVisitingNameText = editAddPersonalInfoVisitingName.getText().toString();
+
+        String editAddPersonalInfoIdNumberText = editAddPersonalInfoIdNumber.getText().toString();
+        String editAddPersonalInfoPhoneText = editAddPersonalInfoPhone.getText().toString();
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("personName", editAddPersonalInfoVisitingNameText);
+        mapParameters.put("gender", String.valueOf(gender));
+        mapParameters.put("orgIndexCode", mIndexCodeLastRoom);
+        mapParameters.put("certificateType", "111");
+        mapParameters.put("certificateNo", editAddPersonalInfoIdNumberText);
+        mapParameters.put("phoneNo", editAddPersonalInfoPhoneText);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getSingleAddData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setSingleAddData(SingleAddDataResponse mSingleAddDataResponse) {
+        try {
+            String code = mSingleAddDataResponse.getStatus();
+            String msg = mSingleAddDataResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                String personId = mSingleAddDataResponse.getData();
+                ToastUtil.showToast(AddPersonalInformationActivity.this, "添加成功");
+                String roomPath1 = addPersonalInfoAreaTv.getText().toString();
+                String roomPath2 = addPersonalInfoHousingTv.getText().toString();
+                String roomPath3 = addPersonalInfoRoomNumberTv.getText().toString();
+                Intent intent = new Intent(mContext, AddInfoGoOnActivity.class);
+                intent.putExtra("personId", personId);
+                intent.putExtra("roomCode", mIndexCodeLastRoom);
+                intent.putExtra("roomPath", roomPath1 + "\n" + roomPath2 + "\n" + roomPath3);
+                startActivity(intent);
+                PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
+                finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
@@ -357,6 +425,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
     @OnClick({R2.id.main_title_back, R2.id.add_personal_info_area_ll,
             R2.id.add_personal_info_housing_ll, R2.id.add_personal_info_room_number_ll,
+            R2.id.add_personal_info_sex_man, R2.id.add_personal_info_sex_woman,
             R2.id.generate_add_personal_info_submit})
     public void onViewClicked(View view) {
         int id = view.getId();
@@ -394,10 +463,67 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
             showDialog();
 
         } else if (id == R.id.generate_add_personal_info_submit) {
+            String addPersonalInfoAreaTvText = addPersonalInfoAreaTv.getText().toString();
+            String addPersonalInfoHousingTvText = addPersonalInfoHousingTv.getText().toString();
+            String addPersonalInfoRoomNumberTvText = addPersonalInfoRoomNumberTv.getText().toString();
 
+            String editAddPersonalInfoVisitingNameText = editAddPersonalInfoVisitingName.getText().toString();
+
+            String editAddPersonalInfoIdNumberText = editAddPersonalInfoIdNumber.getText().toString();
+            String editAddPersonalInfoPhoneText = editAddPersonalInfoPhone.getText().toString();
+            if (Utils.isNull(addPersonalInfoAreaTvText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请选择区域");
+                return;
+            }
+            if (Utils.isNull(addPersonalInfoHousingTvText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请选择小区");
+                return;
+            }
+            if (Utils.isNull(addPersonalInfoRoomNumberTvText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请选择楼栋房号");
+                return;
+            }
+            if (Utils.isNull(editAddPersonalInfoVisitingNameText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请输入2-10位真实姓名");
+                return;
+            }
+            if (Utils.isNull(editAddPersonalInfoIdNumberText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请输入身份证号");
+                return;
+            }
+            if (Utils.isNull(editAddPersonalInfoPhoneText)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请输入手机号码");
+                return;
+            }
+
+            initSingleAddData();
+        } else if (id == R.id.add_personal_info_sex_man) {
+            hideKeyboard(view);
+            gender = 1;
+            sexMan.setBackground(getResources().getDrawable(R.drawable.sex_select));
+            sexMan.setTextColor(getResources().getColor(R.color.color_2AAD67));
+
+            sexWoman.setBackground(getResources().getDrawable(R.drawable.sex_normal));
+            sexWoman.setTextColor(getResources().getColor(R.color.color_494949));
+        } else if (id == R.id.add_personal_info_sex_woman) {
+            hideKeyboard(view);
+            gender = 2;
+
+            sexMan.setBackground(getResources().getDrawable(R.drawable.sex_normal));
+            sexMan.setTextColor(getResources().getColor(R.color.color_494949));
+
+            sexWoman.setBackground(getResources().getDrawable(R.drawable.sex_select));
+            sexWoman.setTextColor(getResources().getColor(R.color.color_2AAD67));
         }
     }
 
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
     @Override
     public void onItemClick(String bankName, String bankCode, int position) {
@@ -488,19 +614,26 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
             @Override
             public void onAddressSelected(ArrayList<ISelectAble> selectAbles) {
                 String result = "";
-                String indexCode = "";
                 for (ISelectAble selectAble : selectAbles) {
                     result += selectAble.getName() + " ";
-                    indexCode += selectAble.getIndexCode() + " ";
+
+                }
+                if (selectAbles.size() > 0) {
+                    mIndexCodeLastRoom = selectAbles.get(selectAbles.size() - 1).getIndexCode();
+                    LogUtil.e(TAG, "=======indexCode:=======" + mIndexCodeLastRoom);
                 }
 
-                LogUtil.e(TAG, "=======result:=======" + result + "=======indexCode:=======" + indexCode);
-                Toast.makeText(AddPersonalInformationActivity.this, result, Toast.LENGTH_SHORT).show();
+                LogUtil.e(TAG, "=======result:=======" + result);
+                //                Toast.makeText(AddInfoGoOnActivity.this, result, Toast.LENGTH_SHORT).show();
+                addPersonalInfoRoomNumberTv.setText(result);
+                if (mDialog != null) {
+                    mDialog.dismiss();
+                }
             }
         });
 
-        BottomDialog dialog = new BottomDialog(this);
-        dialog.init(this, selector);
-        dialog.show();
+        mDialog = new BottomDialog(this);
+        mDialog.init(this, selector);
+        mDialog.show();
     }
 }

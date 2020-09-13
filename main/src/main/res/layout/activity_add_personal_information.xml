@@ -160,6 +160,7 @@
                     android:layout_marginRight="@dimen/dp_16"
                     android:gravity="right"
                     android:hint="请选择"
+                    android:maxWidth="210dp"
                     android:textColor="@color/color_494949"
                     android:textColorHint="@color/color_C5C3C3"
                     android:textSize="@dimen/sp_15" />

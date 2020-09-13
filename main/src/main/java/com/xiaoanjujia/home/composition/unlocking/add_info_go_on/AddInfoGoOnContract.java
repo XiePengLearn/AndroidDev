@@ -1,9 +1,9 @@
-package com.xiaoanjujia.home.composition.unlocking.add_personal_information;
+package com.xiaoanjujia.home.composition.unlocking.add_info_go_on;
 
 
+import com.xiaoanjujia.home.entities.GoOnSingleAddDataResponse;
 import com.xiaoanjujia.home.entities.RootAreaResponse;
 import com.xiaoanjujia.home.entities.RootNextRegionResponse;
-import com.xiaoanjujia.home.entities.SingleAddDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * @Date: 2019/10
  * @Description:
  */
-public interface AddPersonalInformationContract {
+public interface AddInfoGoOnContract {
 
     interface View {
 
@@ -24,7 +24,7 @@ public interface AddPersonalInformationContract {
         void setRootAreaData(RootAreaResponse mRootAreaResponse);
 
         void setRootNextRegionData(RootNextRegionResponse mRootNextRegionResponse);
-        void setSingleAddData(SingleAddDataResponse mSingleAddDataResponse);
+        void setGoOnSingleAddData(GoOnSingleAddDataResponse mGoOnSingleAddDataResponse);
 
         void showProgressDialogView();
 
@@ -45,6 +45,6 @@ public interface AddPersonalInformationContract {
         void getRootAreaData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getRootNextRegionData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
-        void getSingleAddData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getGoOnSingleAddData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

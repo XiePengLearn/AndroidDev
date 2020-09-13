@@ -40,6 +40,24 @@ public class ProjectResponse implements Serializable {
 
     }
 
+    public static boolean isStringData(String content) {
+        try {
+            JSONObject jsonObject = new JSONObject(content);
+            Object object = jsonObject.opt("data");
+            if (object instanceof JSONArray) {
+                return false;
+            } else if (object instanceof JSONObject) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public static String getMessage(String content) {
         try {
             JSONObject jsonObject = new JSONObject(content);

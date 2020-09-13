@@ -4,7 +4,21 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="楼栋房号"
+        android:padding="10dp"
+        android:textColor="#494949"
+        android:textSize="14sp"
+         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e8e8e8" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -31,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_below="@+id/layout_hs_tab"
-            android:background="@android:color/holo_red_light" />
+            android:background="#29AD67" />
 
     </RelativeLayout>
 
