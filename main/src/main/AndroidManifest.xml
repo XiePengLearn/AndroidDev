@@ -178,6 +178,10 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.xiaoanjujia.home.composition.unlocking.add_personal_information.AddPersonalInformationActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

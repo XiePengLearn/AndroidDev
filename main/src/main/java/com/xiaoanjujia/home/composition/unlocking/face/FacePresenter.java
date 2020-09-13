@@ -11,6 +11,7 @@ import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.AddFaceResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
 import com.xiaoanjujia.home.entities.QueryFaceResponse;
+import com.xiaoanjujia.home.entities.UpdateFaceResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
@@ -156,7 +157,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mContractView.hiddenProgressDialogView();
+//                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
@@ -193,7 +194,8 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                //                mContractView.hiddenProgressDialogView();
+                                mContractView.hiddenProgressDialogView();
+                                ToastUtil.showToast(BaseApplication.getInstance(),"上传图片失败");
                 LogUtil.e(TAG, "=======onError:======= ");
             }
 
@@ -233,7 +235,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mContractView.hiddenProgressDialogView();
+//                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
@@ -248,7 +250,53 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+//                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getUpdateFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getFaceUpdateFace(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            private UpdateFaceResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, UpdateFaceResponse.class);
+                    } else {
+                        mDataResponse = new UpdateFaceResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatusString(response));
+                    }
+                    mContractView.setUpdateFace(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
                 mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+//                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);

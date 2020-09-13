@@ -39,6 +39,7 @@ import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.composition.login.login.LoginActivity;
+import com.xiaoanjujia.home.composition.unlocking.add_personal_information.AddPersonalInformationActivity;
 import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
@@ -124,6 +125,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private NormalDialog mNormalDialog;
     private String personName;
     private String personId;
+    private boolean isHaveHouse;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -265,25 +267,25 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         if (!Utils.isNull(personName)) {
                             unlockingHouseTitle.setText(personName);
                         } else {
-                            unlockingHouseTitle.setText("后台还未录入");
-                            unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                            unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
+                            unlockingAddHouseIv.setVisibility(View.GONE);
                         }
                         if (!Utils.isNull(orgPathName)) {
                             unlockingAddHouseTv.setText(orgPathName);
                         } else {
-                            if (!Utils.isNull(personName)) {
-                                unlockingAddHouseTv.setText("暂无房屋信息，请先添加房屋");
-                            } else {
-                                unlockingAddHouseTv.setText("暂无房屋信息");
-                                unlockingAddHouseIv.setVisibility(View.INVISIBLE);
-                            }
+                            unlockingAddHouseTv.setText("暂无房屋信息");
+                            //                            if (!Utils.isNull(personName)) {
+                            //                                unlockingAddHouseTv.setText("暂无房屋信息");
+                            //                            } else {
+                            //                                unlockingAddHouseTv.setText("暂无房屋信息");
+                            //                                unlockingAddHouseIv.setVisibility(View.GONE);
+                            //                            }
                         }
-                        unlockingAddHouseIv.setVisibility(View.INVISIBLE);
                     }
                 } else {
-                    unlockingHouseTitle.setText("平台基本信息未录入");
+                    unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                     unlockingAddHouseTv.setText("暂无房屋信息");
-                    unlockingAddHouseIv.setVisibility(View.INVISIBLE);
+                    unlockingAddHouseIv.setVisibility(View.GONE);
                 }
 
 
@@ -373,7 +375,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     //        } else if (id == R.id.unlocking_visiting_scholar) {
     //            ARouter.getInstance().build("/FaceActivity/FaceActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_to_review) {
-    //            ARouter.getInstance().build("/ReservationRecordDetailsActivity/ReservationRecordDetailsActivity").greenChannel().navigation(mContext);
+    //            ARouter.getInstance().build("/AddPersonalInformationActivity/AddPersonalInformationActivity").greenChannel().navigation(mContext);
     //        } else if (id == R.id.unlocking_visitors_store) {
     //            ARouter.getInstance().build("/publishActivity/publishActivity").greenChannel().navigation(mContext);
     //        }
@@ -425,7 +427,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_two_line_1) {
             //添加个人信息
-
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, AddPersonalInformationActivity.class);
+                if (!Utils.isNull(personId)) {
+                    intent.putExtra("personId", personId);
+                }
+                startActivity(intent);
+            }
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
             if (!NoDoubleClickUtils.isDoubleClick()) {

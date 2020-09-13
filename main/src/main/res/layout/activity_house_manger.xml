@@ -27,9 +27,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat_list"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/dp_18"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_18"
+            android:layout_marginTop="@dimen/dp_18"
             android:layout_marginRight="@dimen/dp_18"
             android:overScrollMode="never"
             android:visibility="visible" />
@@ -58,8 +58,17 @@
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
-                android:background="@drawable/message_empty" />
+                android:background="@drawable/message_empty_no_data_house" />
 
+            <TextView
+                android:id="@+id/no_data_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_95"
+                android:text="暂无房屋信息，请先添加房屋"
+                android:textColor="#767676"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="normal" />
 
         </LinearLayout>
     </RelativeLayout>

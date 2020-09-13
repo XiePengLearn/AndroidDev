@@ -41,6 +41,7 @@ import com.xiaoanjujia.home.composition.me.post_message.GlideEngine;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.PlateNumberDialog;
 import com.xiaoanjujia.home.entities.AddFaceResponse;
 import com.xiaoanjujia.home.entities.QueryFaceResponse;
+import com.xiaoanjujia.home.entities.UpdateFaceResponse;
 import com.xiaoanjujia.home.entities.UploadImageResponse;
 import com.xiaoanjujia.home.entities.VisitorFaceScoreResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
@@ -112,6 +113,9 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
     private PlateNumberDialog reStartOtherCountryDialog;
     private String mPersonId;
     private String mPersonName;
+    private String mPicUri;
+    private boolean isHaveFace = false;
+    private String mPersonPhotoIndexCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,6 +126,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
         personId = intent.getStringExtra("personId");
+
 
         initView();
         initTitle();
@@ -235,14 +240,23 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
         }
     }
 
+    private List<LocalMedia> selectListFace = new ArrayList<>();
 
-    @OnClick({R2.id.main_title_back, R2.id.generate_visitor_card, R2.id.generate_visitor_uploading_face_pic})
+    @OnClick({R2.id.main_title_back, R2.id.generate_visitor_card, R2.id.generate_visitor_uploading_face_pic, R2.id.huzhu_iv})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
-        } else if (id == R.id.main_title_right) {
-            ToastUtil.showToast(BaseApplication.getInstance(), "记录");
+        } else if (id == R.id.huzhu_iv) {
+            if (selectListFace.size() > 0) {
+                PictureSelector.create(FaceActivity.this)
+                        .themeStyle(themeId) // xml设置主题
+                        //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
+                        //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
+                        .isNotPreviewDownload(true)// 预览图片长按是否可以下载
+                        .loadImageEngine(com.xiaoanjujia.home.composition.me.merchants.GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                        .openExternalPreview(0, selectListFace);
+            }
         } else if (id == R.id.generate_visitor_uploading_face_pic) {
             //            上传人脸
             if (selectList2.size() == 0) {
@@ -383,23 +397,34 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                         mPersonId = dataBean.getPersonId();
                         List<VisitorPersonInfoResponse.DataBean.PersonPhotoBean> personPhoto = dataBean.getPersonPhoto();
                         if (personPhoto != null && personPhoto.size() > 0) {
-                            String picUri = personPhoto.get(0).getPicUri();
+
+                            mPersonPhotoIndexCode = personPhoto.get(0).getPersonPhotoIndexCode();
+                            mPicUri = personPhoto.get(0).getPicUri();
                             //                            initQueryFace(picUri, mPersonId);
 
                             RequestOptions options = RequestOptions
                                     .bitmapTransform(new CircleCrop());
 
-                            if (!Utils.isNull(picUri)) {
-                                if (!picUri.startsWith("http")) {
-                                    picUri = MainDataManager.HK_ROOT_URL_PIC + picUri;
+                            if (!Utils.isNull(mPicUri) && !Utils.isNull(mPersonPhotoIndexCode)) {
+
+                                if (!mPicUri.startsWith("http")) {
+                                    mPicUri = MainDataManager.HK_ROOT_URL_PIC + mPicUri;
                                 }
                                 //头像
                                 Glide.with(mContext)
-                                        .load(picUri)
+                                        .load(mPicUri)
                                         .apply(options)
                                         .into(huzhuIv);
-                                
 
+                                LocalMedia localMedia = new LocalMedia();
+                                localMedia.setPath(mPicUri);
+                                selectListFace.clear();
+                                selectListFace.add(localMedia);
+                                generateVisitorCard.setText("重新采集人脸");
+                                isHaveFace = true;
+                            } else {
+                                generateVisitorCard.setText("采集人脸");
+                                isHaveFace = false;
                             }
 
                         }
@@ -442,7 +467,15 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                     int faceScore = data.getFaceScore();
                     if (faceScore > 75) {
                         //                        initData();
-                        initAddFace(mImagePath);
+                        if (!isHaveFace) {
+                            //添加
+                            initAddFace(mImagePath);
+                        } else {
+                            //修改
+                            initUpdateFace(mImagePath);
+                        }
+
+
                     } else {
                         ToastUtil.showToast(FaceActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
                     }
@@ -501,6 +534,54 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
             String msg = mAddFaceResponse.getMessage();
             if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 AddFaceResponse.DataBean data = mAddFaceResponse.getData();
+                //                String faceId = data.getFaceId();
+                //                String faceUrl = data.getFaceUrl();
+                //                String personId = data.getPersonId();
+                //                initQueryFace(faceUrl, personId);
+                initData();
+
+                //                if (data != null) {
+                //                    int faceScore = data.getFaceScore();
+                //                    if (faceScore > 75) {
+                //                        //                        initData();
+                //                    } else {
+                //                        ToastUtil.showToast(FaceActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                //                    }
+                //                }
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    //http://hk.xiaoanjujia.com/artemis/face/updateFace?
+    // faceId=ba1147ab-55c6-4dbb-9c3d-daecd88d2d34&
+    // faceUrl=https://a.xiaoanjujia.com/uploads/images/2020/09-09/20200910105707.jpg **
+    // 具体参数链接及其说明https://open.hikvision.com/docs/cd03aa4347c342c1a6bb9e220a867bc6#bcba56a2
+    public void initUpdateFace(String facePicUrl) {
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("faceId", mPersonPhotoIndexCode);
+        mapParameters.put("faceUrl", facePicUrl);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getUpdateFace(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setUpdateFace(UpdateFaceResponse mUpdateFaceResponse) {
+        try {
+            String code = mUpdateFaceResponse.getStatus();
+            String msg = mUpdateFaceResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                UpdateFaceResponse.DataBean data = mUpdateFaceResponse.getData();
                 //                String faceId = data.getFaceId();
                 //                String faceUrl = data.getFaceUrl();
                 //                String personId = data.getPersonId();

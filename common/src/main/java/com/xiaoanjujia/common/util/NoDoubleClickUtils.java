@@ -6,7 +6,7 @@ package com.xiaoanjujia.common.util;
  * @Description: 防止按钮2连续多次点击
  */
 public class NoDoubleClickUtils {
-    private final static int SPACE_TIME = 1500;//2次点击的间隔时间，单位ms
+    private final static int SPACE_TIME = 500;//2次点击的间隔时间，单位ms
     private static long lastClickTime;
 
     public synchronized static boolean isDoubleClick() {

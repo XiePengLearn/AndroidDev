@@ -1,6 +1,5 @@
 package com.xiaoanjujia.home.composition.unlocking.house_manager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.base.baseadapter.BaseQuickAdapter;
 import com.xiaoanjujia.common.util.LogUtil;
-import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -31,8 +29,6 @@ import com.xiaoanjujia.common.widget.headerview.JDHeaderView;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrFrameLayout;
 import com.xiaoanjujia.common.widget.pulltorefresh.PtrHandler;
 import com.xiaoanjujia.home.MainDataManager;
-import com.xiaoanjujia.home.composition.tenement.quary_detail.QuaryDetailActivity;
-import com.xiaoanjujia.home.entities.PropertyManagementListLogResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -135,15 +131,15 @@ public class HouseManagerActivity extends BaseActivity implements HouseManagerCo
             public boolean onItemChildClick(BaseQuickAdapter baseAdapter, View view, int position) {
                 int i = view.getId();
                 if (i == R.id.item_supervisor_btn_status) {
-                    if (!NoDoubleClickUtils.isDoubleClick()) {
-
-                        List data = adapter.getData();
-                        PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                        int id = dateBean.getId();
-                        Intent intent = new Intent(HouseManagerActivity.this, QuaryDetailActivity.class);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
-                    }
+//                    if (!NoDoubleClickUtils.isDoubleClick()) {
+//
+//                        List data = adapter.getData();
+//                        PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+//                        int id = dateBean.getId();
+//                        Intent intent = new Intent(HouseManagerActivity.this, QuaryDetailActivity.class);
+//                        intent.putExtra("id", id);
+//                        startActivity(intent);
+//                    }
                 }
 
                 return true;
@@ -152,14 +148,14 @@ public class HouseManagerActivity extends BaseActivity implements HouseManagerCo
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (!NoDoubleClickUtils.isDoubleClick()) {
-                    List data = adapter.getData();
-                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
-                    int id = dateBean.getId();
-                    Intent intent = new Intent(HouseManagerActivity.this, QuaryDetailActivity.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
-                }
+//                if (!NoDoubleClickUtils.isDoubleClick()) {
+//                    List data = adapter.getData();
+//                    PropertyManagementListLogResponse.DataBean dateBean = (PropertyManagementListLogResponse.DataBean) data.get(position);
+//                    int id = dateBean.getId();
+//                    Intent intent = new Intent(HouseManagerActivity.this, QuaryDetailActivity.class);
+//                    intent.putExtra("id", id);
+//                    startActivity(intent);
+//                }
             }
         });
 

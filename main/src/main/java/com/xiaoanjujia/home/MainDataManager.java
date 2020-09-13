@@ -613,6 +613,8 @@ public class MainDataManager extends BaseDataManager {
     private static String HK_FACE_CHECK_FACE = "/artemis/face/checkFace";
     //添加人脸
     private static String HK_FACE_ADD_FACE = "/artemis/face/addFace";
+    //修改人脸
+    private static String HK_FACE_UPDATE_FACE = "/artemis/face/updateFace";
     //查询人脸
     private static String HK_FACE_QUERY_FACE = "/artemis/face/queryFace";
     //获取根区域
@@ -788,6 +790,19 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getFaceAddFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHk
                 (HK_ROOT_URL + HK_FACE_ADD_FACE, mapParameters), consumer);
+    }
+/**
+     * 修改人脸
+     * private static String HK_FACE_ADD_FACE = "/artemis/face/addFace";
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getFaceUpdateFace(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (HK_ROOT_URL + HK_FACE_UPDATE_FACE, mapParameters), consumer);
     }
 
     /**

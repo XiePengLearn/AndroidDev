@@ -10,17 +10,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.rmondjone.camera.CameraActivity;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
@@ -29,10 +33,13 @@ import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.me.merchants.GlideEngine;
+import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailGridLayoutManager;
 import com.xiaoanjujia.home.composition.unlocking.permit.PermitActivity;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +58,7 @@ import butterknife.OnClick;
 public class ReservationRecordDetailsActivity extends BaseActivity implements ReservationRecordDetailsContract.View {
     @Inject
     ReservationRecordDetailsPresenter mPresenter;
-    private static final String TAG = "ReservationRecordDetailsActivity";
+    private static final String TAG = "AddPersonalInformationActivity";
     @BindView(R2.id.fake_status_bar)
     View fakeStatusBar;
     @BindView(R2.id.main_title_back)
@@ -87,7 +94,7 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
     @BindView(R2.id.uploading_special_certificate_iv)
     ImageView uploadingSpecialCertificateIv;
     @BindView(R2.id.uploading_special_certificate_rv)
-    RecyclerView uploadingSpecialCertificateRv;
+    RecyclerView recordDetailRv;
     @BindView(R2.id.edit_details_sex_tv)
     TextView editDetailsSexTv;
     @BindView(R2.id.invitation_visiting_gender_ll)
@@ -105,6 +112,7 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visitor_record_details);
+        themeId = R.style.picture_default_style;
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
@@ -212,10 +220,13 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
                 picUri = MainDataManager.HK_ROOT_URL_PIC + picUri;
             }
             //头像
-            Glide.with(mContext)
-                    .load(picUri)
-                    .apply(options)
-                    .into(uploadingSpecialCertificateIv);
+//            Glide.with(mContext)
+//                    .load(picUri)
+//                    .apply(options)
+//                    .into(uploadingSpecialCertificateIv);
+            LocalMedia localMedia = new LocalMedia();
+            localMedia.setPath(picUri);
+            selectList.add(localMedia);
         }
 
         int gender = intent.getIntExtra("gender", 0);
@@ -257,15 +268,48 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
         mainTitleRight.setText("访客通行证");
     }
 
+    private List<LocalMedia> selectList = new ArrayList<>();
+    private ReservationRecordDetailGridImageAdapter mAdapter;
+    private int themeId;
+
     private void initView() {
         DaggerReservationRecordDetailsComponent.builder()
                 .appComponent(getAppComponent())
                 .reservationRecordDetailsPresenterModule(new ReservationRecordDetailsPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
+        RecordDetailGridLayoutManager manager = new RecordDetailGridLayoutManager(ReservationRecordDetailsActivity.this, 1, GridLayoutManager.VERTICAL, false);
+        recordDetailRv.setLayoutManager(manager);
+        mAdapter = new ReservationRecordDetailGridImageAdapter(ReservationRecordDetailsActivity.this, onAddPicClickListener);
+        mAdapter.setList(selectList);
+        //        mAdapter.setSelectMax(5);
+        recordDetailRv.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new ReservationRecordDetailGridImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
 
+                LogUtil.e(TAG, "长度---->" + selectList.size());
+                if (selectList.size() > 0) {
+                    PictureSelector.create(ReservationRecordDetailsActivity.this)
+                            .themeStyle(themeId) // xml设置主题
+                            //                                .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
+                            //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
+                            .isNotPreviewDownload(true)// 预览图片长按是否可以下载
+                            .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                            .openExternalPreview(position, selectList);
+                }
+            }
+        });
     }
 
+    private ReservationRecordDetailGridImageAdapter.onAddPicClickListener1 onAddPicClickListener = new ReservationRecordDetailGridImageAdapter.onAddPicClickListener1() {
+        @Override
+        public void onAddPicClick1() {
+            CameraActivity.startMe(ReservationRecordDetailsActivity.this, 2005, CameraActivity.MongolianLayerType.IDCARD_POSITIVE);
+
+        }
+
+    };
 
     @Override
     protected void onResume() {
