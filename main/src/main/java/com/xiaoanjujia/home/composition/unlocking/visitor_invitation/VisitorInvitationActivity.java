@@ -256,6 +256,13 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
             mapParameters.put("receptionistId", "");
         }
 
+        if (!Util.isNull(editInvitationVisitingIdNumberText)) {
+            mapParameters.put("certificateNo", editInvitationVisitingIdNumberText);
+        }
+        if (!Util.isNull(editInvitationVisitingLicenseNumberText)) {
+            mapParameters.put("plateNo", capitalAbbreviationTvText + editInvitationVisitingLicenseNumberText);
+        }
+
         mapParameters.put("visitorName", editInvitationVisitingNameText);
         mapParameters.put("phoneNo", editInvitationVisitingPhoneText);
         mapParameters.put("visitStartTime", invitationVisitingTimeText);
@@ -263,12 +270,12 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
         mapParameters.put("visitPurpose", editInvitationThingText);
         mapParameters.put("gender", gender);
 
-        mapParameters.put("certificateNo", editInvitationVisitingIdNumberText);
-        mapParameters.put("plateNo", capitalAbbreviationTvText + editInvitationVisitingLicenseNumberText);
 
         mapParameters.put("certificateType", "111");
         mapParameters.put("nation", "1");
-        mapParameters.put("visitorPhoto", mImagePath);
+        if (selectList2.size() != 0) {
+            mapParameters.put("visitorPhoto", mImagePath);
+        }
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -576,26 +583,19 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 return;
             }
 
-
             if (Util.isNull(editInvitationThingText)) {
                 ToastUtil.showToast(mContext.getApplicationContext(), "请输入来访事由");
                 return;
             }
+
+
             if (selectList2.size() == 0) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "请选择人脸照片");
-                return;
-            }
-            if (Util.isNull(editInvitationVisitingIdNumberText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "请输入身份证号");
-                return;
-            }
-            if (Util.isNull(editInvitationVisitingLicenseNumberText)) {
-                ToastUtil.showToast(mContext.getApplicationContext(), "请输入车牌号码");
-                return;
+                initData();
+            } else {
+                uploadPictureToServer(selectList2);
             }
 
 
-            uploadPictureToServer(selectList2);
         } else if (id == R.id.uploading_special_certificate_iv) {
             hideKeyboard(view);
             SelectPicPopupWindow selectPicPopupWindow = new SelectPicPopupWindow(mContext, llKnowledgePublishRoot);

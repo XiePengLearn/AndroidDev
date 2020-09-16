@@ -211,7 +211,6 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                         String certificateNo = dateBean.getCertificateNo();
                         String plateNo = dateBean.getPlateNo();
                         String orderId = dateBean.getOrderId();
-
                         Intent intent = new Intent(ReservationRecordActivity.this, ReservationRecordDetailsActivity.class);
                         intent.putExtra("visitorStatus", visitorStatus);
                         intent.putExtra("visitorName", visitorName);

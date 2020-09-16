@@ -28,7 +28,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.xiaoanjujia.common.BaseApplication;
@@ -58,6 +57,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
 /**
  * @author xiepeng
@@ -310,7 +311,8 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
                 PieDataSet d = new PieDataSet(entries, "");
                 // space between slices
                 d.setSliceSpace(2f);
-                d.setColors(ColorTemplate.VORDIPLOM_COLORS);
+
+                d.setColors(MATERIAL_COLORS);
                 PieData pieData = new PieData(d);
                 // apply styling
                 chart.getDescription().setEnabled(false);
@@ -355,7 +357,9 @@ public class DataAnalysisActivity extends BaseActivity implements DataAnalysisCo
         }
 
     }
-
+    public static final int[] MATERIAL_COLORS = {
+            rgb("#f2d411"), rgb("#f2ab11"), rgb("#f2d411"), rgb("#f2ab11")
+    };
     private SpannableString generateCenterText() {
         SpannableString s = new SpannableString("");
         //        s.setSpan(new RelativeSizeSpan(1.6f), 0, 14, 0);

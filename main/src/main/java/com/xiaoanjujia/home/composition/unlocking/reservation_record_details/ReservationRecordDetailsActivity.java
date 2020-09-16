@@ -336,7 +336,7 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
                 if (data != null && data.size() > 0) {
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
                     if (dataBean != null) {
-                        String orgName = dataBean.getOrgName();
+                        String orgName = dataBean.getOrgPathName();
                         if (!Utils.isNull(orgName)) {
                             editDetailsSuoZaiXiaoQu.setText(orgName);
                         } else {
