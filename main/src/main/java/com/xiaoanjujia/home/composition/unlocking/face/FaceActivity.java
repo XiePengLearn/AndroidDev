@@ -314,6 +314,9 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 if (data != null && data.size() > 0) {
                     VisitorPersonInfoResponse.DataBean dataBean = data.get(0);
                     if (dataBean != null) {
+                        generateVisitorCard.setVisibility(View.VISIBLE);
+                        facePicVisibility.setVisibility(View.GONE);
+                        selectList2.clear();
                         /**
                          *      "marriaged": 0,
                          * 		"orgName": "2户室",
@@ -481,6 +484,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
 
                     } else {
                         ToastUtil.showToast(FaceActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                        hiddenProgressDialog();
                     }
                 }
 

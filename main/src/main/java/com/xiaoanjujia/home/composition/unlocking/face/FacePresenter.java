@@ -6,6 +6,7 @@ import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.ToastUtil;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.AddFaceResponse;
@@ -131,15 +132,25 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mLoginResponse = gson.fromJson(response, VisitorFaceScoreResponse.class);
+                        if (!Utils.isNull(mLoginResponse.getStatus()) && mLoginResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     } else {
                         mLoginResponse = new VisitorFaceScoreResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
                         mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
+                        if (!Utils.isNull(mLoginResponse.getStatus()) && mLoginResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     }
                     mContractView.setFaceScoreData(mLoginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ToastUtil.showToast(BaseApplication.getInstance(),"人脸检测失败,请更换人脸照片");
+                    ToastUtil.showToast(BaseApplication.getInstance(), "人脸检测失败,请更换人脸照片");
                 }
 
             }
@@ -157,7 +168,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
@@ -184,6 +195,12 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     UploadImageResponse mUploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
 
                     mContractView.setUploadPicture(mUploadImageResponse);
+
+                    if (mUploadImageResponse.getStatus() == 1) {
+                        //不做操作
+                    } else {
+                        mContractView.hiddenProgressDialogView();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -194,8 +211,8 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                                mContractView.hiddenProgressDialogView();
-                                ToastUtil.showToast(BaseApplication.getInstance(),"上传图片失败");
+                mContractView.hiddenProgressDialogView();
+                ToastUtil.showToast(BaseApplication.getInstance(), "上传图片失败");
                 LogUtil.e(TAG, "=======onError:======= ");
             }
 
@@ -226,16 +243,22 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, AddFaceResponse.class);
+                        if (!Utils.isNull(mDataResponse.getStatus()) && mDataResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     } else {
                         mDataResponse = new AddFaceResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatusString(response));
+                        mContractView.hiddenProgressDialogView();
                     }
                     mContractView.setAddFace(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
@@ -250,7 +273,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
@@ -272,16 +295,22 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, UpdateFaceResponse.class);
+                        if (!Utils.isNull(mDataResponse.getStatus()) && mDataResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     } else {
                         mDataResponse = new UpdateFaceResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatusString(response));
+                        mContractView.hiddenProgressDialogView();
                     }
                     mContractView.setUpdateFace(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
@@ -296,7 +325,7 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
@@ -318,10 +347,16 @@ public class FacePresenter extends BasePresenter implements FaceContract.Present
                     boolean jsonObjectData = ProjectResponse.isJsonArrayData(response);
                     if (jsonObjectData) {
                         mDataResponse = gson.fromJson(response, QueryFaceResponse.class);
+                        if (!Utils.isNull(mDataResponse.getStatus()) && mDataResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     } else {
                         mDataResponse = new QueryFaceResponse();
                         mDataResponse.setMessage(ProjectResponse.getMessage(response));
                         mDataResponse.setStatus(ProjectResponse.getStatusString(response));
+                        mContractView.hiddenProgressDialogView();
                     }
                     mContractView.seQueryFace(mDataResponse);
                 } catch (Exception e) {

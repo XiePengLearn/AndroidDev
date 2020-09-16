@@ -80,7 +80,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                 try {
 
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
@@ -183,8 +183,9 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                                 @Override
                                 public void onError(Throwable e) {
                                     super.onError(e);
-                                    //                mContractView.hiddenProgressDialogView();
+                                    mContractView.hiddenProgressDialogView();
                                     LogUtil.e(TAG, "=======onError:======= " + e.toString());
+                                    ToastUtil.showToast(BaseApplication.getInstance(), "图片上传报错");
                                 }
 
                                 @Override
@@ -203,6 +204,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                     public void onError(Throwable e) {
                         // TODO 当压缩过程出现问题时调用
                         ToastUtil.showToast(BaseApplication.getInstance(), "图片在压缩过程中报错");
+                        mContractView.hiddenProgressDialogView();
                     }
                 }).launch();
 
@@ -222,7 +224,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
                 try {
 
                     String response = responseBody.string();
-                    LogUtil.e(TAG, "=======response:=======" + response+"---mapParameters---:"+mapParameters.toString());
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
                     Gson gson = new Gson();
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {

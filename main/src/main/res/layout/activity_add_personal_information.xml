@@ -207,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="访客姓名"
+                    android:text="住户姓名"
                     android:textColor="@color/color_494949"
                     android:textSize="@dimen/sp_17" />
 

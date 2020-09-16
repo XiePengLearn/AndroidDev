@@ -143,6 +143,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initWebView();
         initSetting(this);
         initData();
+        mainTitleContainer.setVisibility(View.GONE);
     }
 
     private void initWebView() {
@@ -169,7 +170,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.INVISIBLE);
-        mainTitleText.setText("开锁");
+        mainTitleText.setText("");
     }
 
     @Override
@@ -323,6 +324,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
+                initData();
                 frame.refreshComplete();
             }
         }, 500);

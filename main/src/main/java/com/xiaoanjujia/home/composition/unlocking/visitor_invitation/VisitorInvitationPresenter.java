@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.ProjectResponse;
@@ -126,6 +127,11 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
                     UploadImageResponse mUploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
+                    if (mUploadImageResponse.getStatus() == 1) {
+                        //不做操作
+                    } else {
+                        mContractView.hiddenProgressDialogView();
+                    }
 
                     mContractView.setUploadPicture(mUploadImageResponse);
                 } catch (Exception e) {
@@ -138,7 +144,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                                mContractView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= ");
             }
 
@@ -171,10 +177,16 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                     boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
                     if (jsonObjectData) {
                         mLoginResponse = gson.fromJson(response, VisitorFaceScoreResponse.class);
+                        if (!Utils.isNull(mLoginResponse.getStatus()) && mLoginResponse.getStatus().equals("1")) {
+                            //不做操作
+                        } else {
+                            mContractView.hiddenProgressDialogView();
+                        }
                     } else {
                         mLoginResponse = new VisitorFaceScoreResponse();
                         mLoginResponse.setMessage(ProjectResponse.getMessage(response));
                         mLoginResponse.setStatus(ProjectResponse.getStatusString(response));
+                        mContractView.hiddenProgressDialogView();
                     }
                     mContractView.setFaceScoreData(mLoginResponse);
                 } catch (Exception e) {
@@ -196,7 +208,7 @@ public class VisitorInvitationPresenter extends BasePresenter implements Visitor
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-//                mContractView.hiddenProgressDialogView();
+                //                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);

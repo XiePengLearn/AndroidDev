@@ -664,6 +664,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                         initData();
                     } else {
                         ToastUtil.showToast(VisitorInvitationActivity.this, "人脸评分低于75分,请重新选择人脸照片!");
+                        hiddenProgressDialog();
                     }
                 }
 

@@ -2,8 +2,10 @@ package com.xiaoanjujia.home.composition.me.post_message;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
+import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.FeedBackResponse;
@@ -191,6 +193,9 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
                     UploadImageResponse mUploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
+                    if (mUploadImageResponse.getStatus() != 1) {
+                        mContractView.hiddenProgressDialogView();
+                    }
 
                     mContractView.setUploadImage(mUploadImageResponse);
                 } catch (Exception e) {
@@ -203,8 +208,9 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                //                mContractView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= ");
+                ToastUtil.showToast(BaseApplication.getInstance(), "图片上传报错");
             }
 
             @Override
@@ -236,7 +242,9 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
                     UploadImageResponse mUploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
-
+                    if (mUploadImageResponse.getStatus() != 1) {
+                        mContractView.hiddenProgressDialogView();
+                    }
                     mContractView.setUploadPicture(mUploadImageResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -248,8 +256,9 @@ public class PostMessagePresenter extends BasePresenter implements PostMessageCo
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                //                mContractView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
                 LogUtil.e(TAG, "=======onError:======= ");
+                ToastUtil.showToast(BaseApplication.getInstance(), "图片上传报错");
             }
 
             @Override
