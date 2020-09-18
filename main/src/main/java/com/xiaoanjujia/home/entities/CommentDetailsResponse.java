@@ -52,6 +52,16 @@ public class CommentDetailsResponse  implements Serializable {
         private int all_count;
         private int good_count;
         private int difference_count;
+        private int average_count;
+
+        public int getAverage_count() {
+            return average_count;
+        }
+
+        public void setAverage_count(int average_count) {
+            this.average_count = average_count;
+        }
+
         private int liksestatus; //liksestatus:1已点,0未点
 
         public int getLiksestatus() {

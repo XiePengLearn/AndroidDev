@@ -134,6 +134,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
     private int page = 1;
     private String type = "all_count";
     private MaterialRatingBar comNormalRatingbar;
+    private MaterialRatingBar libraryTinted_normal_ratingbar;
     private int mCommunityId;
     private String shop_phone;
     private String advertisement_url;
@@ -198,6 +199,8 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
         itemCompositionBtnCommentLl = itemHeader.findViewById(R.id.item_composition_btn_comment_ll);
         itemCompositionBtnMerchantLl = itemHeader.findViewById(R.id.item_composition_btn_merchant_ll);
         comNormalRatingbar = itemHeader.findViewById(R.id.com_normal_ratingbar);
+        libraryTinted_normal_ratingbar = itemHeader.findViewById(R.id.library_tinted_normal_ratingbar);
+
 
         itemShopNameTv = itemHeader.findViewById(R.id.item_shop_name_tv);
         itemShopNamePublishNumberTv = itemHeader.findViewById(R.id.item_shop_name_publish_number_tv);
@@ -907,6 +910,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                     int good_count = messageDate.getGood_count();
                     int difference_count = messageDate.getDifference_count();
                     int liksestatus = messageDate.getLiksestatus();
+                    int average_count = messageDate.getAverage_count();
+                    libraryTinted_normal_ratingbar.setRating(average_count);
+//                    libraryTinted_normal_ratingbar.setNumStars(average_count);
                     // liksestatus:1已点,0未点
                     if (liksestatus == 1) {
                         ivCollect.setImageResource(R.drawable.star_icon);
