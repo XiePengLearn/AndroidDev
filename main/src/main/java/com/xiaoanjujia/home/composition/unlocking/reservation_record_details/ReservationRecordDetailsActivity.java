@@ -226,6 +226,7 @@ public class ReservationRecordDetailsActivity extends BaseActivity implements Re
 //                    .into(uploadingSpecialCertificateIv);
             LocalMedia localMedia = new LocalMedia();
             localMedia.setPath(picUri);
+            localMedia.setAndroidQToPath(picUri);
             selectList.add(localMedia);
         }
 

@@ -433,6 +433,7 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                         for (int i = 0; i < log_imgs.size(); i++) {
                             LocalMedia localMedia = new LocalMedia();
                             localMedia.setPath(log_imgs.get(i));
+                            localMedia.setAndroidQToPath(log_imgs.get(i));
                             selectList.add(localMedia);
                         }
 
@@ -790,9 +791,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
             } else {
-//                if (!TextUtils.isEmpty(msg)) {
-//                    ToastUtil.showToast(this.getApplicationContext(), msg);
-//                }
+                //                if (!TextUtils.isEmpty(msg)) {
+                //                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                //                }
 
             }
         } catch (Exception e) {
@@ -831,9 +832,9 @@ public class CompositionDetailActivity extends BaseActivity implements Compositi
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(this);
             } else {
-//                if (!TextUtils.isEmpty(msg)) {
-//                    ToastUtil.showToast(this.getApplicationContext(), msg);
-//                }
+                //                if (!TextUtils.isEmpty(msg)) {
+                //                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                //                }
 
             }
         } catch (Exception e) {

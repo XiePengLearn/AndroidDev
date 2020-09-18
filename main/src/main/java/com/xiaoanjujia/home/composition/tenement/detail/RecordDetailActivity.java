@@ -221,6 +221,7 @@ public class RecordDetailActivity extends BaseActivity implements RecordDetailCo
                         for (int i = 0; i < log_imgs.size(); i++) {
                             LocalMedia localMedia = new LocalMedia();
                             localMedia.setPath(log_imgs.get(i));
+                            localMedia.setAndroidQToPath(log_imgs.get(i));
                             selectList.add(localMedia);
                         }
 

@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.me.merchants;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
@@ -132,7 +133,8 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
         final long beforeRequestTime = System.currentTimeMillis();
         List<File> imageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
-            imageFile.add(new File(LocalMediaList.get(i).getCompressPath()));
+            imageFile.add(new File(SdkVersionUtils.checkedAndroid_Q() ?
+                    LocalMediaList.get(i).getAndroidQToPath() : LocalMediaList.get(i).getCompressPath()));
         }
         List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
         Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {
@@ -180,7 +182,8 @@ public class PublishPresenter extends BasePresenter implements PublishContract.P
         final long beforeRequestTime = System.currentTimeMillis();
         List<File> imageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
-            imageFile.add(new File(LocalMediaList.get(i).getCompressPath()));
+            imageFile.add(new File(SdkVersionUtils.checkedAndroid_Q() ?
+                    LocalMediaList.get(i).getAndroidQToPath() : LocalMediaList.get(i).getCompressPath()));
         }
         List<MultipartBody.Part> partList = filesToMultipartBodyParts(imageFile);
         Disposable disposable = mDataManager.executePostImageHeader(headers, null, partList, new ErrorDisposableObserver<ResponseBody>() {

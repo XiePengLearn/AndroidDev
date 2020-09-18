@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
@@ -137,7 +138,8 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
         final List<File> imageFile = new ArrayList<>();
         final List<File> lubanImageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
-            imageFile.add(new File(LocalMediaList.get(i).getPath()));
+            imageFile.add(new File(SdkVersionUtils.checkedAndroid_Q() ?
+                    LocalMediaList.get(i).getAndroidQToPath() : LocalMediaList.get(i).getCompressPath()));
         }
         Luban.with(BaseApplication.getInstance())
                 .load(imageFile)

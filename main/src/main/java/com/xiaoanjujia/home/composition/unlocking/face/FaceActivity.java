@@ -421,6 +421,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
 
                                 LocalMedia localMedia = new LocalMedia();
                                 localMedia.setPath(mPicUri);
+                                localMedia.setAndroidQToPath(mPicUri);
                                 selectListFace.clear();
                                 selectListFace.add(localMedia);
                                 generateVisitorCard.setText("重新采集人脸");

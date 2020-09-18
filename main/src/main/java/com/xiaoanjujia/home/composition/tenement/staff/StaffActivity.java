@@ -421,6 +421,7 @@ public class StaffActivity extends BaseActivity implements StaffContract.View {
             String stringExtraPath = data.getStringExtra(KEY_IMAGE_PATH);
             LocalMedia localMedia = new LocalMedia();
             localMedia.setPath(stringExtraPath);
+            localMedia.setAndroidQToPath(stringExtraPath);
             selectList.add(localMedia);
             mAdapter.notifyDataSetChanged();
 

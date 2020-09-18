@@ -225,6 +225,7 @@ public class QuaryDetailActivity extends BaseActivity implements QuaryDetailCont
                         for (int i = 0; i < log_imgs.size(); i++) {
                             LocalMedia localMedia = new LocalMedia();
                             localMedia.setPath(log_imgs.get(i));
+                            localMedia.setAndroidQToPath(log_imgs.get(i));
                             selectList.add(localMedia);
                         }
 
