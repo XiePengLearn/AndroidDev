@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -25,7 +26,8 @@ import java.util.Locale;
  */
 public class Utils {
 
-    private Utils() {}
+    private Utils() {
+    }
 
     /**
      * @param context used to get system services
@@ -37,7 +39,7 @@ public class Utils {
             Point size = new Point();
             wm.getDefaultDisplay().getSize(size);
             return size.x;
-        }else{
+        } else {
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             return dm.widthPixels;
         }
@@ -70,12 +72,14 @@ public class Utils {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
         return Math.round(px);
     }
+
     public static boolean isNull(String text) {
         if (text != null && !TextUtils.isEmpty(text)) {
             return false;
         }
         return true;
     }
+
     public static int getVirtualBarHeight(Context context) {
         int vh = 0;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -98,26 +102,78 @@ public class Utils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(date);
     }
+
     public static String getTimeMonth(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         return format.format(date);
     }
+
     public static String getTimeMonthWithHour(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(date);
     }
+
     public static String getToday() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
         return format.format(date);
     }
+
     public static String getTodayWithHour() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
-        return format.format(date);
+        return format.format(getToday());
     }
+
+    public static String getMonthAdd1() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        try {
+            Calendar ct = Calendar.getInstance();
+            ct.setTime(date);
+            ct.add(Calendar.MONTH, +1);
+            return format.format(ct.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+
+    }
+
+    public static String getMonthAdd1WithHour() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        try {
+            Calendar ct = Calendar.getInstance();
+            ct.setTime(date);
+            ct.add(Calendar.MONTH, +1);
+            return format.format(ct.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String getYearAdd1() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        try {
+            Calendar ct = Calendar.getInstance();
+            ct.setTime(date);
+            ct.add(Calendar.YEAR, +1);
+            return format.format(ct.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static int compareDate(String DATE1, String DATE2) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         try {

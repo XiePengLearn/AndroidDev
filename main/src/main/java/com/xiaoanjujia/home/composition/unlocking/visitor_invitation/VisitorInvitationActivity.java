@@ -326,7 +326,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                    ToastUtil.showToast(this.getApplicationContext(), "访客预约提交数据失败");
                 }
 
             }
@@ -633,7 +633,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
                 finish();
             } else {
-                ToastUtil.showToast(this.getApplicationContext(), msg);
+                ToastUtil.showToast(this.getApplicationContext(), "上传人脸照片失败");
                 hiddenProgressDialogView();
             }
         } catch (Exception e) {

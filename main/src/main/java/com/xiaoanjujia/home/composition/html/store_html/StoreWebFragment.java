@@ -24,6 +24,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseFragment;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -163,6 +164,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.putExtra("param", "web");
                     startActivity(intent);
+                    AppManager.getInstance().finishOthersToActivity(LoginActivity.class);
                 }
             });
         }

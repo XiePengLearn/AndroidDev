@@ -157,7 +157,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
                 finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                    ToastUtil.showToast(this.getApplicationContext(), "获取二维码数据失败");
                 }
 
             }

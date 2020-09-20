@@ -38,6 +38,7 @@ import com.xiaoanjujia.home.composition.unlocking.dialog.SelectAreaDialog;
 import com.xiaoanjujia.home.composition.unlocking.reservation_record_details.ReservationRecordDetailGridImageAdapter;
 import com.xiaoanjujia.home.composition.unlocking.select_housing.SelectHousingActivity;
 import com.xiaoanjujia.home.entities.ChooseYourAreaInfo;
+import com.xiaoanjujia.home.entities.GoOnSingleAddDataResponse;
 import com.xiaoanjujia.home.entities.RootAreaResponse;
 import com.xiaoanjujia.home.entities.RootNextRegionResponse;
 import com.xiaoanjujia.home.entities.SingleAddDataResponse;
@@ -128,6 +129,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
     private String mIndexCodeLastRoom;
     private BottomDialog mDialog;
     private int gender = 1;
+    private String personId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -148,7 +150,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("添加个人信息");
+        mainTitleText.setText("添加户主信息");
     }
 
     private List<LocalMedia> selectList = new ArrayList<>();
@@ -198,9 +200,11 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
 
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                hiddenProgressDialogView();
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
             } else {
+                hiddenProgressDialogView();
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
                 }
@@ -244,11 +248,13 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
 
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                hiddenProgressDialogView();
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
             } else {
+                hiddenProgressDialogView();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "获取根区域失败");
                 }
 
             }
@@ -329,11 +335,13 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
 
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                hiddenProgressDialogView();
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
             } else {
+                hiddenProgressDialogView();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "获取下一级区域失败");
                 }
 
             }
@@ -377,7 +385,56 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
             String code = mSingleAddDataResponse.getStatus();
             String msg = mSingleAddDataResponse.getMessage();
             if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
-                String personId = mSingleAddDataResponse.getData();
+                personId = mSingleAddDataResponse.getData();
+                ToastUtil.showToast(AddPersonalInformationActivity.this, "添加成功");
+                String roomPath1 = addPersonalInfoAreaTv.getText().toString();
+                String roomPath2 = addPersonalInfoHousingTv.getText().toString();
+                String roomPath3 = addPersonalInfoRoomNumberTv.getText().toString();
+                Intent intent = new Intent(mContext, AddInfoGoOnActivity.class);
+                intent.putExtra("personId", personId);
+                intent.putExtra("roomCode", mIndexCodeLastRoom);
+                intent.putExtra("roomPath", roomPath1 + "\n" + roomPath2 + "\n" + roomPath3);
+                startActivity(intent);
+                PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
+                finish();
+
+
+//                initSingleAddData(personId, "0", mIndexCodeLastRoom);
+            } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                hiddenProgressDialogView();
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
+
+            } else {
+                hiddenProgressDialogView();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "添加信息失败,请重试");
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(AddPersonalInformationActivity.this, "解析数据失败");
+        }
+    }
+
+    private void initSingleAddData(String personId, String relatedType, String roomCode) {
+
+        Map<String, Object> mapParameters = new HashMap<>(4);
+        mapParameters.put("personId", personId);
+        mapParameters.put("relatedType", relatedType);
+        mapParameters.put("roomCode", roomCode);
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+        mPresenter.getGoOnSingleAddData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setGoOnSingleAddData(GoOnSingleAddDataResponse mGoOnSingleAddDataResponse) {
+        try {
+            String code = mGoOnSingleAddDataResponse.getStatus();
+            String msg = mGoOnSingleAddDataResponse.getMessage();
+            if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
+                //                String data = mGoOnSingleAddDataResponse.getData();
+                //                ToastUtil.showToast(AddInfoGoOnActivity.this, "成功");
                 ToastUtil.showToast(AddPersonalInformationActivity.this, "添加成功");
                 String roomPath1 = addPersonalInfoAreaTv.getText().toString();
                 String roomPath2 = addPersonalInfoHousingTv.getText().toString();
@@ -391,10 +448,12 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
                 finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
+                hiddenProgressDialogView();
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddPersonalInformationActivity.this);
             } else {
+                hiddenProgressDialogView();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(AddPersonalInformationActivity.this, msg);
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "继续添加信息失败,请重试");
                 }
 
             }

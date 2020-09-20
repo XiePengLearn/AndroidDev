@@ -446,7 +446,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "获取人脸信息失败");
                 }
 
             }
@@ -562,7 +562,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "采集人脸照片失败");
                 }
 
             }
@@ -610,7 +610,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "更新人脸照片失败,请重试");
                 }
 
             }
@@ -675,7 +675,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), msg);
+                    ToastUtil.showToast(FaceActivity.this.getApplicationContext(), "查询人脸评分失败,请重试");
                 }
 
             }

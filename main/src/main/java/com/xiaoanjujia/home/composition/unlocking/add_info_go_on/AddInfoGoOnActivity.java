@@ -28,6 +28,7 @@ import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.success.submit.SubmitSuccessActivity;
 import com.xiaoanjujia.home.composition.tenement.detail.RecordDetailGridLayoutManager;
 import com.xiaoanjujia.home.composition.unlocking.dialog.GoOnAddInfoDialog;
 import com.xiaoanjujia.home.composition.unlocking.reservation_record_details.ReservationRecordDetailGridImageAdapter;
@@ -379,14 +380,17 @@ public class AddInfoGoOnActivity extends BaseActivity implements AddInfoGoOnCont
                 //                String data = mGoOnSingleAddDataResponse.getData();
                 //                ToastUtil.showToast(AddInfoGoOnActivity.this, "成功");
                 ToastUtil.showToast(this.getApplicationContext(), "提交成功");
-                ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(mContext);
+                //                ARouter.getInstance().build("/SubmitSuccessActivity/SubmitSuccessActivity").greenChannel().navigation(mContext);
+                Intent intent = new Intent(mContext, SubmitSuccessActivity.class);
+                intent.putExtra("hindText", "hindText");
+                startActivity(intent);
                 finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(AddInfoGoOnActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(AddInfoGoOnActivity.this, msg);
+                    ToastUtil.showToast(AddInfoGoOnActivity.this, "继续添加信息失败,请重试");
                 }
 
             }
@@ -443,10 +447,10 @@ public class AddInfoGoOnActivity extends BaseActivity implements AddInfoGoOnCont
 
             initSingleAddData();
         } else if (id == R.id.invitation_visiting_time_ll) {
-//            hideKeyboard(view);
+            //            hideKeyboard(view);
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         } else if (id == R.id.invitation_leave_time_ll) {
-//            hideKeyboard(view);
+            //            hideKeyboard(view);
             mPvTimeLeave.show(view);
 
         }

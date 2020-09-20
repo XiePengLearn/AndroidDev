@@ -207,7 +207,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
                 finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                    ToastUtil.showToast(this.getApplicationContext(), "获取访客通行证数据失败");
                 }
 
             }

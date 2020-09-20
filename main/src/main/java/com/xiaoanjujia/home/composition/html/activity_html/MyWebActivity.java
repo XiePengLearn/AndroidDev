@@ -22,6 +22,7 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
@@ -159,6 +160,8 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
                 Intent intent = new Intent(MyWebActivity.this, LoginActivity.class);
                 intent.putExtra("param", "web");
                 startActivity(intent);
+                AppManager.getInstance().finishOthersToActivity(LoginActivity.class);
+
             }
         });
     }

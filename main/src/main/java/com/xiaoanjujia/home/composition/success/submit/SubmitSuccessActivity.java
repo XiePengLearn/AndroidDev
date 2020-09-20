@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.success.submit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -59,6 +61,10 @@ public class SubmitSuccessActivity extends BaseActivity implements SubmitSuccess
     LinearLayout mainTitleContainer;
     @BindView(R2.id.register_success_entry)
     AlphaButton registerSuccessEntry;
+    @BindView(R2.id.text1_submit)
+    TextView text1Submit;
+    @BindView(R2.id.text2_submit)
+    TextView text2Submit;
 
     private LoginResponse loginResponse;
     private boolean isClickForgetPassword = false;
@@ -71,7 +77,14 @@ public class SubmitSuccessActivity extends BaseActivity implements SubmitSuccess
         setContentView(R.layout.submit_success_activity);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
-
+        Intent intent = getIntent();
+        if (intent != null) {
+            String hindText = intent.getStringExtra("hindText");
+            if (!Utils.isNull(hindText) && hindText.equals("hindText")) {
+                text1Submit.setText("提交成功");
+                text1Submit.setVisibility(View.INVISIBLE);
+            }
+        }
         initView();
         initTitle();
 

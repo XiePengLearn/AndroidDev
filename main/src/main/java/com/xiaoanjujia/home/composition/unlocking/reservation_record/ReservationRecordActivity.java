@@ -90,10 +90,22 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     RelativeLayout rlNoData;
     @BindView(R2.id.no_data_tv)
     TextView noDataTv;
-    @BindView(R2.id.select_date_tv2)
-    TextView selectDateTv2;
     @BindView(R2.id.select_date_ll2)
     LinearLayout selectDateLl2;
+    @BindView(R2.id.select_date_start_ll)
+    LinearLayout selectDateStartLl;
+    @BindView(R2.id.select_date_end_tv)
+    TextView selectDateEndTv;
+    @BindView(R2.id.select_date_end_ll)
+    LinearLayout selectDateEndLl;
+    @BindView(R2.id.select_date_tv2)
+    TextView selectDateTv2;
+    @BindView(R2.id.select_date_ll_start_2)
+    LinearLayout selectDateLlStart2;
+    @BindView(R2.id.select_date_end_tv2)
+    TextView selectDateEndTv2;
+    @BindView(R2.id.select_date_ll_end_2)
+    LinearLayout selectDateLlEnd2;
 
 
     private LayoutInflater mLayoutInflater;
@@ -111,6 +123,8 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     private String mSelectTimeFangKe;
     private String mSelectTimeFangKe2;
     private int typePage = 1; //访客记录   2 来访记录
+    private String todayEndTime;
+    private String todayEndTime2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,14 +141,24 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
 
         initTitle();
         initTimePicker();
+        initEndTimePicker();
         initTimePicker2();
+        initEndTimePicker2();
         String today = Utils.getToday();
-        mSelectTimeFangKe = Utils.getTodayWithHour();
-        mSelectTimeFangKe2 = Utils.getTodayWithHour();
+        String todayEnd = Utils.getMonthAdd1();
+
+        mSelectTimeFangKe = today + " 00:00:00";
+        mSelectTimeFangKe2 = today + " 00:00:00";
+
+        todayEndTime = todayEnd + " 00:00:00";
+        todayEndTime2 = todayEnd + " 00:00:00";
 
         selectDateTv.setText(today);
         selectDateTv2.setText(today);
-        initData(page, mSelectTimeFangKe);
+
+        selectDateEndTv.setText(todayEnd);
+        selectDateEndTv2.setText(todayEnd);
+        initData(page, mSelectTimeFangKe, todayEndTime);
     }
 
     /**
@@ -324,13 +348,14 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     // pageSize=10&
     // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
     // visitorName=井号
-    private void initData(int page, String time) {
+    private void initData(int page, String startTime, String endTime) {
 
-        Map<String, Object> mapParameters = new HashMap<>(4);
+        Map<String, Object> mapParameters = new HashMap<>(5);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
-        mapParameters.put("visitStartTimeBegin", time);
+        mapParameters.put("visitStartTimeBegin", startTime);
+        mapParameters.put("visitEndTimeEnd", endTime);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -342,13 +367,14 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     // pageSize=10&
     // receptionistId=aebcf3a7b59b4fb889daaea2b45c2bf5&
     // visitorName=井号
-    private void initData2(int page, String time) {
+    private void initData2(int page, String startTime, String endTime) {
 
-        Map<String, Object> mapParameters = new HashMap<>(4);
+        Map<String, Object> mapParameters = new HashMap<>(5);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
-        mapParameters.put("visitStartTimeBegin", time);
+        mapParameters.put("visitStartTimeBegin", startTime);
+        mapParameters.put("visitEndTimeEnd", endTime);
 
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
@@ -402,7 +428,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                 finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                    ToastUtil.showToast(this.getApplicationContext(), "获取访客记录失败");
                 }
 
             }
@@ -444,7 +470,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             } else {
                 adapter.loadMoreComplete();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), "获取访客记录失败");
                 }
 
             }
@@ -500,7 +526,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
                 finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                    ToastUtil.showToast(this.getApplicationContext(), "获取来访记录失败");
                 }
 
             }
@@ -541,7 +567,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             } else {
                 adapter2.loadMoreComplete();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), "获取来访记录失败");
                 }
 
             }
@@ -580,7 +606,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             @Override
             public void run() {
                 page++;
-                initMoreData(page, mSelectTimeFangKe);
+                initMoreData(page, mSelectTimeFangKe, todayEndTime);
             }
         }, 500);
 
@@ -588,7 +614,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             @Override
             public void run() {
                 page2++;
-                initMoreData2(page2, mSelectTimeFangKe2);
+                initMoreData2(page2, mSelectTimeFangKe2, todayEndTime2);
             }
         }, 500);
     }
@@ -596,28 +622,29 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
     //page
     //datetype :时间类型默认----是1(当天)2(本周)3(本月)4(上月)5(近三月)
     //id:角色id  默认0  全部
-    private void initMoreData2(int page, String time) {
+    private void initMoreData2(int page, String time, String endTime) {
 
-        Map<String, Object> mapParameters = new HashMap<>(4);
+        Map<String, Object> mapParameters = new HashMap<>(5);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
         //        mapParameters.put("visitorName", mPersonName);
         mapParameters.put("visitStartTimeBegin", time);
-
+        mapParameters.put("visitEndTimeEnd", endTime);
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getLaiFangMoreData(headersTreeMap, mapParameters);
     }
 
-    private void initMoreData(int page, String time) {
+    private void initMoreData(int page, String time, String endTime) {
 
-        Map<String, Object> mapParameters = new HashMap<>(4);
+        Map<String, Object> mapParameters = new HashMap<>(5);
         mapParameters.put("pageNo", String.valueOf(page));
         mapParameters.put("pageSize", String.valueOf(10));
         mapParameters.put("receptionistId", personId);
         //        mapParameters.put("visitorName", mPersonName);
         mapParameters.put("visitStartTimeBegin", time);
+        mapParameters.put("visitEndTimeEnd", endTime);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -631,11 +658,11 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             public void run() {
                 if (typePage == 1) {
                     page = 1;
-                    initData(page, mSelectTimeFangKe);
+                    initData(page, mSelectTimeFangKe, todayEndTime);
                     frame.refreshComplete();
                 } else {
                     page2 = 1;
-                    initData2(page2, mSelectTimeFangKe2);
+                    initData2(page2, mSelectTimeFangKe2, todayEndTime2);
                     frame.refreshComplete();
                 }
 
@@ -643,7 +670,9 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
         }, 500);
     }
 
-    @OnClick({R2.id.main_title_back, R2.id.fang_ke_record, R2.id.lai_fang_record, R2.id.select_date_ll, R2.id.select_date_ll2})
+    @OnClick({R2.id.main_title_back, R2.id.fang_ke_record, R2.id.lai_fang_record,
+            R2.id.select_date_start_ll, R2.id.select_date_ll_start_2,
+            R2.id.select_date_end_ll, R2.id.select_date_ll_end_2})
     public void onViewClicked(View view) {
         int viewId = view.getId();
         if (viewId == R.id.main_title_back) {
@@ -664,7 +693,7 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             page = 1;
             adapter.setEnableLoadMore(true);
             adapter.loadMoreComplete();
-            initData(page, mSelectTimeFangKe);
+            initData(page, mSelectTimeFangKe, todayEndTime);
         } else if (viewId == R.id.lai_fang_record) {
             typePage = 2;
             noDataTv.setText("暂无来访记录");
@@ -680,12 +709,16 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             page2 = 1;
             adapter2.setEnableLoadMore(true);
             adapter2.loadMoreComplete();
-            initData2(page2, mSelectTimeFangKe2);
+            initData2(page2, mSelectTimeFangKe2, todayEndTime2);
 
-        } else if (viewId == R.id.select_date_ll) {
+        } else if (viewId == R.id.select_date_start_ll) {
             mPvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
-        } else if (viewId == R.id.select_date_ll2) {
+        } else if (viewId == R.id.select_date_ll_start_2) {
             mPvTime2.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+        } else if (viewId == R.id.select_date_end_ll) {
+            mPvEndTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+        } else if (viewId == R.id.select_date_ll_end_2) {
+            mPvEndTime2.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
         }
     }
 
@@ -699,12 +732,37 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             public void onTimeSelect(Date date, View view) {
                 //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 String mVisitorTime = Utils.getTimeMonth(date);
-                mSelectTimeFangKe = Utils.getTimeMonthWithHour(date);
+                mSelectTimeFangKe = Utils.getTimeMonth(date)+ " 00:00:00";
                 selectDateTv.setText(mVisitorTime);
                 page = 1;
                 adapter.setEnableLoadMore(true);
                 adapter.loadMoreComplete();
-                initData(page, mSelectTimeFangKe);
+                initData(page, mSelectTimeFangKe, todayEndTime);
+            }
+        })
+                .setItemVisibleCount(2)
+                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
+    }
+
+    private TimePickerView mPvEndTime;
+
+    private void initEndTimePicker() {//Dialog 模式下，在底部弹出
+        //时间选择器
+
+        mPvEndTime = new TimePickerBuilder(ReservationRecordActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                String mVisitorTime = Utils.getTimeMonth(date);
+                todayEndTime = Utils.getTimeMonth(date) + " 23:59:59";
+                selectDateEndTv.setText(mVisitorTime);
+                page = 1;
+                adapter.setEnableLoadMore(true);
+                adapter.loadMoreComplete();
+                initData(page, mSelectTimeFangKe, todayEndTime);
             }
         })
                 .setItemVisibleCount(2)
@@ -724,12 +782,37 @@ public class ReservationRecordActivity extends BaseActivity implements Reservati
             public void onTimeSelect(Date date, View view) {
                 //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 String mVisitorTime = Utils.getTimeMonth(date);
-                mSelectTimeFangKe2 = Utils.getTimeMonthWithHour(date);
+                mSelectTimeFangKe2 = Utils.getTimeMonth(date)+ " 00:00:00";
                 selectDateTv2.setText(mVisitorTime);
                 page2 = 1;
                 adapter2.setEnableLoadMore(true);
                 adapter2.loadMoreComplete();
-                initData(page2, mSelectTimeFangKe2);
+                initData2(page2, mSelectTimeFangKe2, todayEndTime2);
+            }
+        })
+                .setItemVisibleCount(2)
+                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setSubmitColor(getResources().getColor(R.color.color_2AAD67))//确定按钮文字颜色
+                .setCancelColor(getResources().getColor(R.color.color_2AAD67))//取消按钮文字颜色
+                .build();
+    }
+
+    private TimePickerView mPvEndTime2;
+
+    private void initEndTimePicker2() {//Dialog 模式下，在底部弹出
+        //时间选择器
+
+        mPvEndTime2 = new TimePickerBuilder(ReservationRecordActivity.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                //                Toast.makeText(VisitorInvitationActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                String mVisitorTime = Utils.getTimeMonth(date);
+                todayEndTime2 = Utils.getTimeMonth(date) + " 23:59:59";
+                selectDateEndTv2.setText(mVisitorTime);
+                page2 = 1;
+                adapter2.setEnableLoadMore(true);
+                adapter2.loadMoreComplete();
+                initData2(page2, mSelectTimeFangKe2, todayEndTime2);
             }
         })
                 .setItemVisibleCount(2)
