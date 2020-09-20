@@ -494,7 +494,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(FaceActivity.this);
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(FaceActivity.this, msg);
+                    ToastUtil.showToast(FaceActivity.this, "人脸评分失败,请重新选择人脸照片!");
                 }
 
             }
@@ -518,7 +518,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
                 finish();
             } else {
-                ToastUtil.showToast(this.getApplicationContext(), msg);
+                ToastUtil.showToast(this.getApplicationContext(), "图片上传失败");
                 hiddenProgressDialogView();
             }
         } catch (Exception e) {
