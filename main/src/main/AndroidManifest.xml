@@ -190,6 +190,13 @@
         <activity
             android:name="com.xiaoanjujia.home.composition.unlocking.add_info_go_on.AddInfoGoOnActivity"
             android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="com.xiaoanjujia.home.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

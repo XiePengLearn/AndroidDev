@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -15,16 +16,24 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.xiaoanjujia.common.base.BaseActivity;
+import com.xiaoanjujia.common.util.MyScrollView;
 import com.xiaoanjujia.common.util.ResponseCode;
 import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
+import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
+import com.xiaoanjujia.common.widget.screenshot.ScreenShotActivity;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.entities.PermitResponse;
 import com.xiaoanjujia.home.tool.Api;
 import com.yzq.zxinglibrary.encode.CodeCreator;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +48,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/visitorActivity/visitorActivity")
+@Route(path = "/permitActivity/permitActivity")
 public class PermitActivity extends BaseActivity implements PermitContract.View {
     @Inject
     PermitPresenter mPresenter;
@@ -68,8 +77,13 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
     ImageView qrCodeIv;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+    @BindView(R2.id.generate_visitor_card)
+    AlphaButton generateVisitorCard;
+    @BindView(R2.id.myscrollview)
+    MyScrollView myscrollview;
 
     private String orderId;
+    private Bitmap bitmap;
 
 
     @Override
@@ -93,7 +107,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
         mainTitleText.setText("访客通行证");
-//        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.close_white));
+        //        mainTitleRight.setImageDrawable(getResources().getDrawable(R.drawable.close_white));
     }
 
     private void initView() {
@@ -124,7 +138,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
     @Override
     public void setResponseData(PermitResponse mPermitResponse) {
         try {
-            String code =mPermitResponse.getStatus();
+            String code = mPermitResponse.getStatus();
             String msg = mPermitResponse.getMessage();
             if (code.equals(ResponseCode.SUCCESS_OK_STRING)) {
                 List<PermitResponse.DataBean> dataList = mPermitResponse.getData();
@@ -195,7 +209,7 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
                         }
                     }
                     String qrCode = dataBean.getQRCode();
-                    Bitmap bitmap = CodeCreator.createQRCode(qrCode, 400, 400, null);
+                    bitmap = CodeCreator.createQRCode(qrCode, 400, 400, null);
                     qrCodeIv.setImageBitmap(bitmap);
 
                 }
@@ -236,15 +250,85 @@ public class PermitActivity extends BaseActivity implements PermitContract.View 
         }
     }
 
-    @OnClick({R2.id.main_title_back, R2.id.main_title_right})
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+
+            case REQ_CODE_ACT: {
+                if (resultCode == RESULT_OK && data != null) {
+                    UMImage thumb = new UMImage(this, bitmap);
+                    UMImage image = new UMImage(PermitActivity.this, new File(data.getData().toString()));//本地文件
+                    image.setThumb(thumb);
+                    new ShareAction(PermitActivity.this).withText("访客通行证").withMedia(image).setDisplayList(SHARE_MEDIA.WEIXIN)
+                            .setCallback(shareListener).open();
+                } else {
+                    UMImage thumb = new UMImage(this, bitmap);
+                    UMImage image = new UMImage(PermitActivity.this, bitmap);//bitmap文件
+                    image.setThumb(thumb);
+                    new ShareAction(PermitActivity.this).withText("访客通行证").withMedia(image).setDisplayList(SHARE_MEDIA.WEIXIN)
+                            .setCallback(shareListener).open();
+                }
+            }
+            break;
+
+        }
+    }
+
+    private static final int REQ_CODE_PER = 0x2304;
+    private static final int REQ_CODE_ACT = 0x2305;
+
+    @OnClick({R2.id.main_title_back, R2.id.main_title_right, R2.id.generate_visitor_card})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
             finish();
         } else if (id == R.id.main_title_right) {
             finish();
+        } else if (id == R.id.generate_visitor_card) {
+            myscrollview.scrollTo(0, 0);
+            startActivityForResult(ScreenShotActivity.createIntent(this, null, 0), REQ_CODE_ACT);
         }
     }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(PermitActivity.this, "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(PermitActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(PermitActivity.this, "取消了", Toast.LENGTH_LONG).show();
+
+        }
+    };
 
 
 }

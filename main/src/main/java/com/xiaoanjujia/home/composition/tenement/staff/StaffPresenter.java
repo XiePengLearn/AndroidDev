@@ -139,7 +139,7 @@ public class StaffPresenter extends BasePresenter implements StaffContract.Prese
         final List<File> lubanImageFile = new ArrayList<>();
         for (int i = 0; i < LocalMediaList.size(); i++) {
             imageFile.add(new File(SdkVersionUtils.checkedAndroid_Q() ?
-                    LocalMediaList.get(i).getAndroidQToPath() : LocalMediaList.get(i).getCompressPath()));
+                    LocalMediaList.get(i).getAndroidQToPath() : LocalMediaList.get(i).getPath()));
         }
         Luban.with(BaseApplication.getInstance())
                 .load(imageFile)

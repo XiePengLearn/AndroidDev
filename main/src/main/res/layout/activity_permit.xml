@@ -12,6 +12,7 @@
 
     <com.xiaoanjujia.common.util.MyScrollView
         android:layout_width="match_parent"
+        android:id="@+id/myscrollview"
         android:layout_height="match_parent"
         android:scrollbars="none">
 
@@ -156,7 +157,7 @@
                     android:layout_height="@dimen/dp_54"
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="@dimen/dp_4"
-                    android:layout_marginTop="@dimen/dp_22"
+                    android:layout_marginTop="@dimen/dp_52"
                     android:layout_marginRight="@dimen/dp_4"
                     android:background="@drawable/bg_shap_button_7"
                     android:gravity="center"

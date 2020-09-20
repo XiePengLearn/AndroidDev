@@ -51,6 +51,16 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="667" />
+        <activity
+            android:name="com.xiaoanjujia.common.widget.screenshot.ScreenShotActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Dialog">
+            <intent-filter>
+                <action android:name="androidyuan.shooter"></action>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -100,4 +100,13 @@ dependencies {
     api 'com.github.yuzhiqiang1993:zxing:2.2.5'
     api files('libs/pinyin4j-2.5.0.jar')
     api project(path: ':address_library')
+    api files('libs/umeng-common-9.2.7.jar')
+    api files('libs/umeng-share-core-7.1.1.jar')
+    api files('libs/umeng-share-wechat-full-7.1.1.jar')
+    api files('libs/umeng-shareboard-widget-7.1.1.jar')
+    api files('libs/umeng-sharetool-7.1.1.jar')
+    api files('libs/utdid4all-1.5.2-proguard.jar')
+    api files('libs/wechat-sdk-android-without-mta-5.4.3.jar')
+    api files('libs/umeng-crash-armeabi-v0.0.5.aar')
+    api files('libs/umeng-asms-armeabi-v1.1.3.aar')
 }
