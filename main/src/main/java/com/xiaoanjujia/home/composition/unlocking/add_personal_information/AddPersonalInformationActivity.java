@@ -150,7 +150,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
      */
     private void initTitle() {
         mainTitleBack.setVisibility(View.VISIBLE);
-        mainTitleText.setText("添加户主信息");
+        mainTitleText.setText("添加住户信息");
     }
 
     private List<LocalMedia> selectList = new ArrayList<>();

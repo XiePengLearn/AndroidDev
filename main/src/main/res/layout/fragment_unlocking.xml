@@ -235,7 +235,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/dp_8"
                             android:gravity="center"
-                            android:text="添加个人信息 "
+                            android:text="添加住户"
                             android:textColor="@color/color_494949"
 
                             android:textSize="@dimen/sp_13" />
