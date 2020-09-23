@@ -60,6 +60,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
     ImageView qrHouseCodeIv;
     @BindView(R2.id.ll_knowledge_publish_root)
     LinearLayout llKnowledgePublishRoot;
+    private String personId;
 
 
     @Override
@@ -70,6 +71,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
         unbinder = ButterKnife.bind(this);
         Intent intent = getIntent();
         String houseName = intent.getStringExtra("houseName");
+        personId = intent.getStringExtra("personId");
         if (!Utils.isNull(houseName)) {
             qrHouseTitleTv.setText(houseName);
         } else {
@@ -100,7 +102,7 @@ public class VisitorActivity extends BaseActivity implements VisitorContract.Vie
 
     private void initData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("personId", "65277007e605477fb80eaa25dd91e4b8");
+        mapParameters.put("personId", personId);
 
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 

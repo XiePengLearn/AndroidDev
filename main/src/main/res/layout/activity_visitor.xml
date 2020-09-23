@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp_50"
+                    android:layout_marginTop="@dimen/dp_30"
                     android:paddingLeft="@dimen/dp_18"
                     android:paddingRight="@dimen/dp_18"
                     android:text="小安"
@@ -55,10 +55,10 @@
 
                 <ImageView
                     android:id="@+id/qr_house_code_iv"
-                    android:layout_width="@dimen/dp_184"
-                    android:layout_height="@dimen/dp_184"
+                    android:layout_width="@dimen/dp_260"
+                    android:layout_height="@dimen/dp_260"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp_53"
+                    android:layout_marginTop="@dimen/dp_30"
                     android:scaleType="fitXY"
                     android:src="@drawable/default_icon" />
 
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp_69"
+                    android:layout_marginTop="@dimen/dp_29"
                     android:paddingLeft="@dimen/dp_18"
                     android:paddingRight="@dimen/dp_18"
                     android:text="当前二维码有效时间为24小时"

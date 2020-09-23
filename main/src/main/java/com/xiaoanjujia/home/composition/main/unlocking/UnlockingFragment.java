@@ -410,6 +410,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 if (!Utils.isNull(personName)) {
                     intent.putExtra("houseName", personName);
                 }
+                if (!Utils.isNull(personId)) {
+                    intent.putExtra("personId", personId);
+                }
                 startActivity(intent);
             }
         } else if (id == R.id.unlocking_one_line_2) {
