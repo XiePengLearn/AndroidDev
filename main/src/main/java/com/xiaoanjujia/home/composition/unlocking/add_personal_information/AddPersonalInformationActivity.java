@@ -399,7 +399,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
                 finish();
 
 
-//                initSingleAddData(personId, "0", mIndexCodeLastRoom);
+                //                initSingleAddData(personId, "0", mIndexCodeLastRoom);
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 hiddenProgressDialogView();
@@ -407,8 +407,12 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
 
             } else {
                 hiddenProgressDialogView();
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(AddPersonalInformationActivity.this, "添加信息失败,请重试");
+                if (!TextUtils.isEmpty(msg) && msg.equalsIgnoreCase("Unqiue Field[certificateNo] Already Exists")) {
+                    ToastUtil.showToast(AddPersonalInformationActivity.this, "身份证号码已经存在,请更换身份证号码");
+                } else {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(AddPersonalInformationActivity.this, "添加信息失败,请重试");
+                    }
                 }
 
             }

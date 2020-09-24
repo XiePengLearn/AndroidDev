@@ -156,7 +156,7 @@ public class MyWebActivity extends BaseActivity implements MyWebContract.View, A
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                PrefUtils.writeSESSION_ID("", BaseApplication.getInstance());
                 Intent intent = new Intent(MyWebActivity.this, LoginActivity.class);
                 intent.putExtra("param", "web");
                 startActivity(intent);

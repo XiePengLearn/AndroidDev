@@ -160,7 +160,7 @@ public class StoreWebFragment extends BaseFragment implements StoreWebFragmentCo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    PrefUtils.writeAuthenticationStatus("", BaseApplication.getInstance());
+                    PrefUtils.writeSESSION_ID("", BaseApplication.getInstance());
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.putExtra("param", "web");
                     startActivity(intent);
