@@ -493,9 +493,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_three_line_2) {
-            normalDialog();
+            ToastUtil.showToast(BaseApplication.getInstance(),"暂不开放");
         } else if (id == R.id.unlocking_three_line_3) {
-            normalDialog();
+            ToastUtil.showToast(BaseApplication.getInstance(),"暂不开放");
         } else if (id == R.id.unlocking_four_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_four_line_2) {

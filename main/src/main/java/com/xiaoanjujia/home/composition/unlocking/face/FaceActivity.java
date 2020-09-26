@@ -771,7 +771,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                 .enableCrop(false)// 是否裁剪
                 .compress(true)// 是否压缩
-                .compressQuality(50)// 图片压缩后输出质量 0~ 100
+                .compressQuality(40)// 图片压缩后输出质量 0~ 100
                 .synOrAsy(true)//同步false或异步true 压缩 默认同步
                 .queryMaxFileSize(100)// 只查多少M以内的图片、视频、音频  单位M
                 //.compressSavePath(getPath())//压缩图片保存地址
@@ -791,7 +791,7 @@ public class FaceActivity extends BaseActivity implements FaceContract.View {
                 //                        .videoMinSecond(10)
                 //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                 //.cropCompressQuality(90)// 注：已废弃 改用cutOutQuality()
-                .cutOutQuality(50)// 裁剪输出质量 默认100
+                .cutOutQuality(40)// 裁剪输出质量 默认100
                 .minimumCompressSize(70)// 小于100kb的图片不压缩
                 //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.rotateEnabled(true) // 裁剪是否可旋转图片

@@ -282,7 +282,7 @@
                     android:layout_marginTop="@dimen/dp_21"
                     android:layout_marginRight="@dimen/dp_18"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:id="@+id/unlocking_three_line_1"
@@ -292,7 +292,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:visibility="invisible">
+                        android:visibility="visible">
 
                         <ImageView
                             android:layout_width="@dimen/dp_55"
@@ -307,7 +307,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/dp_8"
                             android:gravity="center"
-                            android:text="人员关怀"
+                            android:text="上门维修"
                             android:textColor="@color/color_494949"
 
                             android:textSize="@dimen/sp_13" />
@@ -322,7 +322,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:visibility="invisible">
+                        android:visibility="visible">
 
                         <ImageView
                             android:layout_width="@dimen/dp_55"
@@ -352,10 +352,10 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:visibility="invisible">
+                        android:visibility="visible">
 
                         <ImageView
-                            android:layout_width="@dimen/dp_55"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp_55"
                             android:layout_gravity="center_horizontal"
                             android:scaleType="fitXY"
@@ -367,7 +367,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/dp_8"
                             android:gravity="center"
-                            android:text="物业报修"
+                            android:text="物业通知"
                             android:textColor="@color/color_494949"
 
                             android:textSize="@dimen/sp_13" />
