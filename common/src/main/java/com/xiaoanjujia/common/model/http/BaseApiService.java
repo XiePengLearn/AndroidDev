@@ -60,6 +60,14 @@ public interface BaseApiService {
             @FieldMap Map<String, Object> maps,
             @HeaderMap TreeMap<String, String> headers
     );
+
+    @POST()
+    @FormUrlEncoded
+    Observable<ResponseBody> executePostNoParam(
+            @Url() String url,
+            @FieldMap Map<String, Object> maps,
+            @HeaderMap TreeMap<String, String> headers
+    );
     @POST()
     @FormUrlEncoded
     Observable<ResponseBody> executePostHk(

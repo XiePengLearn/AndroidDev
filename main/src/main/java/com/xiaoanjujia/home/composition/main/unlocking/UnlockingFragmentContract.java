@@ -1,6 +1,7 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
 
+import com.xiaoanjujia.home.entities.PhoneResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ public interface UnlockingFragmentContract {
 
 
         void setResponseData(VisitorPersonInfoResponse mVisitorPersonInfoResponse);
+        void setGetPhoneData(PhoneResponse mPhoneResponse);
 
         void showProgressDialogView();
 
@@ -33,6 +35,7 @@ public interface UnlockingFragmentContract {
         Map getData();
 
         void getRequestData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getGetPhoneData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }

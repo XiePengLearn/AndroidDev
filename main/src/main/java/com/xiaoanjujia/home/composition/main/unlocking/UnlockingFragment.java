@@ -44,6 +44,7 @@ import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
+import com.xiaoanjujia.home.entities.PhoneResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -143,6 +144,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initWebView();
         initSetting(this);
         initData();
+        initGetPhoneData();
         mainTitleContainer.setVisibility(View.GONE);
     }
 
@@ -267,18 +269,18 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         String orgPathName = dataBean.getOrgPathName();
                         if (!Utils.isNull(personName)) {
                             unlockingHouseTitle.setText(personName);
-                            PrefUtils.writePersonInfo("true",BaseApplication.getInstance());
+                            PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
                         } else {
                             unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                             unlockingAddHouseIv.setVisibility(View.GONE);
-                            PrefUtils.writePersonInfo("",BaseApplication.getInstance());
+                            PrefUtils.writePersonInfo("", BaseApplication.getInstance());
                         }
                         if (!Utils.isNull(orgPathName)) {
                             unlockingAddHouseTv.setText(orgPathName);
-                            PrefUtils.writePersonInfo("true",BaseApplication.getInstance());
+                            PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
                         } else {
                             unlockingAddHouseTv.setText("暂无房屋信息");
-                            PrefUtils.writePersonInfo("",BaseApplication.getInstance());
+                            PrefUtils.writePersonInfo("", BaseApplication.getInstance());
                             //                            if (!Utils.isNull(personName)) {
                             //                                unlockingAddHouseTv.setText("暂无房屋信息");
                             //                            } else {
@@ -291,7 +293,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                     unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                     unlockingAddHouseTv.setText("暂无房屋信息");
                     unlockingAddHouseIv.setVisibility(View.GONE);
-                    PrefUtils.writePersonInfo("",BaseApplication.getInstance());
+                    PrefUtils.writePersonInfo("", BaseApplication.getInstance());
                 }
 
 
@@ -306,6 +308,36 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } catch (Exception e) {
             ToastUtil.showToast(mActivity.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initGetPhoneData() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getGetPhoneData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setGetPhoneData(PhoneResponse mPhoneResponse) {
+        try {
+            int code = mPhoneResponse.getStatus();
+            String msg = mPhoneResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -401,8 +433,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_one_line_1) {
             //            ARouter.getInstance().build("/visitorActivity/visitorActivity").greenChannel().navigation(mContext);
             String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
-            if(Utils.isNull(mPersonInfo)){
-                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+            if (Utils.isNull(mPersonInfo)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请先添加个人信息");
                 return;
             }
             if (!NoDoubleClickUtils.isDoubleClick()) {
@@ -418,8 +450,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_one_line_2) {
             //房屋管理
             String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
-            if(Utils.isNull(mPersonInfo)){
-                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+            if (Utils.isNull(mPersonInfo)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请先添加个人信息");
                 return;
             }
             if (!NoDoubleClickUtils.isDoubleClick()) {
@@ -455,15 +487,15 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 startActivity(intent);
             }
 
-//            if (!NoDoubleClickUtils.isDoubleClick()) {
-//                Intent intent = new Intent(mContext, AddInfoGoOnActivity.class);
-//                startActivity(intent);
-//            }
+            //            if (!NoDoubleClickUtils.isDoubleClick()) {
+            //                Intent intent = new Intent(mContext, AddInfoGoOnActivity.class);
+            //                startActivity(intent);
+            //            }
         } else if (id == R.id.unlocking_two_line_2) {
             //人脸识别
             String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
-            if(Utils.isNull(mPersonInfo)){
-                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+            if (Utils.isNull(mPersonInfo)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请先添加个人信息");
                 return;
             }
             if (!NoDoubleClickUtils.isDoubleClick()) {
@@ -476,8 +508,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_two_line_3) {
             //访客预约
             String mPersonInfo = PrefUtils.readPersonInfo(BaseApplication.getInstance());
-            if(Utils.isNull(mPersonInfo)){
-                ToastUtil.showToast(BaseApplication.getInstance(),"请先添加个人信息");
+            if (Utils.isNull(mPersonInfo)) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "请先添加个人信息");
                 return;
             }
             if (!NoDoubleClickUtils.isDoubleClick()) {
@@ -493,9 +525,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         } else if (id == R.id.unlocking_three_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_three_line_2) {
-            ToastUtil.showToast(BaseApplication.getInstance(),"暂不开放");
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
         } else if (id == R.id.unlocking_three_line_3) {
-            ToastUtil.showToast(BaseApplication.getInstance(),"暂不开放");
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
         } else if (id == R.id.unlocking_four_line_1) {
             normalDialog();
         } else if (id == R.id.unlocking_four_line_2) {
