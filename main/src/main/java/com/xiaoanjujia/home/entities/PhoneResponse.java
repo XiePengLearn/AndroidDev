@@ -1,7 +1,6 @@
 package com.xiaoanjujia.home.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author xp
@@ -10,15 +9,16 @@ import java.util.List;
  */
 public class PhoneResponse implements Serializable {
 
+
     /**
      * status : 1
      * message : OK
-     * data : [{"cate_name":"社区超市","cate_iimg_url":"https://a.xiaoanjujia.com/uploads/images/2020/07-21/8e04c6aacc1579e166be4728fb225b02.jpg"},{"cate_name":"搬家服务","cate_iimg_url":"https://a.xiaoanjujia.com/uploads/images/2020/07-21/8e04c6aacc1579e166be4728fb225b02.jpg"}]
+     * data : {"id":1,"phone":"18635805566"}
      */
 
     private int status;
     private String message;
-    private List<ComcateListsResponse.DataBean> data;
+    private DataBean data;
 
     public int getStatus() {
         return status;
@@ -36,46 +36,37 @@ public class PhoneResponse implements Serializable {
         this.message = message;
     }
 
-    public List<ComcateListsResponse.DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<ComcateListsResponse.DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
         /**
-         * cate_name : 社区超市
-         * cate_iimg_url : https://a.xiaoanjujia.com/uploads/images/2020/07-21/8e04c6aacc1579e166be4728fb225b02.jpg
+         * id : 1
+         * phone : 18635805566
          */
 
-        private String cate_name;
-        private String cate_iimg_url;
-        private int cate_id;
+        private int id;
+        private String phone;
 
-        public int getCate_id() {
-            return cate_id;
+        public int getId() {
+            return id;
         }
 
-        public void setCate_id(int cate_id) {
-            this.cate_id = cate_id;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public String getCate_name() {
-            return cate_name;
+        public String getPhone() {
+            return phone;
         }
 
-        public void setCate_name(String cate_name) {
-            this.cate_name = cate_name;
-        }
-
-        public String getCate_iimg_url() {
-            return cate_iimg_url;
-        }
-
-        public void setCate_iimg_url(String cate_iimg_url) {
-            this.cate_iimg_url = cate_iimg_url;
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
     }
 }

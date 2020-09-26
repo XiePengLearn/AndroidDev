@@ -127,6 +127,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private String personName;
     private String personId;
     private boolean isHaveHouse;
+    private String phone;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -183,7 +184,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private void normalDialog() {
         if (mNormalDialog == null) {
             mNormalDialog = new NormalDialog(getActivity(), onLoadBookCodeDialogClickListener);
-            mNormalDialog.setDialogContent(String.format("确定拨打物业电话吗?%s", "13888888888"));
+            mNormalDialog.setDialogContent(String.format("确定拨打物业电话吗?%s", phone));
             mNormalDialog.setFirstAlTvStr("取消");
             mNormalDialog.setSecondAlTvStr("确定");
             mNormalDialog.setDialogTitle("提示!");
@@ -198,7 +199,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             if (id == R.id.dialog_normal_first_btn_tv) {
                 mNormalDialog.dismiss();
             } else if (id == R.id.dialog_normal_second_btn_tv) {
-                String shop_phone = "15601267550";
+                String shop_phone = phone;
                 if (!Utils.isNull(shop_phone)) {
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     Uri data = Uri.parse("tel:" + shop_phone);
@@ -313,7 +314,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
     private void initGetPhoneData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
         mPresenter.getGetPhoneData(headersTreeMap, mapParameters);
@@ -325,7 +326,11 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             int code = mPhoneResponse.getStatus();
             String msg = mPhoneResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
+                PhoneResponse.DataBean data = mPhoneResponse.getData();
+                if(data != null){
+                    phone = data.getPhone();
 
+                }
 
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -523,13 +528,22 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
-            normalDialog();
+            if(!Utils.isNull(phone)){
+                normalDialog();
+            }else {
+                ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
+            }
         } else if (id == R.id.unlocking_three_line_2) {
             ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
         } else if (id == R.id.unlocking_three_line_3) {
             ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
         } else if (id == R.id.unlocking_four_line_1) {
-            normalDialog();
+            if(!Utils.isNull(phone)){
+                normalDialog();
+            }else {
+                ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
+            }
+
         } else if (id == R.id.unlocking_four_line_2) {
 
         } else if (id == R.id.unlocking_four_line_3) {
