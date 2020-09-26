@@ -647,8 +647,10 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
     }
 
     private DataProvider.DataReceiver Myreceiver;
+    private List<String> mIndexCodeList;
 
     private void showDialog() {
+        mIndexCodeList = new ArrayList<>();
         Selector selector = new Selector(this, 5);
 
         selector.setDataProvider(new DataProvider() {
@@ -656,11 +658,21 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
             public void provideData(int currentDeep, int preId, DataReceiver receiver) {
                 Myreceiver = receiver;
                 if (mIsFirstPop) {
-                    mIndexCodeNext = mIndexCode;
+
                     mIsFirstPop = false;
+                    mIndexCodeList.add(currentDeep, mIndexCode);
+                    mIndexCodeNext = mIndexCodeList.get(currentDeep);
                 } else {
                     if (mRootNextRegionDateList.size() > preId) {
-                        mIndexCodeNext = mRootNextRegionDateList.get(preId).getIndexCode();
+                        //                        mIndexCodeNext = mRootNextRegionDateList.get(preId).getIndexCode();
+                        if(mIndexCodeList.size()==currentDeep){
+                            mIndexCodeList.add(currentDeep, mRootNextRegionDateList.get(preId).getIndexCode());
+                        }
+
+
+                    }
+                    if (mIndexCodeList.size() > currentDeep) {
+                        mIndexCodeNext = mIndexCodeList.get(currentDeep);
                     }
 
                 }

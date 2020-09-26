@@ -181,7 +181,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private void normalDialog() {
         if (mNormalDialog == null) {
             mNormalDialog = new NormalDialog(getActivity(), onLoadBookCodeDialogClickListener);
-            mNormalDialog.setDialogContent(String.format("确定拨打物业电话吗?%s", "15610267550"));
+            mNormalDialog.setDialogContent(String.format("确定拨打物业电话吗?%s", "13888888888"));
             mNormalDialog.setFirstAlTvStr("取消");
             mNormalDialog.setSecondAlTvStr("确定");
             mNormalDialog.setDialogTitle("提示!");
