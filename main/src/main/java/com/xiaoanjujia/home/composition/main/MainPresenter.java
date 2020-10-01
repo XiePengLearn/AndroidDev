@@ -6,6 +6,8 @@ import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
+import com.xiaoanjujia.home.entities.ProjectResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,5 +122,52 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
         });
         addDisposabe(disposable);
     }
+    @Override
+    public void getGetProDisplayData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mMainView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getProDisplay(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
 
+            private ProDisplayDataResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isStringData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, ProDisplayDataResponse.class);
+                    } else {
+                        mDataResponse = new ProDisplayDataResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mMainView.setGetProDisplayData(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mMainView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mMainView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mMainView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
 }

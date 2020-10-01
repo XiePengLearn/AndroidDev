@@ -2,6 +2,7 @@ package com.xiaoanjujia.home.composition.main;
 
 
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,7 +15,7 @@ public interface MainContract {
     interface View {
         void setLoginData(LoginResponse loginResponse);
 
-
+        void setGetProDisplayData(ProDisplayDataResponse mProDisplayDataResponse);
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -28,7 +29,7 @@ public interface MainContract {
 
         Map getData();
         void getLoginData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
-
+        void getGetProDisplayData(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 
 }

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -24,15 +25,21 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseActivity;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
+import com.xiaoanjujia.common.util.PrefUtils;
+import com.xiaoanjujia.common.util.ResponseCode;
+import com.xiaoanjujia.common.util.ToastUtil;
 import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.bottomnavigation.BadgeItem;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationBar;
 import com.xiaoanjujia.common.widget.bottomnavigation.BottomNavigationItem;
+import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.html.me_html.MeWebFragment;
 import com.xiaoanjujia.home.composition.html.store_html.StoreWebFragment;
@@ -40,6 +47,12 @@ import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
 import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
 import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
 import com.xiaoanjujia.home.entities.LoginResponse;
+import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
+import com.xiaoanjujia.home.tool.Api;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -69,6 +82,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE,
             Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE};
     private AlertDialog dialog;
+    private String mProDisplayData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +99,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         //roletype:---0是普通用户---1是物业主管----2是物业人员
         initView();
         initData();
+        initGetDisplayData();
         //         版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -200,56 +215,70 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     .show(mUnlockingFragment)
                     .commitAllowingStateLoss();
         } else if (position == 1) {
-            if (mCommunityFragment == null) {
-                mCommunityFragment = CommunityFragment.newInstance();
-                addFragment(R.id.main_container, mCommunityFragment, "community_fg");
+            if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
+            }else {
+                if (mCommunityFragment == null) {
+                    mCommunityFragment = CommunityFragment.newInstance();
+                    addFragment(R.id.main_container, mCommunityFragment, "community_fg");
+                }
+                hideHomeFragment();
+                hideTenementFragment();
+                hideStoreFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mCommunityFragment)
+                        .commitAllowingStateLoss();
             }
-            hideHomeFragment();
-            hideTenementFragment();
-            hideStoreFragment();
-            hideMyFragment();
-            mFragmentManager.beginTransaction()
-                    .show(mCommunityFragment)
-                    .commitAllowingStateLoss();
+
+
 
 
         } else if (position == 2) {
+            if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
+            }else {
+                if (mStoreFragment == null) {
+                    mStoreFragment = StoreWebFragment.newInstance();
+                    addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                }
 
-            if (mStoreFragment == null) {
-                mStoreFragment = StoreWebFragment.newInstance();
-                addFragment(R.id.main_container, mStoreFragment, "store_fg");
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideMyFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mStoreFragment)
+                        .commitAllowingStateLoss();
             }
 
-            hideHomeFragment();
-            hideTenementFragment();
-            hideCommunityFragment();
-            hideMyFragment();
-            mFragmentManager.beginTransaction()
-                    .show(mStoreFragment)
-                    .commitAllowingStateLoss();
             //                String url = "https://www.xiaoanjujia.com/mobile/index.php";
             //                Intent intent = new Intent(this, MyWebActivity.class);
             //                intent.putExtra("url", url);
             //                startActivity(intent);
 
         } else if (position == 3) {
-
-            if (mMyFragment == null) {
-                mMyFragment = MeWebFragment.newInstance();
-                addFragment(R.id.main_container, mMyFragment, "my_fg");
-            } else {
-                if (!NoDoubleClickUtils.isDoubleClick()) {
-                    mMyFragment.refreshView();
+            if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
+                ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
+            }else {
+                if (mMyFragment == null) {
+                    mMyFragment = MeWebFragment.newInstance();
+                    addFragment(R.id.main_container, mMyFragment, "my_fg");
+                } else {
+                    if (!NoDoubleClickUtils.isDoubleClick()) {
+                        mMyFragment.refreshView();
+                    }
                 }
+
+                hideHomeFragment();
+                hideTenementFragment();
+                hideCommunityFragment();
+                hideStoreFragment();
+                mFragmentManager.beginTransaction()
+                        .show(mMyFragment)
+                        .commitAllowingStateLoss();
             }
 
-            hideHomeFragment();
-            hideTenementFragment();
-            hideCommunityFragment();
-            hideStoreFragment();
-            mFragmentManager.beginTransaction()
-                    .show(mMyFragment)
-                    .commitAllowingStateLoss();
             //                String url = "https://www.xiaoanjujia.com/mobile/index.php?m=user";
             //                Intent intent = new Intent(this, MyWebActivity.class);
             //                intent.putExtra("url", url);
@@ -346,6 +375,37 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     public void setLoginData(LoginResponse loginResponse) {
 
 
+    }
+
+    private void initGetDisplayData() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        presenter.getGetProDisplayData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setGetProDisplayData(ProDisplayDataResponse mProDisplayDataResponse) {
+        try {
+            int code = mProDisplayDataResponse.getStatus();
+            String msg = mProDisplayDataResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                mProDisplayData = mProDisplayDataResponse.getData();
+
+//                initView();
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(MainActivity.this);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(MainActivity.this, msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(MainActivity.this, "解析数据失败");
+        }
     }
 
     @Override

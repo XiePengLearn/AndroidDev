@@ -45,6 +45,7 @@ import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActi
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
 import com.xiaoanjujia.home.entities.PhoneResponse;
+import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -327,8 +328,44 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             String msg = mPhoneResponse.getMessage();
             if (code == ResponseCode.SUCCESS_OK) {
                 PhoneResponse.DataBean data = mPhoneResponse.getData();
-                if(data != null){
+                if (data != null) {
                     phone = data.getPhone();
+
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    private void initGetDisplayData() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getGetProDisplayData(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setGetProDisplayData(ProDisplayDataResponse mProDisplayDataResponse) {
+        try {
+            int code = mProDisplayDataResponse.getStatus();
+            String msg = mProDisplayDataResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                String data = mProDisplayDataResponse.getData();
+                if (!Utils.isNull(data) && data.equals("0")) {
+
+
+                } else {
 
                 }
 
@@ -528,19 +565,19 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
-            if(!Utils.isNull(phone)){
+            if (!Utils.isNull(phone)) {
                 normalDialog();
-            }else {
+            } else {
                 ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
             }
         } else if (id == R.id.unlocking_three_line_2) {
-            ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
         } else if (id == R.id.unlocking_three_line_3) {
-            ToastUtil.showToast(BaseApplication.getInstance(), "暂不开放");
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
         } else if (id == R.id.unlocking_four_line_1) {
-            if(!Utils.isNull(phone)){
+            if (!Utils.isNull(phone)) {
                 normalDialog();
-            }else {
+            } else {
                 ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
             }
 

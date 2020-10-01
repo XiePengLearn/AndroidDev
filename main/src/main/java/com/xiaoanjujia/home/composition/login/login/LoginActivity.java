@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.login.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import com.xiaoanjujia.common.widget.ClearEditText;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.tool.Api;
 
@@ -78,6 +80,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     TextView loginFindPassword;
     @BindView(R2.id.register)
     TextView register;
+
+    @BindView(R2.id.yin_si)
+    LinearLayout yinSi;
     private Button mLoginEntry;
     private LoginResponse loginResponse;
     private boolean isClickForgetPassword = false;
@@ -251,7 +256,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @OnClick({R2.id.main_title_back, R2.id.edit_account, R2.id.edit_password,
-            R2.id.login_remember_passwords, R2.id.login_find_password, R2.id.login_entry, R2.id.register, R2.id.fast_login})
+            R2.id.login_remember_passwords, R2.id.login_find_password,
+            R2.id.login_entry, R2.id.register
+            , R2.id.fast_login
+            , R2.id.yin_si
+    })
     public void onViewClicked(View view) {
         int i = view.getId();
         if (i == R.id.main_title_back) {
@@ -281,6 +290,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         } else if (i == R.id.fast_login) {
             ARouter.getInstance().build("/codeLogin/codeLogin").greenChannel().navigation(this);
             //            finish();
+        } else if (i == R.id.yin_si) {
+            Intent intent = new Intent(LoginActivity.this, MyWebActivity.class);
+            intent.putExtra("url", "https://www.xiaoanjujia.com/xieyi.html");
+            startActivity(intent);
         }
     }
 

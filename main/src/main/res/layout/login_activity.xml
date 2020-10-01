@@ -207,6 +207,47 @@
 
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/yin_si"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_57"
+                android:layout_marginRight="@dimen/dp_30"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="登录注册即表示同意"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/sp_14" />
+
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/color_656565" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="用户协议、隐私条款"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:textColor="@color/color_5bbe8c"
+                    android:textSize="@dimen/sp_14" />
+
+
+            </LinearLayout>
         </LinearLayout>
 
 
