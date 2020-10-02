@@ -81,6 +81,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     TextView unlockingAddHouseTv;
     @BindView(R2.id.main_title_right)
     ImageView mainTitleRight;
+    @BindView(R2.id.wu_ye_guan_li)
+    ImageView wuYeGuanLi;
     @BindView(R2.id.unlocking_add_house_iv)
     ImageView unlockingAddHouseIv;
     @BindView(R2.id.main_title_container)
@@ -465,7 +467,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             R2.id.unlocking_one_line_2, R2.id.unlocking_one_line_3, R2.id.unlocking_two_line_1,
             R2.id.unlocking_two_line_2, R2.id.unlocking_two_line_3, R2.id.unlocking_three_line_1,
             R2.id.unlocking_three_line_2, R2.id.unlocking_three_line_3, R2.id.unlocking_four_line_1,
-            R2.id.unlocking_four_line_2, R2.id.unlocking_four_line_3})
+            R2.id.unlocking_four_line_2, R2.id.unlocking_four_line_3, R2.id.wu_ye_guan_li})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
@@ -504,6 +506,23 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 startActivity(intent);
             }
         } else if (id == R.id.unlocking_one_line_3) {
+            //物业
+//            if (mRoleType == 1) {
+//                //1是物业主管
+//                if (!NoDoubleClickUtils.isDoubleClick()) {
+//                    ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
+//                }
+//            } else if (mRoleType == 2) {
+//                //2是物业人员
+//                if (!NoDoubleClickUtils.isDoubleClick()) {
+//                    ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+//                }
+//            } else {
+//                //普通用户
+//                unlockingOneLine3.setVisibility(View.INVISIBLE);
+//            }
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
+        } else if (id == R.id.wu_ye_guan_li) {
             //物业
             if (mRoleType == 1) {
                 //1是物业主管
@@ -565,11 +584,12 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
             //            ARouter.getInstance().build("/visitorInvitationActivity/visitorInvitationActivity").greenChannel().navigation(mContext);
         } else if (id == R.id.unlocking_three_line_1) {
-            if (!Utils.isNull(phone)) {
-                normalDialog();
-            } else {
-                ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
-            }
+            //            if (!Utils.isNull(phone)) {
+            //                normalDialog();
+            //            } else {
+            //                ToastUtil.showToast(BaseApplication.getInstance(), "未获取到物业电话号码");
+            //            }
+            ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
         } else if (id == R.id.unlocking_three_line_2) {
             ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
         } else if (id == R.id.unlocking_three_line_3) {

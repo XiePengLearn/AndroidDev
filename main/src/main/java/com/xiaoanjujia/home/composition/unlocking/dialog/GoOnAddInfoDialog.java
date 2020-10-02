@@ -60,10 +60,10 @@ public class GoOnAddInfoDialog extends DialogFragment {
         info1.setName("户主");
         info1.setIndexCode("0");
         mChooseYourAreaInfo.add(info1);
-        ChooseYourAreaInfo info2 = new ChooseYourAreaInfo();
-        info2.setName("租户");
-        info2.setIndexCode("1");
-        mChooseYourAreaInfo.add(info2);
+//        ChooseYourAreaInfo info2 = new ChooseYourAreaInfo();
+//        info2.setName("租户");
+//        info2.setIndexCode("1");
+//        mChooseYourAreaInfo.add(info2);
         ChooseYourAreaInfo info3 = new ChooseYourAreaInfo();
         info3.setName("夫妻");
         info3.setIndexCode("3");
