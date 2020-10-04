@@ -51,6 +51,16 @@ public class AppUpdateResponse  implements Serializable {
          */
 
         private int appstatus;
+        private int flag;
+
+        public int getFlag() {
+            return flag;
+        }
+
+        public void setFlag(int flag) {
+            this.flag = flag;
+        }
+
         private String appurl;
 
         public int getAppstatus() {

@@ -399,6 +399,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private void initUpdateData() {
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("versioncode", String.valueOf(getVerCode()));
+        mapParameters.put("system", "android");
         //        mapParameters.put("versioncode", String.valueOf(0));
         TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
 
@@ -440,8 +441,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         String appurl = data.getAppurl();
                         if (!Utils.isNull(appurl)) {
                             //跳出升级弹窗
-                            //                            int lAvIsMajor = Integer.parseInt(data.getData().getFlag());
-                            int lAvIsMajor = 1;
+                            int lAvIsMajor = data.getFlag();
+                            //                            int lAvIsMajor = 1;
                             openDownLoadDialog(appurl, "", lAvIsMajor);
 
                         }
@@ -455,9 +456,9 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
             } else {
-                if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
-                }
+                //                if (!TextUtils.isEmpty(msg)) {
+                //                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                //                }
 
             }
         } catch (Exception e) {
@@ -471,7 +472,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     private void openDownLoadDialog(String apkUrl, String updateContent, int flag) {
         UpdateConfig updateConfig = new UpdateConfig();
         updateConfig.setCheckWifi(true);
-        updateConfig.setNeedCheckMd5(true);
+        updateConfig.setNeedCheckMd5(false);
         if (flag == 1) {
             updateConfig.setForce(true);   //flag == 1 强制更新
         } else {

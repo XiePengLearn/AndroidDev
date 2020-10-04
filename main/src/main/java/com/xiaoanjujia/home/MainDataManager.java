@@ -376,8 +376,8 @@ public class MainDataManager extends BaseDataManager {
      * @return Disposable
      */
     public Disposable getAppUpdate(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
-        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
-                (KPI_ROOT_URL + APPSTATUS, mapParameters), consumer);
+        return changeIOToMainThread(getService(BaseApiService.class).executePostNoParam
+                (KPI_ROOT_URL + APPSTATUS, mapParameters,mapHeaders), consumer);
     }
     /**
      * 社区热点
