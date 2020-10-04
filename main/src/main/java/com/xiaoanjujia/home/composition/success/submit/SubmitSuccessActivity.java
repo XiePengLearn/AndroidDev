@@ -81,7 +81,7 @@ public class SubmitSuccessActivity extends BaseActivity implements SubmitSuccess
         if (intent != null) {
             String hindText = intent.getStringExtra("hindText");
             if (!Utils.isNull(hindText) && hindText.equals("hindText")) {
-                text1Submit.setText("提交成功");
+                text1Submit.setText("请返回首页进行人脸采集，您提交的所有信息将在24小时内审核完成，请耐心等待");
                 text1Submit.setVisibility(View.INVISIBLE);
             }
         }

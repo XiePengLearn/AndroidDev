@@ -1,10 +1,13 @@
 package com.xiaoanjujia.home.composition.main.unlocking;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +47,7 @@ import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
+import com.xiaoanjujia.home.entities.AppUpdateResponse;
 import com.xiaoanjujia.home.entities.PhoneResponse;
 import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
@@ -59,6 +63,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import constant.UiType;
+import listener.Md5CheckResultListener;
+import listener.UpdateDownloadListener;
+import model.UiConfig;
+import model.UpdateConfig;
+import update.UpdateAppUtils;
 
 /**
  * @Auther: xp
@@ -149,6 +159,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initSetting(this);
         initData();
         initGetPhoneData();
+        initUpdateData();
         mainTitleContainer.setVisibility(View.GONE);
     }
 
@@ -385,6 +396,133 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         }
     }
 
+    private void initUpdateData() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("versioncode", String.valueOf(getVerCode()));
+        //        mapParameters.put("versioncode", String.valueOf(0));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getRequestUpdateData(headersTreeMap, mapParameters);
+    }
+
+    public int getVerCode() {
+
+
+        int versioncode;
+        try {
+            // ---get the package info---
+            PackageManager pm = mActivity.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(mActivity.getPackageName(), 0);
+            versioncode = pi.versionCode;
+
+        } catch (Exception e) {
+            Log.e("VersionInfo", "Exception", e);
+            versioncode = -1;
+        }
+        return versioncode;
+
+
+    }
+
+    @Override
+    public void setResponseUpdateData(AppUpdateResponse appUpdateResponse) {
+        try {
+            int code = appUpdateResponse.getStatus();
+            String msg = appUpdateResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                AppUpdateResponse.DataBean data = appUpdateResponse.getData();
+                if (data != null) {
+                    //appstatus:0是不更新....1需要更新
+                    //appurl:sdk路径
+                    int appstatus = data.getAppstatus();
+                    if (appstatus == 1) {
+                        //更新
+                        String appurl = data.getAppurl();
+                        if (!Utils.isNull(appurl)) {
+                            //跳出升级弹窗
+                            //                            int lAvIsMajor = Integer.parseInt(data.getData().getFlag());
+                            int lAvIsMajor = 1;
+                            openDownLoadDialog(appurl, "", lAvIsMajor);
+
+                        }
+                    }
+
+                } else {
+
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    /**
+     * 弹出更新Dialog
+     */
+    private void openDownLoadDialog(String apkUrl, String updateContent, int flag) {
+        UpdateConfig updateConfig = new UpdateConfig();
+        updateConfig.setCheckWifi(true);
+        updateConfig.setNeedCheckMd5(true);
+        if (flag == 1) {
+            updateConfig.setForce(true);   //flag == 1 强制更新
+        } else {
+            updateConfig.setForce(false);  //flag == 2 非强制更新
+        }
+
+        updateConfig.setNotifyImgRes(R.drawable.ic_launcher);
+
+        UiConfig uiConfig = new UiConfig();
+        uiConfig.setUiType(UiType.SIMPLE);
+
+        UpdateAppUtils
+                .getInstance()
+                .apkUrl(apkUrl)
+                .updateTitle("系统提示")
+                .updateContent(updateContent + "\n          点击立即更新会在后台下载,下载完成会自动提示安装!")
+                .uiConfig(uiConfig)
+                .updateConfig(updateConfig)
+
+                .setMd5CheckResultListener(new Md5CheckResultListener() {
+                    @Override
+                    public void onResult(boolean result) {
+
+                    }
+                })
+                .setUpdateDownloadListener(new UpdateDownloadListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onDownload(int progress) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        ToastUtil.showToast(mContext.getApplicationContext(), "下载完成");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                })
+
+                .update();
+
+    }
+
     @Override
     public void showProgressDialogView() {
         showJDLoadingDialog();
@@ -507,20 +645,20 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             }
         } else if (id == R.id.unlocking_one_line_3) {
             //物业
-//            if (mRoleType == 1) {
-//                //1是物业主管
-//                if (!NoDoubleClickUtils.isDoubleClick()) {
-//                    ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
-//                }
-//            } else if (mRoleType == 2) {
-//                //2是物业人员
-//                if (!NoDoubleClickUtils.isDoubleClick()) {
-//                    ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
-//                }
-//            } else {
-//                //普通用户
-//                unlockingOneLine3.setVisibility(View.INVISIBLE);
-//            }
+            //            if (mRoleType == 1) {
+            //                //1是物业主管
+            //                if (!NoDoubleClickUtils.isDoubleClick()) {
+            //                    ARouter.getInstance().build("/supervisorActivity/supervisorActivity").greenChannel().navigation(mContext);
+            //                }
+            //            } else if (mRoleType == 2) {
+            //                //2是物业人员
+            //                if (!NoDoubleClickUtils.isDoubleClick()) {
+            //                    ARouter.getInstance().build("/staffActivity/staffActivity").greenChannel().navigation(mContext);
+            //                }
+            //            } else {
+            //                //普通用户
+            //                unlockingOneLine3.setVisibility(View.INVISIBLE);
+            //            }
             ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
         } else if (id == R.id.wu_ye_guan_li) {
             //物业

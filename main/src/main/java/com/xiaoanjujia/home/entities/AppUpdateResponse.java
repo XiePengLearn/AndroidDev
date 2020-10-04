@@ -11,29 +11,29 @@ public class AppUpdateResponse  implements Serializable {
 
 
     /**
-     * code : 200200
-     * msg : 说明
-     * data : {"updateTip":"更新提示","flag":"true","versionCode":"V1.0.0","url":"http://www.baidu.com"}
+     * status : 1
+     * message : OK
+     * data : {"appstatus":1,"appurl":"https://www.xiaoanjujia.com/app_sdk/app_demo.php"}
      */
 
-    private String code;
-    private String   msg;
+    private int status;
+    private String message;
     private DataBean data;
 
-    public String getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public DataBean getData() {
@@ -44,49 +44,29 @@ public class AppUpdateResponse  implements Serializable {
         this.data = data;
     }
 
-    public  class DataBean {
+    public static class DataBean {
         /**
-         * updateTip : 更新提示
-         * flag : true
-         * versionCode : V1.0.0
-         * url : http://www.baidu.com
+         * appstatus : 1
+         * appurl : https://www.xiaoanjujia.com/app_sdk/app_demo.php
          */
 
-        private String updateTip;
-        private String flag;
-        private String versionCode;
-        private String url;
+        private int appstatus;
+        private String appurl;
 
-        public String getUpdateTip() {
-            return updateTip;
+        public int getAppstatus() {
+            return appstatus;
         }
 
-        public void setUpdateTip(String updateTip) {
-            this.updateTip = updateTip;
+        public void setAppstatus(int appstatus) {
+            this.appstatus = appstatus;
         }
 
-        public String getFlag() {
-            return flag;
+        public String getAppurl() {
+            return appurl;
         }
 
-        public void setFlag(String flag) {
-            this.flag = flag;
-        }
-
-        public String getVersionCode() {
-            return versionCode;
-        }
-
-        public void setVersionCode(String versionCode) {
-            this.versionCode = versionCode;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
+        public void setAppurl(String appurl) {
+            this.appurl = appurl;
         }
     }
 }

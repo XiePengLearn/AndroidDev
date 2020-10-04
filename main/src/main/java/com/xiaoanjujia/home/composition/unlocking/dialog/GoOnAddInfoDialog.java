@@ -80,10 +80,10 @@ public class GoOnAddInfoDialog extends DialogFragment {
         info6.setName("朋友");
         info6.setIndexCode("6");
         mChooseYourAreaInfo.add(info6);
-        ChooseYourAreaInfo info7 = new ChooseYourAreaInfo();
-        info7.setName("其他");
-        info7.setIndexCode("7");
-        mChooseYourAreaInfo.add(info7);
+//        ChooseYourAreaInfo info7 = new ChooseYourAreaInfo();
+//        info7.setName("其他");
+//        info7.setIndexCode("7");
+//        mChooseYourAreaInfo.add(info7);
 
         if (mChooseYourAreaInfo != null && mChooseYourAreaInfo.size() > 0) {
             for (int i = 0; i < mChooseYourAreaInfo.size(); i++) {

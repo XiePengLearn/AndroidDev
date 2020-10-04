@@ -80,7 +80,6 @@ dependencies {
     api 'me.jessyan:autosize:1.2.1'
 
     // updateApp
-    api 'com.teprinciple:updateapputils:2.0.4'
     api 'com.jude:easyrecyclerview:4.2.3'
     api 'com.alibaba:fastjson:1.2.46'
     api 'com.squareup.picasso:picasso:2.4.0'
@@ -109,4 +108,5 @@ dependencies {
     api files('libs/wechat-sdk-android-without-mta-5.4.3.jar')
     api files('libs/umeng-crash-armeabi-v0.0.5.aar')
     api files('libs/umeng-asms-armeabi-v1.1.3.aar')
+    api 'com.teprinciple:updateapputilsx:2.3.0'
 }

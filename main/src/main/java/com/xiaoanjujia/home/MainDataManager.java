@@ -64,6 +64,7 @@ public class MainDataManager extends BaseDataManager {
     //物业电话
     private static String PROPHONE = "/api/v1/prophone";
     private static String PRODISPLAY = "/api/v1/prodisplay";
+    private static String APPSTATUS = "/api/v1/appstatus";
     //社区热点
     private static String GENERAL_COMMUHOTSPOT = "/api/v1/commuhotspot";
     //热点列表
@@ -366,6 +367,17 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getProDisplay(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostNoParam
                 (KPI_ROOT_URL + PRODISPLAY, mapParameters, mapHeaders), consumer);
+    }/**
+     * app更新
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getAppUpdate(TreeMap<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHk
+                (KPI_ROOT_URL + APPSTATUS, mapParameters), consumer);
     }
     /**
      * 社区热点

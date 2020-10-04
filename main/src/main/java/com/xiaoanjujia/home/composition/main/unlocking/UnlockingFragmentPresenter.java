@@ -5,6 +5,7 @@ import com.xiaoanjujia.common.base.rxjava.ErrorDisposableObserver;
 import com.xiaoanjujia.common.util.LogUtil;
 import com.xiaoanjujia.home.MainDataManager;
 import com.xiaoanjujia.home.composition.BasePresenter;
+import com.xiaoanjujia.home.entities.AppUpdateResponse;
 import com.xiaoanjujia.home.entities.PhoneResponse;
 import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 import com.xiaoanjujia.home.entities.ProjectResponse;
@@ -173,6 +174,55 @@ public class UnlockingFragmentPresenter extends BasePresenter implements Unlocki
                         mDataResponse.setStatus(ProjectResponse.getStatus(response));
                     }
                     mContractView.setGetProDisplayData(mDataResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+                LogUtil.e(TAG, "=======onError:======= " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getRequestUpdateData(TreeMap<String, String> mapHeaders, final Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getAppUpdate(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+
+            private AppUpdateResponse mDataResponse;
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response + "---mapParameters---:" + mapParameters.toString());
+                    Gson gson = new Gson();
+                    boolean jsonObjectData = ProjectResponse.isJsonObjectData(response);
+                    if (jsonObjectData) {
+                        mDataResponse = gson.fromJson(response, AppUpdateResponse.class);
+                    } else {
+                        mDataResponse = new AppUpdateResponse();
+                        mDataResponse.setMessage(ProjectResponse.getMessage(response));
+                        mDataResponse.setStatus(ProjectResponse.getStatus(response));
+                    }
+                    mContractView.setResponseUpdateData(mDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
