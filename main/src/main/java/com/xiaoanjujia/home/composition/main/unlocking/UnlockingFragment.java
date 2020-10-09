@@ -250,13 +250,13 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         mRoleType = PrefUtils.readRoleType(BaseApplication.getInstance());
         if (mRoleType == 1) {
             //1是物业主管
-            unlockingOneLine3.setVisibility(View.VISIBLE);
+            wuYeGuanLi.setVisibility(View.VISIBLE);
         } else if (mRoleType == 2) {
             //2是物业人员
-            unlockingOneLine3.setVisibility(View.VISIBLE);
+            wuYeGuanLi.setVisibility(View.VISIBLE);
         } else {
             //普通用户
-            unlockingOneLine3.setVisibility(View.INVISIBLE);
+            wuYeGuanLi.setVisibility(View.INVISIBLE);
         }
     }
 
