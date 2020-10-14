@@ -31,7 +31,7 @@ import okhttp3.ResponseBody;
 public class MainDataManager extends BaseDataManager {
 
     private static String KPI_ROOT_URL = "https://a.xiaoanjujia.com";//预生产环境接口
-    private static String HK_ROOT_URL = "http://hk.xiaoanjujia.com";//预生产环境接口
+    private static String HK_ROOT_URL = "http://hk.xiaoanjujia.com:8088";//预生产环境接口
     public static String HK_ROOT_URL_PIC = "https://36.112.172.190:6114";//海康 图片 接口
     //注册
     private static String GENERAL_REGISTER = "/api/v1/register";
