@@ -28,6 +28,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.xiaoanjujia.common.BaseApplication;
 import com.xiaoanjujia.common.base.BaseFragment;
+import com.xiaoanjujia.common.util.AppManager;
 import com.xiaoanjujia.common.util.NoDoubleClickUtils;
 import com.xiaoanjujia.common.util.PrefUtils;
 import com.xiaoanjujia.common.util.ResponseCode;
@@ -48,6 +49,7 @@ import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActi
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
 import com.xiaoanjujia.home.entities.AppUpdateResponse;
+import com.xiaoanjujia.home.entities.ChangeAccountResponse;
 import com.xiaoanjujia.home.entities.PhoneResponse;
 import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 import com.xiaoanjujia.home.entities.VisitorPersonInfoResponse;
@@ -135,12 +137,16 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     LinearLayout depositPageLoading;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.wu_ye_qie_huan)
+    ImageView wuYeQieHuan;
     private String mWebUrl;
     private NormalDialog mNormalDialog;
     private String personName;
     private String personId;
     private boolean isHaveHouse;
     private String phone;
+    private boolean isBangDing;
+    private boolean isQiehuan;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -160,6 +166,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initData();
         initGetPhoneData();
         initUpdateData();
+        initChangeAccount();
         mainTitleContainer.setVisibility(View.GONE);
     }
 
@@ -283,9 +290,14 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         personId = dataBean.getPersonId();
                         String orgPathName = dataBean.getOrgPathName();
                         if (!Utils.isNull(personName)) {
+                            isBangDing = true;
                             unlockingHouseTitle.setText(personName);
                             PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
+                            if (isBangDing && isQiehuan) {
+                                wuYeQieHuan.setVisibility(View.VISIBLE);
+                            }
                         } else {
+                            isBangDing = false;
                             unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                             unlockingAddHouseIv.setVisibility(View.GONE);
                             PrefUtils.writePersonInfo("", BaseApplication.getInstance());
@@ -305,6 +317,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
                         }
                     }
                 } else {
+                    isBangDing = false;
                     unlockingHouseTitle.setText("请添加个人信息，绑定房屋");
                     unlockingAddHouseTv.setText("暂无房屋信息");
                     unlockingAddHouseIv.setVisibility(View.GONE);
@@ -466,6 +479,48 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         }
     }
 
+    private void initChangeAccount() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("user_id", PrefUtils.readUserId(BaseApplication.getInstance()));
+        //        mapParameters.put("versioncode", String.valueOf(0));
+        TreeMap<String, String> headersTreeMap = Api.getHeadersTreeMap();
+
+        mPresenter.getResponseChangeAccount(headersTreeMap, mapParameters);
+    }
+
+    @Override
+    public void setResponseChangeAccount(ChangeAccountResponse appUpdateResponse) {
+        try {
+            int code = appUpdateResponse.getStatus();
+            String msg = appUpdateResponse.getMessage();
+            if (code == ResponseCode.SUCCESS_OK) {
+                String data = appUpdateResponse.getData();
+                if (!Utils.isNull(data) && data.equals("1")) {
+                    isQiehuan = true;
+                    if (isBangDing && isQiehuan) {
+                        wuYeQieHuan.setVisibility(View.VISIBLE);
+                    }
+
+
+                } else {
+                    isQiehuan = false;
+                }
+
+            } else if (code == ResponseCode.SEESION_ERROR) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(getActivity());
+            } else {
+                isQiehuan = false;
+                //                if (!TextUtils.isEmpty(msg)) {
+                //                    ToastUtil.showToast(getActivity().getApplicationContext(), msg);
+                //                }
+
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(getActivity().getApplicationContext(), "解析数据失败");
+        }
+    }
+
     /**
      * 弹出更新Dialog
      */
@@ -540,6 +595,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             @Override
             public void run() {
                 initData();
+                initChangeAccount();
+
                 frame.refreshComplete();
             }
         }, 500);
@@ -606,7 +663,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
             R2.id.unlocking_one_line_2, R2.id.unlocking_one_line_3, R2.id.unlocking_two_line_1,
             R2.id.unlocking_two_line_2, R2.id.unlocking_two_line_3, R2.id.unlocking_three_line_1,
             R2.id.unlocking_three_line_2, R2.id.unlocking_three_line_3, R2.id.unlocking_four_line_1,
-            R2.id.unlocking_four_line_2, R2.id.unlocking_four_line_3, R2.id.wu_ye_guan_li})
+            R2.id.unlocking_four_line_2, R2.id.unlocking_four_line_3, R2.id.wu_ye_guan_li, R2.id.wu_ye_qie_huan})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.main_title_back) {
@@ -744,6 +801,12 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_four_line_3) {
 
+        }else if (id == R.id.wu_ye_qie_huan) {
+            PrefUtils.writeSESSION_ID("", BaseApplication.getInstance());
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.putExtra("param", "web");
+            startActivity(intent);
+            AppManager.getInstance().finishOthersToActivity(LoginActivity.class);
         }
     }
 
