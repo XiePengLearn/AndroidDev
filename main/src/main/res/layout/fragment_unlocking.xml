@@ -58,7 +58,7 @@
                         <ImageView
                             android:id="@+id/wu_ye_qie_huan"
                             android:layout_width="74dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:layout_height="42dp"
                             android:src="@drawable/qie_huan" />
                         <ImageView

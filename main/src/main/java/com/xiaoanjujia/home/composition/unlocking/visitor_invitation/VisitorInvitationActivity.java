@@ -818,7 +818,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 .isCamera(isCameraButton)// 是否显示拍照按钮
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                 .imageFormat(PictureMimeType.JPEG)// 拍照保存图片格式后缀,默认jpeg
-                .enableCrop(false)// 是否裁剪
+                .enableCrop(true)// 是否裁剪
                 .compress(true)// 是否压缩
                 .compressQuality(40)// 图片压缩后输出质量 0~ 100
                 .synOrAsy(true)//同步false或异步true 压缩 默认同步
@@ -826,7 +826,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 //.compressSavePath(getPath())//压缩图片保存地址
                 //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效 注：已废弃
                 //.glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度 注：已废弃
-                //                        .withAspectRatio(aspect_ratio_x, aspect_ratio_y)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .hideBottomControls(false)// 是否显示uCrop工具栏，默认不显示
                 .isGif(true)// 是否显示gif图片
                 .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
