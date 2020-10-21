@@ -48,6 +48,7 @@ import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
+import com.xiaoanjujia.home.dialog.CashBagRetainDialog;
 import com.xiaoanjujia.home.entities.AppUpdateResponse;
 import com.xiaoanjujia.home.entities.ChangeAccountResponse;
 import com.xiaoanjujia.home.entities.PhoneResponse;
@@ -156,6 +157,28 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         return view;
     }
 
+    //cash bag挽留弹窗 未下注
+    private CashBagRetainDialog mCashBagRetainDialog = null;
+
+    private void showCashBagRetainPopUpDialog() {
+        if (mCashBagRetainDialog == null) {
+            mCashBagRetainDialog = new CashBagRetainDialog(mContext, cashBagRetainPopUpClickListener);
+        }
+        mCashBagRetainDialog.show();
+    }
+
+    private View.OnClickListener cashBagRetainPopUpClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            if (id == R.id.get_cash_bag_retain_bonus_ke_ng) {
+                mCashBagRetainDialog.dismiss();
+            } else if (id == R.id.dialog_close_iv) {
+                mCashBagRetainDialog.dismiss();
+            }
+        }
+    };
+
     @Override
     public void initEvent() {
         initView();
@@ -167,6 +190,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initGetPhoneData();
         initUpdateData();
         initChangeAccount();
+        showCashBagRetainPopUpDialog();
         mainTitleContainer.setVisibility(View.GONE);
     }
 
@@ -801,7 +825,7 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
 
         } else if (id == R.id.unlocking_four_line_3) {
 
-        }else if (id == R.id.wu_ye_qie_huan) {
+        } else if (id == R.id.wu_ye_qie_huan) {
             PrefUtils.writeSESSION_ID("", BaseApplication.getInstance());
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.putExtra("param", "web");

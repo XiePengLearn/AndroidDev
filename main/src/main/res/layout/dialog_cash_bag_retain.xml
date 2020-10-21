@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#85000000"
+
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/dialog_close_iv"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="107dp"
+        android:src="@drawable/icon_ad_dialog_close"
+        app:layout_constraintRight_toLeftOf="@id/cl_gift_container"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/cl_gift_container"
+        android:layout_width="280dp"
+        android:layout_height="296dp"
+        android:layout_gravity="center_horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/cash_bag_retain_button_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginRight="26dp"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/get_cash_bag_retain_bonus_ke_ng"
+        android:layout_width="191dp"
+        android:layout_height="38dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cash_bag_retain_button_bg"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</LinearLayout>
