@@ -121,6 +121,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     PrefUtils.writeFirstLogin(false, mContext);
                     showCashBagRetainPopUpDialog();
                 }
+                showCashBagRetainPopUpDialog();
             }
         }
     }
@@ -628,7 +629,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
     private void showCashBagRetainPopUpDialog() {
         if (mCashBagRetainDialog == null) {
-            mCashBagRetainDialog = new CashBagRetainDialog(mContext, cashBagRetainPopUpClickListener);
+            mCashBagRetainDialog = new CashBagRetainDialog(MainActivity.this, cashBagRetainPopUpClickListener);
         }
         if (!mCashBagRetainDialog.isShowing()) {
             mCashBagRetainDialog.show();
