@@ -19,16 +19,16 @@
 
     <RelativeLayout
         android:id="@+id/cl_gift_container"
-        android:layout_width="280dp"
-        android:layout_height="296dp"
+        android:layout_width="340dp"
+        android:layout_height="300dp"
         android:layout_gravity="center_horizontal">
 
 
-        <RelativeLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="340dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/cash_bag_retain_button_bg" />
+            android:src="@drawable/init_login" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,6 @@
         </LinearLayout>
 
 
-
     </RelativeLayout>
 
     <TextView
@@ -54,7 +53,7 @@
         android:background="@drawable/cash_bag_retain_button_bg"
         android:gravity="center"
         android:text="确定"
-        android:textColor="@color/color_666666"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
 </LinearLayout>

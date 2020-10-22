@@ -25,7 +25,6 @@ public class CashBagRetainDialog extends Dialog {
         View mView = LayoutInflater.from(context).inflate(R.layout.dialog_cash_bag_retain, null, false);
         setContentView(mView);
 
-        TextView cashBagRetainBonusKeNg = mView.findViewById(R.id.cash_bag_retain_bonus_ke_ng);
         TextView getCashBagRetainBonusKeNg = mView.findViewById(R.id.get_cash_bag_retain_bonus_ke_ng);
         getCashBagRetainBonusKeNg.setOnClickListener(listener);
         mView.findViewById(R.id.dialog_close_iv).setOnClickListener(listener);

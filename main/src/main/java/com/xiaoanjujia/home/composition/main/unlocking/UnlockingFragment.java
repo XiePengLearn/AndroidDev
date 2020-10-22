@@ -190,7 +190,8 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
         initGetPhoneData();
         initUpdateData();
         initChangeAccount();
-        showCashBagRetainPopUpDialog();
+        boolean firstLogin = PrefUtils.getFirstLogin(mContext);
+
         mainTitleContainer.setVisibility(View.GONE);
     }
 

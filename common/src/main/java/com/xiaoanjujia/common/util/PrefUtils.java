@@ -13,6 +13,21 @@ public class PrefUtils {
     private static final String SHARE_PREFS_NAME = "kpi_client";
 
     //绩时查 UID
+    public static void writeFirstLogin(boolean firstLogin, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putBoolean("firstLogin", firstLogin);
+        editor.apply();
+    }
+
+    public static boolean getFirstLogin(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getBoolean("firstLogin", true);
+
+    }
+
     public static void writeUserId(String userId, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -64,11 +79,13 @@ public class PrefUtils {
         editor.putString("userName", userName);
         editor.apply();
     }
+
     public static String readUserName(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getString("userName", "");
     }
+
     public static void writePhone(String userName, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -76,6 +93,7 @@ public class PrefUtils {
         editor.putString("userPhone", userName);
         editor.apply();
     }
+
     public static String readPhone(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);

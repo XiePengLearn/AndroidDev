@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ import com.xiaoanjujia.home.composition.html.store_html.StoreWebFragment;
 import com.xiaoanjujia.home.composition.main.community.CommunityFragment;
 import com.xiaoanjujia.home.composition.main.tenement.TenementFragment;
 import com.xiaoanjujia.home.composition.main.unlocking.UnlockingFragment;
+import com.xiaoanjujia.home.dialog.CashBagRetainDialog;
 import com.xiaoanjujia.home.entities.LoginResponse;
 import com.xiaoanjujia.home.entities.ProDisplayDataResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -113,6 +115,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     || i2 != PackageManager.PERMISSION_GRANTED || i3 != PackageManager.PERMISSION_GRANTED) {
                 // 如果没有授予该权限，就去提示用户请求
                 showDialogTipUserRequestPermission();
+            } else {
+                boolean firstLogin = PrefUtils.getFirstLogin(mContext);
+                if (firstLogin) {
+                    PrefUtils.writeFirstLogin(false, mContext);
+                    showCashBagRetainPopUpDialog();
+                }
             }
         }
     }
@@ -217,7 +225,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 1) {
             if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
                 ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
-            }else {
+            } else {
                 if (mCommunityFragment == null) {
                     mCommunityFragment = CommunityFragment.newInstance();
                     addFragment(R.id.main_container, mCommunityFragment, "community_fg");
@@ -232,12 +240,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             }
 
 
-
-
         } else if (position == 2) {
             if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
                 ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
-            }else {
+            } else {
                 if (mStoreFragment == null) {
                     mStoreFragment = StoreWebFragment.newInstance();
                     addFragment(R.id.main_container, mStoreFragment, "store_fg");
@@ -260,7 +266,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 3) {
             if (!Utils.isNull(mProDisplayData) && mProDisplayData.equals("0")) {
                 ToastUtil.showToast(BaseApplication.getInstance(), "暂未开放");
-            }else {
+            } else {
                 if (mMyFragment == null) {
                     mMyFragment = MeWebFragment.newInstance();
                     addFragment(R.id.main_container, mMyFragment, "my_fg");
@@ -393,7 +399,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             if (code == ResponseCode.SUCCESS_OK) {
                 mProDisplayData = mProDisplayDataResponse.getData();
 
-//                initView();
+                //                initView();
             } else if (code == ResponseCode.SEESION_ERROR) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(MainActivity.this);
@@ -599,6 +605,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                         dialog.dismiss();
                     }
 
+                    boolean firstLogin = PrefUtils.getFirstLogin(mContext);
+                    if (firstLogin) {
+                        PrefUtils.writeFirstLogin(false, mContext);
+                        showCashBagRetainPopUpDialog();
+                    }
+                    showCashBagRetainPopUpDialog();
                 } else {
 
 
@@ -611,6 +623,30 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         }
     }
 
+    //cash bag挽留弹窗 未下注
+    private CashBagRetainDialog mCashBagRetainDialog = null;
+
+    private void showCashBagRetainPopUpDialog() {
+        if (mCashBagRetainDialog == null) {
+            mCashBagRetainDialog = new CashBagRetainDialog(mContext, cashBagRetainPopUpClickListener);
+        }
+        if (!mCashBagRetainDialog.isShowing()) {
+            mCashBagRetainDialog.show();
+        }
+
+    }
+
+    private View.OnClickListener cashBagRetainPopUpClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            if (id == R.id.get_cash_bag_retain_bonus_ke_ng) {
+                mCashBagRetainDialog.dismiss();
+            } else if (id == R.id.dialog_close_iv) {
+                mCashBagRetainDialog.dismiss();
+            }
+        }
+    };
 
     //    @OnClick({R2.id.tv_bottom_navigation_4, R2.id.tv_bottom_navigation_5})
     //    public void onViewClicked(View view) {

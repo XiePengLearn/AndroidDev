@@ -220,6 +220,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 PrefUtils.writeRoleType(roletype, BaseApplication.getInstance());
                 PrefUtils.writeUserId(String.valueOf(user_id), BaseApplication.getInstance());
                 PrefUtils.writePhone(editAccount.getText().toString().trim(), this.getApplicationContext());
+
                 if (checked) {
                     //保存账号密码   储存状态 SESSION_ID
                     PrefUtils.writeUserName(editAccount.getText().toString().trim(), this.getApplicationContext());
