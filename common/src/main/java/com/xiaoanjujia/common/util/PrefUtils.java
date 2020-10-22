@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 public class PrefUtils {
     private static final String SHARE_PREFS_NAME = "kpi_client";
 
-    //绩时查 UID
     public static void writeFirstLogin(boolean firstLogin, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -25,6 +24,21 @@ public class PrefUtils {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getBoolean("firstLogin", true);
+
+    }
+
+    public static void writeFaceDialog(boolean firstLogin, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putBoolean("faceDialog", firstLogin);
+        editor.apply();
+    }
+
+    public static boolean getFaceDialog(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getBoolean("faceDialog", false);
 
     }
 

@@ -48,7 +48,7 @@ import com.xiaoanjujia.home.composition.unlocking.face.FaceActivity;
 import com.xiaoanjujia.home.composition.unlocking.house_manager.HouseManagerActivity;
 import com.xiaoanjujia.home.composition.unlocking.qr_code.VisitorActivity;
 import com.xiaoanjujia.home.composition.unlocking.visitor_invitation.VisitorInvitationActivity;
-import com.xiaoanjujia.home.dialog.CashBagRetainDialog;
+import com.xiaoanjujia.home.dialog.FaceDialog;
 import com.xiaoanjujia.home.entities.AppUpdateResponse;
 import com.xiaoanjujia.home.entities.ChangeAccountResponse;
 import com.xiaoanjujia.home.entities.PhoneResponse;
@@ -158,13 +158,26 @@ public class UnlockingFragment extends BaseFragment implements UnlockingFragment
     }
 
     //cash bag挽留弹窗 未下注
-    private CashBagRetainDialog mCashBagRetainDialog = null;
+    private FaceDialog mCashBagRetainDialog = null;
 
     private void showCashBagRetainPopUpDialog() {
-        if (mCashBagRetainDialog == null) {
-            mCashBagRetainDialog = new CashBagRetainDialog(mContext, cashBagRetainPopUpClickListener);
+        if (getActivity() != null) {
+            if (mCashBagRetainDialog == null) {
+                mCashBagRetainDialog = new FaceDialog(getActivity(), cashBagRetainPopUpClickListener);
+            }
+            mCashBagRetainDialog.show();
         }
-        mCashBagRetainDialog.show();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean firstLogin = PrefUtils.getFaceDialog(mContext);
+        if (firstLogin) {
+            PrefUtils.writeFaceDialog(false, mContext);
+            showCashBagRetainPopUpDialog();
+        }
     }
 
     private View.OnClickListener cashBagRetainPopUpClickListener = new View.OnClickListener() {

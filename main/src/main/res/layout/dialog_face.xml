@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="340dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/init_login" />
+            android:src="@drawable/face_guide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         android:layout_height="38dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:background="@drawable/cash_bag_retain_button_bg"
+        android:background="@drawable/cash_bag_retain_button_bg1"
         android:gravity="center"
         android:text="确定"
         android:textColor="@color/white"

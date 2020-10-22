@@ -121,7 +121,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                     PrefUtils.writeFirstLogin(false, mContext);
                     showCashBagRetainPopUpDialog();
                 }
-                showCashBagRetainPopUpDialog();
             }
         }
     }
@@ -546,6 +545,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                         // 用户还是想用我的 APP 的
                         // 提示用户去应用设置界面手动开启权限
                         showDialogTipUserGoToAppSettting();
+                    }
+                }
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
+                    boolean firstLogin = PrefUtils.getFirstLogin(mContext);
+                    if (firstLogin) {
+                        PrefUtils.writeFirstLogin(false, mContext);
+                        showCashBagRetainPopUpDialog();
                     }
                 }
             }

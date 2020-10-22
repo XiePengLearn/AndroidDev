@@ -827,7 +827,7 @@ public class VisitorInvitationActivity extends BaseActivity implements VisitorIn
                 //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效 注：已废弃
                 //.glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度 注：已废弃
                 .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
-                .hideBottomControls(false)// 是否显示uCrop工具栏，默认不显示
+                .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
                 .isGif(true)// 是否显示gif图片
                 .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
                 .circleDimmedLayer(false)// 是否圆形裁剪

@@ -139,7 +139,6 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         mDataNextRegionList = new ArrayList<>();
-
         initView();
         initData();
         initTitle();
@@ -396,6 +395,7 @@ public class AddPersonalInformationActivity extends BaseActivity implements AddP
                 intent.putExtra("roomPath", roomPath1 + "\n" + roomPath2 + "\n" + roomPath3);
                 startActivity(intent);
                 PrefUtils.writePersonInfo("true", BaseApplication.getInstance());
+                PrefUtils.writeFaceDialog(true, mContext);
                 finish();
 
 

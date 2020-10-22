@@ -82,7 +82,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     TextView register;
 
     @BindView(R2.id.yin_si)
-    LinearLayout yinSi;
+    TextView yinSi;
+    @BindView(R2.id.yin_si2)
+    TextView yinSi2;
     private Button mLoginEntry;
     private LoginResponse loginResponse;
     private boolean isClickForgetPassword = false;
@@ -260,7 +262,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             R2.id.login_remember_passwords, R2.id.login_find_password,
             R2.id.login_entry, R2.id.register
             , R2.id.fast_login
-            , R2.id.yin_si
+            , R2.id.yin_si , R2.id.yin_si2
     })
     public void onViewClicked(View view) {
         int i = view.getId();
@@ -294,6 +296,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         } else if (i == R.id.yin_si) {
             Intent intent = new Intent(LoginActivity.this, MyWebActivity.class);
             intent.putExtra("url", "https://www.xiaoanjujia.com/xieyi.html");
+            startActivity(intent);
+        }else if (i == R.id.yin_si2) {
+            Intent intent = new Intent(LoginActivity.this, MyWebActivity.class);
+            intent.putExtra("url", "https://www.xiaoanjujia.com/yinsi.html");
             startActivity(intent);
         }
     }

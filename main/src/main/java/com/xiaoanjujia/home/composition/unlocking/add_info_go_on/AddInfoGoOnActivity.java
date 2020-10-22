@@ -384,6 +384,7 @@ public class AddInfoGoOnActivity extends BaseActivity implements AddInfoGoOnCont
                 Intent intent = new Intent(mContext, SubmitSuccessActivity.class);
                 intent.putExtra("hindText", "hindText");
                 startActivity(intent);
+                PrefUtils.writeFaceDialog(true, mContext);
                 finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR_STRING)) {
                 //SESSION_ID为空别的页面 要调起登录页面
