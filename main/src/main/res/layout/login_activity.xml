@@ -224,7 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
-                    android:text="登录注册即表示同意"
+                    android:text="登录即表示同意"
                     android:textColor="#333333"
                     android:textSize="@dimen/sp_14" />
 
