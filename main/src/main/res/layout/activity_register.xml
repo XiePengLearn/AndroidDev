@@ -65,11 +65,11 @@
             <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                 android:id="@+id/btn_getValidateCode"
                 android:layout_width="100dp"
-                android:gravity="center"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:layout_marginLeft="12dp"
                 android:background="@drawable/bg_shap_button_1"
+                android:gravity="center"
                 android:text="验证码"
                 android:textColor="@color/bg_withe"
                 android:textSize="14sp" />
@@ -140,23 +140,82 @@
             android:layout_marginTop="@dimen/dp_1"
             android:background="#DEDEDE" />
 
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.xiaoanjujia.common.widget.alphaview.AlphaButton
                 android:id="@+id/reg_btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="45dp"
-                android:gravity="center"
+                android:layout_marginTop="155dp"
                 android:background="@drawable/bg_shap_button_1"
+                android:gravity="center"
                 android:text="立即注册"
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
 
         </RelativeLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_16"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:text="登录注册即表示同意"
+                android:textColor="#333333"
+                android:textSize="@dimen/sp_14" />
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/color_656565"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/yin_si"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:gravity="left|center_vertical"
+                android:text="《用户协议》"
+                android:textColor="@color/color_5bbe8c"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:text="与"
+                android:textColor="#333333"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/yin_si2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:gravity="left|center_vertical"
+                android:text="《隐私政策》"
+                android:textColor="@color/color_5bbe8c"
+                android:textSize="@dimen/sp_14" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

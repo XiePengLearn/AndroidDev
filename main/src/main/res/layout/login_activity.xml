@@ -260,7 +260,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_2"
                     android:gravity="left|center_vertical"
-                    android:text="《隐私条款》"
+                    android:text="《隐私政策》"
                     android:textColor="@color/color_5bbe8c"
                     android:textSize="@dimen/sp_14" />
 

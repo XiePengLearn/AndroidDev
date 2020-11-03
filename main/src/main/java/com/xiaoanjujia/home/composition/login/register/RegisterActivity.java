@@ -1,5 +1,6 @@
 package com.xiaoanjujia.home.composition.login.register;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
@@ -28,6 +29,7 @@ import com.xiaoanjujia.common.util.statusbar.StatusBarUtil;
 import com.xiaoanjujia.common.widget.alphaview.AlphaButton;
 import com.xiaoanjujia.common.widget.bottomnavigation.utils.Utils;
 import com.xiaoanjujia.home.MainDataManager;
+import com.xiaoanjujia.home.composition.html.activity_html.MyWebActivity;
 import com.xiaoanjujia.home.entities.RegisterCodeResponse;
 import com.xiaoanjujia.home.entities.RegisterResponse;
 import com.xiaoanjujia.home.tool.Api;
@@ -86,6 +88,10 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     private Timer mTimer;
     private CodeUtils mCodeUtils;
 
+    @BindView(R2.id.yin_si)
+    TextView yinSi;
+    @BindView(R2.id.yin_si2)
+    TextView yinSi2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +205,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
 
     @OnClick({R2.id.main_title_back, R2.id.btn_getValidateCode, R2.id.reg_btn_register, R2.id.image_code
+            , R2.id.yin_si, R2.id.yin_si2
 
     })
     public void onViewClicked(View view) {
@@ -226,6 +233,14 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             Bitmap bitmap = mCodeUtils.createBitmap();
             imageCode.setImageBitmap(bitmap);
 
+        } else if (i == R.id.yin_si) {
+            Intent intent = new Intent(RegisterActivity.this, MyWebActivity.class);
+            intent.putExtra("url", "https://www.xiaoanjujia.com/xieyi.html");
+            startActivity(intent);
+        } else if (i == R.id.yin_si2) {
+            Intent intent = new Intent(RegisterActivity.this, MyWebActivity.class);
+            intent.putExtra("url", "https://www.xiaoanjujia.com/yinsi.html");
+            startActivity(intent);
         }
     }
 
